@@ -27,7 +27,7 @@ export default function RootLayout({
                 <QueryClientProvider>
                     <AuthProvider>
                         <AntdProvider>
-                            <NavBar />
+                            {/* <NavBar /> */}
                             <main>{children}</main>
                         </AntdProvider>
                     </AuthProvider>
