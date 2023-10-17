@@ -2,6 +2,7 @@ import { config } from "@fortawesome/fontawesome-svg-core"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import OzScript from "./OzScript"
 import QueryClientProvider from "./QueryClientProvider"
 import AuthProvider from "./auth/Provider"
 import AntdProvider from "./globalTheme"
@@ -22,6 +23,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
+            <OzScript />
             <body className={inter.className}>
                 <QueryClientProvider>
                     <AuthProvider>

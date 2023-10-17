@@ -14,6 +14,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@tanstack/react-query": "^4.36.1",
+    "@types/react-beautiful-dnd": "^13.1.5",
     "antd": "^5.10.1",
     "axios": "^1.5.1",
     "classnames": "^2.3.2",
@@ -21,13 +22,16 @@
     "next": "13.5.4",
     "next-auth": "^4.23.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "^18",
+    "styled-components": "^6.1.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^9.0.5",
     "autoprefixer": "^10",
     "eslint": "^8",
     "eslint-config-next": "13.5.4",
