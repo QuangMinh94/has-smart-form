@@ -1,3 +1,5 @@
+import { config } from "@fortawesome/fontawesome-svg-core"
+import "@fortawesome/fontawesome-svg-core/styles.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import NavBar from "./NavBar"
@@ -5,6 +7,7 @@ import QueryClientProvider from "./QueryClientProvider"
 import AuthProvider from "./auth/Provider"
 import AntdProvider from "./globalTheme"
 import "./globals.css"
+config.autoAddCss = false
 
 const inter = Inter({ subsets: ["latin"] })
 

@@ -3,7 +3,7 @@
 import { Select } from "antd"
 
 const CustomerServiceFilter = ({ searchParam }: { searchParam: string }) => {
-    return <Select placeholder="Find your form here"></Select>
+    return <Select className="w-60" placeholder="Find your form here"></Select>
 }
 
 export default CustomerServiceFilter

@@ -1,11 +1,11 @@
 import CustomerServiceComp from "./CustomerServiceComp"
 
 interface Props {
-    searchParams: { status: string }
+    searchParams: { product: string }
 }
 
 const CustomerServicePage = ({ searchParams }: Props) => {
-    return <CustomerServiceComp searchParam={searchParams.status} />
+    return <CustomerServiceComp searchParam={searchParams.product} />
 }
 
 export default CustomerServicePage
