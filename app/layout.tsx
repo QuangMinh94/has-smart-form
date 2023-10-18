@@ -1,3 +1,5 @@
+import "@/html5viewer/ui.dynatree.css"
+import "@/public/css/jquery.css"
 import { config } from "@fortawesome/fontawesome-svg-core"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import type { Metadata } from "next"
@@ -6,6 +8,7 @@ import QueryClientProvider from "./QueryClientProvider"
 import AuthProvider from "./auth/Provider"
 import AntdProvider from "./globalTheme"
 import "./globals.css"
+
 config.autoAddCss = false
 
 const inter = Inter({ subsets: ["latin"] })
