@@ -21,18 +21,20 @@ type Props = {
     index: number
 }
 
-const Row: React.FC<Props> = ({ task, index }) => (
-    <Draggable draggableId={task.id} index={index}>
-        {(provided: DraggableProvided) => (
-            <Container
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-                ref={provided.innerRef}
-            >
-                {task.content}
-            </Container>
-        )}
-    </Draggable>
-)
+const Row: React.FC<Props> = ({ task, index }) => {
+    return (
+        <Draggable draggableId={task.id} index={index}>
+            {(provided: DraggableProvided) => (
+                <Container
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
+                >
+                    {task.content}
+                </Container>
+            )}
+        </Draggable>
+    )
+}
 
 export default Row

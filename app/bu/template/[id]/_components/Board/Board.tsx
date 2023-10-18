@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import Column from "../Column/Column"
 import { useDragDrop } from "../DragDropProvider"
@@ -14,42 +14,57 @@ const Board: React.FC = () => {
         colDropshadowProps,
         columns
     } = useDragDrop()
+    const [isBrowser, setIsBrowser] = useState(false)
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setIsBrowser(true)
+        }
+    }, [])
 
     return (
-        <DragDropContext
-            onDragEnd={handleDragEnd}
-            onDragStart={handleDragStart}
-            onDragUpdate={handleDragUpdate}
-        >
-            <Droppable
-                droppableId="all-columns"
-                direction="horizontal"
-                type="column"
-            >
-                {(provided, snapshot) => (
-                    <Container
-                        id="task-board"
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
+        <div className="h-96">
+            {isBrowser ? (
+                <DragDropContext
+                    onDragEnd={handleDragEnd}
+                    onDragStart={handleDragStart}
+                    onDragUpdate={handleDragUpdate}
+                >
+                    <Droppable
+                        droppableId="all-columns"
+                        direction="horizontal"
+                        type="column"
                     >
-                        {columns.map((column, columnIndex) => (
-                            <Column
-                                key={column.id}
-                                column={column}
-                                columnIndex={columnIndex}
-                            />
-                        ))}
-                        {provided.placeholder}
-                        {snapshot.isDraggingOver && (
-                            <ColumnDropshadow
-                                marginLeft={colDropshadowProps.marginLeft}
-                                height={colDropshadowProps.height}
-                            />
+                        {(provided, snapshot) => (
+                            <Container
+                                id="task-board"
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                            >
+                                {columns.map((column, columnIndex) => (
+                                    <Column
+                                        key={column.id}
+                                        column={column}
+                                        columnIndex={columnIndex}
+                                    />
+                                ))}
+                                {provided.placeholder}
+                                {snapshot.isDraggingOver && (
+                                    <ColumnDropshadow
+                                        marginLeft={
+                                            colDropshadowProps.marginLeft
+                                        }
+                                        height={colDropshadowProps.height}
+                                    />
+                                )}
+                            </Container>
                         )}
-                    </Container>
-                )}
-            </Droppable>
-        </DragDropContext>
+                    </Droppable>
+                </DragDropContext>
+            ) : (
+                <></>
+            )}
+        </div>
     )
 }
 

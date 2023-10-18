@@ -1,4 +1,3 @@
-import { ReactNode } from "react"
 import { v4 } from "uuid"
 
 export type TaskType = {
@@ -8,7 +7,7 @@ export type TaskType = {
 
 export type ColumnType = {
     id: string
-    title: ReactNode
+    title: string
     tasks: TaskType[]
 }
 
@@ -20,7 +19,7 @@ export const api: TaskBoardType = {
     columns: [
         {
             id: v4(),
-            title: "col1",
+            title: "Danh sách block",
             tasks: [
                 { content: "item1", id: v4() },
                 { content: "item2", id: v4() },
@@ -29,84 +28,12 @@ export const api: TaskBoardType = {
         },
         {
             id: v4(),
-            title: "col2",
+            title: "Block được chọn",
             tasks: [
                 { content: "item1", id: v4() },
                 { content: "item2", id: v4() },
                 { content: "item3", id: v4() }
             ]
         }
-        /* {
-         id: v4(),
-         title: 'col3',
-         tasks: [
-            { content: 'item1', id: v4() },
-            { content: 'item2', id: v4() },
-            { content: 'item3', id: v4() },
-         ],
-      },
-      {
-         id: v4(),
-         title: 'col4',
-         tasks: [
-            { content: 'item1', id: v4() },
-            { content: 'item2', id: v4() },
-            { content: 'item3', id: v4() },
-         ],
-      },
-      {
-         id: v4(),
-         title: 'col4',
-         tasks: [
-            { content: 'item1', id: v4() },
-            { content: 'item2', id: v4() },
-            { content: 'item3', id: v4() },
-         ],
-      },
-      {
-         id: v4(),
-         title: 'col4',
-         tasks: [
-            { content: 'item1', id: v4() },
-            { content: 'item2', id: v4() },
-            { content: 'item3', id: v4() },
-         ],
-      },
-      {
-         id: v4(),
-         title: 'col4',
-         tasks: [
-            { content: 'item1', id: v4() },
-            { content: 'item2', id: v4() },
-            { content: 'item3', id: v4() },
-         ],
-      },
-      {
-         id: v4(),
-         title: 'col4',
-         tasks: [
-            { content: 'item1', id: v4() },
-            { content: 'item2', id: v4() },
-            { content: 'item3', id: v4() },
-         ],
-      },
-      {
-         id: v4(),
-         title: 'col4',
-         tasks: [
-            { content: 'item1', id: v4() },
-            { content: 'item2', id: v4() },
-            { content: 'item3', id: v4() },
-         ],
-      },
-      {
-         id: v4(),
-         title: 'col4',
-         tasks: [
-            { content: 'item1', id: v4() },
-            { content: 'item2', id: v4() },
-            { content: 'item3', id: v4() },
-         ],
-      }, */
     ]
 }

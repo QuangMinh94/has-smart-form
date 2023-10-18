@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useContext, useState } from "react"
+import { contextBLockInput } from "@/components/context/templateContext"
+import React, { useContext, useEffect, useState } from "react"
 import { DraggableLocation, DropResult } from "react-beautiful-dnd"
 import { v4 } from "uuid"
 import { ColumnType } from "../_assets"
@@ -94,6 +95,8 @@ const DragDropProvider: React.FC<{ children: any; data: ColumnType[] }> = ({
     children,
     data
 }) => {
+    const { setChoosenBlock } = useContext(contextBLockInput)
+
     const [columns, setColumns] = useState<ColumnType[]>(data)
     const [colDropshadowProps, setColDropshadowProps] = useState<ColDropshadow>(
         {
@@ -107,6 +110,11 @@ const DragDropProvider: React.FC<{ children: any; data: ColumnType[] }> = ({
             height: 0
         }
     )
+
+    useEffect(() => {
+        setChoosenBlock({ choosenBlock: columns[1].tasks, changeBlock: 0 })
+        console.log("My columns", columns)
+    }, [columns])
 
     // handling movement of row in the same column
     // [[],[]],[]

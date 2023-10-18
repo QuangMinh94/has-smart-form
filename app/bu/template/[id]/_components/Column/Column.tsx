@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
     Draggable,
     DraggableProvided,
@@ -27,7 +27,18 @@ type Props = {
 
 const Column: React.FC<Props> = ({ column, columnIndex }) => {
     const { rowDropshadowProps } = useDragDrop()
+    const [enabled, setEnabled] = useState(false)
 
+    useEffect(() => {
+        const animation = requestAnimationFrame(() => setEnabled(true))
+
+        return () => {
+            cancelAnimationFrame(animation)
+            setEnabled(false)
+        }
+    }, [])
+
+    if (!enabled) return null
     return (
         <Draggable draggableId={column.id} index={columnIndex}>
             {(provided: DraggableProvided) => (
