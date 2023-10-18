@@ -1,10 +1,12 @@
 "use client"
 
 import CustomLink from "@/components/CustomLink"
-import { Button, Col, Form, Input, Row } from "antd"
+import { Button, Col, Form, Input, Row, Space } from "antd"
 import { signIn } from "next-auth/react"
 import Image from "next/image"
 import HptBackground from "../../../public/img/HptBackground.png"
+import Title from "antd/es/skeleton/Title"
+import { useState } from "react"
 
 type FieldType = {
     username: string
@@ -13,6 +15,7 @@ type FieldType = {
 
 const SigninForm = () => {
     //const router = useRouter()
+    const [error, setError] = useState('')
     const onFinish = async (values: any) => {
         await signIn("credentials", {
             username: values.username,
@@ -29,6 +32,7 @@ const SigninForm = () => {
 
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo)
+        setError(errorInfo)
     }
 
     return (
@@ -106,58 +110,67 @@ const SigninForm = () => {
             }}
         >
             <Col lg={2} md={24}></Col>
-            <Col lg={12} md={24}>
+            <Col lg={7} md={24}>
                 <div
                     style={{
-                        border: "50px solid rgba(255, 255, 255, 0.5)",
-                        backgroundColor:"rgba(255, 255, 255, 0.5)",
-                        borderRadius: 10
+                        border: "70px solid rgba(255, 255, 255, 0.5)",
+                        backgroundColor: "rgba(255, 255, 255, 0.5)",
+                        borderRadius: 20
                     }}
-                > 
+                >
+                    <h3
+                        style={{
+                            backgroundColor: "rgba(255, 255, 255, 0.5)",
+                            color: "rgb(21,92,209)",
+                            fontSize: "36px",
+                            fontWeight: "bold",
+                            textAlign:'center',
+                            alignItems: "center",
+                            height:'10vh'
+                        }}
+                    >
+                        Đăng nhập
+                    </h3>
+                    
                     <Form
                         name="basic"
-                        labelCol={{ span: 8 }}
+                        // labelCol={{ span: 8 }}
                         // wrapperCol={{ span: 16 }}
-                        style={{ backgroundColor:"rgba(255, 255, 255, 0.5)", }}
+                        style={{ backgroundColor: "rgba(255, 255, 255, 0.5)" }}
                         initialValues={{ remember: true }}
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                         autoComplete="off"
-                        
                     >
+                        <b>Email</b>
                         <Form.Item<FieldType>
-                            label="Username"
+                            // label="Username"
                             name="username"
                             rules={[{ required: true }]}
                         >
-                            <Input />
+                            <Input style={{ width: "100%" }} />
                         </Form.Item>
-
+                        <b>Password</b>
                         <Form.Item<FieldType>
-                            label="Password"
+                            // label="Password"
                             name="password"
                             rules={[{ required: true }]}
                         >
-                            <Input.Password />
+                            <Input.Password style={{ width: "100%" }} />
                         </Form.Item>
-
-                        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                        <Form.Item>
                             <Button
                                 type="primary"
                                 className="bg-blue-500"
                                 htmlType="submit"
+                                style={{width:'100%'}}
                             >
-                                Submit
+                                Chuyên viên đăng nhập
                             </Button>
-                            {typeof window !== "undefined" && (
-                                <CustomLink
-                                    href={window.location.origin + "/register"}
-                                >
-                                    New user? Register heres
-                                </CustomLink>
-                            )}
-                            <h1>Or</h1>
+
                         </Form.Item>
+                        <br/>
+                        <div style={{color:'red'}}>{error}</div>
                     </Form>
                 </div>
             </Col>
