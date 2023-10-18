@@ -1,28 +1,35 @@
 "use client"
 
-import { Button } from "antd"
-import { useCallback, useContext, useEffect } from "react"
-import { contextBLockInput } from "./context/templateContext"
+import OzScript from "@/app/OzScript"
+import { Button, Flex } from "antd"
+import { useCallback, useEffect } from "react"
 
 const Viewer = () => {
-    const { choosenBlock } = useContext(contextBLockInput)
     const addScript = () => {
-        /*  const oz = document.getElementById("OZviewer")
+        const oz = document.getElementById("OZviewer")
         oz!.CreateReportEx(
             "connection.servlet=http://10.4.18.92/training/server;connection.reportname=/input/Thẻ/Lệnh chuyển tiền.ozr;viewer.showthumbnail=true;global.concatthumbnail=true;global.concatpreview=false;viewer.showtree=true;viewer.createreport_doc_index=0;viewer.showtab=true;connection.displayname=Lệnh chuyển mới;viewer.thumbnailsection_showclosebutton=true",
             ";"
-        ) */
+        )
     }
-    useEffect(() => {
+    /*  useEffect(() => {
         console.log("New block", choosenBlock)
-        /* const oz = document.getElementById("OZviewer")
+        const oz = document.getElementById("OZviewer")
         let params = "connection.reportname=/input/Thẻ/BIDV.ozr;"
         params += "connection.servlet=http://10.4.18.92/training/server;"
         params += DefaultParams
-        oz!.CreateReportEx(params, ";") */
-    }, [choosenBlock.changeBlock])
+        oz!.CreateReportEx(params, ";")
+    }, [choosenBlock.changeBlock]) */
     return (
-        <>
+        <Flex vertical gap={10}>
+            <OzScript />
+            <Button
+                className="w-36 float-right"
+                type="primary"
+                onClick={addScript}
+            >
+                Click to add form
+            </Button>
             <div
                 id="OZviewer"
                 style={{
@@ -31,10 +38,7 @@ const Viewer = () => {
                     //marginTop: 60
                 }}
             />
-            <Button type="primary" onClick={addScript}>
-                Click to add form
-            </Button>
-        </>
+        </Flex>
     )
 }
 
@@ -49,9 +53,11 @@ const OzViewer = ({ url }: { url: string }) => {
                 oz!.sendToActionScript("connection.servlet", url)
                 oz!.sendToActionScript(
                     "connection.reportname",
-                    `/input/Thẻ/BIDV.ozr`
+                    "/input/Thẻ/BIDV.ozr"
                 )
-                //oz!.sendToActionScript("viewer.showthumbnail", `true`)
+                return true
+                /* oz!.sendToActionScript("etcmenu.showtree", "true")
+                oz!.sendToActionScript("viewer.showthumbnail", `false`)
                 oz!.sendToActionScript("global.concatthumbnail", `true`)
                 oz!.sendToActionScript("global.concatpreview", `true`)
                 oz!.sendToActionScript("viewer.showtree", `true`)
@@ -63,7 +69,7 @@ const OzViewer = ({ url }: { url: string }) => {
                 oz!.sendToActionScript(
                     "viewer.thumbnailsection_showclosebutton",
                     `true`
-                )
+                ) */
             }
             window.start_ozjs("OZviewer", `http://10.4.18.92/html5viewer/`)
         }

@@ -1,3 +1,5 @@
+"use client"
+
 import OzViewer from "@/components/OzViewer"
 import TemplatesProvider from "@/components/context/templateContext"
 import axios from "axios"
@@ -37,9 +39,9 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
         tasks: []
     }
 
-    responseThẻ.data.forEach((item: any) => {
+    /*  responseThẻ.data.forEach((item: any) => {
         chosenBLock.tasks.push({ content: item.name, id: v4() })
-    })
+    }) */
 
     const allColumns: TaskBoardType = {
         columns: [allBlock, chosenBLock]
