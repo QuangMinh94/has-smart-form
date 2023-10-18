@@ -1,5 +1,7 @@
+import {useState} from "react"
 const BUPage = () => {
-    return <div>BUPage</div>
+   
+    return <input placeholder="ok"></input>
 }
 
 export default BUPage
