@@ -1,6 +1,5 @@
 "use client"
 
-import OzScript from "@/app/OzScript"
 import { Button, Flex } from "antd"
 import { useCallback, useEffect } from "react"
 
@@ -12,17 +11,8 @@ const Viewer = () => {
             ";"
         )
     }
-    /*  useEffect(() => {
-        console.log("New block", choosenBlock)
-        const oz = document.getElementById("OZviewer")
-        let params = "connection.reportname=/input/Thẻ/BIDV.ozr;"
-        params += "connection.servlet=http://10.4.18.92/training/server;"
-        params += DefaultParams
-        oz!.CreateReportEx(params, ";")
-    }, [choosenBlock.changeBlock]) */
     return (
         <Flex vertical gap={10}>
-            <OzScript />
             <Button
                 className="w-36 float-right"
                 type="primary"

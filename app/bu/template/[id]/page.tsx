@@ -48,12 +48,14 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
     }
 
     return (
-        <TemplatesProvider>
-            <DragDropProvider data={allColumns.columns}>
-                <Board />
-            </DragDropProvider>
-            <OzViewer url="http://10.4.18.92/training/server" />
-        </TemplatesProvider>
+        <>
+            <TemplatesProvider>
+                <DragDropProvider data={allColumns.columns}>
+                    <Board />
+                </DragDropProvider>
+                <OzViewer url="http://10.4.18.92/training/server" />
+            </TemplatesProvider>
+        </>
     )
 }
 export default TemplateDetailPage
