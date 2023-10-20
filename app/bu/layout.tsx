@@ -5,7 +5,11 @@ interface Props {
 }
 
 const BuLayout = ({ children }: Props) => {
-    return <SideMenu>{children}</SideMenu>
+    return (
+        <>
+            <SideMenu>{children}</SideMenu>
+        </>
+    )
 }
 
 export default BuLayout
