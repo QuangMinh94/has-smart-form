@@ -1,15 +1,26 @@
-import React from "react"
-import { Document, Page, pdfjs } from "react-pdf"
+'use client'
+import React, { useState } from "react"
+import { Document, Page } from "react-pdf"
 
-// Sét đặt cài đặt pdfjs để sử dụng worker của thư viện
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
+function PDFViewer() {
+    const [numPages, setNumPages] = useState(null)
+    const [pageNumber, setPageNumber] = useState(1)
 
-function PDFViewer({ pdfUrl }: { pdfUrl: string }) {
+    function onDocumentLoadSuccess(numPages: any) {
+        setNumPages(numPages)
+    }
+
     return (
         <div>
-            <Document file={pdfUrl}>
-                <Page pageNumber={1} />
-            </Document>
+            {/* <Document
+                file="path/to/your.pdf" // Thay đổi thành URL của tệp PDF bạn muốn hiển thị
+                onLoadSuccess={onDocumentLoadSuccess}
+            >
+                <Page pageNumber={pageNumber} />
+            </Document> */}
+            <p>
+                Page {pageNumber} of {numPages}
+            </p>
         </div>
     )
 }
