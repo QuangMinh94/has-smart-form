@@ -1,9 +1,12 @@
-import Filter from "../../../components/Filter/layoutFilter"
+// "use client"
+
 interface Props {
     children: React.ReactNode
+    title: string
+    filter: React.ReactNode
 }
 
-const LayoutSideMenu = ({ children }: Props) => {
+const LayoutSideMenu = ({ children, title, filter }: Props) => {
     return (
         <div>
             <h1
@@ -14,14 +17,14 @@ const LayoutSideMenu = ({ children }: Props) => {
                     fontSize: "20px"
                 }}
             >
-                Công việc của tôi
+                {title}
             </h1>
             <div
                 style={{
                     margin: "10px 0"
                 }}
             >
-                <Filter />
+                {filter}
             </div>
             <div>{children}</div>
         </div>

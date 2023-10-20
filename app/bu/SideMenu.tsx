@@ -26,6 +26,7 @@ const CustomMenu = () => {
             mode="inline"
             defaultSelectedKeys={["1"]}
             onClick={(e) => switchRoute(e.key)}
+            
             items={[
                 {
                     key: "template",
