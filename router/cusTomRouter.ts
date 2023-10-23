@@ -1,9 +1,7 @@
-import { root } from "postcss"
 
-const locationPath = window.location.origin
-const rootBu = `/bu`
+const rootTeler = `/teller`
 const routers = {
-    mywork: { path: `${rootBu}/mywork` },
+    mywork: { path: `${rootTeler}/mywork` },
     detailMywork: {
         path(params: { id: string }) {
             return `${routers.mywork.path}/detail/${params.id}`

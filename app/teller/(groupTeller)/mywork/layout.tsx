@@ -1,6 +1,6 @@
-import Provider from "../../../components/provider/ProviderMywork"
-import LayoutSideMenu from "@/components/LayoutSideMenu"
-import Filter from "@/components/Filter/LayoutFilter"
+import Provider from "../../components/provider/ProviderMywork"
+import LayoutSideMenu from "@/app/teller/components/LayoutPageInSideMenu"
+import Filter from "@/app/teller/components/Filter/LayoutFilter"
 type Props = {
     children: React.ReactNode
 }

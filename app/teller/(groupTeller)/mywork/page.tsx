@@ -1,5 +1,5 @@
 
-import TableMywork from "../../../components/table/tableMywork"
+import TableMywork from "../../components/table/tableMywork"
 
 const MyWork = () => {
     return <TableMywork/> 

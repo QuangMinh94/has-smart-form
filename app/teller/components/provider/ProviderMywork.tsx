@@ -1,6 +1,6 @@
 "use client"
 import { faBullseye } from "@fortawesome/free-solid-svg-icons"
-import { typeContextMywork, contextMywork } from "../context/context"
+import { typeContextMywork, contextMywork } from "../context"
 import React, { useState } from "react"
 
 type typeProvider = {

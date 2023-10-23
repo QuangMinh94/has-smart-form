@@ -1,10 +1,10 @@
 "use client"
 import React, { useEffect, useMemo, useState } from "react"
 import { Input, Checkbox, Button, Empty } from "antd"
-import { useContextMyWork } from "../../cusTomHook/useContext"
+import { useContextMyWork } from "@/components/cusTomHook/useContext"
 import { DndProvider, useDrag, useDrop } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
-import { ToFilterName } from "../../../util/formatText"
+import { ToFilterName } from "@/util/formatText"
 import {
     faSearch,
     faChevronLeft,
