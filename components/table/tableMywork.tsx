@@ -2,7 +2,8 @@
 import React, { useState } from "react"
 import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
-
+import Link from "next/link"
+import routers from "@/router/cusTomRouter"
 interface DataType {
     key: React.Key
     name: string
@@ -11,6 +12,13 @@ interface DataType {
 }
 
 const columns: ColumnsType<DataType> = [
+    {
+        title: "Id",
+        dataIndex: "key",
+        render: (key: string) => (
+            <Link href={routers.detailMywork.path({ id: key })}>{key}</Link>
+        )
+    },
     {
         title: "Name",
         dataIndex: "name",

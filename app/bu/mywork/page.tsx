@@ -2,7 +2,7 @@
 import TableMywork from "../../../components/table/tableMywork"
 
 const MyWork = () => {
-    return ( <TableMywork/> )
+    return <TableMywork/> 
 }
 
 export default MyWork

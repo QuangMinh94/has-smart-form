@@ -1,28 +1,33 @@
-'use client'
-import React, { useState } from "react"
-import { Document, Page } from "react-pdf"
+"use client"
+// Core viewer
+import { Viewer, Worker } from "@react-pdf-viewer/core"
 
-function PDFViewer() {
-    const [numPages, setNumPages] = useState(null)
-    const [pageNumber, setPageNumber] = useState(1)
+// Plugins
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout"
 
-    function onDocumentLoadSuccess(numPages: any) {
-        setNumPages(numPages)
-    }
+// Import styles
+import "@react-pdf-viewer/core/lib/styles/index.css"
+import "@react-pdf-viewer/default-layout/lib/styles/index.css"
 
+const View = () => {
+    const defaultLayoutPluginInstance = defaultLayoutPlugin()
     return (
-        <div>
-            {/* <Document
-                file="path/to/your.pdf" // Thay đổi thành URL của tệp PDF bạn muốn hiển thị
-                onLoadSuccess={onDocumentLoadSuccess}
+        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+            <div
+                style={{
+                    border: "1px solid rgba(0, 0, 0, 0.3)",
+                    height: "750px"
+                }}
             >
-                <Page pageNumber={pageNumber} />
-            </Document> */}
-            <p>
-                Page {pageNumber} of {numPages}
-            </p>
-        </div>
+                <Viewer
+                    fileUrl={"./test.pdf"}
+                    plugins={[
+                        // Register plugins
+                        defaultLayoutPluginInstance
+                    ]}
+                />
+            </div>
+        </Worker>
     )
 }
-
-export default PDFViewer
+export default View
