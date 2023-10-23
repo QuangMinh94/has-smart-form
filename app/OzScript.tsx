@@ -3,7 +3,6 @@ import "@/public/css/jquery.css"
 import Script from "next/script"
 
 const OzScript = () => {
-    console.log("Load script")
     return (
         <>
             <Script

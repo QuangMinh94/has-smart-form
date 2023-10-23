@@ -11,5 +11,6 @@ declare global {
         sendToActionScript: any
         CreateReportEx: any
         GetInformation: any
+        Script: any
     }
 }
