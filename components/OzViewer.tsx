@@ -6,11 +6,14 @@ import { useCallback, useEffect } from "react"
 const Viewer = () => {
     const addScript = () => {
         const oz = document.getElementById("OZViewer")
-        /* oz!.CreateReportEx(
-            "connection.servlet=http://10.4.18.92/training/server;connection.reportname=/input/Thẻ/Lệnh chuyển tiền.ozr;viewer.showthumbnail=true;global.concatthumbnail=true;global.concatpreview=false;viewer.showtree=true;viewer.createreport_doc_index=0;viewer.showtab=true;connection.displayname=Lệnh chuyển mới;viewer.thumbnailsection_showclosebutton=true",
+        oz!.CreateReportEx(
+            "connection.servlet=http://10.4.18.92/training/server;connection.reportname=/input/Dịch vụ tài khoản/EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán.ozr;global.concatpreview=false;viewer.createreport_doc_index=0;viewer.showtab=true;connection.displayname=Lệnh chuyển cũ;",
             ";"
-        ) */
-        console.log("Value", oz!.GetInformation("INPUT_JSON_ALL"))
+        )
+        //oz!.Script("showthumbnail")
+        /*  const oz = document.getElementById("OZViewer")
+        oz!.Script("showtab") */
+        //console.log("Value", oz!.GetInformation("INPUT_JSON_ALL"))
     }
     return (
         <Flex vertical gap={10}>
@@ -40,6 +43,7 @@ const OzViewer = ({ url }: { url: string }) => {
 
             window.SetOZParamters_OZViewer = () => {
                 const oz = document.getElementById("OZViewer")
+                //oz!.sendToActionScript("viewer.showthumbnail", false)
                 //oz!.sendToActionScript("viewer.emptyframe", "true")
                 oz!.sendToActionScript("connection.servlet", url)
                 oz!.sendToActionScript(
@@ -48,8 +52,8 @@ const OzViewer = ({ url }: { url: string }) => {
                 )
 
                 //oz!.sendToActionScript("etcmenu.showtree", "true")
-                oz!.sendToActionScript("viewer.showtree", "false")
-                oz!.sendToActionScript("viewer.showthumbnail", `false`)
+                //oz!.sendToActionScript("viewer.showtree", "false")
+
                 /*oz!.sendToActionScript("global.concatthumbnail", `true`)
                 oz!.sendToActionScript("global.concatpreview", `true`)
                 oz!.sendToActionScript("viewer.showtree", `true`)
