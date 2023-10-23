@@ -31,3 +31,8 @@ body {
     )
     rgb(var(--background-start-rgb)); */
 }
+
+img{
+  display: inline;
+  vertical-align: baseline;
+}

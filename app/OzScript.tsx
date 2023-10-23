@@ -1,3 +1,5 @@
+import "@/html5viewer/ui.dynatree.css"
+import "@/public/css/jquery.css"
 import Script from "next/script"
 
 const OzScript = () => {
