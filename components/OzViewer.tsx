@@ -10,10 +10,6 @@ const Viewer = () => {
             "connection.servlet=http://10.4.18.92/training/server;connection.reportname=/input/Dịch vụ tài khoản/EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán.ozr;global.concatpreview=false;viewer.createreport_doc_index=0;viewer.showtab=true;connection.displayname=Lệnh chuyển cũ;",
             ";"
         )
-        //oz!.Script("showthumbnail")
-        /*  const oz = document.getElementById("OZViewer")
-        oz!.Script("showtab") */
-        //console.log("Value", oz!.GetInformation("INPUT_JSON_ALL"))
     }
     return (
         <Flex vertical gap={10}>
@@ -68,7 +64,10 @@ const OzViewer = ({ url }: { url: string }) => {
                 ) */
                 //return true
             }
-            window.start_ozjs("OZViewer", `http://10.4.18.92/html5viewer/`)
+            window.start_ozjs(
+                "OZViewer",
+                `${process.env.EFORM_SERVER}/html5viewer/`
+            )
         }
     }, [])
     useEffect(() => {

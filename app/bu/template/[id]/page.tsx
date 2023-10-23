@@ -47,7 +47,7 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
                 <DragDropProvider data={allColumns.columns}>
                     <Board />
                 </DragDropProvider>
-                <OzViewer url="http://10.4.18.92/training/server" />
+                <OzViewer url={process.env.EFORM_SERVER_APP!} />
             </TemplatesProvider>
         </>
     )
