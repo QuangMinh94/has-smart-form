@@ -26,7 +26,8 @@ const DraggableCard: React.FC<{
 }> = ({ data, type, setList }) => {
     const [, ref] = useDrag({
         type,
-        item: data
+        item: data,
+        
     })
     const { setChangeListFilter } = useContextMyWork()
     const HanderClick = (idData: string) => {
@@ -77,10 +78,19 @@ const MyDropTarget: React.FC<typeProps> = ({
 
     const [, ref] = useDrop({
         accept: typeDrop,
-        drop: (item: any) => {
-            setList((p) => [{ ...item, checkBox: false }, ...p])
-            setRomoveList((p) => p.filter((elment) => item?.id !== elment?.id))
-            setChangeListFilter((p) => !p)
+        drop: (item: any, monitor:any) => {
+            
+            if (list.some((list) => list.id === item.id)) {
+            } else {
+                setList((p) => [{ ...item, checkBox: false }, ...p])
+                setRomoveList((p) =>
+                    p.filter((elment) => item?.id !== elment?.id)
+                )
+                setChangeListFilter((p) => !p)
+            }
+        },
+        hover:(item, monitor) =>{
+            console.log("hover",monitor)
         }
     })
 
@@ -248,7 +258,7 @@ const DetailFormUser = () => {
             <div style={{ display: "flex", alignItems: "center" }}>
                 <MyDropTarget
                     typeDrag="left"
-                    typeDrop="right"
+                    typeDrop="left"
                     setList={setListLeft}
                     list={listLeft}
                     setRomoveList={setListRight}
@@ -264,7 +274,7 @@ const DetailFormUser = () => {
                 </div>
                 <MyDropTarget
                     typeDrop="left"
-                    typeDrag="right"
+                    typeDrag="left"
                     setList={setListRight}
                     list={listRight}
                     setRomoveList={setListLeft}
