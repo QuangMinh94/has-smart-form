@@ -3,36 +3,15 @@
 import { Button, Flex } from "antd"
 import { useCallback, useEffect } from "react"
 
-const Viewer = () => {
-    const addScript = () => {
-        const oz = document.getElementById("OZViewer")
-        oz!.CreateReportEx(
-            "connection.servlet=http://10.4.18.92/training/server;connection.reportname=/input/Dịch vụ tài khoản/EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán.ozr;global.concatpreview=false;viewer.createreport_doc_index=0;viewer.showtab=true;connection.displayname=Lệnh chuyển cũ;",
-            ";"
-        )
-    }
-    return (
-        <Flex vertical gap={10}>
-            <Button
-                className="w-36 float-right"
-                type="primary"
-                onClick={addScript}
-            >
-                Click to add form
-            </Button>
-            <div
-                id="OZViewer"
-                style={{
-                    width: "100%",
-                    height: "90vh"
-                    //marginTop: 60
-                }}
-            />
-        </Flex>
-    )
+interface Props {
+    url: string
+    onPreview: (e: any) => void
+    onSubmit: (e: any) => void
+    onSave: (e: any) => void
+    onCancel: (e: any) => void
 }
 
-const OzViewer = ({ url }: { url: string }) => {
+const OzViewer = ({ url, onPreview, onSubmit, onSave, onCancel }: Props) => {
     const cachedFn = useCallback(() => {
         if (window.start_ozjs) {
             console.log("Here i am")
@@ -40,12 +19,12 @@ const OzViewer = ({ url }: { url: string }) => {
             window.SetOZParamters_OZViewer = () => {
                 const oz = document.getElementById("OZViewer")
                 //oz!.sendToActionScript("viewer.showthumbnail", false)
-                //oz!.sendToActionScript("viewer.emptyframe", "true")
-                oz!.sendToActionScript("connection.servlet", url)
+                oz!.sendToActionScript("viewer.emptyframe", "true")
+                /*  oz!.sendToActionScript("connection.servlet", url)
                 oz!.sendToActionScript(
                     "connection.reportname",
                     "/input/Thẻ/BIDV.ozr"
-                )
+                ) */
 
                 //oz!.sendToActionScript("etcmenu.showtree", "true")
                 //oz!.sendToActionScript("viewer.showtree", "false")
@@ -66,22 +45,62 @@ const OzViewer = ({ url }: { url: string }) => {
             }
             window.start_ozjs(
                 "OZViewer",
-                `${process.env.EFORM_SERVER}/html5viewer/`
+                `${process.env.NEXT_PUBLIC_EFORM_SERVER}/html5viewer/`
             )
         }
     }, [])
+
     useEffect(() => {
         if (window) {
             cachedFn()
         }
     }, [cachedFn])
-    return <Viewer />
+
+    return (
+        <Viewer
+            url=""
+            onPreview={onPreview}
+            onSubmit={onSubmit}
+            onSave={onSave}
+            onCancel={onCancel}
+        />
+    )
 }
 
-const DefaultParams = `viewer.showthumbnail=true;global.concatthumbnail=true;
-    global.concatpreview=false;viewer.showtree=true;
-    viewer.showtab=true;
-    connection.displayname=new ozr;
-    viewer.thumbnailsection_showclosebutton=true;`
+const Viewer = ({ onPreview, onSubmit, onSave, onCancel }: Props) => {
+    return (
+        <Flex vertical gap={10}>
+            <Flex justify="flex-end">
+                <Button className="w-20" type="primary" onClick={onPreview}>
+                    Preview
+                </Button>
+            </Flex>
+            <Flex justify="flex-end" gap={10}>
+                <Button className="w-20" type="primary" onClick={onSubmit}>
+                    Submit
+                </Button>
+                <Button className="w-20" type="primary" onClick={onSave}>
+                    Save
+                </Button>
+                <Button
+                    className="w-20"
+                    danger
+                    type="primary"
+                    onClick={onCancel}
+                >
+                    Cancel
+                </Button>
+            </Flex>
+            <div
+                id="OZViewer"
+                style={{
+                    width: "100%",
+                    height: "90vh"
+                    //marginTop: 60
+                }}
+            />
+        </Flex>
+    )
+}
 
 export default OzViewer
