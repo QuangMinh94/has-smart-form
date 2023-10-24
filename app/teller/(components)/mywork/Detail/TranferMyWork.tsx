@@ -20,7 +20,6 @@ const DetailFormUser = () => {
                     id: i,
                     name: `name ${i}`,
                     checkBox: false,
-                    type: "left"
                 })
             }
             setListLeft(arr)
@@ -45,7 +44,7 @@ const DetailFormUser = () => {
                 ColRight={
                     <Container
                         title="col2"
-                        type={"right"}
+                        type="right"
                         setList={setListRight}
                         list={listRight}
                         setRomoveList={setListLeft}

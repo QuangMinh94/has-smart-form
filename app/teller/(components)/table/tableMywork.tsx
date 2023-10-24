@@ -1,9 +1,11 @@
 "use client"
+import axios from "axios"
 import React, { useState } from "react"
 import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import Link from "next/link"
 import routers from "@/router/cusTomRouter"
+
 interface DataType {
     key: React.Key
     name: string
@@ -54,27 +56,34 @@ const rowSelection = {
 for (let i = 0; i <= 100; i++) {
     data.push({ key: i, name: `name${i}`, age: i, address: `address${i}` })
 }
+
 const App: React.FC = () => {
+    
+   
+
+ 
     return (
-        <div>
-            <Table
-                rowSelection={{
-                    type: "checkbox",
-                    ...rowSelection
-                }}
-                scroll={{
-                    y: 400,
-                    scrollToFirstRowOnChange: true
-                }}
-                pagination={{
-                    defaultPageSize: 10,
-                    showSizeChanger: true,
-                    pageSizeOptions: ["5", "10", "20", "30"]
-                }}
-                columns={columns}
-                dataSource={data}
-            />
-        </div>
+       
+            <div>
+                <Table
+                    rowSelection={{
+                        type: "checkbox",
+                        ...rowSelection
+                    }}
+                    scroll={{
+                        y: 400,
+                        scrollToFirstRowOnChange: true
+                    }}
+                    pagination={{
+                        defaultPageSize: 10,
+                        showSizeChanger: true,
+                        pageSizeOptions: ["5", "10", "20", "30"]
+                    }}
+                    columns={columns}
+                    dataSource={data}
+                />
+            </div>
+        
     )
 }
 
