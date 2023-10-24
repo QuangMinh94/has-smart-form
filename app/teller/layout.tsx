@@ -1,4 +1,4 @@
-import SideMenu from "../components/SideMenu"
+import SideMenu from "./(components)/SideMenu"
 
 interface Props {
     children: any
