@@ -9,7 +9,7 @@ import {
 } from "react"
 
 export type changeBlock = {
-    choosenBlock: any[]
+    choosenBlock: { name: string; location: string; ozrRepository: string }[]
     changeBlock: number
 }
 export interface contextBlock {

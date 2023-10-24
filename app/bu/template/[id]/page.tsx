@@ -1,8 +1,8 @@
-import OzViewer from "@/components/OzViewer"
 import TemplatesProvider from "@/components/context/templateContext"
 import axios from "axios"
 import dynamic from "next/dynamic"
 import { v4 } from "uuid"
+import OzViewerWrapper from "../new/OzViewerWrapper"
 import { ColumnType, TaskBoardType } from "./_assets"
 import { DragDropProvider } from "./_components"
 //import { Board } from "./_components"
@@ -47,7 +47,7 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
                 <DragDropProvider data={allColumns.columns}>
                     <Board />
                 </DragDropProvider>
-                <OzViewer url="http://10.4.18.92/training/server" />
+                <OzViewerWrapper />
             </TemplatesProvider>
         </>
     )
