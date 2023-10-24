@@ -121,7 +121,7 @@ const SideMenu = ({ children }: PropsWithChildren) => {
                                             },
                                             {
                                                 label: (
-                                                    <Link href="/auth/signout">
+                                                    <Link href="http://localhost:3000/api/auth/signout">
                                                         Logout
                                                     </Link>
                                                 ),
