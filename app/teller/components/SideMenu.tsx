@@ -16,17 +16,16 @@ const { Header, Sider, Content } = Layout
 const CustomMenu = () => {
     const router = useRouter()
     const switchRoute = (e: string) => {
-        const location = window.location.origin
-        console.log("Location", location)
-        router.push(`${location}/bu/${e}`)
+        router.push(`/teller/${e}`)
+        console.log(e)
     }
     return (
         <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={["mywork"]}
             onClick={(e) => switchRoute(e.key)}
-            
+            onChange={(e) => console.log("rrr",e)}
             items={[
                 {
                     key: "template",
@@ -99,6 +98,7 @@ const SideMenu = ({ children }: PropsWithChildren) => {
                 </Content>
             </Layout>
         </Layout>
+        
     )
 }
 
