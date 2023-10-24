@@ -1,11 +1,11 @@
-import TemplateContext from "@/components/context/templateContext"
+import ProviderTemplate from "@/components/context/providerTemplate"
 import NewTemplateWrapper from "./NewTemplateWrapper"
 
 const NewTemplate = () => {
     return (
-        <TemplateContext>
+        <ProviderTemplate>
             <NewTemplateWrapper />
-        </TemplateContext>
+        </ProviderTemplate>
     )
 }
 

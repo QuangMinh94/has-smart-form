@@ -1,15 +1,16 @@
 "use client"
 
 import OzViewer from "@/components/OzViewer"
-import { contextBLockInput } from "@/components/context/templateContext"
+import { ContextTemplate } from "@/components/context/context"
 import { Form } from "antd"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import CustomButtonGroup from "../_components/CustomButtonGroup"
 import TemplateForm from "./TemplateForm"
+import TransferTemplate from "./TransferTemplate"
 
 const NewTemplateWrapper = () => {
     const [form] = Form.useForm()
-    const { setChoosenBlock } = useContext(contextBLockInput)
+    const { setChoosenBlock, setListLeft } = useContext(ContextTemplate)
     const onPreview = () => {
         const choosenBlock = [
             { name: "BIDV.ozr", location: "1", ozrRepository: "input/Thẻ" },
@@ -42,12 +43,24 @@ const NewTemplateWrapper = () => {
     const onSave = () => {}
     const onCancel = () => {}
 
+    useEffect(() => {
+        const arr = []
+        for (let i = 0; i <= 100; i++) {
+            arr.push({
+                id: i,
+                name: `name ${i}`,
+                checkBox: false,
+                type: "left"
+            })
+        }
+        setListLeft(arr)
+        console.log("ARRRR", arr)
+    }, [])
+
     return (
         <>
-            {/*  <DragDropProvider data={allColumns.columns}>
-                <Board />
-            </DragDropProvider> */}
             <TemplateForm form={form} />
+            <TransferTemplate />
             <CustomButtonGroup
                 onPreview={onPreview}
                 onSubmit={onSubmit}

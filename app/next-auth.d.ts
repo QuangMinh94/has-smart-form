@@ -1,4 +1,5 @@
 import "next-auth"
+import { Users } from "./(types)/Users"
 
 declare module "next-auth" {
     interface Session {
@@ -6,6 +7,7 @@ declare module "next-auth" {
             id: string
             session: string
             token: string
+            userInfo: Users
         } & DefaultSession["user"]
     }
     interface User {

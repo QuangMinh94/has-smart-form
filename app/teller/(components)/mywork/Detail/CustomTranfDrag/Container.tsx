@@ -1,8 +1,8 @@
 "use client"
-import update from "immutability-helper"
-import { useState, useEffect, useCallback } from "react"
-import { Empty, Input } from "antd"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Empty, Input } from "antd"
+import update from "immutability-helper"
+import { useCallback, useEffect, useState } from "react"
 import { useDrop } from "react-dnd"
 
 export type typeKey = "left" | "right"
@@ -14,8 +14,8 @@ type typeProps = {
     title: string
 }
 
-import { ToFilterName } from "@/util/formatText"
 import { useContextMyWork } from "@/components/cusTomHook/useContext"
+import { ToFilterName } from "@/util/formatText"
 import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import DragItem, { TypeDragItem } from "./DragItem"
 
@@ -127,7 +127,7 @@ const MyDropTarget: React.FC<typeProps> = ({
     return (
         <div
             style={{
-                width: "300px",
+                width: "auto",
                 border: "1px solid #f0f0f0",
                 borderRadius: "10px"
             }}
