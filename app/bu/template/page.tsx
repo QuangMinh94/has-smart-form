@@ -8,12 +8,20 @@ const TemplatePage = () => {
     return (
         <Flex justify="space-between">
             <p>TemplatePage</p>
-            <Button
-                type="primary"
-                onClick={() => router.push("/bu/template/2")}
-            >
-                Go to detail
-            </Button>
+            <Flex gap={8}>
+                <Button
+                    type="primary"
+                    onClick={() => router.push("/bu/template/new")}
+                >
+                    Create new
+                </Button>
+                <Button
+                    type="primary"
+                    onClick={() => router.push("/bu/template/2")}
+                >
+                    Go to detail
+                </Button>
+            </Flex>
         </Flex>
     )
 }

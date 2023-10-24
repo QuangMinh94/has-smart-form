@@ -3,7 +3,7 @@
 import OzViewer from "@/components/OzViewer"
 import { ContextTemplate } from "@/components/context/context"
 import { useQuery } from "@tanstack/react-query"
-import { Form, Skeleton } from "antd"
+import { Form, Skeleton, message } from "antd"
 import axios from "axios"
 import { useContext } from "react"
 import CustomButtonGroup from "../_components/CustomButtonGroup"
@@ -17,79 +17,88 @@ interface OptionProps {
     type: string
 }
 
-const useTemplate = () =>
-    useQuery<OptionProps[]>({
-        queryKey: ["option"],
-        queryFn: async () => {
-            const res = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {
-                repository: "Dịch vụ tài khoản"
-            })
-            const res_1 = res.data as {
-                name: string
-                repository: string
-                serverPath: string
-            }[]
-            const _option: OptionProps[] = []
-            res_1.forEach((resChild) => {
-                _option.push({
-                    id: resChild.repository + resChild.name,
-                    name: resChild.name,
-                    checkBox: false,
-                    type: resChild.repository
-                })
-            })
-
-            return _option
-        },
-        //staleTime: 60 * 1000, //60sec
-        retry: 3
-    })
-
 const NewTemplateWrapper = () => {
     const [form] = Form.useForm()
-    const { setChoosenBlock, setListLeft } = useContext(ContextTemplate)
+    const [messageApi, contextHolder] = message.useMessage()
+    const { setChoosenBlock, setListLeft, listRight, setSubmitType } =
+        useContext(ContextTemplate)
     const onPreview = () => {
-        const choosenBlock = [
-            { name: "BIDV.ozr", location: "1", ozrRepository: "input/Thẻ" },
-            {
-                name: "EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán.ozr",
-                location: "1",
-                ozrRepository: "input/Dịch vụ tài khoản"
-            }
-        ]
-        setChoosenBlock({
-            choosenBlock: choosenBlock,
-            changeBlock: 0
-        })
+        if (listRight.length > 0) {
+            const choosenBlock = listRight
 
-        const oz = document.getElementById("OZViewer")
-        choosenBlock.forEach((block) =>
-            oz!.CreateReportEx(
-                DefaultParams(
-                    process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                    "/" + block.ozrRepository + "/" + block.name,
-                    block.name
-                ),
-                ";"
-            )
-        )
+            setChoosenBlock({
+                choosenBlock: choosenBlock,
+                changeBlock: 0
+            })
+
+            const oz = document.getElementById("OZViewer")
+            choosenBlock.forEach((block) => {
+                oz!.CreateReportEx(
+                    DefaultParams(
+                        process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                        "/" + block.type + "/" + block.name,
+                        block.name
+                    ),
+                    ";"
+                )
+            })
+        } else {
+            messageApi.error("Please choose at least 1 block")
+        }
     }
     const onSubmit = () => {
+        setSubmitType("SUBMIT")
         form.submit()
     }
-    const onSave = () => {}
+    const onSave = () => {
+        setSubmitType("SAVE")
+        form.submit()
+    }
     const onCancel = () => {}
 
-    const { data: option, error, isLoading } = useTemplate()
+    const useTemplate = () =>
+        useQuery<OptionProps[]>({
+            queryKey: ["option"],
+            queryFn: async () => {
+                console.log("Query time")
+                const res = await axios.post(
+                    process.env.NEXT_PUBLIC_EFORM_LIST!,
+                    {
+                        repository: "Dịch vụ tài khoản"
+                    }
+                )
+                const res_1 = res.data as {
+                    name: string
+                    repository: string
+                    serverPath: string
+                }[]
+                const _option: OptionProps[] = []
+                res_1.forEach((resChild) => {
+                    _option.push({
+                        id: resChild.repository + resChild.name,
+                        name: resChild.name,
+                        checkBox: false,
+                        type: resChild.repository
+                    })
+                })
+                setListLeft(_option)
+                return _option
+            },
+            //staleTime: 60 * 1000, //60sec
+            retry: 3,
+            refetchOnWindowFocus: false,
+            refetchOnReconnect: false
+        })
+
+    const { error, isLoading } = useTemplate()
 
     if (isLoading) return <Skeleton.Input className="w-fit" active={true} />
 
     if (error) return null
 
-    if (option) setListLeft(option)
-
     return (
         <>
+            {contextHolder}
             <TemplateForm form={form} />
             <TransferTemplate />
             <CustomButtonGroup

@@ -14,6 +14,8 @@ export interface typeContextTemplate {
     ChangeListFilter: boolean
     choosenBlock: changeBlock
     setChoosenBlock: Dispatch<SetStateAction<changeBlock>>
+    submitType: string
+    setSubmitType: Dispatch<SetStateAction<string>>
 }
 const ContextTemplate = createContext<typeContextTemplate>({
     setListLeft: () => {},
@@ -23,6 +25,8 @@ const ContextTemplate = createContext<typeContextTemplate>({
     listLeft: [],
     listRight: [],
     choosenBlock: { changeBlock: 0, choosenBlock: [] },
-    setChoosenBlock: () => {}
+    setChoosenBlock: () => {},
+    submitType: "",
+    setSubmitType: () => {}
 })
 export { ContextTemplate }

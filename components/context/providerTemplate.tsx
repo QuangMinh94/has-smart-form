@@ -10,6 +10,8 @@ const ProviderTemplate = ({ children }: PropsWithChildren) => {
         choosenBlock: [],
         changeBlock: 0
     })
+    const [submitType, setSubmitType] = useState<string>("")
+
     const data: typeContextTemplate = {
         setListLeft,
         setListRight,
@@ -18,7 +20,9 @@ const ProviderTemplate = ({ children }: PropsWithChildren) => {
         listRight,
         ChangeListFilter,
         choosenBlock,
-        setChoosenBlock
+        setChoosenBlock,
+        submitType,
+        setSubmitType
     }
     return (
         <ContextTemplate.Provider value={data}>

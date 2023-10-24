@@ -1,6 +1,6 @@
 "use client"
 
-import { contextBLockInput } from "@/components/context/templateContext"
+import { ContextTemplate } from "@/components/context/context"
 import { Col, DatePicker, Flex, Form, FormInstance, Input, Row } from "antd"
 import axios from "axios"
 import dayjs from "dayjs"
@@ -18,9 +18,8 @@ type FieldType = {
 
 const TemplateForm = ({ form }: { form: FormInstance<any> }) => {
     const cookies = useCookies()
-    const { choosenBlock } = useContext(contextBLockInput)
+    const { choosenBlock, submitType } = useContext(ContextTemplate)
     const onFinish = async (values: any) => {
-        console.log("Choosen", choosenBlock)
         const inputValue = {
             description: values.description,
             validFrom: dayjs(values.validFrom).toString(),
@@ -28,7 +27,7 @@ const TemplateForm = ({ form }: { form: FormInstance<any> }) => {
             code: Math.random().toString(),
             name: values.formName,
             block: choosenBlock.choosenBlock,
-            button: "SAVE"
+            button: submitType
         }
 
         const response = await axios.post(

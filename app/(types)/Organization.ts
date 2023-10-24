@@ -1,5 +1,3 @@
-import { ThemeGlobal } from "../../redux/features/theme/themeSlice"
-
 export interface Organization {
     Active?: boolean
     Address?: string
@@ -9,5 +7,4 @@ export interface Organization {
     Phone?: string
     UpdatedDate?: Date
     _id?: string
-    themeGlobal?: ThemeGlobal
 }
