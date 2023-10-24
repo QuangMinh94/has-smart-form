@@ -2,11 +2,48 @@
 
 import OzViewer from "@/components/OzViewer"
 import { ContextTemplate } from "@/components/context/context"
-import { Form } from "antd"
-import { useContext, useEffect } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { Form, Skeleton } from "antd"
+import axios from "axios"
+import { useContext } from "react"
 import CustomButtonGroup from "../_components/CustomButtonGroup"
 import TemplateForm from "./TemplateForm"
 import TransferTemplate from "./TransferTemplate"
+
+interface OptionProps {
+    id: string
+    name: string
+    checkBox: boolean
+    type: string
+}
+
+const useTemplate = () =>
+    useQuery<OptionProps[]>({
+        queryKey: ["option"],
+        queryFn: async () => {
+            const res = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {
+                repository: "Dịch vụ tài khoản"
+            })
+            const res_1 = res.data as {
+                name: string
+                repository: string
+                serverPath: string
+            }[]
+            const _option: OptionProps[] = []
+            res_1.forEach((resChild) => {
+                _option.push({
+                    id: resChild.repository + resChild.name,
+                    name: resChild.name,
+                    checkBox: false,
+                    type: resChild.repository
+                })
+            })
+
+            return _option
+        },
+        //staleTime: 60 * 1000, //60sec
+        retry: 3
+    })
 
 const NewTemplateWrapper = () => {
     const [form] = Form.useForm()
@@ -43,19 +80,13 @@ const NewTemplateWrapper = () => {
     const onSave = () => {}
     const onCancel = () => {}
 
-    useEffect(() => {
-        const arr = []
-        for (let i = 0; i <= 100; i++) {
-            arr.push({
-                id: i,
-                name: `name ${i}`,
-                checkBox: false,
-                type: "left"
-            })
-        }
-        setListLeft(arr)
-        console.log("ARRRR", arr)
-    }, [])
+    const { data: option, error, isLoading } = useTemplate()
+
+    if (isLoading) return <Skeleton.Input className="w-fit" active={true} />
+
+    if (error) return null
+
+    if (option) setListLeft(option)
 
     return (
         <>

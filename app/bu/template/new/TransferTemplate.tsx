@@ -25,6 +25,7 @@ const TransferTemplate = () => {
                         setChangeListFilter={setChangeListFilter}
                         ChangeListFilter={ChangeListFilter}
                         title="col1"
+
                         type={"left"}
                         setList={setListLeft}
                         list={listLeft}
@@ -45,6 +46,7 @@ const TransferTemplate = () => {
                         setChangeListFilter={setChangeListFilter}
                         ChangeListFilter={ChangeListFilter}
                         title="col2"
+
                         type={"right"}
                         setList={setListRight}
                         list={listRight}
