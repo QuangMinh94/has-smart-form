@@ -16,7 +16,7 @@ const TransferTemplate = () => {
             <LayoutTranfer
                 ColLeft={
                     <Container
-                        title="col1"
+                        title="Danh sách block"
                         type={"left"}
                         setList={setListLeft}
                         list={listLeft}
@@ -26,7 +26,7 @@ const TransferTemplate = () => {
                 Button={<ButtonLeftandRight />}
                 ColRight={
                     <Container
-                        title="col2"
+                        title="Block được chọn"
                         type={"right"}
                         setList={setListRight}
                         list={listRight}
