@@ -1,11 +1,16 @@
 "use client"
 
 import OzViewer from "@/components/OzViewer"
-import { contextBLockInput } from "@/components/context/templateContext"
-import { useContext } from "react"
+import { ContextTemplate } from "@/components/context/context"
+import { Form } from "antd"
+import { useContext, useEffect } from "react"
+import CustomButtonGroup from "../_components/CustomButtonGroup"
+import TemplateForm from "./TemplateForm"
+import TransferTemplate from "./TransferTemplate"
 
-const OzViewerWrapper = () => {
-    const { setChoosenBlock } = useContext(contextBLockInput)
+const NewTemplateWrapper = () => {
+    const [form] = Form.useForm()
+    const { setChoosenBlock, setListLeft } = useContext(ContextTemplate)
     const onPreview = () => {
         const choosenBlock = [
             { name: "BIDV.ozr", location: "1", ozrRepository: "input/Thẻ" },
@@ -32,17 +37,38 @@ const OzViewerWrapper = () => {
             )
         )
     }
-    const onSubmit = () => {}
+    const onSubmit = () => {
+        form.submit()
+    }
     const onSave = () => {}
     const onCancel = () => {}
+
+    useEffect(() => {
+        const arr = []
+        for (let i = 0; i <= 100; i++) {
+            arr.push({
+                id: i,
+                name: `name ${i}`,
+                checkBox: false,
+                type: "left"
+            })
+        }
+        setListLeft(arr)
+        console.log("ARRRR", arr)
+    }, [])
+
     return (
-        <OzViewer
-            url={process.env.NEXT_PUBLIC_EFORM_SERVER_APP!}
-            onPreview={onPreview}
-            onSubmit={onSubmit}
-            onSave={onSave}
-            onCancel={onCancel}
-        />
+        <>
+            <TemplateForm form={form} />
+            <TransferTemplate />
+            <CustomButtonGroup
+                onPreview={onPreview}
+                onSubmit={onSubmit}
+                onSave={onSave}
+                onCancel={onCancel}
+            />
+            <OzViewer />
+        </>
     )
 }
 
@@ -70,4 +96,4 @@ global.concatthumbnail=true;
     connection.displayname=EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán;
     viewer.thumbnailsection_showclosebutton=true;`
 
-export default OzViewerWrapper
+export default NewTemplateWrapper

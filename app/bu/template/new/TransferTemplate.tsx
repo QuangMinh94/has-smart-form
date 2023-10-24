@@ -1,38 +1,21 @@
 "use client"
-import React, { useEffect } from "react"
-import { useContextMyWork } from "@/components/cusTomHook/useContext"
+import ButtonLeftandRight from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/ButtonCusTom"
+import Container from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/Container"
+import LayoutTranfer from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/LayoutTranfer"
+import { useContextTemplate } from "@/components/cusTomHook/useContextTemplate"
+import "@/public/css/myWork/detailMyWork.css"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
-import "@/public/css/myWork/detailMyWork.css"
-import Container from "./CustomTranfDrag/Container"
-import ButtonLeftandRight from "./CustomTranfDrag/ButtonCusTom"
-import LayoutTranfer from "./CustomTranfDrag/LayoutTranfer"
 
-const DetailFormUser = () => {
+const TransferTemplate = () => {
     const {
         listLeft,
         listRight,
         setListLeft,
         setListRight,
-        ChangeListFilter,
-        setChangeListFilter
-    } = useContextMyWork()
-
-    useEffect(() => {
-        function getMock() {
-            const arr = []
-            for (let i = 0; i <= 100; i++) {
-                arr.push({
-                    id: i,
-                    name: `name ${i}`,
-                    checkBox: false
-                })
-            }
-            setListLeft(arr)
-        }
-        setListLeft([])
-        getMock()
-    }, [])
+        setChangeListFilter,
+        ChangeListFilter
+    } = useContextTemplate()
 
     return (
         <DndProvider backend={HTML5Backend}>
@@ -59,10 +42,10 @@ const DetailFormUser = () => {
                 }
                 ColRight={
                     <Container
-                        title="col2"
-                        type="right"
                         setChangeListFilter={setChangeListFilter}
                         ChangeListFilter={ChangeListFilter}
+                        title="col2"
+                        type={"right"}
                         setList={setListRight}
                         list={listRight}
                         setRomoveList={setListLeft}
@@ -73,4 +56,4 @@ const DetailFormUser = () => {
     )
 }
 
-export default DetailFormUser
+export default TransferTemplate

@@ -7,7 +7,19 @@ import {
     UserOutlined,
     VideoCameraOutlined
 } from "@ant-design/icons"
-import { Button, Image, Layout, Menu, theme } from "antd"
+import {
+    Avatar,
+    Button,
+    Dropdown,
+    Flex,
+    Image,
+    Layout,
+    Menu,
+    Skeleton,
+    theme
+} from "antd"
+import { useSession } from "next-auth/react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { PropsWithChildren, useState } from "react"
 
@@ -26,7 +38,6 @@ const CustomMenu = () => {
             mode="inline"
             defaultSelectedKeys={["1"]}
             onClick={(e) => switchRoute(e.key)}
-            
             items={[
                 {
                     key: "template",
@@ -53,6 +64,19 @@ const SideMenu = ({ children }: PropsWithChildren) => {
     const {
         token: { colorBgContainer }
     } = theme.useToken()
+
+    const { status, data: session } = useSession()
+
+    if (status === "loading")
+        return <Skeleton.Avatar shape="circle" active={true} />
+
+    if (status === "unauthenticated")
+        return (
+            <Link className="nav-link" href="api/auth/signin">
+                Login
+            </Link>
+        )
+
     return (
         <Layout className="h-screen">
             <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -69,22 +93,52 @@ const SideMenu = ({ children }: PropsWithChildren) => {
             </Sider>
             <Layout>
                 <Header style={{ padding: 0, background: colorBgContainer }}>
-                    <Button
-                        type="text"
-                        icon={
-                            collapsed ? (
-                                <MenuUnfoldOutlined />
-                            ) : (
-                                <MenuFoldOutlined />
-                            )
-                        }
-                        onClick={() => setCollapsed(!collapsed)}
-                        style={{
-                            fontSize: "16px",
-                            width: 64,
-                            height: 64
-                        }}
-                    />
+                    <Flex justify="space-between" align="center">
+                        <Button
+                            type="text"
+                            icon={
+                                collapsed ? (
+                                    <MenuUnfoldOutlined />
+                                ) : (
+                                    <MenuFoldOutlined />
+                                )
+                            }
+                            onClick={() => setCollapsed(!collapsed)}
+                            style={{
+                                fontSize: "16px",
+                                width: 64,
+                                height: 64
+                            }}
+                        />
+                        {status === "authenticated" && (
+                            <div className="mr-4">
+                                <Dropdown
+                                    menu={{
+                                        items: [
+                                            {
+                                                label: session.user?.email,
+                                                key: "0"
+                                            },
+                                            {
+                                                label: (
+                                                    <Link href="api/auth/signout">
+                                                        Logout
+                                                    </Link>
+                                                ),
+                                                key: "1"
+                                            }
+                                        ]
+                                    }}
+                                >
+                                    <Avatar
+                                        className="cursor-pointer"
+                                        src={session?.user!.image}
+                                        alt="?"
+                                    />
+                                </Dropdown>
+                            </div>
+                        )}
+                    </Flex>
                 </Header>
                 <Content
                     style={{

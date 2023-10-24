@@ -1,4 +1,5 @@
 "use client"
+import { Col, Row } from "antd"
 import React from "react"
 type Props = {
     ColLeft: React.ReactNode
@@ -7,19 +8,18 @@ type Props = {
 }
 const LayoutTranfer: React.FC<Props> = ({ ColLeft, Button, ColRight }) => {
     return (
-        <div style={{ display: "flex", alignItems: "center" }}>
-            {ColLeft}
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    margin: "0 6px"
-                }}
-            >
-                {Button}
-            </div>
-            {ColRight}
-        </div>
+       
+        <Row align="middle">
+            <Col span={11}>{ColLeft}</Col>
+            <Col span={2}>
+                <div
+                    className="flex flex-col mx-6"
+                >
+                    {Button}
+                </div>
+            </Col>
+            <Col span={11}>{ColRight}</Col>
+        </Row>
     )
 }
 export default LayoutTranfer

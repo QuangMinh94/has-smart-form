@@ -1,6 +1,7 @@
 import axios from "axios"
 import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
+import { cookies } from "next/headers"
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -25,8 +26,16 @@ export const authOptions: NextAuthOptions = {
                         username: credentials?.username,
                         password: credentials?.password
                     })
+                    /* const user = await axios.post(process.env.AUTH_LOGIN!, {
+                        username: "minhdq@bpm.lab",
+                        password: "Hpt123456"
+                    }) */
 
                     if (!user.data) return null
+                    cookies().set("token", user.data.token)
+                    cookies().set("session", user.data.session)
+                    //setCookie("token", "token", user.data.token)
+                    //setCookie("session", "session", user.data.session)
 
                     console.log("User data", user.data)
 
