@@ -2,6 +2,8 @@ import { config } from "@fortawesome/fontawesome-svg-core"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { cookies } from "next/headers"
+import { ClientCookiesProvider } from "./ClientCookiesProvider"
 import OzScript from "./OzScript"
 import QueryClientProvider from "./QueryClientProvider"
 import AuthProvider from "./auth/Provider"
@@ -26,13 +28,15 @@ export default function RootLayout({
         <html lang="en">
             <OzScript />
             <body className={inter.className}>
-                <QueryClientProvider>
-                    <AuthProvider>
-                        <AntdProvider>
-                            <main>{children}</main>
-                        </AntdProvider>
-                    </AuthProvider>
-                </QueryClientProvider>
+                <ClientCookiesProvider value={cookies().getAll()}>
+                    <QueryClientProvider>
+                        <AuthProvider>
+                            <AntdProvider>
+                                <main>{children}</main>
+                            </AntdProvider>
+                        </AuthProvider>
+                    </QueryClientProvider>
+                </ClientCookiesProvider>
             </body>
         </html>
     )
