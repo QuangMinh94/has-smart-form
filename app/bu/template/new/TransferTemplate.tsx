@@ -8,25 +8,45 @@ import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 
 const TransferTemplate = () => {
-    const { listLeft, listRight, setListLeft, setListRight } =
-        useContextTemplate()
+    const {
+        listLeft,
+        listRight,
+        setListLeft,
+        setListRight,
+        setChangeListFilter,
+        ChangeListFilter
+    } = useContextTemplate()
 
     return (
         <DndProvider backend={HTML5Backend}>
             <LayoutTranfer
                 ColLeft={
                     <Container
-                        title="Danh sách block"
+                        setChangeListFilter={setChangeListFilter}
+                        ChangeListFilter={ChangeListFilter}
+                        title="col1"
+
                         type={"left"}
                         setList={setListLeft}
                         list={listLeft}
                         setRomoveList={setListRight}
                     />
                 }
-                Button={<ButtonLeftandRight />}
+                Button={
+                    <ButtonLeftandRight
+                        listLeft={listLeft}
+                        listRight={listRight}
+                        setListLeft={setListLeft}
+                        setListRight={setListRight}
+                        setChangeListFilter={setChangeListFilter}
+                    />
+                }
                 ColRight={
                     <Container
-                        title="Block được chọn"
+                        setChangeListFilter={setChangeListFilter}
+                        ChangeListFilter={ChangeListFilter}
+                        title="col2"
+
                         type={"right"}
                         setList={setListRight}
                         list={listRight}

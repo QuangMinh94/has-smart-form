@@ -9,8 +9,14 @@ import ButtonLeftandRight from "./CustomTranfDrag/ButtonCusTom"
 import LayoutTranfer from "./CustomTranfDrag/LayoutTranfer"
 
 const DetailFormUser = () => {
-    const { listLeft, listRight, setListLeft, setListRight } =
-        useContextMyWork()
+    const {
+        listLeft,
+        listRight,
+        setListLeft,
+        setListRight,
+        ChangeListFilter,
+        setChangeListFilter
+    } = useContextMyWork()
 
     useEffect(() => {
         function getMock() {
@@ -19,8 +25,7 @@ const DetailFormUser = () => {
                 arr.push({
                     id: i,
                     name: `name ${i}`,
-                    checkBox: false,
-                    type: "left"
+                    checkBox: false
                 })
             }
             setListLeft(arr)
@@ -34,6 +39,8 @@ const DetailFormUser = () => {
             <LayoutTranfer
                 ColLeft={
                     <Container
+                        setChangeListFilter={setChangeListFilter}
+                        ChangeListFilter={ChangeListFilter}
                         title="col1"
                         type={"left"}
                         setList={setListLeft}
@@ -41,11 +48,21 @@ const DetailFormUser = () => {
                         setRomoveList={setListRight}
                     />
                 }
-                Button={<ButtonLeftandRight />}
+                Button={
+                    <ButtonLeftandRight
+                        listLeft={listLeft}
+                        listRight={listRight}
+                        setListLeft={setListLeft}
+                        setListRight={setListRight}
+                        setChangeListFilter={setChangeListFilter}
+                    />
+                }
                 ColRight={
                     <Container
                         title="col2"
-                        type={"right"}
+                        type="right"
+                        setChangeListFilter={setChangeListFilter}
+                        ChangeListFilter={ChangeListFilter}
                         setList={setListRight}
                         list={listRight}
                         setRomoveList={setListLeft}

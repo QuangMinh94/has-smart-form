@@ -1,5 +1,5 @@
 "use client"
-import { useMemo } from "react"
+import React, { useMemo } from "react"
 import { Button } from "antd"
 import { useContextMyWork } from "@/components/cusTomHook/useContext"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -7,14 +7,20 @@ import {
     faChevronRight,
     faChevronLeft
 } from "@fortawesome/free-solid-svg-icons"
-const ButtonLeftandRight: React.FC = () => {
-    const {
-        listLeft,
-        listRight,
-        setListLeft,
-        setListRight,
-        setChangeListFilter
-    } = useContextMyWork()
+type Props = {
+    listLeft: any[]
+    listRight: any[]
+    setListLeft: React.Dispatch<React.SetStateAction<any[]>>
+    setListRight: React.Dispatch<React.SetStateAction<any[]>>
+    setChangeListFilter: React.Dispatch<React.SetStateAction<boolean>>
+}
+const ButtonLeftandRight: React.FC<Props> = ({
+    listLeft,
+    listRight,
+    setListLeft,
+    setListRight,
+    setChangeListFilter
+}) => {
     const HandlerAdditem = (type: "addRight" | "addLeft") => {
         if (type === "addRight") {
             setListRight((listRight) => {

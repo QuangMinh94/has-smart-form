@@ -10,11 +10,12 @@ type typeProps = {
     list: any[]
     setList: React.Dispatch<React.SetStateAction<any[]>>
     setRomoveList: React.Dispatch<React.SetStateAction<any[]>>
+    setChangeListFilter: React.Dispatch<React.SetStateAction<boolean>>
+    ChangeListFilter: boolean
     type: typeKey
     title: string
 }
 
-import { useContextMyWork } from "@/components/cusTomHook/useContext"
 import { ToFilterName } from "@/util/formatText"
 import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import DragItem, { TypeDragItem } from "./DragItem"
@@ -24,11 +25,12 @@ const MyDropTarget: React.FC<typeProps> = ({
     setList,
     setRomoveList,
     type,
-    title
+    title,
+    ChangeListFilter,
+    setChangeListFilter
 }) => {
     const [listFilter, setListFilter] = useState<any[]>([])
     const [valueSearch, setValueSearch] = useState<string>("")
-    const { ChangeListFilter, setChangeListFilter } = useContextMyWork()
     const HandeFilter = {
         HanderChange: (e: any) => {
             setValueSearch(e.target.value)
