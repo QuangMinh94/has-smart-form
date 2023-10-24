@@ -1,16 +1,11 @@
-import TemplatesProvider from "@/components/context/templateContext"
-import OzViewerWrapper from "./OzViewerWrapper"
-import TemplateForm from "./TemplateForm"
+import TemplateContext from "@/components/context/templateContext"
+import NewTemplateWrapper from "./NewTemplateWrapper"
 
 const NewTemplate = () => {
     return (
-        <TemplatesProvider>
-            {/*  <DragDropProvider data={allColumns.columns}>
-                <Board />
-            </DragDropProvider> */}
-            <TemplateForm />
-            <OzViewerWrapper />
-        </TemplatesProvider>
+        <TemplateContext>
+            <NewTemplateWrapper />
+        </TemplateContext>
     )
 }
 

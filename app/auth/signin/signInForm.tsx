@@ -1,11 +1,7 @@
 "use client"
 
-import CustomLink from "@/components/CustomLink"
-import { Button, Col, Form, Input, Row, Space } from "antd"
+import { Button, Col, Form, Input, Row } from "antd"
 import { signIn } from "next-auth/react"
-import Image from "next/image"
-import HptBackground from "../../../public/img/HptBackground.png"
-import Title from "antd/es/skeleton/Title"
 import { useState } from "react"
 
 type FieldType = {
@@ -15,13 +11,13 @@ type FieldType = {
 
 const SigninForm = () => {
     //const router = useRouter()
-    const [error, setError] = useState('')
+    const [error, setError] = useState("")
     const onFinish = async (values: any) => {
         await signIn("credentials", {
             username: values.username,
             password: values.password,
             redirect: true,
-            callbackUrl: "http://localhost:3000"
+            callbackUrl: "http://localhost:3000/bu"
         })
         /*  if (signInResponse) {
             if (signInResponse.ok) {
@@ -124,14 +120,14 @@ const SigninForm = () => {
                             color: "rgb(21,92,209)",
                             fontSize: "36px",
                             fontWeight: "bold",
-                            textAlign:'center',
+                            textAlign: "center",
                             alignItems: "center",
-                            height:'10vh'
+                            height: "10vh"
                         }}
                     >
                         Đăng nhập
                     </h3>
-                    
+
                     <Form
                         name="basic"
                         // labelCol={{ span: 8 }}
@@ -163,14 +159,13 @@ const SigninForm = () => {
                                 type="primary"
                                 className="bg-blue-500"
                                 htmlType="submit"
-                                style={{width:'100%'}}
+                                style={{ width: "100%" }}
                             >
                                 Chuyên viên đăng nhập
                             </Button>
-
                         </Form.Item>
-                        <br/>
-                        <div style={{color:'red'}}>{error}</div>
+                        <br />
+                        <div style={{ color: "red" }}>{error}</div>
                     </Form>
                 </div>
             </Col>

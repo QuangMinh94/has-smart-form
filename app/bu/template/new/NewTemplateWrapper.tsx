@@ -2,9 +2,13 @@
 
 import OzViewer from "@/components/OzViewer"
 import { contextBLockInput } from "@/components/context/templateContext"
+import { Form } from "antd"
 import { useContext } from "react"
+import CustomButtonGroup from "../_components/CustomButtonGroup"
+import TemplateForm from "./TemplateForm"
 
-const OzViewerWrapper = () => {
+const NewTemplateWrapper = () => {
+    const [form] = Form.useForm()
     const { setChoosenBlock } = useContext(contextBLockInput)
     const onPreview = () => {
         const choosenBlock = [
@@ -32,17 +36,26 @@ const OzViewerWrapper = () => {
             )
         )
     }
-    const onSubmit = () => {}
+    const onSubmit = () => {
+        form.submit()
+    }
     const onSave = () => {}
     const onCancel = () => {}
+
     return (
-        <OzViewer
-            url={process.env.NEXT_PUBLIC_EFORM_SERVER_APP!}
-            onPreview={onPreview}
-            onSubmit={onSubmit}
-            onSave={onSave}
-            onCancel={onCancel}
-        />
+        <>
+            {/*  <DragDropProvider data={allColumns.columns}>
+                <Board />
+            </DragDropProvider> */}
+            <TemplateForm form={form} />
+            <CustomButtonGroup
+                onPreview={onPreview}
+                onSubmit={onSubmit}
+                onSave={onSave}
+                onCancel={onCancel}
+            />
+            <OzViewer />
+        </>
     )
 }
 
@@ -70,4 +83,4 @@ global.concatthumbnail=true;
     connection.displayname=EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán;
     viewer.thumbnailsection_showclosebutton=true;`
 
-export default OzViewerWrapper
+export default NewTemplateWrapper

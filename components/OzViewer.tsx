@@ -1,17 +1,8 @@
 "use client"
 
-import { Button, Flex } from "antd"
 import { useCallback, useEffect } from "react"
 
-interface Props {
-    url: string
-    onPreview: (e: any) => void
-    onSubmit: (e: any) => void
-    onSave: (e: any) => void
-    onCancel: (e: any) => void
-}
-
-const OzViewer = ({ url, onPreview, onSubmit, onSave, onCancel }: Props) => {
+const OzViewer = () => {
     const cachedFn = useCallback(() => {
         if (window.start_ozjs) {
             console.log("Here i am")
@@ -56,50 +47,19 @@ const OzViewer = ({ url, onPreview, onSubmit, onSave, onCancel }: Props) => {
         }
     }, [cachedFn])
 
-    return (
-        <Viewer
-            url=""
-            onPreview={onPreview}
-            onSubmit={onSubmit}
-            onSave={onSave}
-            onCancel={onCancel}
-        />
-    )
+    return <Viewer />
 }
 
-const Viewer = ({ onPreview, onSubmit, onSave, onCancel }: Props) => {
+const Viewer = () => {
     return (
-        <Flex vertical gap={10}>
-            <Flex justify="flex-end">
-                <Button className="w-20" type="primary" onClick={onPreview}>
-                    Preview
-                </Button>
-            </Flex>
-            <Flex justify="flex-end" gap={10}>
-                <Button className="w-20" type="primary" onClick={onSubmit}>
-                    Submit
-                </Button>
-                <Button className="w-20" type="primary" onClick={onSave}>
-                    Save
-                </Button>
-                <Button
-                    className="w-20"
-                    danger
-                    type="primary"
-                    onClick={onCancel}
-                >
-                    Cancel
-                </Button>
-            </Flex>
-            <div
-                id="OZViewer"
-                style={{
-                    width: "100%",
-                    height: "90vh"
-                    //marginTop: 60
-                }}
-            />
-        </Flex>
+        <div
+            id="OZViewer"
+            style={{
+                width: "100%",
+                height: "90vh"
+                //marginTop: 60
+            }}
+        />
     )
 }
 

@@ -112,7 +112,7 @@ const DragDropProvider: React.FC<{ children: any; data: ColumnType[] }> = ({
     )
 
     useEffect(() => {
-        setChoosenBlock({ choosenBlock: columns[1].tasks, changeBlock: 0 })
+        //setChoosenBlock({ choosenBlock: columns[1].tasks, changeBlock: 0 })
         console.log("My columns", columns)
     }, [columns])
 
