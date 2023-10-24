@@ -1,7 +1,6 @@
 "use client"
-import { faBullseye } from "@fortawesome/free-solid-svg-icons"
-import { typeContextMywork, contextMywork } from "../context"
 import React, { useState } from "react"
+import { contextMywork, typeContextMywork } from "../context"
 
 type typeProvider = {
     children: React.ReactNode
