@@ -1,14 +1,19 @@
 "use client"
 
-import OzViewer from "@/components/OzViewer"
+//import OzViewer from "@/components/OzViewer"
+import { EformTemplate } from "@/app/(types)/EformTemplate"
 import { ContextTemplate } from "@/components/context/context"
 import { useQuery } from "@tanstack/react-query"
 import { Form, Skeleton, message } from "antd"
 import axios from "axios"
-import { useContext } from "react"
+import delay from "delay"
+import dynamic from "next/dynamic"
+import { useContext, useEffect, useState } from "react"
 import CustomButtonGroup from "../_components/CustomButtonGroup"
 import TemplateForm from "./TemplateForm"
 import TransferTemplate from "./TransferTemplate"
+
+const OzViewer = dynamic(() => import("@/components/OzViewer"), { ssr: false })
 
 interface OptionProps {
     id: string
@@ -17,30 +22,62 @@ interface OptionProps {
     type: string
 }
 
-const NewTemplateWrapper = () => {
+const NewTemplateWrapper = ({ data }: { data?: EformTemplate[] }) => {
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage()
-    const { setChoosenBlock, setListLeft, listRight, setSubmitType } =
-        useContext(ContextTemplate)
-    const onPreview = () => {
+    const {
+        setFormData,
+        setChoosenBlock,
+        setListLeft,
+        listRight,
+        setSubmitType
+    } = useContext(ContextTemplate)
+    const [viewerKey, setViewerKey] = useState<number>(0)
+
+    useEffect(() => {
+        setFormData(data ? data : [])
+        setViewerKey(Math.random())
+    }, [])
+
+    const resetEForm = () => {
+        setViewerKey(Math.random())
+    }
+    const onPreview = async () => {
         if (listRight.length > 0) {
-            const choosenBlock = listRight
+            setViewerKey(Math.random())
+            //resetEForm()
+            await delay(2000)
+            const choosenBlock: {
+                name: string
+                location: string
+                ozrRepository: string
+            }[] = []
+
+            listRight.forEach((element) => {
+                let count = 0
+                choosenBlock.push({
+                    name: element.name,
+                    location: count.toString(),
+                    ozrRepository: element.type
+                })
+            })
 
             setChoosenBlock({
                 choosenBlock: choosenBlock,
                 changeBlock: 0
             })
-
             const oz = document.getElementById("OZViewer")
+
             choosenBlock.forEach((block) => {
                 oz!.CreateReportEx(
                     DefaultParams(
                         process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                        "/" + block.type + "/" + block.name,
+                        "/" + block.ozrRepository + "/" + block.name,
                         block.name
                     ),
                     ";"
                 )
+                //oz!.Script("refresh")
             })
         } else {
             messageApi.error("Please choose at least 1 block")
@@ -54,7 +91,9 @@ const NewTemplateWrapper = () => {
         setSubmitType("SAVE")
         form.submit()
     }
-    const onCancel = () => {}
+    const onCancel = () => {
+        resetEForm()
+    }
 
     const useTemplate = () =>
         useQuery<OptionProps[]>({
@@ -107,7 +146,7 @@ const NewTemplateWrapper = () => {
                 onSave={onSave}
                 onCancel={onCancel}
             />
-            <OzViewer />
+            <OzViewer viewerKey={viewerKey} />
         </>
     )
 }
@@ -120,20 +159,12 @@ const DefaultParams = (
     return `connection.servlet=${url};
 connection.reportname=${reportName};
 global.concatthumbnail=true;
+connection.refreshperiod=1;
+viewer.createreport_doc_index=0;
     global.concatpreview=false;
     viewer.showtab=true;
     connection.displayname=${displayname};
     viewer.thumbnailsection_showclosebutton=true;`
 }
-
-const BackupParams = `connection.servlet=http://10.4.18.92/training/server;
-connection.reportname=/input/Dịch vụ tài khoản/EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán.ozr;
-viewer.showthumbnail=false;
-global.concatthumbnail=true;
-    global.concatpreview=false;
-    viewer.showtree=true;
-    viewer.showtab=true;
-    connection.displayname=EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán;
-    viewer.thumbnailsection_showclosebutton=true;`
 
 export default NewTemplateWrapper

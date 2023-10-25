@@ -13,6 +13,8 @@ export function useContextTemplate(): typeContextTemplate {
         choosenBlock: provider.choosenBlock,
         setChoosenBlock: provider.setChoosenBlock,
         submitType: provider.submitType,
-        setSubmitType: provider.setSubmitType
+        setSubmitType: provider.setSubmitType,
+        formData: provider.formData,
+        setFormData: provider.setFormData
     }
 }

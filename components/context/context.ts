@@ -1,10 +1,12 @@
 "use client"
+import { EformTemplate } from "@/app/(types)/EformTemplate"
 import { Dispatch, SetStateAction, createContext } from "react"
 
 export type changeBlock = {
     choosenBlock: { name: string; location: string; ozrRepository: string }[]
     changeBlock: number
 }
+
 export interface typeContextTemplate {
     setListLeft: Dispatch<SetStateAction<any[]>>
     listLeft: any[]
@@ -16,6 +18,8 @@ export interface typeContextTemplate {
     setChoosenBlock: Dispatch<SetStateAction<changeBlock>>
     submitType: string
     setSubmitType: Dispatch<SetStateAction<string>>
+    formData: EformTemplate[]
+    setFormData: Dispatch<SetStateAction<EformTemplate[]>>
 }
 const ContextTemplate = createContext<typeContextTemplate>({
     setListLeft: () => {},
@@ -27,6 +31,8 @@ const ContextTemplate = createContext<typeContextTemplate>({
     choosenBlock: { changeBlock: 0, choosenBlock: [] },
     setChoosenBlock: () => {},
     submitType: "",
-    setSubmitType: () => {}
+    setSubmitType: () => {},
+    formData: [],
+    setFormData: () => {}
 })
 export { ContextTemplate }

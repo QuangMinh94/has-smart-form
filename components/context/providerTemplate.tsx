@@ -1,4 +1,5 @@
 "use client"
+import { EformTemplate } from "@/app/(types)/EformTemplate"
 import { PropsWithChildren, useState } from "react"
 import { ContextTemplate, changeBlock, typeContextTemplate } from "./context"
 
@@ -11,6 +12,7 @@ const ProviderTemplate = ({ children }: PropsWithChildren) => {
         changeBlock: 0
     })
     const [submitType, setSubmitType] = useState<string>("")
+    const [formData, setFormData] = useState<EformTemplate[]>([])
 
     const data: typeContextTemplate = {
         setListLeft,
@@ -22,7 +24,9 @@ const ProviderTemplate = ({ children }: PropsWithChildren) => {
         choosenBlock,
         setChoosenBlock,
         submitType,
-        setSubmitType
+        setSubmitType,
+        formData,
+        setFormData
     }
     return (
         <ContextTemplate.Provider value={data}>

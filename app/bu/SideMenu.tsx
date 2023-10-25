@@ -1,12 +1,12 @@
 "use client"
 
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
 import {
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    UploadOutlined,
-    UserOutlined,
-    VideoCameraOutlined
-} from "@ant-design/icons"
+    faArchive,
+    faFile,
+    faFileCirclePlus
+} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
     Avatar,
     Button,
@@ -41,18 +41,18 @@ const CustomMenu = () => {
             items={[
                 {
                     key: "template",
-                    icon: <UserOutlined />,
+                    icon: <FontAwesomeIcon icon={faFile} />,
                     label: "Biểu mẫu"
                 },
                 {
-                    key: "mywork",
-                    icon: <VideoCameraOutlined />,
-                    label: "Công việc của tôi"
+                    key: "/template/new",
+                    icon: <FontAwesomeIcon icon={faFileCirclePlus} />,
+                    label: "Tạo mới biểu mẫu"
                 },
                 {
-                    key: "myfkingwork",
-                    icon: <UploadOutlined />,
-                    label: "Công việc của tao"
+                    key: "/mywork",
+                    icon: <FontAwesomeIcon icon={faArchive} />,
+                    label: "Công việc của tôi"
                 }
             ]}
         />
@@ -94,22 +94,24 @@ const SideMenu = ({ children }: PropsWithChildren) => {
             <Layout>
                 <Header style={{ padding: 0, background: colorBgContainer }}>
                     <Flex justify="space-between" align="center">
-                        <Button
-                            type="text"
-                            icon={
-                                collapsed ? (
-                                    <MenuUnfoldOutlined />
-                                ) : (
-                                    <MenuFoldOutlined />
-                                )
-                            }
-                            onClick={() => setCollapsed(!collapsed)}
-                            style={{
-                                fontSize: "16px",
-                                width: 64,
-                                height: 64
-                            }}
-                        />
+                        <Flex>
+                            <Button
+                                type="text"
+                                icon={
+                                    collapsed ? (
+                                        <MenuUnfoldOutlined />
+                                    ) : (
+                                        <MenuFoldOutlined />
+                                    )
+                                }
+                                onClick={() => setCollapsed(!collapsed)}
+                                style={{
+                                    fontSize: "16px",
+                                    width: 64,
+                                    height: 64
+                                }}
+                            />
+                        </Flex>
                         {status === "authenticated" && (
                             <div className="mr-4">
                                 <Dropdown

@@ -4,7 +4,7 @@ import NewTemplateWrapper from "./NewTemplateWrapper"
 const NewTemplate = () => {
     return (
         <ProviderTemplate>
-            <NewTemplateWrapper />
+            <NewTemplateWrapper key="insert" data={[]} />
         </ProviderTemplate>
     )
 }

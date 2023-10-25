@@ -18,7 +18,7 @@ type FieldType = {
 
 const TemplateForm = ({ form }: { form: FormInstance<any> }) => {
     const cookies = useCookies()
-    const { choosenBlock, submitType } = useContext(ContextTemplate)
+    const { choosenBlock, submitType, formData } = useContext(ContextTemplate)
     const onFinish = async (values: any) => {
         const inputValue = {
             description: values.description,
@@ -30,18 +30,13 @@ const TemplateForm = ({ form }: { form: FormInstance<any> }) => {
             button: submitType
         }
 
-        const response = await axios.post(
-            process.env.NEXT_PUBLIC_EFORM_TEMPLATE!,
-            inputValue,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + cookies.get("token"),
-                    Session: cookies.get("session")
-                }
+        await axios.post(process.env.NEXT_PUBLIC_EFORM_TEMPLATE!, inputValue, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + cookies.get("token"),
+                Session: cookies.get("session")
             }
-        )
-        console.log("Res data", response.data)
+        })
     }
     return (
         <Form
@@ -69,7 +64,13 @@ const TemplateForm = ({ form }: { form: FormInstance<any> }) => {
                                 ]}
                                 className="w-3/6"
                             >
-                                <Input />
+                                <Input
+                                    value={
+                                        formData.length > 0
+                                            ? formData[0].name
+                                            : ""
+                                    }
+                                />
                             </Form.Item>
                             <Form.Item<FieldType>
                                 label="Mã form"
@@ -82,7 +83,13 @@ const TemplateForm = ({ form }: { form: FormInstance<any> }) => {
                                 ]}
                                 className="w-3/6"
                             >
-                                <Input />
+                                <Input
+                                    value={
+                                        formData.length > 0
+                                            ? formData[0].code
+                                            : ""
+                                    }
+                                />
                             </Form.Item>
                         </Flex>
                         <Flex gap={8}>
@@ -97,7 +104,10 @@ const TemplateForm = ({ form }: { form: FormInstance<any> }) => {
                                 ]}
                                 className="w-3/6"
                             >
-                                <DatePicker className="w-full" />
+                                <DatePicker
+                                    className="w-full"
+                                    //value={formData.validFrom}
+                                />
                             </Form.Item>
 
                             <Form.Item<FieldType>
@@ -105,7 +115,10 @@ const TemplateForm = ({ form }: { form: FormInstance<any> }) => {
                                 name="validTo"
                                 className="w-3/6"
                             >
-                                <DatePicker className="w-full" />
+                                <DatePicker
+                                    className="w-full"
+                                    //value={formData.validTo}
+                                />
                             </Form.Item>
                         </Flex>
                     </Flex>
@@ -124,6 +137,11 @@ const TemplateForm = ({ form }: { form: FormInstance<any> }) => {
                             //onChange={onChange}
                             placeholder="can resize"
                             className="w-full"
+                            value={
+                                formData.length > 0
+                                    ? formData[0].description
+                                    : ""
+                            }
                         />
                     </Form.Item>
                 </Col>
