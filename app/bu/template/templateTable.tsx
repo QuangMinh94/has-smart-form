@@ -1,11 +1,10 @@
 "use client"
 
-import { EformTemplate } from "@/app/(types)/EformTemplate"
 import DateFormatter from "@/app/(utilities)/DateFormatter"
 import CustomLink from "@/components/CustomLink"
 import Table, { ColumnsType } from "antd/es/table"
 
-type DataTableType = {
+export type DataTableType = {
     key?: string
     formName?: string
     approval?: string
@@ -60,19 +59,8 @@ const columns: ColumnsType<DataTableType> = [
     }
 ]
 
-const TemplateTable = ({ data }: { data: EformTemplate[] }) => {
-    const _data: DataTableType[] = []
-    data.forEach((element) => {
-        _data.push({
-            key: element._id,
-            formName: element.name,
-            approval: element.approver,
-            validFrom: element.validFrom,
-            status: element.status
-        })
-    })
-
-    return <Table dataSource={_data} columns={columns}></Table>
+const TemplateTable = ({ data }: { data: DataTableType[] }) => {
+    return <Table dataSource={data} columns={columns}></Table>
 }
 
 export default TemplateTable

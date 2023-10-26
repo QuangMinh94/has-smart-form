@@ -15,10 +15,20 @@ export interface EformTemplate {
             ozrRepository?: string
         }
     ]
-    updatedDate?: Date
+    updatedDate?: string | Date
     updateBy?: string
-    validFrom?: Date
-    validTo?: Date
-    status?: string
+    validFrom?: string | Date
+    validTo?: string | Date
+    status?: Status
     description?: string
+}
+
+export interface Status {
+    disabled: boolean
+    _id: string
+    code: string
+    name: string
+    type: string
+    active: boolean
+    descriptiom: string
 }

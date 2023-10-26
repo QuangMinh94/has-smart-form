@@ -2,7 +2,7 @@ import { EformTemplate } from "@/app/(types)/EformTemplate"
 import ProviderTemplate from "@/components/context/providerTemplate"
 import axios from "axios"
 import { cookies } from "next/headers"
-import NewTemplateWrapper from "../new/NewTemplateWrapper"
+import NewTemplateWrapper from "../_components/NewTemplateWrapper"
 
 const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
     const cookie = cookies()
@@ -21,7 +21,7 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
 
     return (
         <ProviderTemplate>
-            <NewTemplateWrapper key={"edit"} data={data} />
+            <NewTemplateWrapper id={params.id} data={data} />
         </ProviderTemplate>
     )
 }

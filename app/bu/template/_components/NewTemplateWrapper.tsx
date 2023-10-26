@@ -2,16 +2,23 @@
 
 //import OzViewer from "@/components/OzViewer"
 import { EformTemplate } from "@/app/(types)/EformTemplate"
+import { timeStampToDayjs } from "@/app/(utilities)/TimeStampToDayjs"
 import { ContextTemplate } from "@/components/context/context"
 import { useQuery } from "@tanstack/react-query"
 import { Form, Skeleton, message } from "antd"
 import axios from "axios"
+import dayjs from "dayjs"
+import tz from "dayjs/plugin/timezone"
+import utc from "dayjs/plugin/utc"
 import delay from "delay"
 import dynamic from "next/dynamic"
 import { useContext, useEffect, useState } from "react"
-import CustomButtonGroup from "../_components/CustomButtonGroup"
-import TemplateForm from "./TemplateForm"
-import TransferTemplate from "./TransferTemplate"
+import TemplateForm from "../new/TemplateForm"
+import TransferTemplate from "../new/TransferTemplate"
+import CustomButtonGroup from "./CustomButtonGroup"
+
+dayjs.extend(utc)
+dayjs.extend(tz)
 
 const OzViewer = dynamic(() => import("@/components/OzViewer"), { ssr: false })
 
@@ -22,7 +29,13 @@ interface OptionProps {
     type: string
 }
 
-const NewTemplateWrapper = ({ data }: { data?: EformTemplate[] }) => {
+const NewTemplateWrapper = ({
+    id,
+    data
+}: {
+    id?: string
+    data: EformTemplate[]
+}) => {
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage()
     const {
@@ -30,12 +43,46 @@ const NewTemplateWrapper = ({ data }: { data?: EformTemplate[] }) => {
         setChoosenBlock,
         setListLeft,
         listRight,
-        setSubmitType
+        setSubmitType,
+        setIsInsert
     } = useContext(ContextTemplate)
     const [viewerKey, setViewerKey] = useState<number>(0)
 
     useEffect(() => {
-        setFormData(data ? data : [])
+        if (data.length > 0) {
+            setIsInsert(false)
+            setChoosenBlock({
+                choosenBlock: data[0].block!,
+                changeBlock: 0
+            })
+
+            form.setFieldsValue({
+                formName: data[0].name,
+                formCode: data[0].code,
+                description: data[0].description,
+                validFrom: timeStampToDayjs(
+                    new Date(data[0].validFrom as string).getTime()
+                ),
+                validTo: timeStampToDayjs(
+                    new Date(data[0].validTo as string).getTime()
+                )
+            })
+        } else {
+            setIsInsert(true)
+            setChoosenBlock({
+                choosenBlock: [],
+                changeBlock: 0
+            })
+            form.setFieldsValue({
+                formName: "",
+                formCode: "",
+                description: "",
+                validFrom: null,
+                validTo: null
+            })
+        }
+
+        setFormData(data)
         setViewerKey(Math.random())
     }, [])
 
@@ -44,7 +91,7 @@ const NewTemplateWrapper = ({ data }: { data?: EformTemplate[] }) => {
     }
     const onPreview = async () => {
         if (listRight.length > 0) {
-            setViewerKey(Math.random())
+            resetEForm()
             //resetEForm()
             await delay(2000)
             const choosenBlock: {
@@ -93,6 +140,10 @@ const NewTemplateWrapper = ({ data }: { data?: EformTemplate[] }) => {
     }
     const onCancel = () => {
         resetEForm()
+        /* const oz = document.getElementById("OZViewer")
+        const inputdata = oz!.GetInformation("INPUT_JSON_ALL")
+        var params = "connection.inputjson=" + inputdata + ";"
+        oz!.ReBind(0, "data", params, ";") */
     }
 
     const useTemplate = () =>
@@ -136,9 +187,9 @@ const NewTemplateWrapper = ({ data }: { data?: EformTemplate[] }) => {
     if (error) return null
 
     return (
-        <>
+        <div>
             {contextHolder}
-            <TemplateForm form={form} />
+            <TemplateForm id={id} form={form} />
             <TransferTemplate />
             <CustomButtonGroup
                 onPreview={onPreview}
@@ -147,7 +198,7 @@ const NewTemplateWrapper = ({ data }: { data?: EformTemplate[] }) => {
                 onCancel={onCancel}
             />
             <OzViewer viewerKey={viewerKey} />
-        </>
+        </div>
     )
 }
 

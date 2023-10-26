@@ -15,6 +15,8 @@ export function useContextTemplate(): typeContextTemplate {
         submitType: provider.submitType,
         setSubmitType: provider.setSubmitType,
         formData: provider.formData,
-        setFormData: provider.setFormData
+        setFormData: provider.setFormData,
+        isInsert: provider.isInsert,
+        setIsInsert: provider.setIsInsert
     }
 }

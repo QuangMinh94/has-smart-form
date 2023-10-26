@@ -3,7 +3,7 @@ import { EformTemplate } from "@/app/(types)/EformTemplate"
 import { Dispatch, SetStateAction, createContext } from "react"
 
 export type changeBlock = {
-    choosenBlock: { name: string; location: string; ozrRepository: string }[]
+    choosenBlock: { name?: string; location?: string; ozrRepository?: string }[]
     changeBlock: number
 }
 
@@ -20,6 +20,8 @@ export interface typeContextTemplate {
     setSubmitType: Dispatch<SetStateAction<string>>
     formData: EformTemplate[]
     setFormData: Dispatch<SetStateAction<EformTemplate[]>>
+    isInsert: boolean
+    setIsInsert: Dispatch<SetStateAction<boolean>>
 }
 const ContextTemplate = createContext<typeContextTemplate>({
     setListLeft: () => {},
@@ -33,6 +35,8 @@ const ContextTemplate = createContext<typeContextTemplate>({
     submitType: "",
     setSubmitType: () => {},
     formData: [],
-    setFormData: () => {}
+    setFormData: () => {},
+    isInsert: true,
+    setIsInsert: () => {}
 })
 export { ContextTemplate }

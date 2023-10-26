@@ -1,33 +1,54 @@
 import { EformTemplate } from "@/app/(types)/EformTemplate"
 import axios from "axios"
 import { cookies } from "next/headers"
+import { cache } from "react"
 import PageHeader from "../_components/PageHeader"
 import SearchParamProvider from "../_context/searchParamProvider"
-import TemplateTable from "./templateTable"
+import TemplateTable, { DataTableType } from "./templateTable"
 
-const TemplatePage = async () => {
-    const cookie = cookies()
-    const response = await axios.post(
+const TemplatePage = async ({
+    searchParams
+}: {
+    searchParams: { name: string }
+}) => {
+    const data = await fetchTemplate(
         process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
-        {},
-        {
-            headers: {
-                Authorization: "Bearer " + cookie.get("token")?.value,
-                Session: cookie.get("session")?.value
-            }
-        }
+        searchParams.name ? { name: searchParams.name } : {}
     )
-    const data = response.data as EformTemplate[]
+
+    const _data: DataTableType[] = []
+    data.forEach((element) => {
+        _data.push({
+            key: element._id,
+            formName: element.name,
+            approval: element.approver,
+            validFrom: element.validFrom,
+            status: element.status?.name
+        })
+    })
 
     return (
         <SearchParamProvider>
             <PageHeader>
-                <TemplateTable data={data} />
+                <TemplateTable data={_data} />
             </PageHeader>
         </SearchParamProvider>
     )
 }
 
+const fetchTemplate = cache(async (url: string, searchInput: any) => {
+    const cookie = cookies()
+    const res = await axios.post(url, searchInput, {
+        headers: {
+            Authorization: "Bearer " + cookie.get("token")?.value,
+            Session: cookie.get("session")?.value
+        }
+    })
+    const data = res.data as EformTemplate[]
+    return data
+})
+
 export const dynamic = "force-dynamic"
+//export const revalidate = 10
 
 export default TemplatePage

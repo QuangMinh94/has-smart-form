@@ -12,5 +12,6 @@ declare global {
         CreateReportEx: any
         GetInformation: any
         Script: any
+        ReBind: any
     }
 }
