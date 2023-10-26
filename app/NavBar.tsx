@@ -81,8 +81,7 @@ const AuthStatus = () => {
                                         className="cursor-pointer"
                                         onClick={() =>
                                             signOut({
-                                                callbackUrl:
-                                                    window.location.host + "/bu"
+                                                callbackUrl: "/bu"
                                             })
                                         }
                                     >
