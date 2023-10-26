@@ -2,7 +2,7 @@
 
 import { Avatar, Dropdown, Image, Skeleton } from "antd"
 import classnames from "classnames"
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -60,7 +60,7 @@ const AuthStatus = () => {
 
     if (status === "unauthenticated")
         return (
-            <Link className="nav-link" href="api/auth/signin">
+            <Link className="nav-link" href="/api/auth/signin">
                 Login
             </Link>
         )
@@ -77,7 +77,17 @@ const AuthStatus = () => {
                             },
                             {
                                 label: (
-                                    <Link href="api/auth/signout">Logout</Link>
+                                    <p
+                                        className="cursor-pointer"
+                                        onClick={async () =>
+                                            await signOut({
+                                                callbackUrl:
+                                                    "http://localhost:3000/bu"
+                                            })
+                                        }
+                                    >
+                                        Log out
+                                    </p>
                                 ),
                                 key: "1"
                             }

@@ -1,54 +1,29 @@
-import TemplatesProvider from "@/components/context/templateContext"
+import { EformTemplate } from "@/app/(types)/EformTemplate"
+import ProviderTemplate from "@/components/context/providerTemplate"
 import axios from "axios"
-import dynamic from "next/dynamic"
-import { v4 } from "uuid"
-import { ColumnType, TaskBoardType } from "./_assets"
-import { DragDropProvider } from "./_components"
-//import { Board } from "./_components"
-const Board = dynamic(() => import("./_components").then((res) => res.Board), {
-    ssr: false
-})
+import { cookies } from "next/headers"
+import NewTemplateWrapper from "../_components/NewTemplateWrapper"
 
 const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
-    const responseTk = await axios.post(
-        "http://10.4.18.143:3000/eform/forcs/itemList",
-        { repository: "Dịch vụ tài khoản" }
+    const cookie = cookies()
+
+    const response = await axios.get(
+        process.env.NEXT_PUBLIC_EFORM_GET_TEMPLATE! + "/" + params.id,
+        {
+            headers: {
+                Authorization: "Bearer " + cookie.get("token")?.value,
+                Session: cookie.get("session")?.value
+            }
+        }
     )
 
-    const responseThẻ = await axios.post(
-        "http://10.4.18.143:3000/eform/forcs/itemList",
-        { repository: "Thẻ" }
-    )
-
-    const allBlock: ColumnType = {
-        id: v4(),
-        title: "Danh sách block",
-        tasks: []
-    }
-
-    responseTk.data.forEach((item: any) => {
-        allBlock.tasks.push({ content: item.name, id: v4() })
-    })
-
-    const chosenBLock: ColumnType = {
-        id: v4(),
-        title: "Danh sách block được chọn",
-        tasks: []
-    }
-
-    const allColumns: TaskBoardType = {
-        columns: [allBlock, chosenBLock]
-    }
+    const data = response.data as EformTemplate[]
 
     return (
-        <>
-            <TemplatesProvider>
-                <DragDropProvider data={allColumns.columns}>
-                    <Board />
-                </DragDropProvider>
-                {/* <OzViewerWrapper /> */}
-            </TemplatesProvider>
-        </>
+        <ProviderTemplate>
+            <NewTemplateWrapper id={params.id} data={data} />
+        </ProviderTemplate>
     )
 }
+
 export default TemplateDetailPage

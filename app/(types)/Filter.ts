@@ -1,11 +1,10 @@
-import { Group } from './Group'
-import { Role } from './Role'
+import { Group } from "./Group"
 export interface Filter {
-    Name?: string,
-    View?: string,
-    User?: string,
-    Active?: boolean,
-    Condition?: Group[],
-    _Id?: string,
+    Name?: string
+    View?: string
+    User?: string
+    Active?: boolean
+    Condition?: Group[]
+    _Id?: string
     Assignee?: string
 }

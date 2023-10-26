@@ -1,21 +1,54 @@
-"use client"
+import { EformTemplate } from "@/app/(types)/EformTemplate"
+import axios from "axios"
+import { cookies } from "next/headers"
+import { cache } from "react"
+import PageHeader from "../_components/PageHeader"
+import SearchParamProvider from "../_context/searchParamProvider"
+import TemplateTable, { DataTableType } from "./templateTable"
 
-import { Button, Flex } from "antd"
-import { useRouter } from "next/navigation"
+const TemplatePage = async ({
+    searchParams
+}: {
+    searchParams: { name: string }
+}) => {
+    const data = await fetchTemplate(
+        process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
+        searchParams.name ? { name: searchParams.name } : {}
+    )
 
-const TemplatePage = () => {
-    const router = useRouter()
+    const _data: DataTableType[] = []
+    data.forEach((element) => {
+        _data.push({
+            key: element._id,
+            formName: element.name,
+            approval: element.approver,
+            validFrom: element.validFrom,
+            status: element.status?.name
+        })
+    })
+
     return (
-        <Flex justify="space-between">
-            <p>TemplatePage</p>
-            <Button
-                type="primary"
-                onClick={() => router.push("/bu/template/2")}
-            >
-                Go to detail
-            </Button>
-        </Flex>
+        <SearchParamProvider>
+            <PageHeader>
+                <TemplateTable data={_data} />
+            </PageHeader>
+        </SearchParamProvider>
     )
 }
+
+const fetchTemplate = cache(async (url: string, searchInput: any) => {
+    const cookie = cookies()
+    const res = await axios.post(url, searchInput, {
+        headers: {
+            Authorization: "Bearer " + cookie.get("token")?.value,
+            Session: cookie.get("session")?.value
+        }
+    })
+    const data = res.data as EformTemplate[]
+    return data
+})
+
+export const dynamic = "force-dynamic"
+//export const revalidate = 10
 
 export default TemplatePage

@@ -1,10 +1,10 @@
 import ProviderTemplate from "@/components/context/providerTemplate"
-import NewTemplateWrapper from "./NewTemplateWrapper"
+import NewTemplateWrapper from "../_components/NewTemplateWrapper"
 
 const NewTemplate = () => {
     return (
         <ProviderTemplate>
-            <NewTemplateWrapper />
+            <NewTemplateWrapper data={[]} />
         </ProviderTemplate>
     )
 }

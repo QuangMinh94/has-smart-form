@@ -11,6 +11,12 @@ export function useContextTemplate(): typeContextTemplate {
         setChangeListFilter: provider.setChangeListFilter,
         ChangeListFilter: provider.ChangeListFilter,
         choosenBlock: provider.choosenBlock,
-        setChoosenBlock: provider.setChoosenBlock
+        setChoosenBlock: provider.setChoosenBlock,
+        submitType: provider.submitType,
+        setSubmitType: provider.setSubmitType,
+        formData: provider.formData,
+        setFormData: provider.setFormData,
+        isInsert: provider.isInsert,
+        setIsInsert: provider.setIsInsert
     }
 }

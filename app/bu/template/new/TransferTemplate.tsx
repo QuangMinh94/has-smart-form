@@ -24,7 +24,7 @@ const TransferTemplate = () => {
                     <Container
                         setChangeListFilter={setChangeListFilter}
                         ChangeListFilter={ChangeListFilter}
-                        title="col1"
+                        title="Danh sách block"
                         type={"left"}
                         setList={setListLeft}
                         list={listLeft}
@@ -44,7 +44,7 @@ const TransferTemplate = () => {
                     <Container
                         setChangeListFilter={setChangeListFilter}
                         ChangeListFilter={ChangeListFilter}
-                        title="col2"
+                        title="Block được chọn"
                         type={"right"}
                         setList={setListRight}
                         list={listRight}
