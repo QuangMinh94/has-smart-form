@@ -2,9 +2,9 @@
 
 import { Avatar, Dropdown, Image, Skeleton } from "antd"
 import classnames from "classnames"
-import { signOut, useSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 const NavBar = () => {
     return (
@@ -54,6 +54,7 @@ const NavLink = () => {
 
 const AuthStatus = () => {
     const { status, data: session } = useSession()
+    const router = useRouter()
 
     if (status === "loading")
         return <Skeleton.Avatar shape="circle" active={true} />
@@ -80,12 +81,7 @@ const AuthStatus = () => {
                                     <p
                                         className="cursor-pointer"
                                         onClick={() =>
-                                            signOut({
-                                                callbackUrl:
-                                                    process.env
-                                                        .NEXT_PUBLIC_SERVER_URL! +
-                                                    "/bu"
-                                            })
+                                            router.push("/api/auth/logout")
                                         }
                                     >
                                         Log out

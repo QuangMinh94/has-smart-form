@@ -2,8 +2,11 @@
 
 import { signOut } from "next-auth/react"
 
-const SignOutPage = async () => {
-    await signOut({ redirect: true, callbackUrl: "http://localhost:3000/bu" })
+const SignOutPage = () => {
+    signOut({
+        redirect: true,
+        callbackUrl: process.env.NEXT_PUBLIC_SERVER_URL! + "/bu"
+    })
     return <div>Sign out successfully</div>
 }
 
