@@ -34,7 +34,7 @@ const OzScript = () => {
                 src="http://10.4.18.92/html5viewer/pdf_js/build/pdf.js"
                 // strategy="beforeInteractive"
             />
-            <Script>
+            <Script id={"ozScript"}>
                 {`function OZCommand_OZViewer(code, args) {
                 console.log('OzEvent',args);
             }`}
