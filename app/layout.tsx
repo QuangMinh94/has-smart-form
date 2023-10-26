@@ -7,7 +7,6 @@ import { ClientCookiesProvider } from "./ClientCookiesProvider"
 import OzScript from "./OzScript"
 import QueryClientProvider from "./QueryClientProvider"
 import AuthProvider from "./auth/Provider"
-import AntdProvider from "./globalTheme"
 import "./globals.css"
 
 config.autoAddCss = false
@@ -31,9 +30,9 @@ export default function RootLayout({
                 <ClientCookiesProvider value={cookies().getAll()}>
                     <QueryClientProvider>
                         <AuthProvider>
-                            <AntdProvider>
-                                <main>{children}</main>
-                            </AntdProvider>
+                            {/* <AntdProvider> */}
+                            <main>{children}</main>
+                            {/*  </AntdProvider> */}
                         </AuthProvider>
                     </QueryClientProvider>
                 </ClientCookiesProvider>
