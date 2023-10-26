@@ -123,7 +123,13 @@ const SideMenu = ({ children }: PropsWithChildren) => {
                                             },
                                             {
                                                 label: (
-                                                    <Link href="http://localhost:3000/api/auth/signout">
+                                                    <Link
+                                                        href={
+                                                            process.env
+                                                                .NEXT_PUBLIC_SERVER_URL! +
+                                                            "/api/auth/signout"
+                                                        }
+                                                    >
                                                         Logout
                                                     </Link>
                                                 ),
