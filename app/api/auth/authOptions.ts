@@ -55,6 +55,12 @@ export const authOptions: NextAuthOptions = {
                 token.name = user.session
             }
             return token
+        },
+        redirect: ({ url, baseUrl }) => {
+            // Allows relative callback URLs
+            console.log("Url where", url)
+            console.log("Da fuck is baseurl ", baseUrl)
+            return baseUrl
         }
     },
     session: {
