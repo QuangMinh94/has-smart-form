@@ -17,7 +17,7 @@ const SigninForm = () => {
             username: values.username,
             password: values.password,
             redirect: true,
-            callbackUrl: "http://localhost:3000/bu"
+            callbackUrl: window.location.host + "/bu"
         })
         /*  if (signInResponse) {
             if (signInResponse.ok) {

@@ -79,10 +79,10 @@ const AuthStatus = () => {
                                 label: (
                                     <p
                                         className="cursor-pointer"
-                                        onClick={async () =>
-                                            await signOut({
+                                        onClick={() =>
+                                            signOut({
                                                 callbackUrl:
-                                                    "http://localhost:3000/bu"
+                                                    window.location.host + "/bu"
                                             })
                                         }
                                     >
