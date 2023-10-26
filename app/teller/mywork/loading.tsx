@@ -1,4 +1,11 @@
-const Loading = ()=>{
-    return <div style={{color:"black"}}>...loading123</div>
+import { Spin } from "antd"
+const Loading = () => {
+    return (
+        <Spin
+            style={{ marginTop: "100px", display: "block", textAlign: "center" }}
+            tip="Loading..."
+            size="large"
+        />
+    )
 }
 export default Loading

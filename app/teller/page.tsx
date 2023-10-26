@@ -1,6 +1,6 @@
 import { useState } from "react"
 const BUPage = () => {
-    return <div style={{ color: "red" }}>err page</div>
+    return <div className="inser" style={{ color: "red" }} >err page</div>
 }
 
 export default BUPage
