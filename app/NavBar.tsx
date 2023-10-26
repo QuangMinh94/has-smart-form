@@ -2,7 +2,7 @@
 
 import { Avatar, Dropdown, Image, Skeleton } from "antd"
 import classnames from "classnames"
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 
@@ -80,9 +80,9 @@ const AuthStatus = () => {
                                 label: (
                                     <p
                                         className="cursor-pointer"
-                                        onClick={() =>
-                                            router.push("/api/auth/logout")
-                                        }
+                                        onClick={() => {
+                                            signOut({ redirect: false })
+                                        }}
                                     >
                                         Log out
                                     </p>
