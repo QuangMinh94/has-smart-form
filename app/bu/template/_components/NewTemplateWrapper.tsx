@@ -43,11 +43,13 @@ const NewTemplateWrapper = ({
         listRight,
         setListRight,
         setSubmitType,
-        setIsInsert
+        setIsInsert,
+        setIsDisabled
     } = useContext(ContextTemplate)
     const [viewerKey, setViewerKey] = useState<number>(0)
 
     useEffect(() => {
+        setIsDisabled(false)
         if (data.length > 0) {
             setIsInsert(false)
             setChoosenBlock({
@@ -106,6 +108,7 @@ const NewTemplateWrapper = ({
         setViewerKey(Math.random())
     }
     const onPreview = async () => {
+        setIsDisabled(true)
         if (listRight.length > 0) {
             resetEForm()
             //resetEForm()
@@ -145,12 +148,15 @@ const NewTemplateWrapper = ({
         } else {
             //messageApi.error("Please choose at least 1 block")
         }
+        setIsDisabled(false)
     }
     const onSubmit = () => {
+        setIsDisabled(true)
         setSubmitType("SUBMIT")
         form.submit()
     }
     const onSave = () => {
+        setIsDisabled(true)
         setSubmitType("SAVE")
         form.submit()
     }

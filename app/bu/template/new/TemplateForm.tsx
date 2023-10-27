@@ -36,7 +36,8 @@ const TemplateForm = ({
     const cookies = useCookies()
     const [messageApi, contextHolder] = message.useMessage()
     const router = useRouter()
-    const { choosenBlock, submitType, isInsert } = useContext(ContextTemplate)
+    const { choosenBlock, submitType, isInsert, setIsDisabled } =
+        useContext(ContextTemplate)
     const onFinish = async (values: any) => {
         const inputValue = {
             description: values.description,
@@ -76,6 +77,7 @@ const TemplateForm = ({
                     }
                 )
             }
+
             router.push("/bu/template/")
             router.refresh()
         } catch (error) {
