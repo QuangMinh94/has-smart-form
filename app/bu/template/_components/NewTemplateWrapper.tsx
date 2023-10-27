@@ -20,7 +20,10 @@ import CustomButtonGroup from "./CustomButtonGroup"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
-const OzViewer = dynamic(() => import("@/components/OzViewer"), { ssr: false })
+const OzViewer = dynamic(() => import("@/components/OzViewer"), {
+    loading: () => <>Loading eform...</>,
+    ssr: false
+})
 
 interface OptionProps {
     id: string
@@ -43,6 +46,7 @@ const NewTemplateWrapper = ({
         setChoosenBlock,
         setListLeft,
         listRight,
+        setListRight,
         setSubmitType,
         setIsInsert
     } = useContext(ContextTemplate)
@@ -55,6 +59,17 @@ const NewTemplateWrapper = ({
                 choosenBlock: data[0].block!,
                 changeBlock: 0
             })
+
+            const _listRight: OptionProps[] = []
+            data[0].block?.forEach((element) => {
+                _listRight.push({
+                    id: element.ozrRepository + element.name!,
+                    name: element.name!,
+                    checkBox: false,
+                    type: element.ozrRepository!
+                })
+            })
+            setListRight(_listRight)
 
             form.setFieldsValue({
                 formName: data[0].name,
@@ -127,7 +142,7 @@ const NewTemplateWrapper = ({
                 //oz!.Script("refresh")
             })
         } else {
-            messageApi.error("Please choose at least 1 block")
+            //messageApi.error("Please choose at least 1 block")
         }
     }
     const onSubmit = () => {
@@ -140,10 +155,6 @@ const NewTemplateWrapper = ({
     }
     const onCancel = () => {
         resetEForm()
-        /* const oz = document.getElementById("OZViewer")
-        const inputdata = oz!.GetInformation("INPUT_JSON_ALL")
-        var params = "connection.inputjson=" + inputdata + ";"
-        oz!.ReBind(0, "data", params, ";") */
     }
 
     const useTemplate = () =>
@@ -171,6 +182,12 @@ const NewTemplateWrapper = ({
                         type: resChild.repository
                     })
                 })
+
+                const results = listRight.filter(
+                    ({ id: id1 }) => !_option.some(({ id: id2 }) => id2 === id1)
+                )
+                console.log("ListRight", listRight)
+
                 setListLeft(_option)
                 return _option
             },

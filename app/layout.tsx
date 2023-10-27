@@ -1,17 +1,16 @@
+import theme from "@/theme/themeConfig"
 import { config } from "@fortawesome/fontawesome-svg-core"
 import "@fortawesome/fontawesome-svg-core/styles.css"
+import { ConfigProvider } from "antd"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import { cookies } from "next/headers"
-import { ClientCookiesProvider } from "./ClientCookiesProvider"
+import { inter } from "./(utilities)/Fonts"
 import OzScript from "./OzScript"
 import QueryClientProvider from "./QueryClientProvider"
 import AuthProvider from "./auth/Provider"
+import AntdProvider from "./globalTheme"
 import "./globals.css"
 
 config.autoAddCss = false
-
-const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -27,15 +26,15 @@ export default function RootLayout({
         <html lang="en">
             <OzScript />
             <body className={inter.className}>
-                <ClientCookiesProvider value={cookies().getAll()}>
-                    <QueryClientProvider>
-                        <AuthProvider>
-                            {/* <AntdProvider> */}
-                            <main>{children}</main>
-                            {/*  </AntdProvider> */}
-                        </AuthProvider>
-                    </QueryClientProvider>
-                </ClientCookiesProvider>
+                <QueryClientProvider>
+                    <AuthProvider>
+                        <AntdProvider>
+                            <ConfigProvider theme={theme}>
+                                <main>{children}</main>
+                            </ConfigProvider>
+                        </AntdProvider>
+                    </AuthProvider>
+                </QueryClientProvider>
             </body>
         </html>
     )

@@ -3,7 +3,7 @@ import axios from "axios"
 import { cookies } from "next/headers"
 import { cache } from "react"
 import PageHeader from "../_components/PageHeader"
-import SearchParamProvider from "../_context/searchParamProvider"
+import { SearchParamProvider } from "../_context/provider"
 import TemplateTable, { DataTableType } from "./templateTable"
 
 const TemplatePage = async ({

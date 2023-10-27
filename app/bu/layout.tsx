@@ -1,4 +1,7 @@
+import { cookies } from "next/headers"
+import { ClientCookiesProvider } from "../ClientCookiesProvider"
 import SideMenu from "./SideMenu"
+import { PathParamsProvider } from "./_context/provider"
 
 interface Props {
     children: any
@@ -6,9 +9,11 @@ interface Props {
 
 const BuLayout = ({ children }: Props) => {
     return (
-        <>
-            <SideMenu>{children}</SideMenu>
-        </>
+        <PathParamsProvider>
+            <ClientCookiesProvider value={cookies().getAll()}>
+                <SideMenu>{children}</SideMenu>
+            </ClientCookiesProvider>
+        </PathParamsProvider>
     )
 }
 
