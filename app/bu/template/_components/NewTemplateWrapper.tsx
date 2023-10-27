@@ -2,17 +2,17 @@
 
 //import OzViewer from "@/components/OzViewer"
 import { EformTemplate } from "@/app/(types)/EformTemplate"
+import { UniqueValue } from "@/app/(utilities)/ArrayUtilities"
 import { timeStampToDayjs } from "@/app/(utilities)/TimeStampToDayjs"
 import { ContextTemplate } from "@/components/context/context"
-import { useQuery } from "@tanstack/react-query"
-import { Form, Skeleton, message } from "antd"
-import axios from "axios"
+import { Form, message } from "antd"
 import dayjs from "dayjs"
 import tz from "dayjs/plugin/timezone"
 import utc from "dayjs/plugin/utc"
 import delay from "delay"
 import dynamic from "next/dynamic"
 import { useContext, useEffect, useState } from "react"
+import { OptionProps } from "../[id]/page"
 import TemplateForm from "../new/TemplateForm"
 import TransferTemplate from "../new/TransferTemplate"
 import CustomButtonGroup from "./CustomButtonGroup"
@@ -25,19 +25,14 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     ssr: false
 })
 
-interface OptionProps {
-    id: string
-    name: string
-    checkBox: boolean
-    type: string
-}
-
 const NewTemplateWrapper = ({
     id,
-    data
+    data,
+    listLeft
 }: {
     id?: string
     data: EformTemplate[]
+    listLeft: OptionProps[]
 }) => {
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage()
@@ -71,6 +66,10 @@ const NewTemplateWrapper = ({
             })
             setListRight(_listRight)
 
+            //console.log("List result", UniqueValue(listLeft, _listRight))
+
+            setListLeft(UniqueValue(listLeft, _listRight))
+
             form.setFieldsValue({
                 formName: data[0].name,
                 formCode: data[0].code,
@@ -83,6 +82,7 @@ const NewTemplateWrapper = ({
                 )
             })
         } else {
+            setListLeft(listLeft)
             setIsInsert(true)
             setChoosenBlock({
                 choosenBlock: [],
@@ -157,51 +157,13 @@ const NewTemplateWrapper = ({
         resetEForm()
     }
 
-    const useTemplate = () =>
-        useQuery<OptionProps[]>({
-            queryKey: ["option"],
-            queryFn: async () => {
-                console.log("Query time")
-                const res = await axios.post(
-                    process.env.NEXT_PUBLIC_EFORM_LIST!,
-                    {
-                        repository: "Dịch vụ tài khoản"
-                    }
-                )
-                const res_1 = res.data as {
-                    name: string
-                    repository: string
-                    serverPath: string
-                }[]
-                const _option: OptionProps[] = []
-                res_1.forEach((resChild) => {
-                    _option.push({
-                        id: resChild.repository + resChild.name,
-                        name: resChild.name,
-                        checkBox: false,
-                        type: resChild.repository
-                    })
-                })
+    /*  const { data: option, error, isLoading } = useTemplate([])
 
-                const results = listRight.filter(
-                    ({ id: id1 }) => !_option.some(({ id: id2 }) => id2 === id1)
-                )
-                console.log("ListRight", listRight)
-
-                setListLeft(_option)
-                return _option
-            },
-            //staleTime: 60 * 1000, //60sec
-            retry: 3,
-            refetchOnWindowFocus: false,
-            refetchOnReconnect: false
-        })
-
-    const { error, isLoading } = useTemplate()
+    setListLeft(option!)
 
     if (isLoading) return <Skeleton.Input className="w-fit" active={true} />
 
-    if (error) return null
+    if (error) return null */
 
     return (
         <div>

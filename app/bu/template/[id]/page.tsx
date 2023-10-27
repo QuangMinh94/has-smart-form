@@ -5,14 +5,40 @@ import { cookies } from "next/headers"
 import { cache } from "react"
 import NewTemplateWrapper from "../_components/NewTemplateWrapper"
 
+export interface OptionProps {
+    id: string
+    name: string
+    checkBox: boolean
+    type: string
+}
+
 const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
     const data = await fetchTemplateDetail(
         process.env.NEXT_PUBLIC_EFORM_GET_TEMPLATE! + "/" + params.id
     )
 
+    //list left
+    const response = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {
+        repository: "Dịch vụ tài khoản"
+    })
+    const res_1 = response.data as {
+        name: string
+        repository: string
+        serverPath: string
+    }[]
+    const _option: OptionProps[] = []
+    res_1.forEach((resChild) => {
+        _option.push({
+            id: resChild.repository + resChild.name,
+            name: resChild.name,
+            checkBox: false,
+            type: resChild.repository
+        })
+    })
+
     return (
         <ProviderTemplate>
-            <NewTemplateWrapper id={params.id} data={data} />
+            <NewTemplateWrapper listLeft={_option} id={params.id} data={data} />
         </ProviderTemplate>
     )
 }
