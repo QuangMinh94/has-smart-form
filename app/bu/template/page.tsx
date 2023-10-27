@@ -5,6 +5,11 @@ import { cache } from "react"
 import PageHeader from "../_components/PageHeader"
 import { SearchParamProvider } from "../_context/provider"
 import TemplateTable, { DataTableType } from "./templateTable"
+/* 
+axios.interceptors.request.use((request) => {
+    console.log("Starting Request", JSON.stringify(request, null, 2))
+    return request
+}) */
 
 const TemplatePage = async ({
     searchParams

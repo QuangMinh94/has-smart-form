@@ -31,9 +31,21 @@ export const authOptions: NextAuthOptions = {
                     cookies().set("token", user.data.token)
                     cookies().set("session", user.data.session)
 
-                    console.log("User data", user.data)
+                    //get user and save to user id
+                    const userResponse = await axios.get(
+                        process.env.GET_USER_ID!,
+                        {
+                            headers: {
+                                Authorization: "Bearer " + user.data.token,
+                                Session: user.data.session
+                            }
+                        }
+                    )
+                    const userInfo = userResponse.data
 
-                    return user.data
+                    //console.log("User data", user.data)
+
+                    return userInfo
                 } catch (error) {
                     console.log("Oh shit error", error)
                     return null
@@ -42,19 +54,20 @@ export const authOptions: NextAuthOptions = {
         })
     ],
     callbacks: {
-        session: async ({ session, token }) => {
-            if (session?.user) {
-                session.user.session = token.name as string
-                session.user.token = token.uid
-            }
-            return session
-        },
         jwt: async ({ user, token }) => {
             if (user) {
                 token.uid = user.token
-                token.name = user.session
+                token.name = JSON.stringify(user)
             }
             return token
+        },
+        session: async ({ session, token }) => {
+            if (session?.user) {
+                //session.user.session = token.name as string
+                session.user.token = token.uid
+                session.user.userInfo = JSON.parse(token.name!)
+            }
+            return session
         }
         /*   redirect: ({ url, baseUrl }) => {
             // Allows relative callback URLs
