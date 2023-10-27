@@ -51,21 +51,22 @@ const NewTemplateWrapper = ({
         if (data.length > 0) {
             setIsInsert(false)
             setChoosenBlock({
-                choosenBlock: data[0].block!,
+                choosenBlock: data[0].block ? data[0].block : [],
                 changeBlock: 0
             })
 
             const _listRight: OptionProps[] = []
-            data[0].block?.forEach((element) => {
-                _listRight.push({
-                    id: element.ozrRepository + element.name!,
-                    name: element.name!,
-                    checkBox: false,
-                    type: element.ozrRepository!
+            if (data[0].block) {
+                data[0].block.forEach((element) => {
+                    _listRight.push({
+                        id: element.ozrRepository + element.name!,
+                        name: element.name!,
+                        checkBox: false,
+                        type: element.ozrRepository!
+                    })
                 })
-            })
-            setListRight(_listRight)
-
+                setListRight(_listRight)
+            }
             //console.log("List result", UniqueValue(listLeft, _listRight))
 
             setListLeft(UniqueValue(listLeft, _listRight))

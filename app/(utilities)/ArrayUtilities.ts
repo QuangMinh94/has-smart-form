@@ -17,8 +17,6 @@ export function getUnique(array: any[], key: any) {
 }
 
 export function UniqueValue(a: any[], b: any[]) {
-    console.log("A", a[0].id)
-    console.log("B", b[0].id)
     const isSameUser = (a: any, b: any) => a.id === b.id
     // Get items that only occur in the left array,
     // using the compareFunction to determine equality.
