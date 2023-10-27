@@ -1,3 +1,5 @@
+"use client"
+
 import { Button, Flex } from "antd"
 
 const CustomButtonGroup = ({
@@ -14,7 +16,7 @@ const CustomButtonGroup = ({
     return (
         <Flex className="mb-3" vertical gap={10}>
             <Flex justify="flex-end">
-                <Button className={"w-20"} type="primary" onClick={onCancel}>
+                <Button className="w-20" type="primary" onClick={onCancel}>
                     Rebind
                 </Button>
                 <Button className="w-20" type="primary" onClick={onPreview}>

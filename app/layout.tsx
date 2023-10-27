@@ -28,11 +28,11 @@ export default function RootLayout({
             <body className={inter.className}>
                 <QueryClientProvider>
                     <AuthProvider>
-                        <AntdProvider>
-                            <ConfigProvider theme={theme}>
+                        <ConfigProvider theme={theme}>
+                            <AntdProvider>
                                 <main>{children}</main>
-                            </ConfigProvider>
-                        </AntdProvider>
+                            </AntdProvider>
+                        </ConfigProvider>
                     </AuthProvider>
                 </QueryClientProvider>
             </body>
