@@ -17,6 +17,8 @@ export function useContextTemplate(): typeContextTemplate {
         formData: provider.formData,
         setFormData: provider.setFormData,
         isInsert: provider.isInsert,
-        setIsInsert: provider.setIsInsert
+        setIsInsert: provider.setIsInsert,
+        setIsDisabled: provider.setIsDisabled,
+        isDisabled: provider.isDisabled
     }
 }
