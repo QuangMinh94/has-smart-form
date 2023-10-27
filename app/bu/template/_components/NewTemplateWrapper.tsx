@@ -134,7 +134,18 @@ const NewTemplateWrapper = ({
             })
             const oz = document.getElementById("OZViewer")
 
-            choosenBlock.forEach((block) => {
+            /*  listRight.forEach((block) => {
+                oz!.CreateReportEx(
+                    DefaultParams(
+                        process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                        "/" + block.type + "/" + block.name,
+                        block.name
+                    ),
+                    ";"
+                )
+            }) */
+
+            /* choosenBlock.forEach((block) => {
                 oz!.CreateReportEx(
                     DefaultParams(
                         process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
@@ -143,10 +154,9 @@ const NewTemplateWrapper = ({
                     ),
                     ";"
                 )
-                //oz!.Script("refresh")
-            })
+            }) */
         } else {
-            //messageApi.error("Please choose at least 1 block")
+            messageApi.error("Please choose at least 1 block")
         }
         setIsDisabled(false)
     }

@@ -9,12 +9,9 @@ const OzViewer = ({ viewerKey }: { viewerKey: number }) => {
 }
 
 const Viewer = () => {
-    const { formData } = useContext(ContextTemplate)
+    const { formData, listRight } = useContext(ContextTemplate)
     const cachedFn = useCallback(async () => {
         if (window.start_ozjs) {
-            console.log("Here i am with", formData)
-            const formdata = formData[0]
-
             window.SetOZParamters_OZViewer = () => {
                 const oz = document.getElementById("OZViewer")
                 oz!.sendToActionScript("viewer.emptyframe", "true")
@@ -25,15 +22,15 @@ const Viewer = () => {
                 `${process.env.NEXT_PUBLIC_EFORM_SERVER}/html5viewer/`
             )
 
-            await delay(2000)
+            await delay(1000)
 
-            if (formData.length > 0) {
-                formdata.block!.forEach((element) => {
+            if (listRight.length > 0) {
+                listRight.forEach((element) => {
                     const oz = document.getElementById("OZViewer")
                     oz!.CreateReportEx(
                         DefaultParams(
                             process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                            "/" + element.ozrRepository + "/" + element.name,
+                            "/" + element.type + "/" + element.name,
                             element.name!
                         ),
                         ";"
