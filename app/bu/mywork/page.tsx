@@ -24,7 +24,7 @@ const MyWorkPage = async ({
             process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
             searchParams.name
                 ? { name: searchParams.name, userRole: userInfo._id }
-                : { userRole: userInfo._id }
+                : { userRole: (userInfo.defaultGroup?.role as string[])[0] }
         )
 
         const _data: DataTableType[] = []

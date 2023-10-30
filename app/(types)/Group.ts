@@ -12,19 +12,19 @@ export interface Parent {
 }
 export interface Group {
     _id?: string
-    Name?: string
+    name?: string
     __v?: number
-    Active?: boolean
-    Description?: string
-    Parent?: Parent
-    Role?: CheckboxValueType[]
-    Organization?: Organization
-    Department?: Department
-    CreatedDate?: string
-    Creator?: string
-    Children?: Group[]
-    Position?: string
-    User?: string[]
+    active?: boolean
+    description?: string
+    parent?: Parent
+    role?: CheckboxValueType[] | string[]
+    organization?: Organization
+    department?: Department
+    createdDate?: string
+    creator?: string
+    children?: Group[]
+    position?: string
+    user?: string[]
 }
 
 export interface bodyGroupRequest {

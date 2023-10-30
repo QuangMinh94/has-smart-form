@@ -12,30 +12,30 @@ export interface Token {
 export interface Users extends Token {
     key?: number | string
     _id?: string
-    EnterReportToMe?: boolean
-    UserName?: string
-    Password?: string
-    Name?: string
-    Role?: Role
-    Department?: Department
-    Color?: string
-    DefaultGroup?: Group
-    FirstName?: string
-    LastName?: string
-    Group?: Group[]
+    enterReportToMe?: boolean
+    username?: string
+    password?: string
+    name?: string
+    role?: Role
+    department?: Department
+    color?: string
+    defaultGroup?: Group
+    firstName?: string
+    lastName?: string
+    group?: Group[]
     message?: string
     code?: number
     __v?: number
-    Stt?: number
-    Active?: boolean
-    Root?: string
-    Image?: IImage
-    Mail?: string
-    Permission?: Permission[]
-    Organization?: string | Organization
-    AuthenProvider?: any
-    Phone?: string
-    Birthday?: string
+    stt?: number
+    active?: boolean
+    root?: string
+    image?: IImage
+    mail?: string
+    permission?: Permission[]
+    organization?: string | Organization
+    authenProvider?: any
+    phone?: string
+    birthday?: string
 }
 
 export interface BodyUserRequest {
