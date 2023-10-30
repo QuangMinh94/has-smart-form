@@ -3,7 +3,7 @@ import ProviderTemplate from "@/components/context/providerTemplate"
 import axios from "axios"
 import { cookies } from "next/headers"
 import { cache } from "react"
-import NewTemplateWrapper from "../_components/NewTemplateWrapper"
+import NewTemplateWrapper from "../_components/TemplateWrapper"
 
 export interface OptionProps {
     id: string

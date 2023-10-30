@@ -1,7 +1,7 @@
 import ProviderTemplate from "@/components/context/providerTemplate"
 import axios from "axios"
 import { OptionProps } from "../[id]/page"
-import NewTemplateWrapper from "../_components/NewTemplateWrapper"
+import NewTemplateWrapper from "../_components/TemplateWrapper"
 
 const NewTemplate = async () => {
     const response = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {

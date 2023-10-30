@@ -4,10 +4,16 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Flex, Input } from "antd"
 import { useRouter } from "next/navigation"
-import { PropsWithChildren, useContext } from "react"
+import { ReactNode, useContext } from "react"
 import { SearchParamContext } from "../_context/context"
 
-const PageHeader = ({ children }: PropsWithChildren) => {
+const PageHeader = ({
+    path,
+    children
+}: {
+    path: string
+    children: ReactNode
+}) => {
     const router = useRouter()
     const { searchValue, setSearchValue } = useContext(SearchParamContext)
     return (
@@ -19,9 +25,9 @@ const PageHeader = ({ children }: PropsWithChildren) => {
                     prefix={<FontAwesomeIcon icon={faSearch} />}
                     onChange={(e) => setSearchValue(e.target.value)}
                     onPressEnter={() => {
-                        let searchQuery = "/bu/template"
+                        let searchQuery = path
                         if (searchValue) {
-                            searchQuery = `/bu/template?name=${searchValue}`
+                            searchQuery = `${path}?name=${searchValue}`
                         }
                         router.push(searchQuery)
                     }}

@@ -56,6 +56,21 @@ const columns: ColumnsType<DataTableType> = [
         ellipsis: true,
         width: "6vw",
         responsive: ["md"]
+    },
+    {
+        title: "Hành động",
+        key: "Edit",
+        //dataIndex: 'action',
+        align: "center",
+        width: "5vw",
+        fixed: "right",
+        render: (_value, record, _index) => {
+            return (
+                <CustomLink href={`/bu/template/${record.key}`}>
+                    Phê duyệt
+                </CustomLink>
+            )
+        }
     }
 ]
 

@@ -9,6 +9,11 @@ import PageHeader from "../_components/PageHeader"
 import { SearchParamProvider } from "../_context/provider"
 import TemplateTable, { DataTableType } from "../template/templateTable"
 
+axios.interceptors.request.use((request) => {
+    console.log("Starting Request", JSON.stringify(request, null, 2))
+    return request
+})
+
 const MyWorkPage = async ({
     searchParams
 }: {
@@ -18,16 +23,17 @@ const MyWorkPage = async ({
 
     if (session) {
         const userInfo = session.user.userInfo as Users
-        console.log("UserInfo", userInfo)
+        const userRole = userInfo.defaultGroup?.role as string[]
 
         const data = await fetchTemplateData(
             process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
             searchParams.name
-                ? { name: searchParams.name, userRole: userInfo._id }
-                : { userRole: (userInfo.defaultGroup?.role as string[])[0] }
+                ? { name: searchParams.name, userRole: userRole[0] }
+                : { userRole: userRole[0] }
         )
 
         const _data: DataTableType[] = []
+        console.log("Data", data)
         data.forEach((element) => {
             _data.push({
                 key: element._id,
@@ -40,7 +46,7 @@ const MyWorkPage = async ({
 
         return (
             <SearchParamProvider>
-                <PageHeader>
+                <PageHeader path="/bu/mywork">
                     <TemplateTable data={_data} />
                 </PageHeader>
             </SearchParamProvider>

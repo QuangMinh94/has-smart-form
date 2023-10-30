@@ -15,6 +15,7 @@ const Viewer = () => {
             window.SetOZParamters_OZViewer = () => {
                 const oz = document.getElementById("OZViewer")
                 oz!.sendToActionScript("viewer.emptyframe", "true")
+                //oz!.sendToActionScript("eform.signpad_type", "dialog")
             }
 
             window.start_ozjs(
@@ -73,7 +74,8 @@ viewer.createreport_doc_index=0;
     global.concatpreview=false;
     viewer.showtab=true;
     connection.displayname=${displayname};
-    viewer.thumbnailsection_showclosebutton=true;`
+    viewer.thumbnailsection_showclosebutton=true;
+    eform.signpad_type=dialog;`
 }
 
 export default OzViewer

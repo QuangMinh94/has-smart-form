@@ -2,14 +2,16 @@
 
 //import OzViewer from "@/components/OzViewer"
 import { EformTemplate } from "@/app/(types)/EformTemplate"
-import { UniqueValue } from "@/app/(utilities)/ArrayUtilities"
+import { uniqueValue } from "@/app/(utilities)/ArrayUtilities"
 import { timeStampToDayjs } from "@/app/(utilities)/TimeStampToDayjs"
 import { ContextTemplate } from "@/components/context/context"
 import { Form, message } from "antd"
+import axios from "axios"
 import dayjs from "dayjs"
 import tz from "dayjs/plugin/timezone"
 import utc from "dayjs/plugin/utc"
 import delay from "delay"
+import { useSession } from "next-auth/react"
 import dynamic from "next/dynamic"
 import { useContext, useEffect, useState } from "react"
 import { OptionProps } from "../[id]/page"
@@ -25,7 +27,7 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     ssr: false
 })
 
-const NewTemplateWrapper = ({
+const TemplateWrapper = ({
     id,
     data,
     listLeft
@@ -34,6 +36,8 @@ const NewTemplateWrapper = ({
     data: EformTemplate[]
     listLeft: OptionProps[]
 }) => {
+    const { data: session } = useSession()
+    const userInfo = session?.user.userInfo
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage()
     const {
@@ -71,7 +75,7 @@ const NewTemplateWrapper = ({
             }
             //console.log("List result", UniqueValue(listLeft, _listRight))
 
-            setListLeft(UniqueValue(listLeft, _listRight))
+            setListLeft(uniqueValue(listLeft, _listRight))
 
             form.setFieldsValue({
                 formName: data[0].name,
@@ -132,9 +136,9 @@ const NewTemplateWrapper = ({
                 choosenBlock: choosenBlock,
                 changeBlock: 0
             })
-            const oz = document.getElementById("OZViewer")
+            /*const oz = document.getElementById("OZViewer")
 
-            /*  listRight.forEach((block) => {
+              listRight.forEach((block) => {
                 oz!.CreateReportEx(
                     DefaultParams(
                         process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
@@ -174,6 +178,28 @@ const NewTemplateWrapper = ({
         resetEForm()
     }
 
+    const onVerify = async () => {
+        const data = {
+            ozrName:
+                "input\\Dịch vụ tài khoản\\EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán.ozr",
+            inputData: "",
+            exportFormat: "pdf",
+            exportPath: "MyName.ozr",
+            exportFileName: "MyName.pdf"
+        }
+
+        const myData = await axios.post(
+            "http://10.4.18.92/training/script/export - no2.jsp",
+            data,
+            { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+        )
+        const repsonsedata: string = myData.data
+            .toString()
+            .replace(/(?:\\[rn])+/g, "")
+            .trim()
+        console.log("Repsonse yo", repsonsedata)
+    }
+
     /*  const { data: option, error, isLoading } = useTemplate([])
 
     setListLeft(option!)
@@ -185,13 +211,21 @@ const NewTemplateWrapper = ({
     return (
         <div>
             {contextHolder}
-            <TemplateForm id={id} form={form} />
-            <TransferTemplate />
+            {userInfo.defaultGroup.role[0] === "CV" ? (
+                <>
+                    <TemplateForm id={id} form={form} />
+                    <TransferTemplate />
+                </>
+            ) : (
+                <></>
+            )}
             <CustomButtonGroup
                 onPreview={onPreview}
                 onSubmit={onSubmit}
                 onSave={onSave}
                 onCancel={onCancel}
+                onVerify={onVerify}
+                role="KSV"
             />
             <OzViewer viewerKey={viewerKey} />
         </div>
@@ -214,4 +248,4 @@ viewer.createreport_doc_index=0;
     viewer.thumbnailsection_showclosebutton=true;`
 }
 
-export default NewTemplateWrapper
+export default TemplateWrapper

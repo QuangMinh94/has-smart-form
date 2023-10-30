@@ -31,13 +31,12 @@ const TemplateForm = ({
     form
 }: {
     id?: string
-    form: FormInstance<any>
+    form?: FormInstance<any>
 }) => {
     const cookies = useCookies()
     const [messageApi, contextHolder] = message.useMessage()
     const router = useRouter()
-    const { choosenBlock, submitType, isInsert, setIsDisabled } =
-        useContext(ContextTemplate)
+    const { choosenBlock, submitType, isInsert } = useContext(ContextTemplate)
     const onFinish = async (values: any) => {
         const inputValue = {
             description: values.description,
