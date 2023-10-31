@@ -13,6 +13,7 @@ import utc from "dayjs/plugin/utc"
 import delay from "delay"
 import { useSession } from "next-auth/react"
 import dynamic from "next/dynamic"
+import { useRouter } from "next/navigation"
 import { useContext, useEffect, useState } from "react"
 import { OptionProps } from "../[id]/page"
 import TemplateForm from "../new/TemplateForm"
@@ -37,6 +38,7 @@ const TemplateWrapper = ({
     listLeft: OptionProps[]
 }) => {
     const { data: session } = useSession()
+    const router = useRouter()
     const userInfo = session?.user.userInfo
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage()
@@ -51,6 +53,7 @@ const TemplateWrapper = ({
         setIsDisabled
     } = useContext(ContextTemplate)
     const [viewerKey, setViewerKey] = useState<number>(0)
+    console.log("UserInfo", userInfo)
 
     useEffect(() => {
         setIsDisabled(false)
@@ -179,6 +182,7 @@ const TemplateWrapper = ({
     }
 
     const onVerify = async () => {
+        setIsDisabled(true)
         const data = {
             ozrName:
                 "input\\Dịch vụ tài khoản\\EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán.ozr",
@@ -198,6 +202,12 @@ const TemplateWrapper = ({
             .replace(/(?:\\[rn])+/g, "")
             .trim()
         console.log("Repsonse yo", repsonsedata)
+        setIsDisabled(false)
+    }
+
+    const onBack = () => {
+        router.push("/bu/template")
+        router.refresh()
     }
 
     /*  const { data: option, error, isLoading } = useTemplate([])
@@ -225,6 +235,7 @@ const TemplateWrapper = ({
                 onSave={onSave}
                 onCancel={onCancel}
                 onVerify={onVerify}
+                onBack={onBack}
                 role="KSV"
             />
             <OzViewer viewerKey={viewerKey} />

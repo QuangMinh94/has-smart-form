@@ -3,7 +3,7 @@ import ProviderTemplate from "@/components/context/providerTemplate"
 import axios from "axios"
 import { cookies } from "next/headers"
 import { cache } from "react"
-import NewTemplateWrapper from "../_components/TemplateWrapper"
+import TemplateWrapper from "../_components/TemplateWrapper"
 
 export interface OptionProps {
     id: string
@@ -38,7 +38,7 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
 
     return (
         <ProviderTemplate>
-            <NewTemplateWrapper listLeft={_option} id={params.id} data={data} />
+            <TemplateWrapper listLeft={_option} id={params.id} data={data} />
         </ProviderTemplate>
     )
 }

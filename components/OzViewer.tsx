@@ -50,14 +50,16 @@ const Viewer = () => {
     }, [cachedFn])
 
     return (
-        <div
-            id="OZViewer"
-            style={{
-                width: "100%",
-                height: "90vh"
-                //marginTop: 60
-            }}
-        />
+        <div className="container mx-auto">
+            <div
+                id="OZViewer"
+                style={{
+                    width: "100%",
+                    height: "80vh"
+                    //marginTop: 60
+                }}
+            />
+        </div>
     )
 }
 
@@ -75,6 +77,8 @@ viewer.createreport_doc_index=0;
     viewer.showtab=true;
     connection.displayname=${displayname};
     viewer.thumbnailsection_showclosebutton=true;
+    information.debug=true;
+    eform.signpad_zoom=50;
     eform.signpad_type=dialog;`
 }
 

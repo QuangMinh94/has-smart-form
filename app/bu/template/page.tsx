@@ -53,7 +53,7 @@ const fetchTemplate = cache(async (url: string, searchInput: any) => {
     return data
 })
 
-//export const dynamic = "force-dynamic"
-export const revalidate = 10
+export const dynamic = "force-dynamic"
+//export const revalidate = 10
 
 export default TemplatePage

@@ -1,6 +1,8 @@
 "use client"
 
 import { ContextTemplate } from "@/components/context/context"
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Flex } from "antd"
 import { useContext } from "react"
 
@@ -11,6 +13,7 @@ const CustomButtonGroup = ({
     onCancel,
     onVerify,
     onReject,
+    onBack,
     role
 }: {
     onPreview: () => void
@@ -19,6 +22,7 @@ const CustomButtonGroup = ({
     onCancel: () => void
     onVerify?: () => void
     onReject?: () => void
+    onBack?: () => void
     role: string
 }) => {
     const { isDisabled } = useContext(ContextTemplate)
@@ -28,69 +32,84 @@ const CustomButtonGroup = ({
                 <Flex className="mb-3" vertical gap={10}>
                     <Flex justify="flex-end">
                         <Button
-                            disabled={isDisabled}
+                            //disabled={isDisabled}
                             className="w-20"
                             type="primary"
                             onClick={onCancel}
+                            loading={isDisabled}
                         >
                             Rebind
                         </Button>
                         <Button
-                            disabled={isDisabled}
                             className="w-20"
                             type="primary"
                             onClick={onPreview}
+                            loading={isDisabled}
                         >
                             Preview
                         </Button>
                     </Flex>
                     <Flex justify="flex-end" gap={10}>
                         <Button
-                            disabled={isDisabled}
                             className="w-20"
                             type="primary"
                             onClick={onSubmit}
+                            loading={isDisabled}
                         >
                             Submit
                         </Button>
                         <Button
-                            disabled={isDisabled}
                             className="w-20"
                             type="primary"
                             onClick={onSave}
+                            loading={isDisabled}
                         >
                             Save
                         </Button>
                         <Button
-                            disabled={isDisabled}
                             className="w-20"
                             danger
                             type="primary"
                             onClick={onCancel}
+                            loading={isDisabled}
                         >
                             Cancel
                         </Button>
                     </Flex>
                 </Flex>
             ) : (
-                <Flex className="mb-3" gap={10}>
-                    <Button
-                        type="primary"
-                        onClick={() => {
-                            if (onVerify) onVerify()
-                        }}
-                    >
-                        Phê duyệt
-                    </Button>
-                    <Button
-                        type="primary"
-                        danger
-                        onClick={() => {
-                            if (onReject) onReject()
-                        }}
-                    >
-                        Từ chối
-                    </Button>
+                <Flex justify="space-between">
+                    <Flex>
+                        <Button
+                            type="primary"
+                            onClick={onBack}
+                            loading={isDisabled}
+                            icon={<FontAwesomeIcon icon={faArrowLeft} />}
+                        >
+                            Back
+                        </Button>
+                    </Flex>
+                    <Flex className="mb-3" justify="flex-end" gap={10}>
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                if (onVerify) onVerify()
+                            }}
+                            loading={isDisabled}
+                        >
+                            Phê duyệt
+                        </Button>
+                        <Button
+                            type="primary"
+                            danger
+                            onClick={() => {
+                                if (onReject) onReject()
+                            }}
+                            loading={isDisabled}
+                        >
+                            Từ chối
+                        </Button>
+                    </Flex>
                 </Flex>
             )}
         </>
