@@ -2,7 +2,8 @@
 
 //import OzViewer from "@/components/OzViewer"
 import { EformTemplate } from "@/app/(types)/EformTemplate"
-import { uniqueValue } from "@/app/(utilities)/ArrayUtilities"
+import { Permission } from "@/app/(types)/Permission"
+import { FindPermission, uniqueValue } from "@/app/(utilities)/ArrayUtilities"
 import { timeStampToDayjs } from "@/app/(utilities)/TimeStampToDayjs"
 import { ContextTemplate } from "@/components/context/context"
 import { Form, message } from "antd"
@@ -31,15 +32,16 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
 const TemplateWrapper = ({
     id,
     data,
-    listLeft
+    listLeft,
+    permission
 }: {
     id?: string
     data: EformTemplate[]
     listLeft: OptionProps[]
+    permission: Permission[]
 }) => {
     const { data: session } = useSession()
     const router = useRouter()
-    const userInfo = session?.user.userInfo
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage()
     const {
@@ -53,7 +55,6 @@ const TemplateWrapper = ({
         setIsDisabled
     } = useContext(ContextTemplate)
     const [viewerKey, setViewerKey] = useState<number>(0)
-    console.log("UserInfo", userInfo)
 
     useEffect(() => {
         setIsDisabled(false)
@@ -139,29 +140,6 @@ const TemplateWrapper = ({
                 choosenBlock: choosenBlock,
                 changeBlock: 0
             })
-            /*const oz = document.getElementById("OZViewer")
-
-              listRight.forEach((block) => {
-                oz!.CreateReportEx(
-                    DefaultParams(
-                        process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                        "/" + block.type + "/" + block.name,
-                        block.name
-                    ),
-                    ";"
-                )
-            }) */
-
-            /* choosenBlock.forEach((block) => {
-                oz!.CreateReportEx(
-                    DefaultParams(
-                        process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                        "/" + block.ozrRepository + "/" + block.name,
-                        block.name
-                    ),
-                    ";"
-                )
-            }) */
         } else {
             messageApi.error("Please choose at least 1 block")
         }
@@ -210,18 +188,10 @@ const TemplateWrapper = ({
         router.refresh()
     }
 
-    /*  const { data: option, error, isLoading } = useTemplate([])
-
-    setListLeft(option!)
-
-    if (isLoading) return <Skeleton.Input className="w-fit" active={true} />
-
-    if (error) return null */
-
     return (
         <div>
             {contextHolder}
-            {userInfo.defaultGroup.role[0] === "CV" ? (
+            {FindPermission(permission, "children", "VisibleFormInput") ? (
                 <>
                     <TemplateForm id={id} form={form} />
                     <TransferTemplate />
@@ -230,33 +200,17 @@ const TemplateWrapper = ({
                 <></>
             )}
             <CustomButtonGroup
+                permission={permission}
                 onPreview={onPreview}
                 onSubmit={onSubmit}
                 onSave={onSave}
                 onCancel={onCancel}
                 onVerify={onVerify}
                 onBack={onBack}
-                role="KSV"
             />
             <OzViewer viewerKey={viewerKey} />
         </div>
     )
-}
-
-const DefaultParams = (
-    url: string,
-    reportName: string,
-    displayname: string
-) => {
-    return `connection.servlet=${url};
-connection.reportname=${reportName};
-global.concatthumbnail=true;
-connection.refreshperiod=1;
-viewer.createreport_doc_index=0;
-    global.concatpreview=false;
-    viewer.showtab=true;
-    connection.displayname=${displayname};
-    viewer.thumbnailsection_showclosebutton=true;`
 }
 
 export default TemplateWrapper

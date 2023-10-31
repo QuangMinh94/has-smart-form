@@ -175,9 +175,9 @@ const SideMenu = ({ children }: PropsWithChildren) => {
                         padding: 24,
                         minHeight: 280,
                         background: colorBgContainer,
-                        /*  overflowX: "hidden",
-                        overflowY: "scroll" */
-                        overflow: "hidden"
+                        overflowX: "hidden",
+                        overflowY: "scroll"
+                        //overflow: "hidden"
                     }}
                 >
                     {children}

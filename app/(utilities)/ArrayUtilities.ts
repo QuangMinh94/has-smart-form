@@ -1,3 +1,6 @@
+import _ from "lodash"
+import { Permission } from "../(types)/Permission"
+
 export function getUnique(array: any[], key: any) {
     if (typeof key !== "function") {
         const property = key
@@ -34,4 +37,36 @@ export function uniqueValue(a: any[], b: any[]) {
     const result = [...onlyInA, ...onlyInB]
 
     return result
+}
+
+export const FlattenItems = (items: any[], key: string): any[] => {
+    return items.reduce((flattenedItems: any[], item: any) => {
+        flattenedItems.push(item)
+
+        if (Array.isArray(item[key])) {
+            flattenedItems = flattenedItems.concat(FlattenItems(item[key], key))
+        }
+
+        return flattenedItems
+    }, [])
+}
+
+export const FindPermission = (
+    items: any[],
+    key: string,
+    searchKey: string
+): boolean => {
+    try {
+        const data = FlattenItems(items, key)
+
+        console.log("Data", data)
+        console.log("Key", searchKey)
+
+        const findValue = _.find(data, ["name", searchKey]) as Permission
+
+        console.log("FindValue", findValue)
+        return findValue.value!
+    } catch {
+        return false
+    }
 }

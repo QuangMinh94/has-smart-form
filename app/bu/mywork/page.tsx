@@ -10,10 +10,10 @@ import PageHeader from "../_components/PageHeader"
 import { SearchParamProvider } from "../_context/provider"
 import TemplateTable, { DataTableType } from "../template/templateTable"
 
-axios.interceptors.request.use((request) => {
+/* axios.interceptors.request.use((request) => {
     console.log("Starting Request", JSON.stringify(request, null, 2))
     return request
-})
+}) */
 
 const MyWorkPage = async ({
     searchParams
@@ -25,8 +25,6 @@ const MyWorkPage = async ({
     if (session) {
         const userInfo = session.user.userInfo as Users
         const userRole = userInfo.defaultGroup?.role as Role[]
-
-        console.log("User role", userInfo.defaultGroup?.role)
 
         const data = await fetchTemplateData(
             process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,

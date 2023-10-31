@@ -1,6 +1,10 @@
 import { EformTemplate } from "@/app/(types)/EformTemplate"
+import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
+import { authOptions } from "@/app/api/auth/authOptions"
 import axios from "axios"
+import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
+import { notFound } from "next/navigation"
 import { cache } from "react"
 import PageHeader from "../_components/PageHeader"
 import { SearchParamProvider } from "../_context/provider"
@@ -16,6 +20,13 @@ const TemplatePage = async ({
 }: {
     searchParams: { name: string }
 }) => {
+    const session = await getServerSession(authOptions)
+    if (!session) notFound()
+
+    const permission = session.user.userInfo.permission
+
+    if (!FindPermission(permission, "children", "VisibleTemplateBU")) notFound()
+
     const data = await fetchTemplate(
         process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
         searchParams.name ? { name: searchParams.name } : {}

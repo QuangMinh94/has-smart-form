@@ -1,5 +1,7 @@
 "use client"
 
+import { Permission } from "@/app/(types)/Permission"
+import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import { ContextTemplate } from "@/components/context/context"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -14,7 +16,7 @@ const CustomButtonGroup = ({
     onVerify,
     onReject,
     onBack,
-    role
+    permission
 }: {
     onPreview: () => void
     onSubmit: () => void
@@ -23,12 +25,16 @@ const CustomButtonGroup = ({
     onVerify?: () => void
     onReject?: () => void
     onBack?: () => void
-    role: string
+    permission: Permission[] | []
 }) => {
     const { isDisabled } = useContext(ContextTemplate)
     return (
         <>
-            {role === "CV" ? (
+            {FindPermission(
+                permission,
+                "children",
+                "VisibleSubmitButtonGroup"
+            ) ? (
                 <Flex className="mb-3" vertical gap={10}>
                     <Flex justify="flex-end">
                         <Button
@@ -78,7 +84,7 @@ const CustomButtonGroup = ({
                     </Flex>
                 </Flex>
             ) : (
-                <Flex justify="space-between">
+                <Flex className="mt-5" justify="space-between">
                     <Flex>
                         <Button
                             type="primary"
