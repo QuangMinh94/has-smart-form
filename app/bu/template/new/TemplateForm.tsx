@@ -48,8 +48,6 @@ const TemplateForm = ({
             button: submitType
         }
 
-        //console.log("BLock?", choosenBlock)
-
         try {
             if (isInsert) {
                 await axios.post(
