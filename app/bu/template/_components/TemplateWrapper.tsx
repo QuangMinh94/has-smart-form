@@ -42,6 +42,7 @@ const TemplateWrapper = ({
     const permission = session!.user.userInfo.permission as Permission[]
     const router = useRouter()
     const [form] = Form.useForm()
+
     const [messageApi, contextHolder] = message.useMessage()
     const {
         setFormData,

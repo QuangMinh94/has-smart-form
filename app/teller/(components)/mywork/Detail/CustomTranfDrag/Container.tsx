@@ -1,10 +1,10 @@
 "use client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Empty, Input } from "antd"
+import { Empty, Input, Spin } from "antd"
 import update from "immutability-helper"
 import { useCallback, useEffect, useState } from "react"
 import { useDrop } from "react-dnd"
-
+import Select from "../../../customSelect/SelectEproduct"
 export type typeKey = "left" | "right"
 type typeProps = {
     list: any[]
@@ -14,6 +14,8 @@ type typeProps = {
     ChangeListFilter: boolean
     type: typeKey
     title: string
+    HidenUI?: React.ReactNode
+    loading?: boolean
 }
 
 import { ToFilterName } from "@/util/formatText"
@@ -27,7 +29,9 @@ const MyDropTarget: React.FC<typeProps> = ({
     type,
     title,
     ChangeListFilter,
-    setChangeListFilter
+    setChangeListFilter,
+    HidenUI,
+    loading
 }) => {
     const [listFilter, setListFilter] = useState<any[]>([])
     const [valueSearch, setValueSearch] = useState<string>("")
@@ -128,6 +132,7 @@ const MyDropTarget: React.FC<typeProps> = ({
     const data = valueSearch.length > 0 ? listFilter : list
     return (
         <div
+            className="shadow-md"
             style={{
                 width: "auto",
                 border: "1px solid #f0f0f0",
@@ -143,11 +148,13 @@ const MyDropTarget: React.FC<typeProps> = ({
             >
                 {title}
             </div>
-            <div style={{ margin: "10px 0", textAlign: "center" }}>
+
+            <div style={{ width: "90%", margin: "10px auto" }}>
+                {HidenUI && <div className="my-5"> {HidenUI} </div>}
                 <Input
                     value={valueSearch}
                     onChange={(e) => HandeFilter.HanderChange(e)}
-                    style={{ width: "90%" }}
+                    // style={{ width: "90%" }}
                     prefix={<FontAwesomeIcon icon={faSearch} />}
                     placeholder="Search"
                 />
@@ -160,7 +167,13 @@ const MyDropTarget: React.FC<typeProps> = ({
                     height: "300px"
                 }}
             >
-                {data.length <= 0 ? (
+                {loading ? (
+                    <div className="mt-20">
+                        <Spin tip="Loading....">
+                            <div className="content" />
+                        </Spin>
+                    </div>
+                ) : data.length <= 0 ? (
                     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 ) : (
                     data.map((item, index) => (
