@@ -17,6 +17,8 @@ export interface typeContextMyworkDetail {
     setChoosenBlock: React.Dispatch<React.SetStateAction<changeBlock>>
     dataGlobal: dataGlobal
     setDataGlobal: React.Dispatch<React.SetStateAction<dataGlobal>>
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
+    loading: boolean
 }
 const contextMyworkDetail = createContext<typeContextMyworkDetail>({
     setListLeft: () => {},
@@ -28,7 +30,10 @@ const contextMyworkDetail = createContext<typeContextMyworkDetail>({
     choosenBlock: { changeBlock: 0, choosenBlock: [] },
     setChoosenBlock: () => {},
     dataGlobal: { repository: "", appointment: "" },
-    setDataGlobal: () => {}
+    setDataGlobal: () => {},
+    setLoading:()=>{},
+    loading: false
+
 })
 export interface typeContextMywork {
     setListIdRemove: React.Dispatch<React.Key[]>

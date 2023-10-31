@@ -19,7 +19,9 @@ function useContextMyWorkDetail(): typeContextMyworkDetail {
         setDataGlobal: provider.setDataGlobal,
         dataGlobal: provider.dataGlobal,
         setChoosenBlock: provider.setChoosenBlock,
-        choosenBlock:provider.choosenBlock
+        choosenBlock:provider.choosenBlock,
+        setLoading:provider.setLoading,
+        loading:provider.loading
     }
 }
 function useContextMyWork(): typeContextMywork {

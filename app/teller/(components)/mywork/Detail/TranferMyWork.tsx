@@ -1,5 +1,5 @@
 "use client"
-import React,{useEffect} from "react"
+import React, { useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import axios from "axios"
@@ -10,7 +10,8 @@ import LayoutTranfer from "./CustomTranfDrag/LayoutTranfer"
 import { DataTranfer } from "@/app/(types)/typeDataTranfe"
 import { EformList } from "@/app/(types)/EformList"
 import Loading from "@/app/teller/mywork/loading"
-import { usePathname } from "next/navigation"
+import SelectEproduct from "../../customSelect/SelectEproduct"
+import HeaderUi from "../Detail/HeaderUiContent"
 interface DataTranfeCustom extends DataTranfer {
     repository: string
 }
@@ -22,47 +23,50 @@ const DetailFormUser = () => {
         setListRight,
         ChangeListFilter,
         setChangeListFilter,
-        dataGlobal
+        dataGlobal,
+        loading
     } = useContextMyWorkDetail()
 
-    useEffect(()=>{
+    useEffect(() => {
         setListRight([])
-    },[])
-    
-    const { isLoading, error } = useQuery<DataTranfeCustom[]>({
-        queryKey: ["option"],
-        queryFn: async () => {
-            const res = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {
-                repository: dataGlobal.repository
-            })
-            const res_1: EformList[] = res.data
-            const _option: DataTranfeCustom[] = []
-            res_1.forEach((resChild) => {
-                _option.push({
-                    id: resChild.repository + resChild.name,
-                    name: resChild.name,
-                    checkBox: false,
-                    repository: resChild.repository
-                })
-            })
-            setListLeft(_option)
-            return _option
-        },
-        retry: 3,
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false
-    })
+    }, [])
 
-    if (error) {
-        return <div style={{ color: "red" }}>có lỗi</div>
-    }
-    if (isLoading) {
-        return <Loading />
-    }
+    // const { isLoading, error } = useQuery<DataTranfeCustom[]>({
+    //     queryKey: ["option"],
+    //     queryFn: async () => {
+    //         const res = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {
+    //             repository: "bảo hiểm"
+    //         })
+    //         const res_1: EformList[] = res.data
+    //         const _option: DataTranfeCustom[] = []
+    //         res_1.forEach((resChild) => {
+    //             _option.push({
+    //                 id: resChild.repository + resChild.name,
+    //                 name: resChild.name,
+    //                 checkBox: false,
+    //                 repository: resChild.repository
+    //             })
+    //         })
+    //         setListLeft(_option)
+    //         return _option
+    //     },
+    //     retry: 3,
+    //     refetchOnWindowFocus: false,
+    //     refetchOnReconnect: false
+    // })
+
+    // if (error) {
+    //     return <div style={{ color: "red" }}>có lỗi</div>
+    // }
+    // if (isLoading) {
+    //     return <Loading />
+    // }
+
     return (
         <LayoutTranfer
             ColLeft={
                 <Container
+                    HidenUI={<HeaderUi />}
                     setChangeListFilter={setChangeListFilter}
                     ChangeListFilter={ChangeListFilter}
                     title="Danh sách block"
@@ -70,6 +74,7 @@ const DetailFormUser = () => {
                     setList={setListLeft}
                     list={listLeft}
                     setRomoveList={setListRight}
+                    loading={loading}
                 />
             }
             Button={

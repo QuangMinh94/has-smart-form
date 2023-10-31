@@ -1,12 +1,20 @@
 export interface eProduct {
+    image?: {
+        data: string
+        contentType: string
+    }
     createdDate?: string
+    formTemplate?: string[]
     _id?: string
     active?: boolean
     code?: string
-    name?: string
+    name: string
     creator?: string
     description?: string
-    parent?: string
     type?: string
-    formTemplate?: string[]
+}
+export interface requestBodyEproduct {
+    type?: string
+    id?: string
+    parent?: string
 }
