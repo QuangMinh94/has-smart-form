@@ -31,7 +31,7 @@ const TemplateForm = ({
     form
 }: {
     id?: string
-    form: FormInstance<any>
+    form?: FormInstance<any>
 }) => {
     const cookies = useCookies()
     const [messageApi, contextHolder] = message.useMessage()
@@ -76,6 +76,7 @@ const TemplateForm = ({
                     }
                 )
             }
+
             router.push("/bu/template/")
             router.refresh()
         } catch (error) {

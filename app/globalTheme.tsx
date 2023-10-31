@@ -18,7 +18,11 @@ const AntdProvider = ({ children }: PropsWithChildren) => {
         )
     })
 
-    return <StyleProvider cache={cache}>{children}</StyleProvider>
+    return (
+        <StyleProvider hashPriority="high" cache={cache}>
+            {children}
+        </StyleProvider>
+    )
 }
 
 export default AntdProvider

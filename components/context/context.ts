@@ -22,6 +22,8 @@ export interface typeContextTemplate {
     setFormData: Dispatch<SetStateAction<EformTemplate[]>>
     isInsert: boolean
     setIsInsert: Dispatch<SetStateAction<boolean>>
+    isDisabled: boolean
+    setIsDisabled: Dispatch<SetStateAction<boolean>>
 }
 const ContextTemplate = createContext<typeContextTemplate>({
     setListLeft: () => {},
@@ -37,6 +39,8 @@ const ContextTemplate = createContext<typeContextTemplate>({
     formData: [],
     setFormData: () => {},
     isInsert: true,
-    setIsInsert: () => {}
+    setIsInsert: () => {},
+    isDisabled: false,
+    setIsDisabled: () => {}
 })
 export { ContextTemplate }

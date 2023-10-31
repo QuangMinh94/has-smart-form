@@ -14,6 +14,7 @@ const ProviderTemplate = ({ children }: PropsWithChildren) => {
     const [submitType, setSubmitType] = useState<string>("")
     const [formData, setFormData] = useState<EformTemplate[]>([])
     const [isInsert, setIsInsert] = useState<boolean>(true)
+    const [isDisabled, setIsDisabled] = useState<boolean>(false)
 
     const data: typeContextTemplate = {
         setListLeft,
@@ -29,7 +30,9 @@ const ProviderTemplate = ({ children }: PropsWithChildren) => {
         formData,
         setFormData,
         isInsert,
-        setIsInsert
+        setIsInsert,
+        isDisabled,
+        setIsDisabled
     }
     return (
         <ContextTemplate.Provider value={data}>

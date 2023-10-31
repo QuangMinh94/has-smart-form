@@ -4,7 +4,7 @@ import { Avatar, Dropdown, Image, Skeleton } from "antd"
 import classnames from "classnames"
 import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 const NavBar = () => {
     return (
@@ -54,6 +54,7 @@ const NavLink = () => {
 
 const AuthStatus = () => {
     const { status, data: session } = useSession()
+    const router = useRouter()
 
     if (status === "loading")
         return <Skeleton.Avatar shape="circle" active={true} />
@@ -79,12 +80,9 @@ const AuthStatus = () => {
                                 label: (
                                     <p
                                         className="cursor-pointer"
-                                        onClick={async () =>
-                                            await signOut({
-                                                callbackUrl:
-                                                    "http://localhost:3000/bu"
-                                            })
-                                        }
+                                        onClick={() => {
+                                            signOut({ redirect: false })
+                                        }}
                                     >
                                         Log out
                                     </p>

@@ -17,7 +17,7 @@ const SigninForm = () => {
             username: values.username,
             password: values.password,
             redirect: true,
-            callbackUrl: "http://localhost:3000/bu"
+            callbackUrl: process.env.NEXT_PUBLIC_SERVER_URL! + "/bu"
         })
         /*  if (signInResponse) {
             if (signInResponse.ok) {

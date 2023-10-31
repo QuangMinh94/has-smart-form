@@ -14,4 +14,8 @@ declare module "next-auth" {
         token: string
         session: string
     }
+    interface Token {
+        token: string
+        userInfo: Users
+    }
 }

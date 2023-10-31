@@ -3,8 +3,13 @@ import axios from "axios"
 import { cookies } from "next/headers"
 import { cache } from "react"
 import PageHeader from "../_components/PageHeader"
-import SearchParamProvider from "../_context/searchParamProvider"
+import { SearchParamProvider } from "../_context/provider"
 import TemplateTable, { DataTableType } from "./templateTable"
+/* 
+axios.interceptors.request.use((request) => {
+    console.log("Starting Request", JSON.stringify(request, null, 2))
+    return request
+}) */
 
 const TemplatePage = async ({
     searchParams
@@ -29,7 +34,7 @@ const TemplatePage = async ({
 
     return (
         <SearchParamProvider>
-            <PageHeader>
+            <PageHeader path="/bu/template">
                 <TemplateTable data={_data} />
             </PageHeader>
         </SearchParamProvider>
@@ -48,7 +53,7 @@ const fetchTemplate = cache(async (url: string, searchInput: any) => {
     return data
 })
 
-export const dynamic = "force-dynamic"
-//export const revalidate = 10
+//export const dynamic = "force-dynamic"
+export const revalidate = 10
 
 export default TemplatePage
