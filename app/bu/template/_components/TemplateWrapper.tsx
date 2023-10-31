@@ -155,7 +155,9 @@ const TemplateWrapper = ({
         form.submit()
     }
     const onCancel = () => {
-        resetEForm()
+        setIsDisabled(true)
+        setSubmitType("DELETE")
+        form.submit()
     }
 
     const onVerify = async () => {
