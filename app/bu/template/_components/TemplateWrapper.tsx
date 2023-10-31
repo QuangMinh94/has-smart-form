@@ -32,15 +32,14 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
 const TemplateWrapper = ({
     id,
     data,
-    listLeft,
-    permission
+    listLeft
 }: {
     id?: string
     data: EformTemplate[]
     listLeft: OptionProps[]
-    permission: Permission[]
 }) => {
     const { data: session } = useSession()
+    const permission = session!.user.userInfo.permission as Permission[]
     const router = useRouter()
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage()
