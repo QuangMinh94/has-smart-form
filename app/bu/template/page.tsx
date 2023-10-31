@@ -34,9 +34,11 @@ const TemplatePage = async ({
 
     return (
         <SearchParamProvider>
-            <PageHeader path="/bu/template">
-                <TemplateTable data={_data} />
-            </PageHeader>
+            <div>
+                <PageHeader path="/bu/template">
+                    <TemplateTable data={_data} />
+                </PageHeader>
+            </div>
         </SearchParamProvider>
     )
 }

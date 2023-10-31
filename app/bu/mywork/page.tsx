@@ -1,4 +1,5 @@
 import { EformTemplate } from "@/app/(types)/EformTemplate"
+import { Role } from "@/app/(types)/Group"
 import { Users } from "@/app/(types)/Users"
 import { authOptions } from "@/app/api/auth/authOptions"
 import axios from "axios"
@@ -23,13 +24,15 @@ const MyWorkPage = async ({
 
     if (session) {
         const userInfo = session.user.userInfo as Users
-        const userRole = userInfo.defaultGroup?.role as string[]
+        const userRole = userInfo.defaultGroup?.role as Role[]
+
+        console.log("User role", userInfo.defaultGroup?.role)
 
         const data = await fetchTemplateData(
             process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
             searchParams.name
                 ? { name: searchParams.name, userRole: userRole[0] }
-                : { userRole: userRole[0] }
+                : { userRole: userRole[0]._id }
         )
 
         const _data: DataTableType[] = []

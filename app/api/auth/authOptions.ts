@@ -55,6 +55,7 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         jwt: async ({ user, token }) => {
+            //console.log("User", user)
             if (user) {
                 token.uid = user.token
                 token.name = JSON.stringify(user)

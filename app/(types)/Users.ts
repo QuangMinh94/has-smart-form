@@ -1,8 +1,7 @@
 import { Department } from "./Department"
-import { Group } from "./Group"
+import { Group, Role } from "./Group"
 import { Organization } from "./Organization"
 import { Permission } from "./Permission"
-import { Role } from "./Role"
 
 export interface Token {
     token?: string
