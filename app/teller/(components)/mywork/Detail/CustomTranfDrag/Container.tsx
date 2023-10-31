@@ -128,6 +128,7 @@ const MyDropTarget: React.FC<typeProps> = ({
     const data = valueSearch.length > 0 ? listFilter : list
     return (
         <div
+            className="shadow-md"
             style={{
                 width: "auto",
                 border: "1px solid #f0f0f0",
@@ -144,7 +145,6 @@ const MyDropTarget: React.FC<typeProps> = ({
                 {title}
             </div>
             <div style={{ margin: "10px 0", textAlign: "center" }}>
-           
                 <Input
                     value={valueSearch}
                     onChange={(e) => HandeFilter.HanderChange(e)}
@@ -161,7 +161,6 @@ const MyDropTarget: React.FC<typeProps> = ({
                     height: "300px"
                 }}
             >
-                
                 {data.length <= 0 ? (
                     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 ) : (

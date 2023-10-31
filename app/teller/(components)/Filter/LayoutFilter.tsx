@@ -8,12 +8,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { RadioChangeEvent, Row, Col, theme } from "antd"
 import { Radio, Button, Input } from "antd"
 import React, { useEffect, memo, useCallback, useMemo } from "react"
+import { useContextMyWork } from "@/components/cusTomHook/useContext"
 import {
     usePathname,
     useParams,
     useRouter,
     useSearchParams
 } from "next/navigation"
+import MyWork from "../../mywork/page"
 
 type condisions = {
     pagemywork: {
@@ -21,6 +23,17 @@ type condisions = {
         isDetailMyorkpath: boolean
     }
 }
+export type typeSearch = "CDDD" | "MGD"
+const mywork = {
+    TYPE_SEARCH: "search",
+    VALUE_SEARCH: "idSearch",
+    params(type: typeSearch, idSearch: string | null) {
+        return `?${this.TYPE_SEARCH}=${type}${
+            !idSearch ? "" : `&${this.VALUE_SEARCH}=${idSearch}`
+        }`
+    }
+}
+
 const useHanderNavigation = (): {
     pathName: any
     params: any
@@ -63,13 +76,19 @@ const RadioComponent: React.FC<{
 }> = memo(({ pathName, condition }) => {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const value = searchParams.get("search")
+    const value = searchParams.get(mywork.TYPE_SEARCH)
+    const searchQuery = useSearchParams()
+    const valueSearch: string | null = useMemo(
+        () => searchQuery.get(mywork.VALUE_SEARCH),
+        [searchQuery.get(mywork.VALUE_SEARCH)]
+    )
+
     const onChange = (e: RadioChangeEvent) => {
-        router.push(`?search=${e.target.value}`)
+        router.push(mywork.params(e.target.value, valueSearch))
     }
     useEffect(() => {
         if (condition().pagemywork.isMyworkpath) {
-            router.push(`?search=MCD`)
+            router.push(`?${mywork.TYPE_SEARCH}=MGD`)
         }
     }, [pathName])
     return (
@@ -80,7 +99,7 @@ const RadioComponent: React.FC<{
                 value={value}
             >
                 <Radio value={"CDDD"}>CDDD</Radio>
-                <Radio value={"MCD"}>Mã GD</Radio>
+                <Radio value={"MGD"}>Mã GD</Radio>
             </Radio.Group>
         </>
     )
@@ -91,6 +110,8 @@ const CustomBtn: React.FC<{
     paramsId: string
     condition: () => condisions
 }> = memo(({ pathName, paramsId, condition }) => {
+    const { listIdRmove } = useContextMyWork()
+
     const router = useRouter()
     const HanderBtn = {
         Back: () => {
@@ -100,14 +121,16 @@ const CustomBtn: React.FC<{
             }
             router.push(pathRevert[pathName])
         },
-        Add: () => {}
+        Remove: () => {
+            console.log("listIdRmove", listIdRmove)
+        }
     }
     const HandleClick = () => {
         if (condition().pagemywork.isDetailMyorkpath) {
             HanderBtn.Back()
         }
         if (condition().pagemywork.isMyworkpath) {
-            HanderBtn.Add()
+            HanderBtn.Remove()
         }
     }
     const icon = condition().pagemywork.isDetailMyorkpath
@@ -130,14 +153,15 @@ const CustomFilter: React.FC<{
     paramsId: string
     condition: () => condisions
 }> = memo(({ pathName, paramsId, condition }) => {
+    const router = useRouter()
     const searchQuery = useSearchParams()
-    const key = useMemo(
-        () => searchQuery.get("search"),
-        [searchQuery.get("search")]
+    const typeSearch: any = useMemo(
+        () => searchQuery.get(mywork.TYPE_SEARCH),
+        [searchQuery.get(mywork.TYPE_SEARCH)]
     )
     const HanderFilter = {
         [`${routers.mywork.path}`]: (value: string) => {
-            console.log("filterMywork", value)
+            router.push(mywork.params(typeSearch, value))
         }
     }
     const HandlerChange = (e: any) => {

@@ -7,16 +7,11 @@ type typeProvider = {
 }
 
 const ProviderMyWork: React.FC<typeProvider> = ({ children }) => {
-    const [listLeft, setListLeft] = useState<any[]>([])
-    const [listRight, setListRight] = useState<any[]>([])
-    const [ChangeListFilter, setChangeListFilter] = useState<boolean>(false)
+    const [listIdRmove, setListIdRemove] = useState<React.Key[]>([])
+
     const data: typeContextMywork = {
-        setListLeft,
-        setListRight,
-        setChangeListFilter,
-        listLeft,
-        listRight,
-        ChangeListFilter
+        setListIdRemove,
+        listIdRmove
     }
     return (
         <contextMywork.Provider value={data}>{children}</contextMywork.Provider>

@@ -1,13 +1,19 @@
 "use client"
-import React, { useEffect } from "react"
-import { useContextMyWork } from "@/components/cusTomHook/useContext"
-import { DndProvider } from "react-dnd"
-import { HTML5Backend } from "react-dnd-html5-backend"
+import React,{useEffect} from "react"
+import { useQuery } from "@tanstack/react-query"
+import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+import axios from "axios"
 import "@/public/css/myWork/detailMyWork.css"
 import Container from "./CustomTranfDrag/Container"
 import ButtonLeftandRight from "./CustomTranfDrag/ButtonCusTom"
 import LayoutTranfer from "./CustomTranfDrag/LayoutTranfer"
-
+import { DataTranfer } from "@/app/(types)/typeDataTranfe"
+import { EformList } from "@/app/(types)/EformList"
+import Loading from "@/app/teller/mywork/loading"
+import { usePathname } from "next/navigation"
+interface DataTranfeCustom extends DataTranfer {
+    repository: string
+}
 const DetailFormUser = () => {
     const {
         listLeft,
@@ -15,61 +21,78 @@ const DetailFormUser = () => {
         setListLeft,
         setListRight,
         ChangeListFilter,
-        setChangeListFilter
-    } = useContextMyWork()
+        setChangeListFilter,
+        dataGlobal
+    } = useContextMyWorkDetail()
 
-    useEffect(() => {
-        function getMock() {
-            const arr = []
-            for (let i = 0; i <= 100; i++) {
-                arr.push({
-                    id: i,
-                    name: `name ${i}`,
-                    checkBox: false
+    useEffect(()=>{
+        setListRight([])
+    },[])
+    
+    const { isLoading, error } = useQuery<DataTranfeCustom[]>({
+        queryKey: ["option"],
+        queryFn: async () => {
+            const res = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {
+                repository: dataGlobal.repository
+            })
+            const res_1: EformList[] = res.data
+            const _option: DataTranfeCustom[] = []
+            res_1.forEach((resChild) => {
+                _option.push({
+                    id: resChild.repository + resChild.name,
+                    name: resChild.name,
+                    checkBox: false,
+                    repository: resChild.repository
                 })
-            }
-            setListLeft(arr)
-        }
-        setListLeft([])
-        getMock()
-    }, [])
+            })
+            setListLeft(_option)
+            return _option
+        },
+        retry: 3,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false
+    })
 
+    if (error) {
+        return <div style={{ color: "red" }}>có lỗi</div>
+    }
+    if (isLoading) {
+        return <Loading />
+    }
     return (
-        <DndProvider backend={HTML5Backend}>
-            <LayoutTranfer
-                ColLeft={
-                    <Container
-                        setChangeListFilter={setChangeListFilter}
-                        ChangeListFilter={ChangeListFilter}
-                        title="col1"
-                        type={"left"}
-                        setList={setListLeft}
-                        list={listLeft}
-                        setRomoveList={setListRight}
-                    />
-                }
-                Button={
-                    <ButtonLeftandRight
-                        listLeft={listLeft}
-                        listRight={listRight}
-                        setListLeft={setListLeft}
-                        setListRight={setListRight}
-                        setChangeListFilter={setChangeListFilter}
-                    />
-                }
-                ColRight={
-                    <Container
-                        title="col2"
-                        type="right"
-                        setChangeListFilter={setChangeListFilter}
-                        ChangeListFilter={ChangeListFilter}
-                        setList={setListRight}
-                        list={listRight}
-                        setRomoveList={setListLeft}
-                    />
-                }
-            />
-        </DndProvider>
+        <LayoutTranfer
+            ColLeft={
+                <Container
+                    setChangeListFilter={setChangeListFilter}
+                    ChangeListFilter={ChangeListFilter}
+                    title="Danh sách block"
+                    type={"left"}
+                    setList={setListLeft}
+                    list={listLeft}
+                    setRomoveList={setListRight}
+                />
+            }
+            Button={
+                <ButtonLeftandRight
+                    listLeft={listLeft}
+                    listRight={listRight}
+                    setListLeft={setListLeft}
+                    setListRight={setListRight}
+                    setChangeListFilter={setChangeListFilter}
+                />
+            }
+            ColRight={
+                <Container
+                    title="Block được chọn"
+                    type="right"
+                    setChangeListFilter={setChangeListFilter}
+                    ChangeListFilter={ChangeListFilter}
+                    setList={setListRight}
+                    list={listRight}
+                    setRomoveList={setListLeft}
+                />
+            }
+        />
     )
 }
 

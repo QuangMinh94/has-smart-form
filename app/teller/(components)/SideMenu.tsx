@@ -7,6 +7,9 @@ import React, { useState, useEffect } from "react"
 import routers from "@/router/cusTomRouter"
 const { Header, Sider, Content } = Layout
 import ButtonLogOut from "./customButton/ButtonLogout"
+import ProviderMyWork from "./provider/ProviderMyWork"
+import ProviderMyworkDetail from "./provider/ProviderMyworkDetail"
+import ProvidertemplateContext from '@/components/context/templateContext'
 const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
     const router = useRouter()
     const switchRoute = (e: string) => {
@@ -90,10 +93,16 @@ const SideMenu = ({ children, title }: Props) => {
                         overflowY: "scroll"
                     }}
                 >
-                    <div className="my-6">
-                        <Filter />
-                    </div>
-                    <div>{children}</div>
+                   
+                    <ProviderMyWork>
+                        <ProviderMyworkDetail>
+                            <div className="my-6">
+                                <Filter />
+                            </div>
+                            <div>{children}</div>
+                        </ProviderMyworkDetail>
+                    </ProviderMyWork>
+                    
                 </Content>
             </Layout>
         </Layout>

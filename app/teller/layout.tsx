@@ -5,8 +5,7 @@ interface Props {
 }
 
 const BuLayout = ({ children }: Props) => {
-    const priMaryColor = "#0e7490"
-
+    const priMaryColor = "#0E7490"
     return (
         <ConfigProvider
             theme={{
@@ -20,20 +19,7 @@ const BuLayout = ({ children }: Props) => {
                         headerSortActiveBg: priMaryColor,
                         headerSortHoverBg: priMaryColor,
                         algorithm: true
-                    },
-                    // Button: {
-                    //   colorPrimary: '#00b96b',
-                    //   algorithm: true, // Enable algorithm
-                    // },
-                    Input: {
-                        hoverBorderColor: priMaryColor,
-                        algorithm: true // Enable algorithm
                     }
-                    // Menu: {
-                    //     colorPrimary: '#1375b1',
-
-                    //     algorithm: true,
-                    // }
                 }
             }}
         >

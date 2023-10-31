@@ -6,7 +6,7 @@ import NewTemplateWrapper from "../_components/NewTemplateWrapper"
 
 const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
     const cookie = cookies()
-
+   
     const response = await axios.get(
         process.env.NEXT_PUBLIC_EFORM_GET_TEMPLATE! + "/" + params.id,
         {

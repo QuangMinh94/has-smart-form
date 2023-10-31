@@ -38,7 +38,7 @@ const TemplatePage = async ({
 
 const fetchTemplate = cache(async (url: string, searchInput: any) => {
     const cookie = cookies()
-    const res = await axios.post(url, searchInput, {
+        const res = await axios.post(url, searchInput, {
         headers: {
             Authorization: "Bearer " + cookie.get("token")?.value,
             Session: cookie.get("session")?.value

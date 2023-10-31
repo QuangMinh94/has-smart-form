@@ -1,106 +1,94 @@
 "use client"
 import axios from "axios"
-import React from "react"
+import React, { useMemo, useCallback } from "react"
 import { Table } from "antd"
-import type { ColumnsType} from "antd/es/table"
+import type { ColumnsType } from "antd/es/table"
 import Link from "next/link"
 import routers from "@/router/cusTomRouter"
 import { myWork } from "@/app/(types)/teller/mywork"
 import dayjs from "dayjs"
+import { useContextMyWork } from "@/components/cusTomHook/useContext"
+import { useRouter } from "next/navigation"
+import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 
-const columns: ColumnsType<myWork> = [
-    {
-        title: "Mã giao dịch",
-        dataIndex: "_id",
-        render: (key: string) => (
-            <Link
-                href={`${routers.detailMywork.path({
-                    id: key
-                })}?CCCD=1&Name=hoang`}
-            >
-                {key}
-            </Link>
+type Props = {
+    data: myWork[]
+}
+const App: React.FC<Props> = ({ data }) => {
+    const { setDataGlobal } = useContextMyWorkDetail()
+    const { setListIdRemove } = useContextMyWork()
+    const router = useRouter()
+    const CustomClickPath = useCallback((row: myWork) => {
+       
+        setDataGlobal({
+            repository: row?.eProduct?.name as string,
+            appointment: row?.appointmentCode
+        })
+        router.push(
+            `${routers.detailMywork.path({
+                id: row._id ?? ""
+            })}?CCCD=${row?.citizenId}&Name=${row.name}`
         )
-    },
-    {
-        title: "CCCD",
-        dataIndex: "cddd",
-        render: (cddd: string) => (
-            <Link
-                href={`${routers.detailMywork.path({
-                    id: cddd
-                })}?CCCD=1&Name=hoang`}
-            >
-                {cddd}
-            </Link>
-        )
-    },
-    {
-        title: "Người làm đơn",
-        dataIndex: "applicant"
-    },
-    {
-        title: "Sản phẩm",
-        dataIndex: "product"
-    },
-    {
-        title: "Ngày tạo",
-        dataIndex: "creatDate",
-        render: (creatDate) => {
-            return dayjs(creatDate).format("DD/MM/YYYY")
-        },
-        sorter: (a: myWork, b: myWork) => {
-            if (dayjs(a.creatDate).isAfter(b.creatDate)) {
-                return 1
+    }, [])
+    const rowSelection = useMemo(
+        () => ({
+            onChange: (selectedRowKeys: React.Key[]) => {
+                console.log(selectedRowKeys)
+                setListIdRemove(selectedRowKeys)
             }
-            return -1
+        }),
+        []
+    )
+    const columns: ColumnsType<myWork> = [
+        {
+            title: "Mã giao dịch",
+
+            render: (row: myWork) => (
+                <div onClick={() => CustomClickPath(row)}>{row._id}</div>
+            )
+        },
+        {
+            title: "CCCD",
+            render: (row: myWork) => (
+                <div onClick={() => CustomClickPath(row)}>{row?.citizenId}</div>
+            )
+        },
+        {
+            title: "Người làm đơn",
+            dataIndex: "name"
+        },
+        {
+            title: "Sản phẩm",
+
+            render: (row: myWork) => {
+                return <>{row?.eProduct?.name}</>
+            }
+        },
+        {
+            title: "Ngày tạo",
+            dataIndex: "createDate",
+            render: (createDate) => {
+                return dayjs(createDate).format("DD/MM/YYYY HH:mm:ss")
+            },
+            sorter: (a: myWork, b: myWork) => {
+                if (dayjs(a.createDate).isAfter(b.createDate)) {
+                    return 1
+                }
+                return -1
+            }
+        },
+        {
+            title: "Trạng thái",
+            render: (row: myWork) => <>{row?.status?.name}</>
+        },
+        {
+            title: "Người thực hiện",
+            dataIndex: "implementer"
         }
-    },
-    {
-        title: "Trạng thái",
-        dataIndex: "status"
-    },
-    {
-        title: "Người thực hiện",
-        dataIndex: "implementer"
-    }
-]
-
-const data: myWork[] = []
-
-// rowSelection object indicates the need for row selection
-const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: myWork[]) => {
-        console.log(
-            `selectedRowKeys: ${selectedRowKeys}`,
-            "selectedRows: ",
-            selectedRows
-        )
-    },
-    getCheckboxProps: (record: myWork) => ({
-        disabled: record.applicant === "Disabled User", // Column configuration not to be checked
-        name: record.applicant
-    })
-}
-
-for (let i = 0; i <= 5; i++) {
-    data.push({
-        key: `${i}`,
-        _id: `${i}`,
-        cddd: `cddd${i}`,
-        applicant: `applicant${i}`,
-        product: `product ${i}`,
-        creatDate: `${dayjs().toISOString()}`,
-        status: `status ${i}`,
-        implementer: `implementer${i}`
-    })
-}
-console.log(data)
-
-const App: React.FC = () => {
+    ]
+    console.log(data)
     return (
         <div>
-           
             <Table
                 rowSelection={{
                     type: "checkbox",

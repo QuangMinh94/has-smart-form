@@ -37,6 +37,7 @@ const NewTemplateWrapper = ({
     data: EformTemplate[]
 }) => {
     const [form] = Form.useForm()
+
     const [messageApi, contextHolder] = message.useMessage()
     const {
         setFormData,
