@@ -5,8 +5,9 @@ import ProviderTemplate from "@/components/context/providerTemplate"
 import axios from "axios"
 import { getServerSession } from "next-auth"
 import { notFound } from "next/navigation"
+import { cache } from "react"
 import { OptionProps } from "../[id]/page"
-import NewTemplateWrapper from "../_components/TemplateWrapper"
+import TemplateWrapper from "../_components/TemplateWrapper"
 
 const NewTemplate = async () => {
     const session = await getServerSession(authOptions)
@@ -16,7 +17,18 @@ const NewTemplate = async () => {
 
     if (!FindPermission(permission, "children", "VisibleBU")) notFound()
 
-    const response = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {
+    const _option = await fetchRepositoryList(
+        process.env.NEXT_PUBLIC_EFORM_LIST!
+    )
+    return (
+        <ProviderTemplate>
+            <TemplateWrapper listLeft={_option} data={[]} />
+        </ProviderTemplate>
+    )
+}
+
+const fetchRepositoryList = cache(async (url: string) => {
+    const response = await axios.post(url, {
         repository: "Dịch vụ tài khoản"
     })
     const res_1 = response.data as {
@@ -33,11 +45,7 @@ const NewTemplate = async () => {
             type: resChild.repository
         })
     })
-    return (
-        <ProviderTemplate>
-            <NewTemplateWrapper listLeft={_option} data={[]} />
-        </ProviderTemplate>
-    )
-}
+    return _option
+})
 
 export default NewTemplate

@@ -38,15 +38,6 @@ const CustomButtonGroup = ({
                 <Flex className="mb-3" vertical gap={10}>
                     <Flex justify="flex-end">
                         <Button
-                            //disabled={isDisabled}
-                            className="w-20"
-                            type="primary"
-                            onClick={onCancel}
-                            loading={isDisabled}
-                        >
-                            Rebind
-                        </Button>
-                        <Button
                             className="w-20"
                             type="primary"
                             onClick={onPreview}
