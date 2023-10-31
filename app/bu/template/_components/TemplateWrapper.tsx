@@ -156,7 +156,7 @@ const TemplateWrapper = ({
     }
     const onCancel = () => {
         setIsDisabled(true)
-        setSubmitType("DELETE")
+        setSubmitType("CANCEL")
         form.submit()
     }
 

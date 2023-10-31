@@ -59,12 +59,8 @@ export const FindPermission = (
     try {
         const data = FlattenItems(items, key)
 
-        console.log("Data", data)
-        console.log("Key", searchKey)
-
         const findValue = _.find(data, ["name", searchKey]) as Permission
 
-        console.log("FindValue", findValue)
         return findValue.value!
     } catch {
         return false
