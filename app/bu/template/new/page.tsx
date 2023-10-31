@@ -35,11 +35,7 @@ const NewTemplate = async () => {
     })
     return (
         <ProviderTemplate>
-            <NewTemplateWrapper
-                permission={permission}
-                listLeft={_option}
-                data={[]}
-            />
+            <NewTemplateWrapper listLeft={_option} data={[]} />
         </ProviderTemplate>
     )
 }
