@@ -16,6 +16,8 @@ type Props = {
     parent?: string
     onChange: (value: string) => void
     typeQuery: string
+    placeholder: string
+    setDataService?: React.Dispatch<React.SetStateAction<eProduct[]>>
 }
 
 const UseFecthApi = (
@@ -41,7 +43,13 @@ const UseFecthApi = (
 
     return { isLoading, error, data, refetch }
 }
-const CustomerSelect: React.FC<Props> = ({ parent, onChange, typeQuery }) => {
+const CustomerSelect: React.FC<Props> = ({
+    parent,
+    onChange,
+    typeQuery,
+    placeholder,
+    setDataService
+}) => {
     const cookies = useCookies()
     const { isLoading, error, data, refetch } = UseFecthApi(
         cookies?.get("token") ?? "",
@@ -53,8 +61,15 @@ const CustomerSelect: React.FC<Props> = ({ parent, onChange, typeQuery }) => {
     //     return <div style={{ color: "red" }}>có lỗi</div>
     // }
     useEffect(() => {
-        refetch()
+        if (parent) {
+            refetch()
+        }
     }, [parent])
+    useEffect(()=>{
+        if (parent) {
+            setDataService && setDataService(data ?? [])
+        }
+    },[data])
     const HandlerfilterOption = useCallback(
         (input: string, option: any) =>
             ToFilterName(option?.label ?? "").includes(ToFilterName(input)),
@@ -65,7 +80,7 @@ const CustomerSelect: React.FC<Props> = ({ parent, onChange, typeQuery }) => {
         <Select
             loading={isLoading}
             style={{ width: "100%" }}
-            placeholder="Tags Mode"
+            placeholder={placeholder}
             onChange={onChange}
             options={data?.map((value) => ({
                 value: value._id,

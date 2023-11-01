@@ -2,7 +2,7 @@ import { eProduct } from "../eProduct"
 import { status } from "../status"
 
 export interface myWork {
-    key?: string
+    key: number
     _id?: string
     citizenId?: string
     name?: string

@@ -3,7 +3,8 @@ import { myWork } from "@/app/(types)/teller/mywork"
 import axios from "axios"
 import { cache } from "react"
 import { cookies } from "next/headers"
-import { lte } from "lodash"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/authOptions"
 const MyWork = async ({
     searchParams
 }: {
@@ -12,7 +13,14 @@ const MyWork = async ({
     const { search, idSearch } = searchParams
     const ListMyworks = await fetchApi({ search, idSearch })
 
-    return <TableMywork data={ListMyworks} />
+    return (
+        <TableMywork
+            data={ListMyworks.map((item, index) => ({
+                ...item,
+                key: index + 1
+            }))}
+        />
+    )
 }
 const fetchApi = cache(
     async ({
@@ -23,25 +31,29 @@ const fetchApi = cache(
         idSearch: string | null
     }): Promise<myWork[]> => {
         const cookie = cookies()
-        const KeySearch:"citizenId" = search === "CDDD" ? "citizenId" : "citizenId"
-        const bodyRequest:any = {
-            [KeySearch]: idSearch
+        const session = await getServerSession(authOptions)
+        const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
+        const KeySearch: "citizenId" =
+            search === "CDDD" ? "citizenId" : "citizenId"
+        const bodyRequest: any = {
+            [KeySearch]: idSearch,
+            userRole: idRole
         }
         if (!idSearch) {
-             delete bodyRequest[KeySearch]
+            delete bodyRequest[KeySearch]
         }
         try {
-        const res = await axios.post(
-            process.env.NEXT_PUBLIC_APPOINT_MENTS!,
-            bodyRequest,
-            {
-                headers: {
-                    Authorization: "Bearer " + cookie.get("token")?.value,
-                    Session: cookie.get("session")?.value
+            const res = await axios.post(
+                process.env.NEXT_PUBLIC_APPOINT_MENTS!,
+                bodyRequest,
+                {
+                    headers: {
+                        Authorization: "Bearer " + cookie.get("token")?.value,
+                        Session: cookie.get("session")?.value
+                    }
                 }
-            }
-        )
-        return res.data
+            )
+            return res.data
         } catch (e: any) {
             throw new Error("error fetching", e)
         }
