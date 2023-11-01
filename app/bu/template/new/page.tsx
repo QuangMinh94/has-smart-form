@@ -5,12 +5,12 @@ import { authOptions } from "@/app/api/auth/authOptions"
 import ProviderTemplate from "@/components/context/providerTemplate"
 import axios from "axios"
 import { getServerSession } from "next-auth"
+import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import { cache } from "react"
 import { TreeDataType } from "../../_types/TreeDataType"
 import { OptionProps } from "../[id]/page"
 import TemplateWrapper from "../_components/TemplateWrapper"
-import { fetchTemplate } from "../page"
 
 const NewTemplate = async () => {
     const session = await getServerSession(authOptions)
@@ -29,16 +29,12 @@ const NewTemplate = async () => {
 
     const treeDataView: TreeDataType[] = MappingChildren(treeData)
 
-    const _option = await fetchRepositoryList(
+    /* const _option = await fetchRepositoryList(
         process.env.NEXT_PUBLIC_EFORM_LIST!
-    )
+    ) */
     return (
         <ProviderTemplate>
-            <TemplateWrapper
-                treeData={treeDataView}
-                listLeft={_option}
-                data={[]}
-            />
+            <TemplateWrapper treeData={treeDataView} listLeft={[]} data={[]} />
         </ProviderTemplate>
     )
 }
@@ -82,5 +78,21 @@ const MappingChildren = (product: TreeProduct[]) => {
     })
     return childrenView
 }
+
+const fetchTemplate = cache(async (url: string, searchInput: any) => {
+    const cookie = cookies()
+    try {
+        const res = await axios.post(url, searchInput, {
+            headers: {
+                Authorization: "Bearer " + cookie.get("token")?.value,
+                Session: cookie.get("session")?.value
+            }
+        })
+        const data = res.data
+        return data
+    } catch {
+        return []
+    }
+})
 
 export default NewTemplate

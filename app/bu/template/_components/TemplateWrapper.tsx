@@ -59,7 +59,8 @@ const TemplateWrapper = ({
         setListRight,
         setSubmitType,
         setIsInsert,
-        setIsDisabled
+        setIsDisabled,
+        selectedTree
     } = useContext(ContextTemplate)
     const [viewerKey, setViewerKey] = useState<number>(0)
 
@@ -118,6 +119,8 @@ const TemplateWrapper = ({
         setFormData(data)
         setViewerKey(Math.random())
     }, [])
+
+    useEffect(() => {}, [selectedTree])
 
     const resetEForm = () => {
         setViewerKey(Math.random())

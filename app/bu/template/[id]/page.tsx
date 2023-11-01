@@ -38,7 +38,12 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
 
     return (
         <ProviderTemplate>
-            <TemplateWrapper listLeft={_option} id={params.id} data={data} />
+            <TemplateWrapper
+                treeData={[]}
+                listLeft={_option}
+                id={params.id}
+                data={data}
+            />
         </ProviderTemplate>
     )
 }

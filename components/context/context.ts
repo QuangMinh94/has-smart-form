@@ -24,6 +24,8 @@ export interface typeContextTemplate {
     setIsInsert: Dispatch<SetStateAction<boolean>>
     isDisabled: boolean
     setIsDisabled: Dispatch<SetStateAction<boolean>>
+    selectedTree: string
+    setSelectedTree: Dispatch<SetStateAction<string>>
 }
 const ContextTemplate = createContext<typeContextTemplate>({
     setListLeft: () => {},
@@ -41,6 +43,8 @@ const ContextTemplate = createContext<typeContextTemplate>({
     isInsert: true,
     setIsInsert: () => {},
     isDisabled: false,
-    setIsDisabled: () => {}
+    setIsDisabled: () => {},
+    selectedTree: "",
+    setSelectedTree: () => {}
 })
 export { ContextTemplate }

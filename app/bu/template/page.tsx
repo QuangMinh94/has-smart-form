@@ -61,19 +61,23 @@ const TemplatePage = async ({
     )
 }
 
-export const fetchTemplate = cache(async (url: string, searchInput: any) => {
+const fetchTemplate = cache(async (url: string, searchInput: any) => {
     const cookie = cookies()
-    const res = await axios.post(url, searchInput, {
-        headers: {
-            Authorization: "Bearer " + cookie.get("token")?.value,
-            Session: cookie.get("session")?.value
-        }
-    })
-    const data = res.data
-    return data
+    try {
+        const res = await axios.post(url, searchInput, {
+            headers: {
+                Authorization: "Bearer " + cookie.get("token")?.value,
+                Session: cookie.get("session")?.value
+            }
+        })
+        const data = res.data
+        return data
+    } catch {
+        return []
+    }
 })
 
-//export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic"
 //export const revalidate = 10
 
 export default TemplatePage
