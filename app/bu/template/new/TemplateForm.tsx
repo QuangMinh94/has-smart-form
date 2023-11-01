@@ -94,6 +94,7 @@ const TemplateForm = ({
                 wrapperCol={{ span: 24 }}
                 layout="vertical"
                 onFinish={onFinish}
+                onFinishFailed={() => setIsDisabled(false)}
                 autoComplete="on"
             >
                 <Row gutter={10}>
@@ -110,14 +111,14 @@ const TemplateForm = ({
                                                 "Please input the form name"
                                         }
                                     ]}
-                                    className="w-3/6"
+                                    className="w-full"
                                     shouldUpdate={(prevValues, curValues) =>
                                         prevValues !== curValues
                                     }
                                 >
                                     <Input />
                                 </Form.Item>
-                                <Form.Item<FieldType>
+                                {/*  <Form.Item<FieldType>
                                     label="Mã form"
                                     name="formCode"
                                     rules={[
@@ -133,7 +134,7 @@ const TemplateForm = ({
                                     }
                                 >
                                     <Input />
-                                </Form.Item>
+                                </Form.Item> */}
                             </Flex>
                             <Flex gap={8}>
                                 <Form.Item<FieldType>
@@ -163,6 +164,31 @@ const TemplateForm = ({
                                     shouldUpdate={(prevValues, curValues) =>
                                         prevValues !== curValues
                                     }
+                                    rules={[
+                                        {
+                                            validator: async (
+                                                _,
+                                                endDatetime
+                                            ) => {
+                                                var startDatetime =
+                                                    form!.getFieldValue(
+                                                        "validFrom"
+                                                    )
+                                                if (endDatetime !== null) {
+                                                    if (startDatetime != null) {
+                                                        if (
+                                                            endDatetime <=
+                                                            startDatetime
+                                                        ) {
+                                                            return Promise.reject(
+                                                                "Ngày hiệu lực đến không được bé hơn ngày hiệu lực"
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]}
                                 >
                                     <DatePicker
                                         className="w-full"

@@ -50,7 +50,14 @@ const MyWorkPage = async ({
 
         return (
             <SearchParamProvider>
-                <PageHeader path="/bu/mywork">
+                <PageHeader
+                    path="/bu/mywork"
+                    addNewPermission={FindPermission(
+                        permission,
+                        "children",
+                        "VisibleAddNew"
+                    )}
+                >
                     <TemplateTable
                         data={_data}
                         ksvPermission={FindPermission(
