@@ -1,18 +1,25 @@
 "use client"
+import axios from "axios"
 import { message } from "antd"
 import React, { useState } from "react"
 import dynamic from "next/dynamic"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
-const OzViewer = dynamic(() => import("@/components/OzViewer"), { ssr: false })
+
 import TranferMyWork from "./TranferMyWork"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+import { useCookies } from "next-client-cookies"
 import delay from "delay"
+import { addEformTask } from "@/app/(service)/addEformTasks"
+import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
+const OzViewer = dynamic(() => import("@/components/OzViewer"), { ssr: false })
+
 const TemlateWrapper: React.FC = () => {
+    const cookies = useCookies()
     const [messageApi, contextHolder] = message.useMessage()
     const [viewerKey, setViewerKey] = useState<number>(0)
-    const { listRight, setChoosenBlock } = useContextMyWorkDetail()
+    const { listRight, setChoosenBlock, dataGlobal } = useContextMyWorkDetail()
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
@@ -41,6 +48,7 @@ const TemlateWrapper: React.FC = () => {
                 changeBlock: 0
             })
             const oz = document.getElementById("OZViewer")
+            console.log(choosenBlock)
             choosenBlock.forEach((block) => {
                 oz!.CreateReportEx(
                     DefaultParams(
@@ -59,19 +67,54 @@ const TemlateWrapper: React.FC = () => {
     const onCancel = () => {
         resetEForm()
     }
-    const onSubmit = () => {
-        const oz = document.getElementById("OZViewer")
-        if (oz) {
-            if (oz.GetInformation("INPUT_CHECK_VALIDITY") == "valid") {
-                var inputdata = oz.GetInformation(
-                    "INPUT_JSON_ALL_GROUP_BY_REPORT"
-                )
-                console.log("hoang", inputdata)
-            }else{
-                console.log("no input data")
+    const onSubmit = async () => {
+        handleradd("SUBMIT")
+    }
+    const onSave = () => {
+        handleradd("SAVE")
+    }
+    const handleradd = async (type: "SAVE" | "SUBMIT") => {
+        try {
+            const oz = document.getElementById("OZViewer")
+            if (oz) {
+                if (oz.GetInformation("INPUT_CHECK_VALIDITY") == "valid") {
+                    var inputdatas = JSON.parse(
+                        oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
+                    )
+                    const reversedata = [...listRight].reverse()
+                    const eformTasks: taskEform[] = []
+
+                    inputdatas.forEach((inputdata: any, index: number) => {
+                        eformTasks.push({
+                            data: inputdata,
+                            fromTemplate: reversedata?.[index]?.id,
+                            documentId: "test"
+                        })
+                    })
+
+                    const body: RequestEformTaks = {
+                        eformTasks: eformTasks,
+                        appointment: dataGlobal.appointment,
+                        button: type
+                    }
+                    console.log(body)
+                    const res = await addEformTask({
+                        bodyRequest: body,
+                        token: cookies.get("token") ?? "",
+                        session: cookies.get("session") ?? ""
+                    })
+                    if (res.status === 200) {
+                        messageApi.success("success")
+                    }
+                } else {
+                    messageApi.error("no input data")
+                }
             }
+        } catch (e: any) {
+            messageApi.error("err")
         }
     }
+
     return (
         <div>
             {contextHolder}
@@ -81,7 +124,7 @@ const TemlateWrapper: React.FC = () => {
                     <ButtonHandleEform
                         onCancel={onCancel}
                         onPreview={onPreview}
-                        onSave={() => {}}
+                        onSave={onSave}
                         onSubmit={onSubmit}
                     />
                 </div>

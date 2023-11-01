@@ -30,12 +30,11 @@ const DetailFormUser = () => {
     useEffect(() => {
         setListRight([])
     }, [])
-
-    // const { isLoading, error } = useQuery<DataTranfeCustom[]>({
+    // const { isLoading, error, refetch } = useQuery<DataTranfeCustom[]>({
     //     queryKey: ["option"],
     //     queryFn: async () => {
     //         const res = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {
-    //             repository: "bảo hiểm"
+    //             repository: dataGlobal.repository
     //         })
     //         const res_1: EformList[] = res.data
     //         const _option: DataTranfeCustom[] = []
@@ -54,7 +53,11 @@ const DetailFormUser = () => {
     //     refetchOnWindowFocus: false,
     //     refetchOnReconnect: false
     // })
-
+    // useEffect(() => {
+    //     if (dataGlobal.repository.length > 0) {
+    //         refetch()
+    //     }
+    // }, [dataGlobal.repository])
     // if (error) {
     //     return <div style={{ color: "red" }}>có lỗi</div>
     // }
