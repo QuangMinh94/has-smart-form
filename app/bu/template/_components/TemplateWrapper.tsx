@@ -2,7 +2,8 @@
 
 //import OzViewer from "@/components/OzViewer"
 import { EformTemplate } from "@/app/(types)/EformTemplate"
-import { uniqueValue } from "@/app/(utilities)/ArrayUtilities"
+import { Permission } from "@/app/(types)/Permission"
+import { FindPermission, uniqueValue } from "@/app/(utilities)/ArrayUtilities"
 import { timeStampToDayjs } from "@/app/(utilities)/TimeStampToDayjs"
 import { ContextTemplate } from "@/components/context/context"
 import { Form, message } from "antd"
@@ -12,8 +13,12 @@ import tz from "dayjs/plugin/timezone"
 import utc from "dayjs/plugin/utc"
 import delay from "delay"
 import { useSession } from "next-auth/react"
+import { useCookies } from "next-client-cookies"
 import dynamic from "next/dynamic"
+import { useRouter } from "next/navigation"
 import { useContext, useEffect, useState } from "react"
+import { BUTTON_TYPE } from "../../_types/ButtonType"
+import { TreeDataType } from "../../_types/TreeDataType"
 import { OptionProps } from "../[id]/page"
 import TemplateForm from "../new/TemplateForm"
 import TransferTemplate from "../new/TransferTemplate"
@@ -30,15 +35,19 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
 const TemplateWrapper = ({
     id,
     data,
-    listLeft
+    listLeft,
+    treeData
 }: {
     id?: string
     data: EformTemplate[]
     listLeft: OptionProps[]
+    treeData: TreeDataType[]
 }) => {
     const { data: session } = useSession()
-    const userInfo = session?.user.userInfo
+    const permission = session!.user.userInfo.permission as Permission[]
+    const router = useRouter()
     const [form] = Form.useForm()
+    const cookies = useCookies()
 
     const [messageApi, contextHolder] = message.useMessage()
     const {
@@ -75,8 +84,9 @@ const TemplateWrapper = ({
                 setListRight(_listRight)
             }
             //console.log("List result", UniqueValue(listLeft, _listRight))
-
-            setListLeft(uniqueValue(listLeft, _listRight))
+            if (listLeft.length > 0) {
+                setListLeft(uniqueValue(listLeft, _listRight))
+            }
 
             form.setFieldsValue({
                 formName: data[0].name,
@@ -137,29 +147,6 @@ const TemplateWrapper = ({
                 choosenBlock: choosenBlock,
                 changeBlock: 0
             })
-            /*const oz = document.getElementById("OZViewer")
-
-              listRight.forEach((block) => {
-                oz!.CreateReportEx(
-                    DefaultParams(
-                        process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                        "/" + block.type + "/" + block.name,
-                        block.name
-                    ),
-                    ";"
-                )
-            }) */
-
-            /* choosenBlock.forEach((block) => {
-                oz!.CreateReportEx(
-                    DefaultParams(
-                        process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                        "/" + block.ozrRepository + "/" + block.name,
-                        block.name
-                    ),
-                    ";"
-                )
-            }) */
         } else {
             messageApi.error("Please choose at least 1 block")
         }
@@ -176,10 +163,13 @@ const TemplateWrapper = ({
         form.submit()
     }
     const onCancel = () => {
-        resetEForm()
+        setIsDisabled(true)
+        setSubmitType("CANCEL")
+        form.submit()
     }
 
     const onVerify = async () => {
+        /*  setIsDisabled(true)
         const data = {
             ozrName:
                 "input\\Dịch vụ tài khoản\\EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán.ozr",
@@ -199,54 +189,93 @@ const TemplateWrapper = ({
             .replace(/(?:\\[rn])+/g, "")
             .trim()
         console.log("Repsonse yo", repsonsedata)
+        setIsDisabled(false) */
+        setIsDisabled(true)
+        try {
+            await axios.post(
+                process.env.NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
+                {
+                    id: id,
+                    button: BUTTON_TYPE.SUBMIT
+                },
+                {
+                    headers: {
+                        Authorization: "Bearer " + cookies.get("token"),
+                        Session: cookies.get("session")
+                    }
+                }
+            )
+            messageApi.success("Phê duyệt thành công")
+
+            setTimeout(() => {
+                router.push("/bu/mywork")
+                router.refresh()
+            }, 2000)
+        } catch (error) {
+            console.log(error)
+            messageApi.error("Phê duyệt thất bại. Xin hãy thử lại sau")
+            setIsDisabled(false)
+        }
     }
 
-    /*  const { data: option, error, isLoading } = useTemplate([])
+    const onBack = () => {
+        router.push("/bu/template")
+        router.refresh()
+    }
 
-    setListLeft(option!)
+    const onReject = async () => {
+        setIsDisabled(true)
+        try {
+            await axios.post(
+                process.env.NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
+                {
+                    id: id,
+                    button: BUTTON_TYPE.REJECT
+                },
+                {
+                    headers: {
+                        Authorization: "Bearer " + cookies.get("token"),
+                        Session: cookies.get("session")
+                    }
+                }
+            )
+            messageApi.success("Hủy đơn thành công")
 
-    if (isLoading) return <Skeleton.Input className="w-fit" active={true} />
-
-    if (error) return null */
+            setTimeout(() => {
+                router.push("/bu/mywork")
+                router.refresh()
+            }, 2000)
+        } catch (error) {
+            console.log(error)
+            messageApi.error("Hủy đơn thất bại. Xin hãy thử lại sau")
+            setIsDisabled(false)
+        }
+    }
 
     return (
         <div>
             {contextHolder}
-            {userInfo.defaultGroup.role[0] === "CV" ? (
+            {FindPermission(permission, "children", "VisibleFormInput") ? (
                 <>
                     <TemplateForm id={id} form={form} />
-                    <TransferTemplate />
+                    <TransferTemplate treeData={treeData} />
                 </>
             ) : (
                 <></>
             )}
             <CustomButtonGroup
+                permission={permission}
                 onPreview={onPreview}
                 onSubmit={onSubmit}
                 onSave={onSave}
                 onCancel={onCancel}
                 onVerify={onVerify}
-                role="KSV"
+                onBack={onBack}
+                onReject={onReject}
             />
             <OzViewer viewerKey={viewerKey} />
         </div>
     )
-}
-
-const DefaultParams = (
-    url: string,
-    reportName: string,
-    displayname: string
-) => {
-    return `connection.servlet=${url};
-connection.reportname=${reportName};
-global.concatthumbnail=true;
-connection.refreshperiod=1;
-viewer.createreport_doc_index=0;
-    global.concatpreview=false;
-    viewer.showtab=true;
-    connection.displayname=${displayname};
-    viewer.thumbnailsection_showclosebutton=true;`
 }
 
 export default TemplateWrapper

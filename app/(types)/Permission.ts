@@ -1,12 +1,9 @@
 export interface Permission {
-    _id?: string,
-    Name?: string,
-    Value?: boolean,
-    Children?: Permission[]
-    Active?: boolean
-    CreatedDate?: string
-    Object?: string
-}
-export interface bodyGetPermission{
-    Active: boolean
+    _id?: string
+    name?: string
+    value?: boolean
+    children: any[]
+    active?: boolean
+    createdDate?: string
+    object?: string
 }

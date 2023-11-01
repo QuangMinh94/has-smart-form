@@ -1,15 +1,14 @@
 "use client"
-import Filter from "./Filter/LayoutFilter"
+import routers from "@/router/cusTomRouter"
 import { VideoCameraOutlined } from "@ant-design/icons"
 import { Image, Layout, Menu, theme } from "antd"
 import { useRouter } from "next/navigation"
-import React, { useState, useEffect } from "react"
-import routers from "@/router/cusTomRouter"
-const { Header, Sider, Content } = Layout
+import React, { useEffect, useState } from "react"
+import Filter from "./Filter/LayoutFilter"
 import ButtonLogOut from "./customButton/ButtonLogout"
-import ProviderMyWork from "./provider/ProviderMyWork"
+import ProviderMyWork from "./provider/ProviderMywork"
 import ProviderMyworkDetail from "./provider/ProviderMyworkDetail"
-import ProvidertemplateContext from '@/components/context/templateContext'
+const { Header, Sider, Content } = Layout
 const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
     const router = useRouter()
     const switchRoute = (e: string) => {
@@ -93,7 +92,6 @@ const SideMenu = ({ children, title }: Props) => {
                         overflowY: "scroll"
                     }}
                 >
-                   
                     <ProviderMyWork>
                         <ProviderMyworkDetail>
                             <div className="my-6">
@@ -102,7 +100,6 @@ const SideMenu = ({ children, title }: Props) => {
                             <div>{children}</div>
                         </ProviderMyworkDetail>
                     </ProviderMyWork>
-                    
                 </Content>
             </Layout>
         </Layout>

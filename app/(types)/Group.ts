@@ -17,7 +17,7 @@ export interface Group {
     active?: boolean
     description?: string
     parent?: Parent
-    role?: CheckboxValueType[] | string[]
+    role?: CheckboxValueType[] | string[] | Role[]
     organization?: Organization
     department?: Department
     createdDate?: string
@@ -25,6 +25,17 @@ export interface Group {
     children?: Group[]
     position?: string
     user?: string[]
+}
+
+export interface Role {
+    _id?: string
+    __v: number
+    active: boolean
+    createdDate: Date
+    name: string
+    organization: string
+    permission: string[]
+    description: string
 }
 
 export interface bodyGroupRequest {
