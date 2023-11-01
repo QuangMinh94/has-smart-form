@@ -22,6 +22,9 @@ const CustomButtonGroup = ({
                 <Button className="w-20" type="primary" onClick={onSubmit}>
                     Submit
                 </Button>
+                <Button className="w-20" type="primary" onClick={onSave}>
+                    Save
+                </Button>
                 <Button
                     className="w-20"
                     danger
