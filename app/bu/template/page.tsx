@@ -39,7 +39,7 @@ const TemplatePage = async ({
             formName: element.name,
             approval: element.approver,
             validFrom: element.validFrom,
-            status: element.status?.name
+            status: element.status?.description
         })
     })
 
@@ -47,7 +47,14 @@ const TemplatePage = async ({
         <SearchParamProvider>
             <div>
                 <PageHeader path="/bu/template">
-                    <TemplateTable data={_data} />
+                    <TemplateTable
+                        data={_data}
+                        ksvPermission={FindPermission(
+                            permission,
+                            "children",
+                            "VisibleVerifyButton"
+                        )}
+                    />
                 </PageHeader>
             </div>
         </SearchParamProvider>
@@ -56,7 +63,7 @@ const TemplatePage = async ({
 
 const fetchTemplate = cache(async (url: string, searchInput: any) => {
     const cookie = cookies()
-        const res = await axios.post(url, searchInput, {
+    const res = await axios.post(url, searchInput, {
         headers: {
             Authorization: "Bearer " + cookie.get("token")?.value,
             Session: cookie.get("session")?.value
@@ -66,7 +73,7 @@ const fetchTemplate = cache(async (url: string, searchInput: any) => {
     return data
 })
 
-export const dynamic = "force-dynamic"
+//export const dynamic = "force-dynamic"
 //export const revalidate = 10
 
 export default TemplatePage

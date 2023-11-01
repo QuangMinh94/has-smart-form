@@ -13,9 +13,11 @@ import tz from "dayjs/plugin/timezone"
 import utc from "dayjs/plugin/utc"
 import delay from "delay"
 import { useSession } from "next-auth/react"
+import { useCookies } from "next-client-cookies"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
 import { useContext, useEffect, useState } from "react"
+import { BUTTON_TYPE } from "../../_types/ButtonType"
 import { OptionProps } from "../[id]/page"
 import TemplateForm from "../new/TemplateForm"
 import TransferTemplate from "../new/TransferTemplate"
@@ -42,6 +44,7 @@ const TemplateWrapper = ({
     const permission = session!.user.userInfo.permission as Permission[]
     const router = useRouter()
     const [form] = Form.useForm()
+    const cookies = useCookies()
 
     const [messageApi, contextHolder] = message.useMessage()
     const {
@@ -162,7 +165,7 @@ const TemplateWrapper = ({
     }
 
     const onVerify = async () => {
-        setIsDisabled(true)
+        /*  setIsDisabled(true)
         const data = {
             ozrName:
                 "input\\Dịch vụ tài khoản\\EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán.ozr",
@@ -182,12 +185,67 @@ const TemplateWrapper = ({
             .replace(/(?:\\[rn])+/g, "")
             .trim()
         console.log("Repsonse yo", repsonsedata)
-        setIsDisabled(false)
+        setIsDisabled(false) */
+        setIsDisabled(true)
+        try {
+            await axios.post(
+                process.env.NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
+                {
+                    id: id,
+                    button: BUTTON_TYPE.SUBMIT
+                },
+                {
+                    headers: {
+                        Authorization: "Bearer " + cookies.get("token"),
+                        Session: cookies.get("session")
+                    }
+                }
+            )
+            messageApi.success("Phê duyệt thành công")
+
+            setTimeout(() => {
+                router.push("/bu/mywork")
+                router.refresh()
+            }, 2000)
+        } catch (error) {
+            console.log(error)
+            messageApi.error("Phê duyệt thất bại. Xin hãy thử lại sau")
+            setIsDisabled(false)
+        }
     }
 
     const onBack = () => {
         router.push("/bu/template")
         router.refresh()
+    }
+
+    const onReject = async () => {
+        setIsDisabled(true)
+        try {
+            await axios.post(
+                process.env.NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
+                {
+                    id: id,
+                    button: BUTTON_TYPE.REJECT
+                },
+                {
+                    headers: {
+                        Authorization: "Bearer " + cookies.get("token"),
+                        Session: cookies.get("session")
+                    }
+                }
+            )
+            messageApi.success("Hủy đơn thành công")
+
+            setTimeout(() => {
+                router.push("/bu/mywork")
+                router.refresh()
+            }, 2000)
+        } catch (error) {
+            console.log(error)
+            messageApi.error("Hủy đơn thất bại. Xin hãy thử lại sau")
+            setIsDisabled(false)
+        }
     }
 
     return (
@@ -209,6 +267,7 @@ const TemplateWrapper = ({
                 onCancel={onCancel}
                 onVerify={onVerify}
                 onBack={onBack}
+                onReject={onReject}
             />
             <OzViewer viewerKey={viewerKey} />
         </div>

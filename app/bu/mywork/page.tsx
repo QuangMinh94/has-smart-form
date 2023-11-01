@@ -1,6 +1,8 @@
 import { EformTemplate } from "@/app/(types)/EformTemplate"
 import { Role } from "@/app/(types)/Group"
+import { Permission } from "@/app/(types)/Permission"
 import { Users } from "@/app/(types)/Users"
+import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import { authOptions } from "@/app/api/auth/authOptions"
 import axios from "axios"
 import { getServerSession } from "next-auth"
@@ -25,6 +27,7 @@ const MyWorkPage = async ({
     if (session) {
         const userInfo = session.user.userInfo as Users
         const userRole = userInfo.defaultGroup?.role as Role[]
+        const permission = session.user.userInfo.permission as Permission[]
 
         const data = await fetchTemplateData(
             process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
@@ -41,14 +44,21 @@ const MyWorkPage = async ({
                 formName: element.name,
                 approval: element.approver,
                 validFrom: element.validFrom,
-                status: element.status?.name
+                status: element.status?.description
             })
         })
 
         return (
             <SearchParamProvider>
                 <PageHeader path="/bu/mywork">
-                    <TemplateTable data={_data} />
+                    <TemplateTable
+                        data={_data}
+                        ksvPermission={FindPermission(
+                            permission,
+                            "children",
+                            "VisibleVerifyButton"
+                        )}
+                    />
                 </PageHeader>
             </SearchParamProvider>
         )
