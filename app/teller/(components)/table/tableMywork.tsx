@@ -24,7 +24,7 @@ const App: React.FC<Props> = ({ data }) => {
 
     const router = useRouter()
     const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
-
+    
     const CustomClickPath = async (row: myWork) => {
         try {
             await viewAppointMent({
@@ -58,7 +58,7 @@ const App: React.FC<Props> = ({ data }) => {
     const columns: ColumnsType<myWork> = [
         {
             title: "Mã giao dịch",
-           
+
             render: (row: myWork) => (
                 <div
                     className="cursor-pointer text-sky-500"
@@ -70,7 +70,7 @@ const App: React.FC<Props> = ({ data }) => {
         },
         {
             title: "CCCD",
-           
+
             render: (row: myWork) => (
                 <div
                     className="cursor-pointer text-sky-500"
@@ -81,19 +81,19 @@ const App: React.FC<Props> = ({ data }) => {
             )
         },
         {
-           
+
             title: "Người làm đơn",
             dataIndex: "name"
         },
         {
             title: "Sản phẩm",
-           
+
             render: (row: myWork) => {
                 return <>{row?.eProduct?.name}</>
             }
         },
         {
-           
+
             title: "Ngày tạo",
             dataIndex: "createDate",
             render: (createDate) => {
@@ -107,17 +107,17 @@ const App: React.FC<Props> = ({ data }) => {
             }
         },
         {
-           
+
             title: "Trạng thái",
             render: (row: myWork) => <>{row?.status?.name}</>
         },
         {
-           
+
             title: "Người thực hiện",
             dataIndex: "implementer"
         }
     ]
-   
+
     return (
         <div>
             <Table
