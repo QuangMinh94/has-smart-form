@@ -24,6 +24,7 @@ const App: React.FC<Props> = ({ data }) => {
 
     const router = useRouter()
     const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
+    
 
     const CustomClickPath = async (row: myWork) => {
         try {
@@ -70,6 +71,7 @@ const App: React.FC<Props> = ({ data }) => {
         },
         {
             title: "CCCD",
+
            
             render: (row: myWork) => (
                 <div
@@ -81,6 +83,7 @@ const App: React.FC<Props> = ({ data }) => {
             )
         },
         {
+
            
             title: "Người làm đơn",
             dataIndex: "name"
@@ -93,6 +96,7 @@ const App: React.FC<Props> = ({ data }) => {
             }
         },
         {
+
            
             title: "Ngày tạo",
             dataIndex: "createDate",
@@ -107,16 +111,19 @@ const App: React.FC<Props> = ({ data }) => {
             }
         },
         {
+
            
             title: "Trạng thái",
             render: (row: myWork) => <>{row?.status?.name}</>
         },
         {
+
            
             title: "Người thực hiện",
             dataIndex: "implementer"
         }
     ]
+
    
     return (
         <div>
