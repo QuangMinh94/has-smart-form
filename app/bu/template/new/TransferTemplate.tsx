@@ -4,10 +4,59 @@ import Container from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/C
 import LayoutTranfer from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/LayoutTranfer"
 import { useContextTemplate } from "@/components/cusTomHook/useContextTemplate"
 import "@/public/css/myWork/detailMyWork.css"
+import { TreeSelect } from "antd"
+import axios from "axios"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
+import { TreeDataType } from "../../_types/TreeDataType"
+import { OptionProps } from "../[id]/page"
 
-const TransferTemplate = () => {
+const TreeSelectComp = ({ treeData }: { treeData: TreeDataType[] }) => {
+    const { setSelectedTree, setListLeft } = useContextTemplate()
+
+    const updateListLeft = async (selectedKeys: any) => {
+        const response = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {
+            repository: selectedKeys
+        })
+        const res_1 = response.data as {
+            name: string
+            repository: string
+            serverPath: string
+        }[]
+        const _option: OptionProps[] = []
+        res_1.forEach((resChild) => {
+            _option.push({
+                id: resChild.repository + resChild.name,
+                name: resChild.name,
+                checkBox: false,
+                type: resChild.repository
+            })
+        })
+        setListLeft(_option)
+    }
+
+    const onSelect = (selectedKeys: any, info: any) => {
+        console.log("selected", selectedKeys, info)
+        setSelectedTree(selectedKeys)
+        updateListLeft(selectedKeys)
+    }
+
+    return (
+        <TreeSelect
+            showSearch
+            style={{ width: "100%" }}
+            dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
+            placeholder="Please select"
+            allowClear
+            treeDefaultExpandAll
+            //onChange={onChange}
+            onSelect={onSelect}
+            treeData={treeData}
+        />
+    )
+}
+
+const TransferTemplate = ({ treeData }: { treeData: TreeDataType[] }) => {
     const {
         listLeft,
         listRight,
@@ -22,6 +71,7 @@ const TransferTemplate = () => {
             <LayoutTranfer
                 ColLeft={
                     <Container
+                        HidenUI={<TreeSelectComp treeData={treeData} />}
                         setChangeListFilter={setChangeListFilter}
                         ChangeListFilter={ChangeListFilter}
                         title="Danh sách block"

@@ -19,6 +19,8 @@ export function useContextTemplate(): typeContextTemplate {
         isInsert: provider.isInsert,
         setIsInsert: provider.setIsInsert,
         setIsDisabled: provider.setIsDisabled,
-        isDisabled: provider.isDisabled
+        isDisabled: provider.isDisabled,
+        selectedTree: provider.selectedTree,
+        setSelectedTree: provider.setSelectedTree
     }
 }

@@ -30,5 +30,5 @@ export interface Status {
     name: string
     type: string
     active: boolean
-    descriptiom: string
+    description: string
 }
