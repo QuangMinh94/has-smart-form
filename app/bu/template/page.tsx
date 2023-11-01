@@ -48,7 +48,14 @@ const TemplatePage = async ({
     return (
         <SearchParamProvider>
             <div>
-                <PageHeader path="/bu/template">
+                <PageHeader
+                    path="/bu/template"
+                    addNewPermission={FindPermission(
+                        permission,
+                        "children",
+                        "VisibleAddNew"
+                    )}
+                >
                     <TemplateTable
                         data={_data}
                         ksvPermission={FindPermission(
