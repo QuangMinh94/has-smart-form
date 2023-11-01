@@ -23,7 +23,6 @@ const TemplateTable = ({
         {
             title: "Tên biểu mẫu",
             dataIndex: "formName",
-            align: "center",
             ellipsis: true,
             width: "6vw",
             render(_value, record, _index) {

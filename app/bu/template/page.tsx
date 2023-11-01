@@ -27,7 +27,7 @@ const TemplatePage = async ({
 
     if (!FindPermission(permission, "children", "VisibleTemplateBU")) notFound()
 
-    const data = await fetchTemplate(
+    const data: EformTemplate[] = await fetchTemplate(
         process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
         searchParams.name ? { name: searchParams.name } : {}
     )
@@ -61,7 +61,7 @@ const TemplatePage = async ({
     )
 }
 
-const fetchTemplate = cache(async (url: string, searchInput: any) => {
+export const fetchTemplate = cache(async (url: string, searchInput: any) => {
     const cookie = cookies()
     const res = await axios.post(url, searchInput, {
         headers: {
@@ -69,7 +69,7 @@ const fetchTemplate = cache(async (url: string, searchInput: any) => {
             Session: cookie.get("session")?.value
         }
     })
-    const data = res.data as EformTemplate[]
+    const data = res.data
     return data
 })
 

@@ -18,6 +18,7 @@ import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
 import { useContext, useEffect, useState } from "react"
 import { BUTTON_TYPE } from "../../_types/ButtonType"
+import { TreeDataType } from "../../_types/TreeDataType"
 import { OptionProps } from "../[id]/page"
 import TemplateForm from "../new/TemplateForm"
 import TransferTemplate from "../new/TransferTemplate"
@@ -34,12 +35,15 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
 const TemplateWrapper = ({
     id,
     data,
-    listLeft
+    listLeft,
+    treeData
 }: {
     id?: string
     data: EformTemplate[]
     listLeft: OptionProps[]
+    treeData: TreeDataType[]
 }) => {
+    console.log("Tree data", treeData)
     const { data: session } = useSession()
     const permission = session!.user.userInfo.permission as Permission[]
     const router = useRouter()
@@ -254,7 +258,7 @@ const TemplateWrapper = ({
             {FindPermission(permission, "children", "VisibleFormInput") ? (
                 <>
                     <TemplateForm id={id} form={form} />
-                    <TransferTemplate />
+                    <TransferTemplate treeData={treeData} />
                 </>
             ) : (
                 <></>
