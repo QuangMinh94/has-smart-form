@@ -43,7 +43,6 @@ const TemplateWrapper = ({
     listLeft: OptionProps[]
     treeData: TreeDataType[]
 }) => {
-    console.log("Tree data", treeData)
     const { data: session } = useSession()
     const permission = session!.user.userInfo.permission as Permission[]
     const router = useRouter()
@@ -59,8 +58,7 @@ const TemplateWrapper = ({
         setListRight,
         setSubmitType,
         setIsInsert,
-        setIsDisabled,
-        selectedTree
+        setIsDisabled
     } = useContext(ContextTemplate)
     const [viewerKey, setViewerKey] = useState<number>(0)
 
@@ -86,8 +84,9 @@ const TemplateWrapper = ({
                 setListRight(_listRight)
             }
             //console.log("List result", UniqueValue(listLeft, _listRight))
-
-            setListLeft(uniqueValue(listLeft, _listRight))
+            if (listLeft.length > 0) {
+                setListLeft(uniqueValue(listLeft, _listRight))
+            }
 
             form.setFieldsValue({
                 formName: data[0].name,
@@ -119,8 +118,6 @@ const TemplateWrapper = ({
         setFormData(data)
         setViewerKey(Math.random())
     }, [])
-
-    useEffect(() => {}, [selectedTree])
 
     const resetEForm = () => {
         setViewerKey(Math.random())

@@ -9,7 +9,7 @@ const OzViewer = ({ viewerKey }: { viewerKey: number }) => {
 }
 
 const Viewer = () => {
-    const { formData, listRight } = useContext(ContextTemplate)
+    const { listRight } = useContext(ContextTemplate)
     const cachedFn = useCallback(async () => {
         if (window.start_ozjs) {
             window.SetOZParamters_OZViewer = () => {

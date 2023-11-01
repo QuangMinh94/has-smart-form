@@ -9,7 +9,6 @@ import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import { cache } from "react"
 import { TreeDataType } from "../../_types/TreeDataType"
-import { OptionProps } from "../[id]/page"
 import TemplateWrapper from "../_components/TemplateWrapper"
 
 const NewTemplate = async () => {
@@ -25,7 +24,6 @@ const NewTemplate = async () => {
         process.env.EPRODUCT_TREEDATA!,
         {}
     )
-    console.log("My tree data", treeData)
 
     const treeDataView: TreeDataType[] = MappingChildren(treeData)
 
@@ -38,27 +36,6 @@ const NewTemplate = async () => {
         </ProviderTemplate>
     )
 }
-
-const fetchRepositoryList = cache(async (url: string) => {
-    const response = await axios.post(url, {
-        repository: "Dịch vụ tài khoản"
-    })
-    const res_1 = response.data as {
-        name: string
-        repository: string
-        serverPath: string
-    }[]
-    const _option: OptionProps[] = []
-    res_1.forEach((resChild) => {
-        _option.push({
-            id: resChild.repository + resChild.name,
-            name: resChild.name,
-            checkBox: false,
-            type: resChild.repository
-        })
-    })
-    return _option
-})
 
 const MappingChildren = (product: TreeProduct[]) => {
     if (product.length === 0) return []
