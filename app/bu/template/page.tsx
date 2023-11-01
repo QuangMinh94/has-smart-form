@@ -37,7 +37,9 @@ const TemplatePage = async ({
         _data.push({
             key: element._id,
             formName: element.name,
-            approval: element.approver,
+            approval: element.approver
+                ? element.approver.lastName + " " + element.approver!.firstName
+                : "",
             validFrom: element.validFrom,
             status: element.status?.description
         })
