@@ -1,28 +1,23 @@
-export { default } from "next-auth/middleware"
+//export { default } from "next-auth/middleware"
+
+import withAuth, { NextRequestWithAuth } from "next-auth/middleware"
+import { NextResponse } from "next/server"
 
 /* export function middleware(request: NextRequestWithAuth) {
     console.log("Request", request)
     //return NextResponse.redirect(new URL('/bu/mywork', request.url))
 } */
 
-/* export default withAuth(function middleware(request: NextRequestWithAuth) {
+export default withAuth(function middleware(request: NextRequestWithAuth) {
     const token = request.nextauth.token
-    const url = request.url
-    console.log("Token", token)
-    console.log("URL", url)
-    if (token && !url.includes("signin")) {
+    const pathName = request.nextUrl.pathname
+    if (token) {
         const role = token.role
-        if (role === "BU") {
-            return NextResponse.redirect(new URL("/bu/template", request.url))
-        } else if (role === "TELLER") {
-            return NextResponse.redirect(new URL("/teller", request.url))
-        } else {
-            return NextResponse.redirect(new URL("/auth/login", request.url))
+        if (!pathName.toLowerCase().includes((role as string).toLowerCase())) {
+            return NextResponse.redirect(new URL("/notAuthorized", request.url))
         }
     }
-}) 
-
-*/
+})
 
 export const config = {
     matcher: ["/dashboard", "/bu/:path*", "/teller/:path*"]
