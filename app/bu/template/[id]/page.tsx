@@ -51,18 +51,6 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
     )
 }
 
-const fetchTemplateDetail = cache(async (url: string) => {
-    const cookie = cookies()
-    const res = await axios.get(url, {
-        headers: {
-            Authorization: "Bearer " + cookie.get("token")?.value,
-            Session: cookie.get("session")?.value
-        }
-    })
-    const data = res.data as EformTemplate[]
-    return data
-})
-
 const fetchTemplate = cache(async (url: string, searchInput: any) => {
     const cookie = cookies()
     try {

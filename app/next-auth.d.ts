@@ -15,7 +15,6 @@ declare module "next-auth" {
         session: string
     }
     interface Token {
-        token: string
-        userInfo: Users
+        role: string
     }
 }

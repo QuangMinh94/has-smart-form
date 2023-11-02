@@ -44,7 +44,7 @@ export const authOptions: NextAuthOptions = {
                     const userInfo = userResponse.data
 
                     //console.log("User data", user.data)
-                    
+
                     return userInfo
                 } catch (error) {
                     console.log("Oh shit error", error)
@@ -55,7 +55,6 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         jwt: async ({ user, token }) => {
-            //console.log("User", user)
             if (user) {
                 token.uid = user.token
                 token.name = JSON.stringify(user)

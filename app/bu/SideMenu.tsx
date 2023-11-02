@@ -16,31 +16,37 @@ import {
 } from "antd"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { PropsWithChildren, useContext, useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
+import { PropsWithChildren, useContext, useEffect, useState } from "react"
 import { PathParamsContext } from "./_context/context"
 
 const { Header, Sider, Content } = Layout
 
 const CustomMenu = () => {
+    const [selectedKey, setSelectedKey] = useState<string>("/bu/template")
     const router = useRouter()
+    const pathName = usePathname()
 
     const switchRoute = (e: string) => {
         const location = window.location.origin
         router.push(`${location}/bu/${e}`)
     }
+    useEffect(() => {
+        setSelectedKey(pathName)
+    }, [pathName])
 
     return (
         <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["1"]}
+            selectedKeys={[selectedKey]}
+            //defaultSelectedKeys={["1"]}
             /*  onClick={(e) => {
                 switchRoute(e.key)
             }} */
             items={[
                 {
-                    key: "template",
+                    key: "/bu/template",
                     icon: (
                         <Link href={"/bu/template"}>
                             <FontAwesomeIcon icon={faFile} />
@@ -58,7 +64,7 @@ const CustomMenu = () => {
                     label: "Tạo mới biểu mẫu"
                 }, */
                 {
-                    key: "mywork",
+                    key: "/bu/mywork",
                     icon: (
                         <Link href={"/bu/mywork"}>
                             <FontAwesomeIcon icon={faArchive} />
