@@ -19,8 +19,6 @@ const HeaderUi = () => {
         listLeft,
         setListRight,
         listRight,
-        setLoading,
-        setDataGlobal
     } = useContextMyWorkDetail()
     const [idProduct, setIdProduct] = useState<string>("")
     const [dataService, setDataService] = useState<eProduct[]>([])
@@ -37,7 +35,7 @@ const HeaderUi = () => {
         },
         [listLeft.length]
     )
-    const onChangeNV = async (value: string) => {
+    const onChangeNV =  (value: string) => {
         if (listRight.length > 0) {
             setListRight([])
         }
@@ -48,7 +46,6 @@ const HeaderUi = () => {
             return
         }
         const find = dataService.find((item) => item._id === value)
-
         const template: formTemplate[] = find?.formTemplate ?? []
         console.log(find)
         console.log("temp", template)

@@ -13,7 +13,10 @@ import { useCookies } from "next-client-cookies"
 import delay from "delay"
 import { addEformTask } from "@/app/(service)/addEformTasks"
 import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
-const OzViewer = dynamic(() => import("@/components/OzViewer"), { ssr: false })
+const OzViewer = dynamic(() => import("@/components/OzViewer"), {
+    loading: () => <div style={{color:"red"}}>Loading eform...</div>,
+    ssr: false
+})
 
 const TemlateWrapper: React.FC = () => {
     const cookies = useCookies()
@@ -68,12 +71,12 @@ const TemlateWrapper: React.FC = () => {
         resetEForm()
     }
     const onSubmit = async () => {
-        handleradd("SUBMIT")
+        HandlerActionEform("SUBMIT")
     }
     const onSave = () => {
-        handleradd("SAVE")
+        HandlerActionEform("SAVE")
     }
-    const handleradd = async (type: "SAVE" | "SUBMIT") => {
+    const HandlerActionEform = async (type: "SAVE" | "SUBMIT") => {
         try {
             const oz = document.getElementById("OZViewer")
             if (oz) {

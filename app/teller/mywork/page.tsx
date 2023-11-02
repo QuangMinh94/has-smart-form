@@ -17,7 +17,7 @@ const MyWork = async ({
         <TableMywork
             data={ListMyworks.map((item, index) => ({
                 ...item,
-                key: index + 1
+                key: item?._id ?? ""
             }))}
         />
     )
@@ -32,9 +32,13 @@ const fetchApi = cache(
     }): Promise<myWork[]> => {
         const cookie = cookies()
         const session = await getServerSession(authOptions)
+        if (!session) {
+            return []
+        }
         const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
-        const KeySearch: "citizenId" =
-            search === "CDDD" ? "citizenId" : "citizenId"
+
+        const KeySearch: "citizenId" | "appointmentCode" =
+            search === "CDDD" ? "citizenId" : "appointmentCode"
         const bodyRequest: any = {
             [KeySearch]: idSearch,
             userRole: idRole
@@ -59,6 +63,6 @@ const fetchApi = cache(
         }
     }
 )
-export const dynamic = "auto"
+// export const dynamic = "auto"
 // export const dynamic = "force-dynamic"
 export default MyWork

@@ -23,48 +23,13 @@ const DetailFormUser = () => {
         setListRight,
         ChangeListFilter,
         setChangeListFilter,
-        dataGlobal,
         loading
     } = useContextMyWorkDetail()
 
     useEffect(() => {
         setListRight([])
     }, [])
-    // const { isLoading, error, refetch } = useQuery<DataTranfeCustom[]>({
-    //     queryKey: ["option"],
-    //     queryFn: async () => {
-    //         const res = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {
-    //             repository: dataGlobal.repository
-    //         })
-    //         const res_1: EformList[] = res.data
-    //         const _option: DataTranfeCustom[] = []
-    //         res_1.forEach((resChild) => {
-    //             _option.push({
-    //                 id: resChild.repository + resChild.name,
-    //                 name: resChild.name,
-    //                 checkBox: false,
-    //                 repository: resChild.repository
-    //             })
-    //         })
-    //         setListLeft(_option)
-    //         return _option
-    //     },
-    //     retry: 3,
-    //     refetchOnWindowFocus: false,
-    //     refetchOnReconnect: false
-    // })
-    // useEffect(() => {
-    //     if (dataGlobal.repository.length > 0) {
-    //         refetch()
-    //     }
-    // }, [dataGlobal.repository])
-    // if (error) {
-    //     return <div style={{ color: "red" }}>có lỗi</div>
-    // }
-    // if (isLoading) {
-    //     return <Loading />
-    // }
-
+   
     return (
         <LayoutTranfer
             ColLeft={
