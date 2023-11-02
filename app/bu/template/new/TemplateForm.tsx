@@ -28,10 +28,12 @@ type FieldType = {
 
 const TemplateForm = ({
     id,
-    form
+    form,
+    disabled
 }: {
     id?: string
     form?: FormInstance<any>
+    disabled: boolean
 }) => {
     const cookies = useCookies()
     const [messageApi, contextHolder] = message.useMessage()
@@ -76,7 +78,7 @@ const TemplateForm = ({
                 )
             }
 
-            router.push("/bu/template/")
+            router.push("/bu/mywork/")
             router.refresh()
         } catch (error) {
             console.log("Error", error)
@@ -94,7 +96,9 @@ const TemplateForm = ({
                 wrapperCol={{ span: 24 }}
                 layout="vertical"
                 onFinish={onFinish}
+                onFinishFailed={() => setIsDisabled(false)}
                 autoComplete="on"
+                disabled={disabled}
             >
                 <Row gutter={10}>
                     <Col xl={12} lg={12} md={24}>
@@ -110,14 +114,14 @@ const TemplateForm = ({
                                                 "Please input the form name"
                                         }
                                     ]}
-                                    className="w-3/6"
+                                    className="w-full"
                                     shouldUpdate={(prevValues, curValues) =>
                                         prevValues !== curValues
                                     }
                                 >
                                     <Input />
                                 </Form.Item>
-                                <Form.Item<FieldType>
+                                {/*  <Form.Item<FieldType>
                                     label="Mã form"
                                     name="formCode"
                                     rules={[
@@ -133,7 +137,7 @@ const TemplateForm = ({
                                     }
                                 >
                                     <Input />
-                                </Form.Item>
+                                </Form.Item> */}
                             </Flex>
                             <Flex gap={8}>
                                 <Form.Item<FieldType>
@@ -163,6 +167,31 @@ const TemplateForm = ({
                                     shouldUpdate={(prevValues, curValues) =>
                                         prevValues !== curValues
                                     }
+                                    rules={[
+                                        {
+                                            validator: async (
+                                                _,
+                                                endDatetime
+                                            ) => {
+                                                var startDatetime =
+                                                    form!.getFieldValue(
+                                                        "validFrom"
+                                                    )
+                                                if (endDatetime !== null) {
+                                                    if (startDatetime != null) {
+                                                        if (
+                                                            endDatetime <=
+                                                            startDatetime
+                                                        ) {
+                                                            return Promise.reject(
+                                                                "Ngày hiệu lực đến không được bé hơn ngày hiệu lực"
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]}
                                 >
                                     <DatePicker
                                         className="w-full"

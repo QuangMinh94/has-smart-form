@@ -10,26 +10,16 @@ import dayjs from "dayjs"
 import { useContextMyWork } from "@/components/cusTomHook/useContext"
 import { useRouter } from "next/navigation"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
-import { useSession } from "next-auth/react"
-import { viewAppointMent } from "@/app/(service)/appointments"
-import { useCookies } from "next-client-cookies"
 type Props = {
     data: myWork[]
 }
 const App: React.FC<Props> = ({ data }) => {
     const { setDataGlobal } = useContextMyWorkDetail()
     const { setListIdRemove } = useContextMyWork()
-    const cookies = useCookies()
-    const { data: session } = useSession()
     const router = useRouter()
-    const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
+   
     const CustomClickPath = async (row: myWork) => {
         try {
-            // await viewAppointMent({
-            //     bodyRequest: { id:  row?.appointmentCode ?? "", userRole: idRole },
-            //     session: cookies.get("session") ?? "",
-            //     token: cookies.get("token") ?? ""
-            // })
             setDataGlobal({
                 repository: "",
                 appointment: row?._id ?? "",

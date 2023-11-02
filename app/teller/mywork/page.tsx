@@ -15,7 +15,7 @@ const MyWork = async ({
 
     return (
         <TableMywork
-            data={ListMyworks.map((item, index) => ({
+            data={ListMyworks.map((item) => ({
                 ...item,
                 key: item?._id ?? ""
             }))}

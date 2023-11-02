@@ -9,7 +9,7 @@ const SignOut = () => {
     useEffect(() => {
         async function out() {
             await signOut({ redirect: false })
-            router.push("/bu")
+            router.push("/")
         }
         out()
     }, [])

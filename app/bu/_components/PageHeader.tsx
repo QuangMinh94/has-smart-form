@@ -9,10 +9,12 @@ import { SearchParamContext } from "../_context/context"
 
 const PageHeader = ({
     path,
-    children
+    children,
+    addNewPermission
 }: {
     path: string
     children: ReactNode
+    addNewPermission: boolean
 }) => {
     const router = useRouter()
     const { searchValue, setSearchValue } = useContext(SearchParamContext)
@@ -32,12 +34,14 @@ const PageHeader = ({
                         router.push(searchQuery)
                     }}
                 />
-                <Button
-                    type="primary"
-                    onClick={() => router.push("/bu/template/new")}
-                >
-                    Tạo mới
-                </Button>
+                {addNewPermission && (
+                    <Button
+                        type="primary"
+                        onClick={() => router.push("/bu/template/new")}
+                    >
+                        Tạo mới
+                    </Button>
+                )}
             </Flex>
             {children}
         </Flex>

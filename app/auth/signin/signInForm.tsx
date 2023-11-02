@@ -1,8 +1,12 @@
 "use client"
 
+import { Permission } from "@/app/(types)/Permission"
+import { Users } from "@/app/(types)/Users"
+import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import { Button, Col, Form, Input, Row } from "antd"
-import { signIn } from "next-auth/react"
-import { useState } from "react"
+import { signIn, useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 type FieldType = {
     username: string
@@ -12,19 +16,36 @@ type FieldType = {
 const SigninForm = () => {
     //const router = useRouter()
     const [error, setError] = useState("")
+    const { data: session } = useSession()
+    const router = useRouter()
     const onFinish = async (values: any) => {
         await signIn("credentials", {
             username: values.username,
             password: values.password,
-            redirect: true,
-            callbackUrl: process.env.NEXT_PUBLIC_SERVER_URL! + "/bu"
+            redirect: false
+            //callbackUrl: process.env.NEXT_PUBLIC_SERVER_URL! + "/bu"
         })
-        /*  if (signInResponse) {
+        /* if (signInResponse) {
             if (signInResponse.ok) {
-                console.log("Success", signInResponse)
             } else console.log(signInResponse)
         } */
     }
+
+    useEffect(() => {
+        if (session) {
+            const userInfo = session.user.userInfo as Users
+            const permission = userInfo.permission as Permission[]
+            if (FindPermission(permission, "children", "VisibleBU")) {
+                router.replace("/bu/mywork")
+            } else if (
+                FindPermission(permission, "children", "VisibleTeller")
+            ) {
+                router.replace("/teller")
+            } else {
+                router.replace("/bu/mywork")
+            }
+        }
+    }, [session])
 
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo)

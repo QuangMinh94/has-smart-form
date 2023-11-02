@@ -1,3 +1,6 @@
+import { Permission } from "@/app/(types)/Permission"
+import { Users } from "@/app/(types)/Users"
+import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import axios from "axios"
 import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
@@ -57,6 +60,13 @@ export const authOptions: NextAuthOptions = {
         jwt: async ({ user, token }) => {
             //console.log("User", user)
             if (user) {
+            const myUser = JSON.parse(JSON.stringify(user)) as Users
+                const permission = myUser.permission as Permission[]
+                const role = FindPermission(permission, "children", "VisibleBU")
+                    ? FindPermission(permission, "children", "VisibleTeller")
+                        ? "TELLER"
+                        : "BU"
+                    : "TELLER"
                 token.uid = user.token
                 token.name = JSON.stringify(user)
             }

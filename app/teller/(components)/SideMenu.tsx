@@ -14,7 +14,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 const { Header, Sider, Content } = Layout
 
 const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
-    const router = useRouter()
 
     return (
         <Menu
