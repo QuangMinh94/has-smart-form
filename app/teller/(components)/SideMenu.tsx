@@ -2,13 +2,12 @@
 import routers from "@/router/cusTomRouter"
 import { VideoCameraOutlined } from "@ant-design/icons"
 import { Image, Layout, Menu, theme } from "antd"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import React, { useEffect, useState } from "react"
 import Filter from "./Filter/LayoutFilter"
 import ButtonLogOut from "./customButton/ButtonLogout"
-import ProviderMyWork from "./provider/ProviderMyWork"
+import ProviderMyWork from "./provider/ProviderMywork"
 import ProviderMyworkDetail from "./provider/ProviderMyworkDetail"
-import { usePathname } from 'next/navigation'
 const { Header, Sider, Content } = Layout
 
 const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
@@ -18,8 +17,8 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
         router.push(`/teller/${e}`)
     }
     useEffect(() => {
-        if(pathname==="/teller"){
-        router.push(routers.mywork.path)
+        if (pathname === "/teller") {
+            router.push(routers.mywork.path)
         }
     }, [])
 
