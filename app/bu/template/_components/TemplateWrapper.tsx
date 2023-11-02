@@ -255,11 +255,15 @@ const TemplateWrapper = ({
     return (
         <div>
             {contextHolder}
+            <TemplateForm
+                disabled={
+                    !FindPermission(permission, "children", "VisibleFormInput")
+                }
+                id={id}
+                form={form}
+            />
             {FindPermission(permission, "children", "VisibleFormInput") ? (
-                <>
-                    <TemplateForm id={id} form={form} />
-                    <TransferTemplate treeData={treeData} />
-                </>
+                <TransferTemplate treeData={treeData} />
             ) : (
                 <></>
             )}

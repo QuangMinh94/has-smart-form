@@ -28,10 +28,12 @@ type FieldType = {
 
 const TemplateForm = ({
     id,
-    form
+    form,
+    disabled
 }: {
     id?: string
     form?: FormInstance<any>
+    disabled: boolean
 }) => {
     const cookies = useCookies()
     const [messageApi, contextHolder] = message.useMessage()
@@ -96,6 +98,7 @@ const TemplateForm = ({
                 onFinish={onFinish}
                 onFinishFailed={() => setIsDisabled(false)}
                 autoComplete="on"
+                disabled={disabled}
             >
                 <Row gutter={10}>
                     <Col xl={12} lg={12} md={24}>
