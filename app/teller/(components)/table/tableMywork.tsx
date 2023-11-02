@@ -20,12 +20,10 @@ const App: React.FC<Props> = ({ data }) => {
     const { setDataGlobal } = useContextMyWorkDetail()
     const { setListIdRemove } = useContextMyWork()
     const cookies = useCookies()
-    const { data: session } = useSession()
 
+    const { data: session } = useSession()
     const router = useRouter()
     const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
-    
-
     const CustomClickPath = async (row: myWork) => {
         try {
             await viewAppointMent({
@@ -51,15 +49,14 @@ const App: React.FC<Props> = ({ data }) => {
             onChange: (selectedRowKeys: React.Key[]) => {
                 console.log(selectedRowKeys)
                 setListIdRemove(selectedRowKeys)
-            },
-    
+            }
         }),
         []
     )
     const columns: ColumnsType<myWork> = [
         {
+            key: "_id",
             title: "Mã giao dịch",
-           
             render: (row: myWork) => (
                 <div
                     className="cursor-pointer text-sky-500"
@@ -70,9 +67,8 @@ const App: React.FC<Props> = ({ data }) => {
             )
         },
         {
+            key: "citizenId",
             title: "CCCD",
-
-           
             render: (row: myWork) => (
                 <div
                     className="cursor-pointer text-sky-500"
@@ -83,21 +79,19 @@ const App: React.FC<Props> = ({ data }) => {
             )
         },
         {
-
-           
+            key: "name",
             title: "Người làm đơn",
             dataIndex: "name"
         },
         {
+            key: "eProduct",
             title: "Sản phẩm",
-           
             render: (row: myWork) => {
                 return <>{row?.eProduct?.name}</>
             }
         },
         {
-
-           
+            key: "createDate",
             title: "Ngày tạo",
             dataIndex: "createDate",
             render: (createDate) => {
@@ -111,20 +105,17 @@ const App: React.FC<Props> = ({ data }) => {
             }
         },
         {
-
-           
+            key: "status",
             title: "Trạng thái",
             render: (row: myWork) => <>{row?.status?.name}</>
         },
         {
-
-           
+            key: "implementer",
             title: "Người thực hiện",
             dataIndex: "implementer"
         }
     ]
 
-   
     return (
         <div>
             <Table
