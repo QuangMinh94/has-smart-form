@@ -23,12 +23,12 @@ const Viewer = () => {
                 `${process.env.NEXT_PUBLIC_EFORM_SERVER}/html5viewer/`
             )
 
-            await delay(1000)
+            await delay(3000)
 
             if (listRight.length > 0) {
                 listRight.forEach((element) => {
                     const oz = document.getElementById("OZViewer")
-                    console.log('Path',"/" + element.type + "/" + element.name)
+                    console.log("Path", "/" + element.type + "/" + element.name)
                     oz!.CreateReportEx(
                         DefaultParams(
                             process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,

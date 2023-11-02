@@ -1,18 +1,13 @@
 "use client"
-import axios from "axios"
 import { message } from "antd"
-import React, { useState } from "react"
 import dynamic from "next/dynamic"
+import React, { useState } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 
-import TranferMyWork from "./TranferMyWork"
-import ButtonHandleEform from "../../customButton/ButtonHandleEform"
-import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
-import { useCookies } from "next-client-cookies"
-import delay from "delay"
 import { addEformTask } from "@/app/(service)/addEformTasks"
 import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
+
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{color:"red"}}>Loading eform...</div>,
     ssr: false
@@ -84,6 +79,7 @@ const TemlateWrapper: React.FC = () => {
                     var inputdatas = JSON.parse(
                         oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
                     )
+                    console.log("My data where", inputdatas)
                     const reversedata = [...listRight].reverse()
                     const eformTasks: taskEform[] = []
 

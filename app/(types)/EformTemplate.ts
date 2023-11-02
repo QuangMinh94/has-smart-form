@@ -1,7 +1,7 @@
 export interface EformTemplate {
     _id?: string
     name?: string
-    approver?: string
+    approver?: any
     type?: string
     code?: string
     active?: string
