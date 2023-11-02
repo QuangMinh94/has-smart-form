@@ -3,5 +3,5 @@ export { default } from "next-auth/middleware"
 //     return NextResponse.redirect(new URL('/bu/mywork', request.url))
 //   }
 export const config = {
-    matcher: ["/dashboard", "/bu/:path*","/teller/:path*"]
+    matcher: ["/dashboard", "/bu/:path*" /* ,"/teller/:path*" */]
 }
