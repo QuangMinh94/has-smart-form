@@ -14,11 +14,19 @@ export default withAuth(function middleware(request: NextRequestWithAuth) {
     if (!pathName.includes("signin")) {
         if (token) {
             const role = token.role
-            if (
-                !pathName.toLowerCase().includes((role as string).toLowerCase())
-            ) {
+            if (role) {
+                if (
+                    !pathName
+                        .toLowerCase()
+                        .includes((role as string).toLowerCase())
+                ) {
+                    return NextResponse.redirect(
+                        new URL("/notAuthorized", request.url)
+                    )
+                }
+            } else {
                 return NextResponse.redirect(
-                    new URL("/notAuthorized", request.url)
+                    new URL("/auth/signin", request.url)
                 )
             }
         } else {

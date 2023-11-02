@@ -17,8 +17,8 @@ import {
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { PropsWithChildren, useContext, useEffect, useState } from "react"
-import { PathParamsContext } from "./_context/context"
+import { PropsWithChildren, useEffect, useState } from "react"
+import { DocumentName } from "./_types/DocumentName"
 
 const { Header, Sider, Content } = Layout
 
@@ -79,9 +79,17 @@ const CustomMenu = () => {
 
 const SideMenu = ({ children }: PropsWithChildren) => {
     const [collapsed, setCollapsed] = useState(false)
-    const { documentName, pathName } = useContext(PathParamsContext)
-
+    const [documentName, setDocumentName] = useState<string>("")
+    const pathName = usePathname()
     const { status, data: session } = useSession()
+
+    useEffect(() => {
+        if (pathName.includes("template")) {
+            setDocumentName(DocumentName.TEMPLATE)
+        } else {
+            setDocumentName(DocumentName.MYWORK)
+        }
+    }, [pathName])
 
     const {
         token: { colorBgContainer }
@@ -120,7 +128,7 @@ const SideMenu = ({ children }: PropsWithChildren) => {
                     }}
                 >
                     <Flex justify="space-between" align="center">
-                        <Flex gap={10}>
+                        <Flex gap={10} align="center">
                             <Button
                                 type="text"
                                 icon={
@@ -137,8 +145,9 @@ const SideMenu = ({ children }: PropsWithChildren) => {
                                     height: 64
                                 }}
                             />
-                            {documentName}
+                            <p className="text-2xl">{documentName}</p>
                         </Flex>
+
                         {status === "authenticated" && (
                             <div className="mr-4">
                                 <Dropdown

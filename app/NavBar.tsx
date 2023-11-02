@@ -43,6 +43,7 @@ const NavLink = () => {
                             "!text-zinc-900": link.href === currentPath
                         })}
                         href={link.href}
+                        key={link.href}
                     >
                         {link.label}
                     </Link>

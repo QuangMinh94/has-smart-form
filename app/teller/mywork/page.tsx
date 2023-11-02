@@ -1,10 +1,16 @@
-import TableMywork from "../(components)/table/tableMywork"
 import { myWork } from "@/app/(types)/teller/mywork"
-import axios from "axios"
-import { cache } from "react"
-import { cookies } from "next/headers"
-import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/authOptions"
+import axios from "axios"
+import { getServerSession } from "next-auth"
+import { cookies } from "next/headers"
+import { cache } from "react"
+import TableMywork from "../(components)/table/tableMywork"
+
+/* axios.interceptors.request.use((request) => {
+    console.log("Starting Request", JSON.stringify(request, null, 2))
+    return request
+}) */
+
 const MyWork = async ({
     searchParams
 }: {
@@ -57,6 +63,7 @@ const fetchApi = cache(
                     }
                 }
             )
+
             return res.data
         } catch (e: any) {
             throw new Error("error fetching", e)
