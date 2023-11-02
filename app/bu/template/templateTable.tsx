@@ -4,6 +4,7 @@ import DateFormatter from "@/app/(utilities)/DateFormatter"
 import CustomLink from "@/components/CustomLink"
 import { Table } from "antd"
 import { ColumnsType } from "antd/es/table"
+import { usePathname } from "next/navigation"
 
 export type DataTableType = {
     key?: string
@@ -20,6 +21,7 @@ const TemplateTable = ({
     data: DataTableType[]
     ksvPermission: boolean
 }) => {
+    const pathName = usePathname()
     const columns: ColumnsType<DataTableType> = [
         {
             title: "Tên biểu mẫu",
@@ -66,7 +68,7 @@ const TemplateTable = ({
             sorter: (a, b) => a.status!.localeCompare(b.status!)
         },
         {
-            ...(ksvPermission
+            ...(ksvPermission && !pathName.includes("/bu/template")
                 ? {
                       title: "Hành động",
                       key: "Edit",
