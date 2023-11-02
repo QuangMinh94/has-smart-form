@@ -11,10 +11,18 @@ import { NextResponse } from "next/server"
 export default withAuth(function middleware(request: NextRequestWithAuth) {
     const token = request.nextauth.token
     const pathName = request.nextUrl.pathname
-    if (token) {
-        const role = token.role
-        if (!pathName.toLowerCase().includes((role as string).toLowerCase())) {
-            return NextResponse.redirect(new URL("/notAuthorized", request.url))
+    if (!pathName.includes("signin")) {
+        if (token) {
+            const role = token.role
+            if (
+                !pathName.toLowerCase().includes((role as string).toLowerCase())
+            ) {
+                return NextResponse.redirect(
+                    new URL("/notAuthorized", request.url)
+                )
+            }
+        } else {
+            return NextResponse.redirect(new URL("/auth/signin", request.url))
         }
     }
 })
