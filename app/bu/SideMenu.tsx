@@ -37,7 +37,7 @@ const CustomMenu = () => {
 
     return (
         <Menu
-            theme="dark"
+            //theme="dark"
             mode="inline"
             selectedKeys={[selectedKey]}
             //defaultSelectedKeys={["1"]}

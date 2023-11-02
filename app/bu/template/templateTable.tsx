@@ -2,7 +2,8 @@
 
 import DateFormatter from "@/app/(utilities)/DateFormatter"
 import CustomLink from "@/components/CustomLink"
-import Table, { ColumnsType } from "antd/es/table"
+import { Table } from "antd"
+import { ColumnsType } from "antd/es/table"
 
 export type DataTableType = {
     key?: string
@@ -61,7 +62,8 @@ const TemplateTable = ({
             align: "center",
             ellipsis: true,
             width: "6vw",
-            responsive: ["md"]
+            responsive: ["md"],
+            sorter: (a, b) => a.status!.localeCompare(b.status!)
         },
         {
             ...(ksvPermission
