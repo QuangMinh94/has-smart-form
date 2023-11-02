@@ -18,7 +18,9 @@ const ProviderMyWorkDetail: React.FC<typeProvider> = ({ children }) => {
     })
     const [dataGlobal, setDataGlobal] = useState<dataGlobal>({
         repository: "",
-        appointment: ""
+        appointment: "",
+        idEProduct:"",
+        nameEproduct:"",
     })
     const data: typeContextMyworkDetail = {
         setListLeft,

@@ -4,7 +4,7 @@ export type changeBlock = {
     choosenBlock: { name?: string; location?: string; ozrRepository?: string }[]
     changeBlock: number
 }
-export type dataGlobal = { repository: string; appointment: string }
+export type dataGlobal = { repository: string; appointment: string, idEProduct:string ,nameEproduct:string}
 export interface typeContextMyworkDetail {
     setListLeft: React.Dispatch<React.SetStateAction<any[]>>
     listLeft: any[]
@@ -29,7 +29,7 @@ const contextMyworkDetail = createContext<typeContextMyworkDetail>({
     listRight: [],
     choosenBlock: { changeBlock: 0, choosenBlock: [] },
     setChoosenBlock: () => {},
-    dataGlobal: { repository: "", appointment: "" },
+    dataGlobal: { repository: "", appointment: "", idEProduct:"",nameEproduct:"" },
     setDataGlobal: () => {},
     setLoading:()=>{},
     loading: false

@@ -1,16 +1,12 @@
 "use client"
 
-import React, { useEffect, useCallback } from "react"
+import React, { useEffect, useCallback, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { Select } from "antd"
-import type { SelectProps } from "antd"
+import { Select, Empty, Spin } from "antd"
 import { eProduct, requestBodyEproduct } from "@/app/(types)/eProduct"
 import { GetProduct } from "@/app/(service)/eProduct"
 import { useCookies } from "next-client-cookies"
 import { ToFilterName } from "../../../../util/formatText"
-const handleChange = (value: string) => {
-    console.log(`selected ${value}`)
-}
 
 type Props = {
     parent?: string
@@ -18,13 +14,15 @@ type Props = {
     typeQuery: string
     placeholder: string
     setDataService?: React.Dispatch<React.SetStateAction<eProduct[]>>
+    defalutValue?: string
 }
 
 const UseFecthApi = (
     token: string,
     session: string,
     body: requestBodyEproduct,
-    type: string
+    type: string,
+    enabled: boolean
 ) => {
     const { isLoading, error, data, refetch } = useQuery<eProduct[]>({
         queryKey: [type],
@@ -38,7 +36,8 @@ const UseFecthApi = (
         },
         retry: 3,
         refetchOnWindowFocus: false,
-        refetchOnReconnect: false
+        refetchOnReconnect: false,
+        enabled: enabled
     })
 
     return { isLoading, error, data, refetch }
@@ -48,28 +47,31 @@ const CustomerSelect: React.FC<Props> = ({
     onChange,
     typeQuery,
     placeholder,
-    setDataService
+    setDataService,
+    defalutValue
 }) => {
+    const [enabledFecth, setenabledFecth] = useState<boolean>(false)
     const cookies = useCookies()
     const { isLoading, error, data, refetch } = UseFecthApi(
         cookies?.get("token") ?? "",
         cookies?.get("session") ?? "",
         parent !== undefined ? { parent } : { type: "P" },
-        typeQuery
+        typeQuery,
+        enabledFecth
     )
     // if (error) {
     //     return <div style={{ color: "red" }}>có lỗi</div>
     // }
     useEffect(() => {
-        if (parent) {
+        if (parent && enabledFecth) {
             refetch()
         }
     }, [parent])
-    useEffect(()=>{
+    useEffect(() => {
         if (parent) {
             setDataService && setDataService(data ?? [])
         }
-    },[data])
+    }, [data])
     const HandlerfilterOption = useCallback(
         (input: string, option: any) =>
             ToFilterName(option?.label ?? "").includes(ToFilterName(input)),
@@ -78,7 +80,10 @@ const CustomerSelect: React.FC<Props> = ({
 
     return (
         <Select
-            loading={isLoading}
+            onClick={() => {
+                setenabledFecth(true)
+            }}
+            defaultValue={defalutValue || undefined}
             style={{ width: "100%" }}
             placeholder={placeholder}
             onChange={onChange}
@@ -87,6 +92,13 @@ const CustomerSelect: React.FC<Props> = ({
                 label: value?.name
             }))}
             filterOption={HandlerfilterOption}
+            notFoundContent={
+                isLoading ? (
+                    <Spin size="small" />
+                ) : (
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                )
+            }
             showSearch
             allowClear
         />

@@ -2,25 +2,19 @@
 import SelectEproduct from "../../customSelect/SelectEproduct"
 import { useState, useCallback } from "react"
 import { Row, Col, Select } from "antd"
-import { GetProduct } from "@/app/(service)/eProduct"
-import { useCookies } from "next-client-cookies"
+
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import { eProduct, formTemplate } from "@/app/(types)/eProduct"
 import { DataTranfer } from "@/app/(types)/typeDataTranfe"
-import { EformList } from "@/app/(types)/EformList"
 
-import axios from "axios"
+
 interface DataTranfeCustom extends DataTranfer, eProduct {
     repository: string
 }
 const HeaderUi = () => {
-    const {
-        setListLeft,
-        listLeft,
-        setListRight,
-        listRight,
-    } = useContextMyWorkDetail()
-    const [idProduct, setIdProduct] = useState<string>("")
+    const { setListLeft, listLeft, setListRight, listRight, dataGlobal } =
+        useContextMyWorkDetail()
+    const [idProduct, setIdProduct] = useState<string>(dataGlobal.idEProduct)
     const [dataService, setDataService] = useState<eProduct[]>([])
 
     const onChangeProduct = useCallback(
@@ -35,7 +29,7 @@ const HeaderUi = () => {
         },
         [listLeft.length]
     )
-    const onChangeNV =  (value: string) => {
+    const onChangeNV = (value: string) => {
         if (listRight.length > 0) {
             setListRight([])
         }
@@ -100,6 +94,7 @@ const HeaderUi = () => {
         <Row gutter={9}>
             <Col span={12}>
                 <SelectEproduct
+                    defalutValue={dataGlobal.nameEproduct}
                     typeQuery="getProduct"
                     onChange={onChangeProduct}
                     placeholder="Sản phẩm"

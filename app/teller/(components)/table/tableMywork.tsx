@@ -20,24 +20,25 @@ const App: React.FC<Props> = ({ data }) => {
     const { setDataGlobal } = useContextMyWorkDetail()
     const { setListIdRemove } = useContextMyWork()
     const cookies = useCookies()
-
     const { data: session } = useSession()
     const router = useRouter()
     const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
     const CustomClickPath = async (row: myWork) => {
         try {
-            await viewAppointMent({
-                bodyRequest: { id: row?._id ?? "", userRole: idRole },
-                session: cookies.get("session") ?? "",
-                token: cookies.get("token") ?? ""
-            })
+            // await viewAppointMent({
+            //     bodyRequest: { id:  row?.appointmentCode ?? "", userRole: idRole },
+            //     session: cookies.get("session") ?? "",
+            //     token: cookies.get("token") ?? ""
+            // })
             setDataGlobal({
                 repository: "",
-                appointment: row?._id ?? ""
+                appointment: row?._id ?? "",
+                idEProduct:row?.eProduct?._id ?? '',
+                nameEproduct:row?.eProduct?.name?? ''
             })
             router.push(
                 `${routers.detailMywork.path({
-                    id: row._id ?? ""
+                    id: row?.appointmentCode ?? ""
                 })}?CCCD=${row?.citizenId}&Name=${row.name}`
             )
         } catch (e) {
@@ -62,7 +63,7 @@ const App: React.FC<Props> = ({ data }) => {
                     className="cursor-pointer text-sky-500"
                     onClick={() => CustomClickPath(row)}
                 >
-                    {row._id}
+                    {row.appointmentCode}
                 </div>
             )
         },
@@ -107,7 +108,7 @@ const App: React.FC<Props> = ({ data }) => {
         {
             key: "status",
             title: "Trạng thái",
-            render: (row: myWork) => <>{row?.status?.name}</>
+            render: (row: myWork) => <>{row?.status?.description}</>
         },
         {
             key: "implementer",

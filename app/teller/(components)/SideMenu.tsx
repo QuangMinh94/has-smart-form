@@ -3,38 +3,32 @@ import routers from "@/router/cusTomRouter"
 import { VideoCameraOutlined } from "@ant-design/icons"
 import { Image, Layout, Menu, theme } from "antd"
 import { useRouter } from "next/navigation"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import Filter from "./Filter/LayoutFilter"
 import ButtonLogOut from "./customButton/ButtonLogout"
 import ProviderMyWork from "./provider/ProviderMyWork"
 import ProviderMyworkDetail from "./provider/ProviderMyworkDetail"
-import { usePathname } from 'next/navigation'
+import Link from "next/link"
+import { faArchive, faFile } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 const { Header, Sider, Content } = Layout
 
 const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
-    const pathname = usePathname()
     const router = useRouter()
-    const switchRoute = (e: string) => {
-        router.push(`/teller/${e}`)
-    }
-    useEffect(() => {
-        if(pathname==="/teller"){
-        router.push(routers.mywork.path)
-        }
-    }, [])
 
     return (
         <Menu
             style={{ backgroundColor }}
-            onSelect={(e) => {
-                console.log(e)
-            }}
             defaultSelectedKeys={["mywork"]}
-            onClick={(e) => switchRoute(e.key)}
             items={[
                 {
                     key: "mywork",
-                    icon: <VideoCameraOutlined />,
+                    icon: (
+                        <Link href={"/teller/mywork"}>
+                            ,
+                            <FontAwesomeIcon icon={faArchive} />
+                        </Link>
+                    ),
                     label: "Công việc của tôi"
                 }
             ]}
