@@ -26,17 +26,19 @@ const Viewer = () => {
             await delay(3000)
 
             if (listRight.length > 0) {
+                let count = 0
                 listRight.forEach((element) => {
                     const oz = document.getElementById("OZViewer")
-                    console.log("Path", "/" + element.type + "/" + element.name)
                     oz!.CreateReportEx(
                         DefaultParams(
                             process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                             "/" + element.type + "/" + element.name,
-                            element.name!
+                            element.name!,
+                            count.toString()
                         ),
                         ";"
                     )
+                    count++
                 })
             } else {
                 console.log("Wut")
@@ -67,13 +69,14 @@ const Viewer = () => {
 const DefaultParams = (
     url: string,
     reportName: string,
-    displayname: string
+    displayname: string,
+    index: string
 ) => {
     return `connection.servlet=${url};
 connection.reportname=${reportName};
 global.concatthumbnail=true;
 connection.refreshperiod=1;
-viewer.createreport_doc_index=0;
+viewer.createreport_doc_index=${index};
     global.concatpreview=false;
     viewer.showtab=true;
     connection.displayname=${displayname};
