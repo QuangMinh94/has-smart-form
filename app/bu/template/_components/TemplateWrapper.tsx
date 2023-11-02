@@ -75,7 +75,7 @@ const TemplateWrapper = ({
             if (data[0].block) {
                 data[0].block.forEach((element) => {
                     _listRight.push({
-                        id: element.ozrRepository + element.name!,
+                        id: element.ozrRepository + "/" + element.name!,
                         name: element.name!,
                         checkBox: false,
                         type: element.ozrRepository!

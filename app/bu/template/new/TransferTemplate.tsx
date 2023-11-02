@@ -1,4 +1,5 @@
 "use client"
+import { uniqueValue } from "@/app/(utilities)/ArrayUtilities"
 import ButtonLeftandRight from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/ButtonCusTom"
 import Container from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/Container"
 import LayoutTranfer from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/LayoutTranfer"
@@ -12,9 +13,10 @@ import { TreeDataType } from "../../_types/TreeDataType"
 import { OptionProps } from "../[id]/page"
 
 const TreeSelectComp = ({ treeData }: { treeData: TreeDataType[] }) => {
-    const { setSelectedTree, setListLeft } = useContextTemplate()
+    const { listRight, setSelectedTree, setListLeft } = useContextTemplate()
 
     const updateListLeft = async (selectedKeys: any) => {
+        console.log("ListRIght", listRight)
         const response = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {
             repository: selectedKeys
         })
@@ -26,13 +28,15 @@ const TreeSelectComp = ({ treeData }: { treeData: TreeDataType[] }) => {
         const _option: OptionProps[] = []
         res_1.forEach((resChild) => {
             _option.push({
-                id: resChild.repository + resChild.name,
+                id: resChild.repository + "/" + resChild.name,
                 name: resChild.name,
                 checkBox: false,
                 type: resChild.repository
             })
         })
-        setListLeft(_option)
+        //console.log("Option", _option)
+        //setListLeft(_option)
+        setListLeft(uniqueValue(_option, listRight))
     }
 
     const onSelect = (selectedKeys: any, info: any) => {
