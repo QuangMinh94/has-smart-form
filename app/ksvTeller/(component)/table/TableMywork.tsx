@@ -100,6 +100,11 @@ const TableMyWork: React.FC<Props> = ({ data }) => {
             key: "implementer",
             title: "Người thực hiện",
             dataIndex: "implementer"
+        },
+        {
+            key: "action",
+            title: "Hành Động",
+            dataIndex: "implementer"
         }
     ]
 
