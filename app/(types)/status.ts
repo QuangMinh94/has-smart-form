@@ -5,5 +5,5 @@ export interface status {
     name?: string
     type?: string
     active?: boolean
-    descriptiom?: string
+    description?: string
 }

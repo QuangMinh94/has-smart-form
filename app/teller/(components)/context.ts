@@ -4,7 +4,10 @@ export type changeBlock = {
     choosenBlock: { name?: string; location?: string; ozrRepository?: string }[]
     changeBlock: number
 }
-export type dataGlobal = { repository: string; appointment: string }
+export type dataGlobal = {
+    idEProduct: string
+    nameEproduct: string
+}
 export interface typeContextMyworkDetail {
     setListLeft: React.Dispatch<React.SetStateAction<any[]>>
     listLeft: any[]
@@ -12,7 +15,6 @@ export interface typeContextMyworkDetail {
     listRight: any[]
     setChangeListFilter: React.Dispatch<React.SetStateAction<boolean>>
     ChangeListFilter: boolean
-
     choosenBlock: changeBlock
     setChoosenBlock: React.Dispatch<React.SetStateAction<changeBlock>>
     dataGlobal: dataGlobal
@@ -29,18 +31,13 @@ const contextMyworkDetail = createContext<typeContextMyworkDetail>({
     listRight: [],
     choosenBlock: { changeBlock: 0, choosenBlock: [] },
     setChoosenBlock: () => {},
-    dataGlobal: { repository: "", appointment: "" },
+    dataGlobal: {
+        idEProduct: "",
+        nameEproduct: ""
+    },
     setDataGlobal: () => {},
-    setLoading:()=>{},
+    setLoading: () => {},
     loading: false
+})
 
-})
-export interface typeContextMywork {
-    setListIdRemove: React.Dispatch<React.Key[]>
-    listIdRmove: React.Key[]
-}
-const contextMywork = createContext<typeContextMywork>({
-    setListIdRemove: () => {},
-    listIdRmove: []
-})
-export { contextMyworkDetail, contextMywork }
+export { contextMyworkDetail }

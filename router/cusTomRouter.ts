@@ -1,11 +1,14 @@
-
-const rootTeler = `/teller`
-const routers = {
-    mywork: { path: `${rootTeler}/mywork` },
-    detailMywork: {
-        path(params: { id: string }) {
-            return `${routers.mywork.path}/detail/${params.id}`
+export type rootPath = "teller" | "ksv"
+const routers = (root: rootPath) => {
+    const router = {
+        mywork: { path: `/${root}/mywork` },
+        detailMywork: {
+            path(params: { id: string }): string {
+                return `${router.mywork.path}/detail/${params.id}`
+            }
         }
     }
+    return router
 }
+
 export default routers

@@ -1,5 +1,5 @@
 "use client"
-import routers from "@/router/cusTomRouter"
+import routers, { rootPath } from "@/router/cusTomRouter"
 import {
     faTrashAlt,
     faLongArrowAltLeft
@@ -8,14 +8,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { RadioChangeEvent, Row, Col, theme } from "antd"
 import { Radio, Button, Input } from "antd"
 import React, { useEffect, memo, useCallback, useMemo } from "react"
-import { useContextMyWork } from "@/components/cusTomHook/useContext"
+
 import {
     usePathname,
     useParams,
     useRouter,
     useSearchParams
 } from "next/navigation"
-import MyWork from "../../mywork/page"
 
 type condisions = {
     pagemywork: {
@@ -24,6 +23,7 @@ type condisions = {
     }
 }
 export type typeSearch = "CDDD" | "MGD"
+
 const mywork = {
     TYPE_SEARCH: "search",
     VALUE_SEARCH: "idSearch",
@@ -34,7 +34,9 @@ const mywork = {
     }
 }
 
-const useHanderNavigation = (): {
+const useHanderNavigation = (
+    rootpath: rootPath
+): {
     pathName: any
     params: any
     condition: condisions
@@ -43,9 +45,10 @@ const useHanderNavigation = (): {
     const params = useParams()
     const condition: condisions = {
         pagemywork: {
-            isMyworkpath: pathName === routers.mywork.path,
+            isMyworkpath: pathName === routers(rootpath).mywork.path,
             isDetailMyorkpath:
-                pathName === routers.detailMywork.path({ id: `${params?.id}` })
+                pathName ===
+                routers(rootpath).detailMywork.path({ id: `${params?.id}` })
         }
     }
     return { pathName, params, condition }
@@ -109,21 +112,19 @@ const CustomBtn: React.FC<{
     pathName: string
     paramsId: string
     condition: () => condisions
-}> = memo(({ pathName, paramsId, condition }) => {
-    const { listIdRmove } = useContextMyWork()
-
+    rootPath: rootPath
+}> = memo(({ pathName, paramsId, condition, rootPath }) => {
     const router = useRouter()
     const HanderBtn = {
         Back: () => {
             const pathRevert = {
-                [`${routers.detailMywork.path({ id: `${paramsId}` })}`]:
-                    routers.mywork.path
+                [`${routers(rootPath).detailMywork.path({
+                    id: `${paramsId}`
+                })}`]: routers(rootPath).mywork.path
             }
             router.push(pathRevert[pathName])
         },
-        Remove: () => {
-            console.log("listIdRmove", listIdRmove)
-        }
+        Remove: () => {}
     }
     const HandleClick = () => {
         if (condition().pagemywork.isDetailMyorkpath) {
@@ -139,28 +140,26 @@ const CustomBtn: React.FC<{
     return (
         <Button onClick={HandleClick} type="primary">
             <FontAwesomeIcon className="mr-2" icon={icon} />
-            {condition().pagemywork.isDetailMyorkpath
-                ? "Quay lại"
-                : condition().pagemywork.isMyworkpath
-                ? "Xóa"
-                : "error"}
+            {condition().pagemywork.isDetailMyorkpath ? "Quay lại" : "error"}
         </Button>
     )
 })
 
 const CustomFilter: React.FC<{
     pathName: string
-    paramsId: string
+    rootPath: rootPath
     condition: () => condisions
-}> = memo(({ pathName, paramsId, condition }) => {
+}> = memo(({ pathName, condition, rootPath }) => {
     const router = useRouter()
     const searchQuery = useSearchParams()
+    const searchParams = useSearchParams()
+    const appointmentCode: string = searchParams.get("code") ?? ""
     const typeSearch: any = useMemo(
         () => searchQuery.get(mywork.TYPE_SEARCH),
         [searchQuery.get(mywork.TYPE_SEARCH)]
     )
     const HanderFilter = {
-        [`${routers.mywork.path}`]: (value: string) => {
+        [`${routers(rootPath).mywork.path}`]: (value: string) => {
             router.push(mywork.params(typeSearch, value))
         }
     }
@@ -171,7 +170,7 @@ const CustomFilter: React.FC<{
         <>
             {condition().pagemywork.isDetailMyorkpath && (
                 <CustomerLabel text="Mã giao dịch">
-                    <Input value={paramsId} disabled />
+                    <Input value={appointmentCode} disabled />
                 </CustomerLabel>
             )}
             {condition().pagemywork.isMyworkpath && (
@@ -207,8 +206,8 @@ CustomFilter.displayName = "CustomFilter"
 RadioComponent.displayName = "RadioComponent"
 FilterMyWorkDetail.displayName = "FilterMyWorkDetail"
 
-const Filter = () => {
-    const { condition, pathName, params } = useHanderNavigation()
+const Filter = ({ rootPath }: { rootPath: rootPath }) => {
+    const { condition, pathName, params } = useHanderNavigation(rootPath)
     const cusTomCondition = useCallback(() => {
         return condition
     }, [pathName])
@@ -217,7 +216,7 @@ const Filter = () => {
         <Row align="middle" gutter={16}>
             <Col span={7}>
                 <CustomFilter
-                    paramsId={params?.id}
+                    rootPath={rootPath}
                     pathName={pathName}
                     condition={cusTomCondition}
                 />
@@ -234,13 +233,16 @@ const Filter = () => {
                 )}
             </Col>
             <Col span={4}>
-                <div className="flex justify-end">
-                    <CustomBtn
-                        paramsId={params?.id}
-                        pathName={pathName}
-                        condition={cusTomCondition}
-                    />
-                </div>
+                {condition.pagemywork.isDetailMyorkpath && (
+                    <div className="flex justify-end">
+                        <CustomBtn
+                            rootPath={rootPath}
+                            paramsId={params?.id}
+                            pathName={pathName}
+                            condition={cusTomCondition}
+                        />
+                    </div>
+                )}
             </Col>
         </Row>
     )

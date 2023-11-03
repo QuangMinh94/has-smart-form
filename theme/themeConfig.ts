@@ -16,7 +16,9 @@ const theme: ThemeConfig = {
         Table: {
             headerBg: "#0E7490",
             headerColor: "white",
-            headerSortHoverBg: "#0E7490"
+            headerSortActiveBg: "#0E7490",
+            headerSortHoverBg: "#0E7490",
+            algorithm: true
         }
     },
     token: {
