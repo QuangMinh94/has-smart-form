@@ -1,5 +1,4 @@
-import { dataGlobal } from "./../../app/teller/(components)/context"
-;("use client")
+"use client"
 import { useContext } from "react"
 import {
     contextMyworkDetail,

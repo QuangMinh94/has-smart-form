@@ -1,4 +1,4 @@
-import SideMenu from "./(components)/SideMenu"
+import SideMenu from "./(component)/SideMenu"
 
 import { ClientCookiesProvider } from "../ClientCookiesProvider"
 import { cookies } from "next/headers"
@@ -6,7 +6,7 @@ interface Props {
     children: any
 }
 
-const BuLayout = ({ children }: Props) => {
+const Layout = ({ children }: Props) => {
     return (
         <ClientCookiesProvider value={cookies().getAll()}>
             <SideMenu title="Công việc của tôi">{children}</SideMenu>
@@ -14,4 +14,4 @@ const BuLayout = ({ children }: Props) => {
     )
 }
 
-export default BuLayout
+export default Layout
