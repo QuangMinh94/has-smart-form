@@ -1,5 +1,5 @@
 "use client"
-import routers from "@/router/cusTomRouter"
+import routers, { rootPath } from "@/router/cusTomRouter"
 import {
     faTrashAlt,
     faLongArrowAltLeft
@@ -23,6 +23,7 @@ type condisions = {
     }
 }
 export type typeSearch = "CDDD" | "MGD"
+
 const mywork = {
     TYPE_SEARCH: "search",
     VALUE_SEARCH: "idSearch",
@@ -33,7 +34,9 @@ const mywork = {
     }
 }
 
-const useHanderNavigation = (): {
+const useHanderNavigation = (
+    rootpath: rootPath
+): {
     pathName: any
     params: any
     condition: condisions
@@ -42,9 +45,10 @@ const useHanderNavigation = (): {
     const params = useParams()
     const condition: condisions = {
         pagemywork: {
-            isMyworkpath: pathName === routers.mywork.path,
+            isMyworkpath: pathName === routers(rootpath).mywork.path,
             isDetailMyorkpath:
-                pathName === routers.detailMywork.path({ id: `${params?.id}` })
+                pathName ===
+                routers(rootpath).detailMywork.path({ id: `${params?.id}` })
         }
     }
     return { pathName, params, condition }
@@ -108,13 +112,15 @@ const CustomBtn: React.FC<{
     pathName: string
     paramsId: string
     condition: () => condisions
-}> = memo(({ pathName, paramsId, condition }) => {
+    rootPath: rootPath
+}> = memo(({ pathName, paramsId, condition, rootPath }) => {
     const router = useRouter()
     const HanderBtn = {
         Back: () => {
             const pathRevert = {
-                [`${routers.detailMywork.path({ id: `${paramsId}` })}`]:
-                    routers.mywork.path
+                [`${routers(rootPath).detailMywork.path({
+                    id: `${paramsId}`
+                })}`]: routers(rootPath).mywork.path
             }
             router.push(pathRevert[pathName])
         },
@@ -141,9 +147,9 @@ const CustomBtn: React.FC<{
 
 const CustomFilter: React.FC<{
     pathName: string
-
+    rootPath: rootPath
     condition: () => condisions
-}> = memo(({ pathName, condition }) => {
+}> = memo(({ pathName, condition, rootPath }) => {
     const router = useRouter()
     const searchQuery = useSearchParams()
     const searchParams = useSearchParams()
@@ -153,7 +159,7 @@ const CustomFilter: React.FC<{
         [searchQuery.get(mywork.TYPE_SEARCH)]
     )
     const HanderFilter = {
-        [`${routers.mywork.path}`]: (value: string) => {
+        [`${routers(rootPath).mywork.path}`]: (value: string) => {
             router.push(mywork.params(typeSearch, value))
         }
     }
@@ -200,8 +206,8 @@ CustomFilter.displayName = "CustomFilter"
 RadioComponent.displayName = "RadioComponent"
 FilterMyWorkDetail.displayName = "FilterMyWorkDetail"
 
-const Filter = () => {
-    const { condition, pathName, params } = useHanderNavigation()
+const Filter = ({ rootPath }: { rootPath: rootPath }) => {
+    const { condition, pathName, params } = useHanderNavigation(rootPath)
     const cusTomCondition = useCallback(() => {
         return condition
     }, [pathName])
@@ -209,7 +215,11 @@ const Filter = () => {
     return (
         <Row align="middle" gutter={16}>
             <Col span={7}>
-                <CustomFilter pathName={pathName} condition={cusTomCondition} />
+                <CustomFilter
+                    rootPath={rootPath}
+                    pathName={pathName}
+                    condition={cusTomCondition}
+                />
             </Col>
             <Col span={13}>
                 {condition.pagemywork.isMyworkpath && (
@@ -226,6 +236,7 @@ const Filter = () => {
                 {condition.pagemywork.isDetailMyorkpath && (
                     <div className="flex justify-end">
                         <CustomBtn
+                            rootPath={rootPath}
                             paramsId={params?.id}
                             pathName={pathName}
                             condition={cusTomCondition}

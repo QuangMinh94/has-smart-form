@@ -92,7 +92,7 @@ const SideMenu = ({ children, title }: Props) => {
                 >
                     <ProviderMyworkDetail>
                         <div className="my-6">
-                            <Filter />
+                            <Filter rootPath="teller" />
                         </div>
                         <div>{children}</div>
                     </ProviderMyworkDetail>

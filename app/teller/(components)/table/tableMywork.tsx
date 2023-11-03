@@ -24,7 +24,7 @@ const App: React.FC<Props> = ({ data }) => {
                 nameEproduct: row?.eProduct?.name ?? ""
             })
             router.push(
-                `${routers.detailMywork.path({
+                `${routers("teller").detailMywork.path({
                     id: row?._id ?? ""
                 })}?CCCD=${row?.citizenId}&Name=${row.name}&code=${
                     row.appointmentCode
