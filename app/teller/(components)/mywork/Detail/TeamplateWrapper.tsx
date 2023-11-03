@@ -88,17 +88,6 @@ const TemlateWrapper: React.FC = () => {
                         oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
                     )
 
-                    //rebind the data
-                    /*  if (type === "SAVE") {
-                        const ozz = document.getElementById("OZViewer")
-                        const input_data_all = ozz!.GetInformation("INPUT_JSON")
-                        console.log("INPUT ALL", input_data_all)
-                        const params =
-                            "connection.inputjson=" + input_data_all + ";"
-                        oz.ReBind(0, "report", params, ";")
-                        oz.ReBind(1, "report", params, ";")
-                    } */
-
                     const reversedata = [...listRight].reverse()
                     console.log("reverse", reversedata)
                     const eformTasks: taskEform[] = []
@@ -134,6 +123,34 @@ const TemlateWrapper: React.FC = () => {
         }
     }
 
+    const onSync = () => {
+        //rebind the data
+        //get number of reports
+        const oz = document.getElementById("OZViewer")
+        if (oz) {
+            const numOfReport: number = oz.GetInformation("REPORT_COUNT")
+
+            //get report index
+            const currentReportIndex: number = oz.GetInformation(
+                "CURRENT_REPORT_INDEX"
+            )
+
+            //create the array with length of number of reports,exclude the currentReportIndex
+            const numberArray: number[] = []
+            for (let i = 0; i < numOfReport; i++) {
+                if (i !== currentReportIndex) numberArray.push(i)
+            }
+
+            //get input json of current report and sync with other reports
+            const input_data_current = oz.GetInformation("INPUT_JSON")
+
+            const params = "connection.inputjson=" + input_data_current + ";"
+            numberArray.forEach((element) => {
+                oz.ReBind(element, "report", params, ";")
+            })
+        }
+    }
+
     return (
         <div>
             {contextHolder}
@@ -145,6 +162,7 @@ const TemlateWrapper: React.FC = () => {
                         onPreview={onPreview}
                         onSave={onSave}
                         onSubmit={onSubmit}
+                        onSync={onSync}
                     />
                 </div>
                 <OzViewer viewerKey={viewerKey} />

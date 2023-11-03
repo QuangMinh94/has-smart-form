@@ -37,7 +37,11 @@ const OzScript = () => {
             <Script id={"ozScript"}>
                 {`function OZReportChangeCommand_OZViewer(docindex) {
                     console.log('DocinDex',docindex);
-                }`}
+                }
+                function OZProgressCommand_OZViewer(step,state,reportname) {
+                    console.log("State", state)
+                }
+                `}
             </Script>
         </>
     )

@@ -4,12 +4,14 @@ const CustomButtonGroup = ({
     onPreview,
     onSubmit,
     onSave,
-    onCancel
+    onCancel,
+    onSync
 }: {
     onPreview: () => void
     onSubmit: () => void
     onSave: () => void
     onCancel: () => void
+    onSync?: () => void
 }) => {
     return (
         <Flex className="mb-3" vertical gap={10}>
@@ -19,6 +21,9 @@ const CustomButtonGroup = ({
                 </Button>
             </Flex>
             <Flex justify="flex-end" gap={10} className="mt-5">
+                <Button className="w-20" type="primary" onClick={onSync}>
+                    Sync
+                </Button>
                 <Button className="w-20" type="primary" onClick={onSubmit}>
                     Submit
                 </Button>
