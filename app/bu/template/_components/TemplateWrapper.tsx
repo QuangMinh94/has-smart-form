@@ -198,7 +198,7 @@ const TemplateWrapper = ({
     }
 
     const onBack = () => {
-        router.push("/bu/template")
+        router.push("/bu/mywork")
         router.refresh()
     }
 
