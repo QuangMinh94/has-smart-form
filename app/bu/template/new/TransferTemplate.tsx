@@ -34,7 +34,8 @@ const TreeSelectComp = ({ treeData }: { treeData: TreeDataType[] }) => {
                 type: resChild.repository
             })
         })
-        //console.log("Option", _option)
+        console.log("Option", _option)
+        console.log("Right", listRight)
         //setListLeft(_option)
         setListLeft(uniqueValue(_option, listRight))
     }

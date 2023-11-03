@@ -7,6 +7,7 @@ import { HTML5Backend } from "react-dnd-html5-backend"
 
 import { addEformTask } from "@/app/(service)/addEformTasks"
 import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
+import { DefaultParams } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import delay from "delay"
 import { useCookies } from "next-client-cookies"
@@ -137,19 +138,5 @@ const TemlateWrapper: React.FC = () => {
         </div>
     )
 }
-const DefaultParams = (
-    url: string,
-    reportName: string,
-    displayname: string
-) => {
-    return `connection.servlet=${url};
-connection.reportname=${reportName};
-global.concatthumbnail=true;
-connection.refreshperiod=1;
-viewer.createreport_doc_index=0;
-    global.concatpreview=false;
-    viewer.showtab=true;
-    connection.displayname=${displayname};
-    viewer.thumbnailsection_showclosebutton=true;`
-}
+
 export default TemlateWrapper

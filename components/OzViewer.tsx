@@ -66,11 +66,11 @@ const Viewer = () => {
     )
 }
 
-const DefaultParams = (
+export const DefaultParams = (
     url: string,
     reportName: string,
     displayname: string,
-    index: string
+    index: string = "0"
 ) => {
     return `connection.servlet=${url};
 connection.reportname=${reportName};
@@ -83,7 +83,8 @@ viewer.createreport_doc_index=${index};
     viewer.thumbnailsection_showclosebutton=true;
     information.debug=true;
     eform.signpad_zoom=50;
-    eform.signpad_type=dialog;`
+    eform.signpad_type=dialog;
+    viewer.reportchangecommand=true;`
 }
 
 export default OzViewer

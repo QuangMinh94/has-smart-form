@@ -35,9 +35,9 @@ const OzScript = () => {
                 // strategy="beforeInteractive"
             />
             <Script id={"ozScript"}>
-                {`function OZCommand_OZViewer(code, args) {
-                console.log('OzEvent',args);
-            }`}
+                {`function OZReportChangeCommand_OZViewer(docindex) {
+                    console.log('DocinDex',docindex);
+                }`}
             </Script>
         </>
     )
