@@ -1,4 +1,4 @@
-export type rootPath = "teller" | "ksv"
+export type rootPath = "teller" | "ksvTeller"
 const routers = (root: rootPath) => {
     const router = {
         mywork: { path: `/${root}/mywork` },

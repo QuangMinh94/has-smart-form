@@ -2,10 +2,10 @@
 
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
-import Filter from "./Filter/LayoutFilter"
-import ButtonLogOut from "./customButton/ButtonLogout"
+import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
+import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
 
-import ProviderMyworkDetail from "./provider/ProviderMyworkDetail"
+import ProviderMyworkDetail from "@/app/teller/(components)/provider/ProviderMyworkDetail"
 import Link from "next/link"
 import { faArchive } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -20,7 +20,7 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
                 {
                     key: "mywork",
                     icon: (
-                        <Link href={"/teller/mywork"}>
+                        <Link href={"/ksvTeller/mywork"}>
                             ,
                             <FontAwesomeIcon icon={faArchive} />
                         </Link>
@@ -91,7 +91,7 @@ const SideMenu = ({ children, title }: Props) => {
                 >
                     <ProviderMyworkDetail>
                         <div className="my-6">
-                            <Filter rootPath="teller" />
+                            <Filter rootPath="ksvTeller" />
                         </div>
                         <div>{children}</div>
                     </ProviderMyworkDetail>

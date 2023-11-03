@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useMemo, useCallback } from "react"
+import React from "react"
 import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 
@@ -13,7 +13,7 @@ import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 type Props = {
     data: myWork[]
 }
-const App: React.FC<Props> = ({ data }) => {
+const TableMyWork: React.FC<Props> = ({ data }) => {
     const { setDataGlobal } = useContextMyWorkDetail()
     const router = useRouter()
     console.log("data", data)
@@ -24,7 +24,7 @@ const App: React.FC<Props> = ({ data }) => {
                 nameEproduct: row?.eProduct?.name ?? ""
             })
             router.push(
-                `${routers("teller").detailMywork.path({
+                `${routers("ksvTeller").detailMywork.path({
                     id: row?._id ?? ""
                 })}?CCCD=${row?.citizenId}&Name=${row.name}&code=${
                     row.appointmentCode
@@ -122,4 +122,4 @@ const App: React.FC<Props> = ({ data }) => {
     )
 }
 
-export default App
+export default TableMyWork
