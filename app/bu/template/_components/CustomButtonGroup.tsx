@@ -76,7 +76,7 @@ const CustomButtonGroup = ({
                         </Button>
                     </Flex>
                 </Flex>
-            ) : status && (status === "APPROVE" || status === "REJECT") ? (
+            ) : (
                 //KSV
                 <Flex className="mt-5" justify="space-between">
                     <Flex>
@@ -111,8 +111,6 @@ const CustomButtonGroup = ({
                         </Button>
                     </Flex>
                 </Flex>
-            ) : (
-                <></>
             )}
         </>
     )

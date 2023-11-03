@@ -1,17 +1,17 @@
 "use client"
-import { message } from "antd"
-import dynamic from "next/dynamic"
-import React, { useState } from "react"
-import { DndProvider } from "react-dnd"
-import { HTML5Backend } from "react-dnd-html5-backend"
-import { useParams } from "next/navigation"
 import { addEformTask } from "@/app/(service)/addEformTasks"
 import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
 import { DefaultParams } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import { useContextTemplate } from "@/components/cusTomHook/useContextTemplate"
+import { message } from "antd"
 import delay from "delay"
 import { useCookies } from "next-client-cookies"
+import dynamic from "next/dynamic"
+import { useParams } from "next/navigation"
+import React, { useState } from "react"
+import { DndProvider } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
 import TranferMyWork from "./TranferMyWork"
 
@@ -87,7 +87,17 @@ const TemlateWrapper: React.FC = () => {
                     var inputdatas = JSON.parse(
                         oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
                     )
-                    console.log("My data where", inputdatas)
+
+                    //rebind the data
+                    /*  if (type === "SAVE") {
+                        const ozz = document.getElementById("OZViewer")
+                        const input_data_all = ozz!.GetInformation("INPUT_JSON")
+                        console.log("INPUT ALL", input_data_all)
+                        const params =
+                            "connection.inputjson=" + input_data_all + ";"
+                        oz.ReBind(0, "report", params, ";")
+                        oz.ReBind(1, "report", params, ";")
+                    } */
 
                     const reversedata = [...listRight].reverse()
                     console.log("reverse", reversedata)
