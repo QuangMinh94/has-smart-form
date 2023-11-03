@@ -169,27 +169,6 @@ const TemplateWrapper = ({
     }
 
     const onVerify = async () => {
-        /*  setIsDisabled(true)
-        const data = {
-            ozrName:
-                "input\\Dịch vụ tài khoản\\EXIMBANK Đề nghị kiêm hợp đồng sử dụng dịch vụ tài khoản thanh toán.ozr",
-            inputData: "",
-            exportFormat: "pdf",
-            exportPath: "MyName.ozr",
-            exportFileName: "MyName.pdf"
-        }
-
-        const myData = await axios.post(
-            "http://10.4.18.92/training/script/export - no2.jsp",
-            data,
-            { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
-        )
-        const repsonsedata: string = myData.data
-            .toString()
-            .replace(/(?:\\[rn])+/g, "")
-            .trim()
-        console.log("Repsonse yo", repsonsedata)
-        setIsDisabled(false) */
         setIsDisabled(true)
         try {
             await axios.post(
@@ -210,7 +189,7 @@ const TemplateWrapper = ({
             setTimeout(() => {
                 router.push("/bu/mywork")
                 router.refresh()
-            }, 2000)
+            }, 1000)
         } catch (error) {
             console.log(error)
             messageApi.error("Phê duyệt thất bại. Xin hãy thử lại sau")
