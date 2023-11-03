@@ -94,12 +94,12 @@ const SigninForm = () => {
                             backgroundColor: "#BEDCF7A6",
                             borderRadius: 20
                         }}
-                        gap={30}
+                        gap={20}
                     >
                         <center>
                             <Image
-                                width={40}
-                                height={40}
+                                width={60}
+                                height={60}
                                 src={"/img/hptIconKnowingIT.png"}
                                 alt={"hpticon"}
                             />
