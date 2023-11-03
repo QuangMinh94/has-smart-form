@@ -48,7 +48,7 @@ export const authOptions: NextAuthOptions = {
                     const userInfo = userResponse.data
 
                     //console.log("User data", user.data)
-                    
+
                     return userInfo
                 } catch (error: any) {
                     /* console.log("Oh shit error", error.response)
@@ -62,7 +62,7 @@ export const authOptions: NextAuthOptions = {
         jwt: async ({ user, token }) => {
             //console.log("User", user)
             if (user) {
-            const myUser = JSON.parse(JSON.stringify(user)) as Users
+                const myUser = JSON.parse(JSON.stringify(user)) as Users
                 const permission = myUser.permission as Permission[]
                 const role = FindPermission(permission, "children", "VisibleBU")
                     ? FindPermission(permission, "children", "VisibleTeller")
@@ -71,6 +71,7 @@ export const authOptions: NextAuthOptions = {
                     : "TELLER"
                 token.uid = user.token
                 token.name = JSON.stringify(user)
+                token.role = role
             }
             return token
         },
