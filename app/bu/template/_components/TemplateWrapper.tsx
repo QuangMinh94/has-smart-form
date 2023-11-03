@@ -247,7 +247,7 @@ const TemplateWrapper = ({
                 <></>
             )}
             <CustomButtonGroup
-                status={data[0].status!.code}
+                //status={data[0].status!.code}
                 permission={permission}
                 onPreview={onPreview}
                 onSubmit={onSubmit}
