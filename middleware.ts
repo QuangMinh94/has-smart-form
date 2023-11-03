@@ -21,7 +21,10 @@ export default withAuth(function middleware(request: NextRequestWithAuth) {
                         .includes((role as string).toLowerCase())
                 ) {
                     return NextResponse.redirect(
-                        new URL("/notAuthorized", request.url)
+                        new URL(
+                            `/${(role as string).toLowerCase()}`,
+                            request.url
+                        )
                     )
                 }
             } else {
