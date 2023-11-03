@@ -9,7 +9,6 @@ const fetchApi = cache(async (idAppointMent: string) => {
         const cookie = cookies()
         const session = await getServerSession(authOptions)
         const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
-
         const res = await viewAppointMent({
             bodyRequest: { id: idAppointMent, userRole: idRole },
             session: cookie.get("session")?.value ?? "",
@@ -22,7 +21,8 @@ const fetchApi = cache(async (idAppointMent: string) => {
     }
 })
 const DetailMyWork = async ({ params }: { params: { id: string } }) => {
-    await fetchApi(params.id)
+    const data = await fetchApi(params.id)
+    console.log("no", data)
     return <TemlateWrapper />
 }
 

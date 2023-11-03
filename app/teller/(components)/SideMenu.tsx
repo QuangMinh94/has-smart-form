@@ -2,19 +2,18 @@
 import routers from "@/router/cusTomRouter"
 import { VideoCameraOutlined } from "@ant-design/icons"
 import { Image, Layout, Menu, theme } from "antd"
-import { useRouter } from "next/navigation"
+import ProviderTemplate from "@/components/context/providerTemplate"
 import React, { useState } from "react"
 import Filter from "./Filter/LayoutFilter"
 import ButtonLogOut from "./customButton/ButtonLogout"
-import ProviderMyWork from "./provider/ProviderMyWork"
+
 import ProviderMyworkDetail from "./provider/ProviderMyworkDetail"
 import Link from "next/link"
-import { faArchive, faFile } from "@fortawesome/free-solid-svg-icons"
+import { faArchive } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 const { Header, Sider, Content } = Layout
 
 const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
-
     return (
         <Menu
             style={{ backgroundColor }}
@@ -91,14 +90,12 @@ const SideMenu = ({ children, title }: Props) => {
                         overflowY: "scroll"
                     }}
                 >
-                    <ProviderMyWork>
-                        <ProviderMyworkDetail>
-                            <div className="my-6">
-                                <Filter />
-                            </div>
-                            <div>{children}</div>
-                        </ProviderMyworkDetail>
-                    </ProviderMyWork>
+                    <ProviderMyworkDetail>
+                        <div className="my-6">
+                            <Filter />
+                        </div>
+                        <div>{children}</div>
+                    </ProviderMyworkDetail>
                 </Content>
             </Layout>
         </Layout>

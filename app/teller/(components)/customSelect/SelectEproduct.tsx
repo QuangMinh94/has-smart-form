@@ -1,19 +1,21 @@
 "use client"
 
-import React, { useEffect, useCallback, useState } from "react"
+import React, { useCallback, useState, useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { Select, Empty, Spin } from "antd"
-import { eProduct, requestBodyEproduct } from "@/app/(types)/eProduct"
-import { GetProduct } from "@/app/(service)/eProduct"
+import { TreeSelect, Empty, Spin } from "antd"
+import {
+    eProduct,
+    requestBodyEproduct,
+    OptionTree
+} from "@/app/(types)/eProduct"
+import { GetProductTree } from "@/app/(service)/eProduct"
 import { useCookies } from "next-client-cookies"
 import { ToFilterName } from "../../../../util/formatText"
 
 type Props = {
-    parent?: string
-    onChange: (value: string) => void
     typeQuery: string
     placeholder: string
-    setDataService?: React.Dispatch<React.SetStateAction<eProduct[]>>
+    onSelect: (selectedKeys: string, info: OptionTree) => void
     defalutValue?: string
 }
 
@@ -27,7 +29,7 @@ const UseFecthApi = (
     const { isLoading, error, data, refetch } = useQuery<eProduct[]>({
         queryKey: [type],
         queryFn: async () => {
-            const res = await GetProduct({
+            const res = await GetProductTree({
                 bodyRequest: body,
                 token,
                 session
@@ -43,55 +45,59 @@ const UseFecthApi = (
     return { isLoading, error, data, refetch }
 }
 const CustomerSelect: React.FC<Props> = ({
-    parent,
-    onChange,
+    onSelect,
     typeQuery,
     placeholder,
-    setDataService,
     defalutValue
 }) => {
     const [enabledFecth, setenabledFecth] = useState<boolean>(false)
     const cookies = useCookies()
-    const { isLoading, error, data, refetch } = UseFecthApi(
+    const { isLoading, error, data } = UseFecthApi(
         cookies?.get("token") ?? "",
         cookies?.get("session") ?? "",
-        parent !== undefined ? { parent } : { type: "P" },
+        {},
         typeQuery,
         enabledFecth
     )
-    // if (error) {
-    //     return <div style={{ color: "red" }}>có lỗi</div>
-    // }
-    useEffect(() => {
-        if (parent && enabledFecth) {
-            refetch()
-        }
-    }, [parent])
-    useEffect(() => {
-        if (parent) {
-            setDataService && setDataService(data ?? [])
-        }
-    }, [data])
+    const TreeDataOption = useMemo(() => {
+        return MappingChildren(data ?? [])
+    }, [data?.length])
+
     const HandlerfilterOption = useCallback(
         (input: string, option: any) =>
             ToFilterName(option?.label ?? "").includes(ToFilterName(input)),
         []
     )
+    function MappingChildren(product: eProduct[]): OptionTree[] {
+        if (product.length === 0) return []
+
+        const childrenView: OptionTree[] = []
+        product.forEach((element, index) => {
+            childrenView.push({
+                value: element._id + "",
+                title: element?.name,
+                children:
+                    element?.children && element?.children.length > 0
+                        ? MappingChildren(element?.children ?? [])
+                        : [],
+                formTemplate: element?.formTemplate ?? []
+            })
+        })
+        return childrenView
+    }
 
     return (
-        <Select
-            onClick={() => {
-                setenabledFecth(true)
-            }}
+        <TreeSelect
             defaultValue={defalutValue || undefined}
+            onClick={() => setenabledFecth(true)}
+            showSearch
             style={{ width: "100%" }}
+            dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
             placeholder={placeholder}
-            onChange={onChange}
-            options={data?.map((value) => ({
-                value: value._id,
-                label: value?.name
-            }))}
-            filterOption={HandlerfilterOption}
+            allowClear
+            treeDefaultExpandAll
+            onSelect={onSelect}
+            treeData={TreeDataOption}
             notFoundContent={
                 isLoading ? (
                     <Spin size="small" />
@@ -99,8 +105,6 @@ const CustomerSelect: React.FC<Props> = ({
                     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 )
             }
-            showSearch
-            allowClear
         />
     )
 }

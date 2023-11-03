@@ -4,10 +4,11 @@ import dynamic from "next/dynamic"
 import React, { useState } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
-
+import { useParams } from "next/navigation"
 import { addEformTask } from "@/app/(service)/addEformTasks"
 import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+import { useContextTemplate } from "@/components/cusTomHook/useContextTemplate"
 import delay from "delay"
 import { useCookies } from "next-client-cookies"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
@@ -20,16 +21,17 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
 
 const TemlateWrapper: React.FC = () => {
     const cookies = useCookies()
+    const params = useParams()
     const [messageApi, contextHolder] = message.useMessage()
     const [viewerKey, setViewerKey] = useState<number>(0)
-    const { listRight, setChoosenBlock, dataGlobal } = useContextMyWorkDetail()
+    const { listRight, setChoosenBlock } = useContextMyWorkDetail()
+    const {} = useContextTemplate()
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
     const onPreview = async () => {
         if (listRight.length > 0) {
             resetEForm()
-            //resetEForm()
             await delay(2000)
             const choosenBlock: {
                 name: string
@@ -85,20 +87,22 @@ const TemlateWrapper: React.FC = () => {
                         oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
                     )
                     console.log("My data where", inputdatas)
+
                     const reversedata = [...listRight].reverse()
+                    console.log("reverse", reversedata)
                     const eformTasks: taskEform[] = []
 
                     inputdatas.forEach((inputdata: any, index: number) => {
                         eformTasks.push({
                             data: inputdata,
-                            fromTemplate: reversedata?.[index]?.id,
+                            fromTemplate: reversedata?.[index]?.idFormTemplate,
                             documentId: "test"
                         })
                     })
-
+                    console.log("eformTasks")
                     const body: RequestEformTaks = {
                         eformTasks: eformTasks,
-                        appointment: dataGlobal.appointment,
+                        appointment: `${params?.id}`,
                         button: type
                     }
                     console.log(body)

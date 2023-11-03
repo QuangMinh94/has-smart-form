@@ -7,7 +7,7 @@ import type { ColumnsType } from "antd/es/table"
 import routers from "@/router/cusTomRouter"
 import { myWork } from "@/app/(types)/teller/mywork"
 import dayjs from "dayjs"
-import { useContextMyWork } from "@/components/cusTomHook/useContext"
+
 import { useRouter } from "next/navigation"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 type Props = {
@@ -15,35 +15,25 @@ type Props = {
 }
 const App: React.FC<Props> = ({ data }) => {
     const { setDataGlobal } = useContextMyWorkDetail()
-    const { setListIdRemove } = useContextMyWork()
     const router = useRouter()
-   
+    console.log("data", data)
     const CustomClickPath = async (row: myWork) => {
         try {
             setDataGlobal({
-                repository: "",
-                appointment: row?._id ?? "",
-                idEProduct:row?.eProduct?._id ?? '',
-                nameEproduct:row?.eProduct?.name?? ''
+                idEProduct: row?.eProduct?._id ?? "",
+                nameEproduct: row?.eProduct?.name ?? ""
             })
             router.push(
                 `${routers.detailMywork.path({
-                    id: row?.appointmentCode ?? ""
-                })}?CCCD=${row?.citizenId}&Name=${row.name}`
+                    id: row?._id ?? ""
+                })}?CCCD=${row?.citizenId}&Name=${row.name}&code=${
+                    row.appointmentCode
+                }`
             )
         } catch (e) {
             alert("error")
         }
     }
-    const rowSelection = useMemo(
-        () => ({
-            onChange: (selectedRowKeys: React.Key[]) => {
-                console.log(selectedRowKeys)
-                setListIdRemove(selectedRowKeys)
-            }
-        }),
-        []
-    )
     const columns: ColumnsType<myWork> = [
         {
             key: "_id",
@@ -110,10 +100,6 @@ const App: React.FC<Props> = ({ data }) => {
     return (
         <div>
             <Table
-                rowSelection={{
-                    type: "checkbox",
-                    ...rowSelection
-                }}
                 scroll={{
                     y: 400,
                     scrollToFirstRowOnChange: true

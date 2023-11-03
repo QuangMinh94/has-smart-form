@@ -1,10 +1,10 @@
 "use client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Empty, Input, Spin } from "antd"
+import { Empty, Input, Spin, Checkbox, theme } from "antd"
 import update from "immutability-helper"
 import { useCallback, useEffect, useState } from "react"
 import { useDrop } from "react-dnd"
-import Select from "../../../customSelect/SelectEproduct"
+
 export type typeKey = "left" | "right"
 type typeProps = {
     list: any[]
@@ -33,6 +33,9 @@ const MyDropTarget: React.FC<typeProps> = ({
     HidenUI,
     loading
 }) => {
+    const {
+        token: { colorPrimary }
+    } = theme.useToken()
     const [listFilter, setListFilter] = useState<any[]>([])
     const [valueSearch, setValueSearch] = useState<string>("")
     const HandeFilter = {
@@ -128,7 +131,11 @@ const MyDropTarget: React.FC<typeProps> = ({
             })
         })
     }
-
+    const onCheck = (e: any) => {
+        setList((list) =>
+            list.map((item) => ({ ...item, checkBox: !!e.target.checked }))
+        )
+    }
     const data = valueSearch.length > 0 ? listFilter : list
     return (
         <div
@@ -139,26 +146,41 @@ const MyDropTarget: React.FC<typeProps> = ({
                 borderRadius: "10px"
             }}
         >
-            <div
-                style={{
-                    color: "black",
-                    padding: "15px 0px 15px 10px ",
-                    borderBottom: "1px solid  #f0f0f0"
-                }}
-            >
-                {title}
-            </div>
+            <header style={{ borderBottom: "1px solid  #f0f0f0" }}>
+                <div
+                    className="flex"
+                    style={{
+                        width: "95%",
+                        margin: "10px auto "
+                    }}
+                >
+                    <div className="flex-1" style={{ color: colorPrimary }}>
+                        {title}
+                    </div>
+                    <div>
+                        <Checkbox
+                            onChange={onCheck}
+                            checked={
+                                list.length > 0 &&
+                                list.every((item) => !!item?.checkBox)
+                            }
+                        >
+                            Check All
+                        </Checkbox>
+                    </div>
+                </div>
+            </header>
 
-            <div style={{ width: "90%", margin: "10px auto" }}>
+            <div style={{ width: "95%", margin: "10px auto " }}>
                 {HidenUI && <div className="my-5"> {HidenUI} </div>}
                 <Input
                     value={valueSearch}
                     onChange={(e) => HandeFilter.HanderChange(e)}
-                    // style={{ width: "90%" }}
                     prefix={<FontAwesomeIcon icon={faSearch} />}
                     placeholder="Search"
                 />
             </div>
+
             <ul
                 className="test"
                 ref={drop}

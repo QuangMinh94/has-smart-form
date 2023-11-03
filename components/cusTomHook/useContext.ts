@@ -1,11 +1,9 @@
-import { dataGlobal } from './../../app/teller/(components)/context';
-"use client"
+import { dataGlobal } from "./../../app/teller/(components)/context"
+;("use client")
 import { useContext } from "react"
 import {
     contextMyworkDetail,
-    typeContextMyworkDetail,
-    typeContextMywork,
-    contextMywork
+    typeContextMyworkDetail
 } from "../../app/teller/(components)/context"
 function useContextMyWorkDetail(): typeContextMyworkDetail {
     const provider = useContext(contextMyworkDetail)
@@ -19,16 +17,10 @@ function useContextMyWorkDetail(): typeContextMyworkDetail {
         setDataGlobal: provider.setDataGlobal,
         dataGlobal: provider.dataGlobal,
         setChoosenBlock: provider.setChoosenBlock,
-        choosenBlock:provider.choosenBlock,
-        setLoading:provider.setLoading,
-        loading:provider.loading
+        choosenBlock: provider.choosenBlock,
+        setLoading: provider.setLoading,
+        loading: provider.loading
     }
 }
-function useContextMyWork(): typeContextMywork {
-    const provider = useContext(contextMywork)
-    return {
-        setListIdRemove: provider.setListIdRemove,
-        listIdRmove: provider.listIdRmove
-    }
-}
-export { useContextMyWorkDetail, useContextMyWork }
+
+export { useContextMyWorkDetail }

@@ -8,14 +8,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { RadioChangeEvent, Row, Col, theme } from "antd"
 import { Radio, Button, Input } from "antd"
 import React, { useEffect, memo, useCallback, useMemo } from "react"
-import { useContextMyWork } from "@/components/cusTomHook/useContext"
+
 import {
     usePathname,
     useParams,
     useRouter,
     useSearchParams
 } from "next/navigation"
-import MyWork from "../../mywork/page"
 
 type condisions = {
     pagemywork: {
@@ -110,8 +109,6 @@ const CustomBtn: React.FC<{
     paramsId: string
     condition: () => condisions
 }> = memo(({ pathName, paramsId, condition }) => {
-    const { listIdRmove } = useContextMyWork()
-
     const router = useRouter()
     const HanderBtn = {
         Back: () => {
@@ -121,9 +118,7 @@ const CustomBtn: React.FC<{
             }
             router.push(pathRevert[pathName])
         },
-        Remove: () => {
-            console.log("listIdRmove", listIdRmove)
-        }
+        Remove: () => {}
     }
     const HandleClick = () => {
         if (condition().pagemywork.isDetailMyorkpath) {
@@ -139,22 +134,20 @@ const CustomBtn: React.FC<{
     return (
         <Button onClick={HandleClick} type="primary">
             <FontAwesomeIcon className="mr-2" icon={icon} />
-            {condition().pagemywork.isDetailMyorkpath
-                ? "Quay lại"
-                : condition().pagemywork.isMyworkpath
-                ? "Xóa"
-                : "error"}
+            {condition().pagemywork.isDetailMyorkpath ? "Quay lại" : "error"}
         </Button>
     )
 })
 
 const CustomFilter: React.FC<{
     pathName: string
-    paramsId: string
+
     condition: () => condisions
-}> = memo(({ pathName, paramsId, condition }) => {
+}> = memo(({ pathName, condition }) => {
     const router = useRouter()
     const searchQuery = useSearchParams()
+    const searchParams = useSearchParams()
+    const appointmentCode: string = searchParams.get("code") ?? ""
     const typeSearch: any = useMemo(
         () => searchQuery.get(mywork.TYPE_SEARCH),
         [searchQuery.get(mywork.TYPE_SEARCH)]
@@ -171,7 +164,7 @@ const CustomFilter: React.FC<{
         <>
             {condition().pagemywork.isDetailMyorkpath && (
                 <CustomerLabel text="Mã giao dịch">
-                    <Input value={paramsId} disabled />
+                    <Input value={appointmentCode} disabled />
                 </CustomerLabel>
             )}
             {condition().pagemywork.isMyworkpath && (
@@ -216,11 +209,7 @@ const Filter = () => {
     return (
         <Row align="middle" gutter={16}>
             <Col span={7}>
-                <CustomFilter
-                    paramsId={params?.id}
-                    pathName={pathName}
-                    condition={cusTomCondition}
-                />
+                <CustomFilter pathName={pathName} condition={cusTomCondition} />
             </Col>
             <Col span={13}>
                 {condition.pagemywork.isMyworkpath && (
@@ -234,13 +223,15 @@ const Filter = () => {
                 )}
             </Col>
             <Col span={4}>
-                <div className="flex justify-end">
-                    <CustomBtn
-                        paramsId={params?.id}
-                        pathName={pathName}
-                        condition={cusTomCondition}
-                    />
-                </div>
+                {condition.pagemywork.isDetailMyorkpath && (
+                    <div className="flex justify-end">
+                        <CustomBtn
+                            paramsId={params?.id}
+                            pathName={pathName}
+                            condition={cusTomCondition}
+                        />
+                    </div>
+                )}
             </Col>
         </Row>
     )

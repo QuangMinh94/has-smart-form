@@ -1,3 +1,4 @@
+import { ReactNode } from "react"
 export interface formTemplate {
     _id?: string
     name?: string
@@ -33,9 +34,23 @@ export interface eProduct {
     creator?: string
     description?: string
     type?: string
+    children?: eProduct[]
 }
 export interface requestBodyEproduct {
     type?: string
     _id?: string
     parent?: string
+}
+export interface requestBodyEproductTree {
+    name?: string
+    code?: string
+    active?: boolean
+    id?: string
+    type?: string
+}
+export interface OptionTree {
+    value: string
+    title: ReactNode
+    children: OptionTree[]
+    formTemplate: formTemplate[]
 }

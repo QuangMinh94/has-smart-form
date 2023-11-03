@@ -98,7 +98,7 @@ const Card: FC<CardProps> = ({
                 color: "black",
                 display: "flex",
                 cursor: "pointer",
-                padding: " 8px 0 8px 14px",
+                padding: " 8px 0 8px 2.5%",
                 opacity: opacity
             }}
         >
