@@ -16,7 +16,8 @@ const CustomButtonGroup = ({
     onVerify,
     onReject,
     onBack,
-    permission
+    permission,
+    status
 }: {
     onPreview: () => void
     onSubmit: () => void
@@ -26,6 +27,7 @@ const CustomButtonGroup = ({
     onReject?: () => void
     onBack?: () => void
     permission: Permission[] | []
+    status?: string
 }) => {
     const { isDisabled } = useContext(ContextTemplate)
     return (
@@ -74,7 +76,8 @@ const CustomButtonGroup = ({
                         </Button>
                     </Flex>
                 </Flex>
-            ) : (
+            ) : status && (status === "APPROVE" || status === "REJECT") ? (
+                //KSV
                 <Flex className="mt-5" justify="space-between">
                     <Flex>
                         <Button
@@ -108,6 +111,8 @@ const CustomButtonGroup = ({
                         </Button>
                     </Flex>
                 </Flex>
+            ) : (
+                <></>
             )}
         </>
     )

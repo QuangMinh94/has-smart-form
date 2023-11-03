@@ -1,6 +1,7 @@
 "use client"
 
 import delay from "delay"
+import { reverse } from "lodash"
 import { useCallback, useContext, useEffect } from "react"
 import { ContextTemplate } from "./context/context"
 
@@ -10,6 +11,9 @@ const OzViewer = ({ viewerKey }: { viewerKey: number }) => {
 
 const Viewer = () => {
     const { listRight } = useContext(ContextTemplate)
+    const reverseListRight: any[] = reverse(
+        JSON.parse(JSON.stringify(listRight))
+    )
     const cachedFn = useCallback(async () => {
         if (window.start_ozjs) {
             window.SetOZParamters_OZViewer = () => {
@@ -25,16 +29,15 @@ const Viewer = () => {
 
             await delay(3000)
 
-            if (listRight.length > 0) {
+            if (reverseListRight.length > 0) {
                 let count = 0
-                listRight.forEach((element) => {
+                reverseListRight.forEach((element) => {
                     const oz = document.getElementById("OZViewer")
                     oz!.CreateReportEx(
                         DefaultParams(
                             process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                             "/" + element.type + "/" + element.name,
-                            element.name!,
-                            count.toString()
+                            element.name!
                         ),
                         ";"
                     )
@@ -66,11 +69,11 @@ const Viewer = () => {
     )
 }
 
-const DefaultParams = (
+export const DefaultParams = (
     url: string,
     reportName: string,
     displayname: string,
-    index: string
+    index: string = "0"
 ) => {
     return `connection.servlet=${url};
 connection.reportname=${reportName};
@@ -83,7 +86,8 @@ viewer.createreport_doc_index=${index};
     viewer.thumbnailsection_showclosebutton=true;
     information.debug=true;
     eform.signpad_zoom=50;
-    eform.signpad_type=dialog;`
+    eform.signpad_type=dialog;
+    viewer.reportchangecommand=true;`
 }
 
 export default OzViewer

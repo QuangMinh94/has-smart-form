@@ -31,6 +31,7 @@ export const authOptions: NextAuthOptions = {
                     })
 
                     if (!user.data) return null
+
                     cookies().set("token", user.data.token)
                     cookies().set("session", user.data.session)
 
@@ -49,9 +50,10 @@ export const authOptions: NextAuthOptions = {
                     //console.log("User data", user.data)
                     
                     return userInfo
-                } catch (error) {
-                    console.log("Oh shit error", error)
-                    return null
+                } catch (error: any) {
+                    /* console.log("Oh shit error", error.response)
+                    return null */
+                    throw new Error(error.response.data.message)
                 }
             }
         })

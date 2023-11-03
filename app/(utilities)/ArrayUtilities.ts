@@ -32,9 +32,9 @@ export function uniqueValue(a: any[], b: any[]) {
         )
 
     const onlyInA = onlyInLeft(a, b, isSameUser)
-    const onlyInB = onlyInLeft(b, a, isSameUser)
+    //const onlyInB = onlyInLeft(b, a, isSameUser)
 
-    const result = [...onlyInA, ...onlyInB]
+    const result = [...onlyInA]
 
     return result
 }

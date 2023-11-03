@@ -44,7 +44,9 @@ const TemplateForm = ({
         const inputValue = {
             description: values.description,
             validFrom: dayjs(values.validFrom).toString(),
-            validTo: dayjs(values.validTo).toString(),
+            validTo: values.validTo
+                ? dayjs(values.validTo).toString()
+                : undefined,
             code: Math.random().toString(),
             name: values.formName,
             block: choosenBlock.choosenBlock,

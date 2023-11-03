@@ -19,16 +19,19 @@ const SigninForm = () => {
     const { data: session } = useSession()
     const router = useRouter()
     const onFinish = async (values: any) => {
-        await signIn("credentials", {
+        const signInResponse = await signIn("credentials", {
             username: values.username,
             password: values.password,
             redirect: false
             //callbackUrl: process.env.NEXT_PUBLIC_SERVER_URL! + "/bu"
         })
-        /* if (signInResponse) {
-            if (signInResponse.ok) {
-            } else console.log(signInResponse)
-        } */
+        if (signInResponse?.error) {
+            if (signInResponse.status !== 401) {
+                setError(signInResponse?.error)
+            } else {
+                setError("Sai username hoặc mật khẩu")
+            }
+        }
     }
 
     useEffect(() => {
@@ -138,7 +141,9 @@ const SigninForm = () => {
                                 </Button>
                             </Form.Item>
                             <br />
-                            <div style={{ color: "red" }}>{error}</div>
+                            <center>
+                                <div className="text-red-600">{error}</div>
+                            </center>
                         </Form>
                     </div>
                 </Col>

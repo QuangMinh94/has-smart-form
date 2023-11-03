@@ -12,8 +12,7 @@ interface DataTranfeCustom extends DataTranfer, eProduct {
     idFormTemplate: string
 }
 const HeaderUi = () => {
-    const { setListLeft, listLeft, setListRight, listRight, dataGlobal } =
-        useContextMyWorkDetail()
+    const { setListLeft, listLeft, dataGlobal } = useContextMyWorkDetail()
 
     const onSelect = (selectedKeys: string, info: OptionTree) => {
         if (listLeft.length > 0) {
