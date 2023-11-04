@@ -159,9 +159,12 @@ const SigninForm = () => {
                                 <div className="text-red-600">{error}</div>
                             </center>
                         </Form>
-                        <p className="text-black text-xs/8">
-                            © 2023. All Rights Reserved. Một sản phẩm của HPT
-                        </p>
+                        <center>
+                            <p className="text-black text-xs/8">
+                                © 2023. All Rights Reserved. Một sản phẩm của
+                                HPT
+                            </p>
+                        </center>
                     </Flex>
                 </Col>
             </Row>
