@@ -1,18 +1,19 @@
 "use client"
-import SelectEproduct from "../../customSelect/SelectEproduct"
+import SelectEproduct from "../../customSelect/SelectEproductTree"
 
 import { Row } from "antd"
 
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
-import { eProduct, OptionTree } from "@/app/(types)/eProduct"
+import { OptionTree, block } from "@/app/(types)/eProduct"
 import { DataTranfer } from "@/app/(types)/typeDataTranfe"
+import { uniqueValue } from "@/app/(utilities)/ArrayUtilities"
 
-interface DataTranfeCustom extends DataTranfer, eProduct {
-    repository: string
-    idFormTemplate: string
+interface DataTranfeCustom extends DataTranfer {
+    block: block[]
 }
 const HeaderUi = () => {
-    const { setListLeft, listLeft, dataGlobal } = useContextMyWorkDetail()
+    const { setListLeft, listLeft, dataGlobal, listRight } =
+        useContextMyWorkDetail()
 
     const onSelect = (selectedKeys: string, info: OptionTree) => {
         if (listLeft.length > 0) {
@@ -20,19 +21,17 @@ const HeaderUi = () => {
         }
 
         console.log(info)
-        const dataTranfer: DataTranfeCustom[] = []
+        const dataListLeft: DataTranfeCustom[] = []
         info.formTemplate.forEach((tempalate) => {
-            tempalate?.block?.forEach((block) => {
-                dataTranfer.push({
-                    id: block?._id + tempalate?._id ?? "",
-                    name: block?.name ?? "",
-                    checkBox: false,
-                    repository: block?.ozrRepository ?? "",
-                    idFormTemplate: tempalate._id ?? ""
-                })
+            dataListLeft.push({
+                id: tempalate?._id ?? "",
+                name: tempalate?.name ?? "",
+                checkBox: false,
+                block: tempalate.block ?? []
             })
         })
-        setListLeft(dataTranfer)
+        const uniqueListLeft = uniqueValue(dataListLeft, listRight)
+        setListLeft(uniqueListLeft)
     }
     return (
         <Row>

@@ -7,7 +7,7 @@ import type { ColumnsType } from "antd/es/table"
 import routers from "@/router/cusTomRouter"
 import { myWork } from "@/app/(types)/teller/mywork"
 import dayjs from "dayjs"
-
+import ButtonApprove from "@/app/ksvTeller/(component)/ButonApprove"
 import { useRouter } from "next/navigation"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 type Props = {
@@ -102,9 +102,12 @@ const TableMyWork: React.FC<Props> = ({ data }) => {
             dataIndex: "implementer"
         },
         {
+            align: "center",
             key: "action",
             title: "Hành Động",
-            dataIndex: "implementer"
+            render: (row: myWork) => (
+                <ButtonApprove data={row} content="Duyệt" />
+            )
         }
     ]
 

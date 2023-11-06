@@ -1,5 +1,3 @@
-"use client"
-
 import axios from "axios"
 import {
     requestBodyEproduct,
@@ -13,7 +11,7 @@ export const GetProduct = async (pram: {
 }) => {
     const { bodyRequest, token, session } = pram
     const res = await axios.post(
-        process.env.NEXT_PUBLIC_EPRODUCT_TREEDATA!,
+        process.env.NEXT_PUBLIC_GET_EPRODUCT!,
         bodyRequest,
         {
             headers: {

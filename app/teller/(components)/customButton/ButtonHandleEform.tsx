@@ -5,8 +5,10 @@ const CustomButtonGroup = ({
     onSubmit,
     onSave,
     onCancel,
+    loading,
     onSync
 }: {
+    loading: boolean
     onPreview: () => void
     onSubmit: () => void
     onSave: () => void
@@ -16,7 +18,12 @@ const CustomButtonGroup = ({
     return (
         <Flex className="mb-3" vertical gap={10}>
             <Flex justify="flex-end" gap={10}>
-                <Button className="w-20" type="primary" onClick={onPreview}>
+                <Button
+                    loading={loading}
+                    className="w-20"
+                    type="primary"
+                    onClick={onPreview}
+                >
                     Preview
                 </Button>
             </Flex>
@@ -24,10 +31,20 @@ const CustomButtonGroup = ({
                 <Button className="w-20" type="primary" onClick={onSync}>
                     Sync
                 </Button>
-                <Button className="w-20" type="primary" onClick={onSubmit}>
+                  <Button
+                    loading={loading}
+                    className="w-20"
+                    type="primary"
+                    onClick={onSubmit}
+                >
                     Submit
                 </Button>
-                <Button className="w-20" type="primary" onClick={onSave}>
+                <Button
+                    loading={loading}
+                    className="w-20"
+                    type="primary"
+                    onClick={onSave}
+                >
                     Save
                 </Button>
                 <Button
@@ -35,6 +52,7 @@ const CustomButtonGroup = ({
                     danger
                     type="primary"
                     onClick={onCancel}
+                    loading={loading}
                 >
                     Cancel
                 </Button>
