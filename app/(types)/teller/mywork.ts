@@ -17,7 +17,7 @@ interface eProductforMywork {
     type?: string
     children?: eProduct[]
 }
-interface eFormTask {
+export interface eFormTask {
     _id: string
     createdDate: string
     creator: string

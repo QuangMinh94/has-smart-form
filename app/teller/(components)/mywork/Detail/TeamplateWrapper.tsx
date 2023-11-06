@@ -68,6 +68,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             changeBlock: 0
         })
     }
+
     useEffect(() => {
         const cusTomerFormtemplate = (
             EformTask: eFormTask[]
@@ -106,6 +107,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         }
         GetEform()
     }, [])
+
     const onPreview = () => {
         if (listRight.length > 0) {
             HandelerPreview(listRight)
@@ -113,19 +115,21 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             messageApi.error("Please choose at least 1 block")
         }
     }
-    const oz = document.getElementById("OZViewer")
 
     const onCancel = () => {
         resetEForm()
     }
+
     const onSubmit = async () => {
         setLoading(true)
         HandlerActionEform("SUBMIT")
     }
+
     const onSave = async () => {
         setLoading(true)
         HandlerActionEform("SAVE")
     }
+
     const HandlerActionEform = async (type: "SAVE" | "SUBMIT") => {
         try {
             const oz = document.getElementById("OZViewer")
