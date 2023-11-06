@@ -32,7 +32,7 @@ const MyWorkPage = async ({
         const data = await fetchTemplateData(
             process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
             searchParams.name
-                ? { name: searchParams.name, userRole: userRole[0] }
+                ? { name: searchParams.name, userRole: userRole[0]._id }
                 : { userRole: userRole[0]._id }
         )
 
