@@ -132,7 +132,7 @@ const SigninForm = () => {
                             onFinishFailed={onFinishFailed}
                             autoComplete="off"
                         >
-                            <b>Email</b>
+                            <b>Tên đăng nhập</b>
                             <Form.Item<FieldType>
                                 // label="Username"
                                 name="username"
@@ -140,7 +140,7 @@ const SigninForm = () => {
                             >
                                 <Input style={{ width: "100%" }} />
                             </Form.Item>
-                            <b>Password</b>
+                            <b>Mật khẩu</b>
                             <Form.Item<FieldType>
                                 // label="Password"
                                 name="password"
@@ -170,12 +170,12 @@ const SigninForm = () => {
                                 <div className="text-red-600">{error}</div>
                             </center>
                         </Form>
-                        <center>
+                        {/* <center>
                             <p className="text-black text-xs/8">
                                 © 2023. All Rights Reserved. Một sản phẩm của
                                 HPT
                             </p>
-                        </center>
+                        </center> */}
                     </Flex>
                 </Col>
             </Row>
