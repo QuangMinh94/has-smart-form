@@ -21,7 +21,6 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
                     key: "mywork",
                     icon: (
                         <Link href={"/teller/mywork"}>
-                            ,
                             <FontAwesomeIcon icon={faArchive} />
                         </Link>
                     ),
