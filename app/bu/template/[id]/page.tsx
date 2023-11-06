@@ -6,6 +6,7 @@ import ProviderTemplate from "@/components/context/providerTemplate"
 import axios from "axios"
 import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
+import { RedirectType, redirect } from "next/navigation"
 import { cache } from "react"
 import { TreeDataType } from "../../_types/TreeDataType"
 import TemplateWrapper from "../_components/TemplateWrapper"
@@ -19,7 +20,7 @@ export interface OptionProps {
 
 const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
     const session = await getServerSession(authOptions)
-    if (!session) return null
+    if (!session) redirect("/auth/signin", RedirectType.replace)
 
     const userRole = session.user.userInfo.defaultGroup?.role as Role[]
 
@@ -36,7 +37,6 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
         process.env.EPRODUCT_TREEDATA!,
         {}
     )
-
     const treeDataView: TreeDataType[] = MappingChildren(treeData)
 
     return (
