@@ -1,6 +1,6 @@
 "use client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Empty, Input, Spin, Checkbox, theme } from "antd"
+import { Checkbox, Empty, Input, Spin, theme } from "antd"
 import update from "immutability-helper"
 import { useCallback, useEffect, useState } from "react"
 import { useDrop } from "react-dnd"
@@ -139,7 +139,7 @@ const MyDropTarget: React.FC<typeProps> = ({
     const data = valueSearch.length > 0 ? listFilter : list
     return (
         <div
-            className="shadow-md"
+            className="shadow-md h-full"
             style={{
                 width: "auto",
                 border: "1px solid #f0f0f0",
