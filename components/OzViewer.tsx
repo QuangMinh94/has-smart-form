@@ -73,7 +73,8 @@ export const DefaultParams = (
     url: string,
     reportName: string,
     displayname: string,
-    index: string = "0"
+    index: string = "0",
+    inputJson: string = ""
 ) => {
     return `connection.servlet=${url};
 connection.reportname=${reportName};
@@ -83,6 +84,7 @@ viewer.createreport_doc_index=${index};
     global.concatpreview=false;
     viewer.showtab=true;
     connection.displayname=${displayname};
+    connection.inputjson=${inputJson};
     viewer.thumbnailsection_showclosebutton=true;
     information.debug=true;
     eform.signpad_zoom=50;
