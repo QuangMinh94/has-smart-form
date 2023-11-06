@@ -1,5 +1,5 @@
 "use client"
-import routers, { rootPath } from "@/router/cusTomRouter"
+import routers, { rootPath, DE_TAIL, APP_ROVE } from "@/router/cusTomRouter"
 import {
     faTrashAlt,
     faLongArrowAltLeft
@@ -20,6 +20,7 @@ type condisions = {
     pagemywork: {
         isMyworkpath: boolean
         isDetailMyorkpath: boolean
+        isAppRoverPath: boolean
     }
 }
 export type typeSearch = "CDDD" | "MGD"
@@ -43,12 +44,16 @@ const useHanderNavigation = (
 } => {
     const pathName = usePathname()
     const params = useParams()
+
     const condition: condisions = {
         pagemywork: {
             isMyworkpath: pathName === routers(rootpath).mywork.path,
-            isDetailMyorkpath:
-                pathName ===
-                routers(rootpath).detailMywork.path({ id: `${params?.id}` })
+            isDetailMyorkpath: pathName.includes(
+                routers(rootpath).mywork.path + `/${DE_TAIL}`
+            ),
+            isAppRoverPath: pathName.includes(
+                routers(rootpath).mywork.path + `/${APP_ROVE}`
+            )
         }
     }
     return { pathName, params, condition }
@@ -109,38 +114,45 @@ const RadioComponent: React.FC<{
 })
 
 const CustomBtn: React.FC<{
-    pathName: string
-    paramsId: string
     condition: () => condisions
     rootPath: rootPath
-}> = memo(({ pathName, paramsId, condition, rootPath }) => {
+}> = memo(({ condition, rootPath }) => {
     const router = useRouter()
+
     const HanderBtn = {
         Back: () => {
-            const pathRevert = {
-                [`${routers(rootPath).detailMywork.path({
-                    id: `${paramsId}`
-                })}`]: routers(rootPath).mywork.path
+            if (
+                condition().pagemywork.isDetailMyorkpath ||
+                condition().pagemywork.isAppRoverPath
+            ) {
+                router.push(routers(rootPath).mywork.path)
             }
-            router.push(pathRevert[pathName])
         },
         Remove: () => {}
     }
     const HandleClick = () => {
-        if (condition().pagemywork.isDetailMyorkpath) {
+        if (
+            condition().pagemywork.isDetailMyorkpath ||
+            condition().pagemywork.isAppRoverPath
+        ) {
             HanderBtn.Back()
         }
         if (condition().pagemywork.isMyworkpath) {
             HanderBtn.Remove()
         }
     }
-    const icon = condition().pagemywork.isDetailMyorkpath
-        ? faLongArrowAltLeft
-        : faTrashAlt
+    const icon =
+        condition().pagemywork.isDetailMyorkpath ||
+        condition().pagemywork.isAppRoverPath
+            ? faLongArrowAltLeft
+            : faTrashAlt
     return (
         <Button onClick={HandleClick} type="primary">
             <FontAwesomeIcon className="mr-2" icon={icon} />
-            {condition().pagemywork.isDetailMyorkpath ? "Quay lại" : "error"}
+            {condition().pagemywork.isDetailMyorkpath ||
+            condition().pagemywork.isAppRoverPath
+                ? "Quay lại"
+                : "error"}
         </Button>
     )
 })
@@ -233,12 +245,11 @@ const Filter = ({ rootPath }: { rootPath: rootPath }) => {
                 )}
             </Col>
             <Col span={4}>
-                {condition.pagemywork.isDetailMyorkpath && (
+                {(condition.pagemywork.isDetailMyorkpath ||
+                    condition.pagemywork.isAppRoverPath) && (
                     <div className="flex justify-end">
                         <CustomBtn
                             rootPath={rootPath}
-                            paramsId={params?.id}
-                            pathName={pathName}
                             condition={cusTomCondition}
                         />
                     </div>

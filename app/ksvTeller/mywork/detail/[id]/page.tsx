@@ -22,6 +22,7 @@ const fetchApi = cache(async (idAppointMent: string) => {
 })
 const DetailMyWork = async ({ params }: { params: { id: string } }) => {
     const data = await fetchApi(params.id)
+    console.log("data", data)
     return <TemlateWrapper />
 }
 

@@ -1,7 +1,13 @@
 "use client"
 import React, { createContext } from "react"
+export type choosenBlock = {
+    name: string
+    location: string
+    ozrRepository: string
+    idTemplate: string
+}
 export type changeBlock = {
-    choosenBlock: { name?: string; location?: string; ozrRepository?: string }[]
+    choosenBlock: choosenBlock[]
     changeBlock: number
 }
 export type dataGlobal = {

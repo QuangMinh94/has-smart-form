@@ -1,17 +1,17 @@
 import { ReactNode } from "react"
+export interface block {
+    name: string
+    location: string
+    ozrRepository: string
+    _id: string
+}
 export interface formTemplate {
     _id?: string
     name?: string
     code?: string
     createdDate?: string
     creator?: string
-    block?: {
-        name: string
-        location: string
-        ozrRepository: string
-        _id: string
-    }[]
-
+    block?: block[]
     updatedDate?: string
     validFrom?: string
     validTo: string

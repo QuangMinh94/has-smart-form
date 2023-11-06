@@ -10,7 +10,7 @@ import LayoutTranfer from "./CustomTranfDrag/LayoutTranfer"
 import { DataTranfer } from "@/app/(types)/typeDataTranfe"
 import { EformList } from "@/app/(types)/EformList"
 import Loading from "@/app/teller/mywork/loading"
-import SelectEproduct from "../../customSelect/SelectEproduct"
+import SelectEproduct from "../../customSelect/SelectEproductTree"
 import HeaderUi from "../Detail/HeaderUiContent"
 interface DataTranfeCustom extends DataTranfer {
     repository: string
@@ -29,7 +29,7 @@ const DetailFormUser = () => {
     useEffect(() => {
         setListRight([])
     }, [])
-   
+
     return (
         <LayoutTranfer
             ColLeft={
