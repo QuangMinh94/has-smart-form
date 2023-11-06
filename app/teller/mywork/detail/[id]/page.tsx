@@ -17,6 +17,7 @@ const fetchApi = cache(async (idAppointMent: string) => {
 
         return res.data
     } catch (e: any) {
+        console.log("err", e)
         throw new Error("error")
     }
 })
