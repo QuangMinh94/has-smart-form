@@ -11,31 +11,31 @@ import { NextResponse } from "next/server"
 export default withAuth(function middleware(request: NextRequestWithAuth) {
     const token = request.nextauth.token
     const pathName = request?.nextUrl?.pathname
-    // if (!pathName.includes("signin")) {
-    //     if (token) {
-    //         const role = token.role
-    //         if (role) {
-    //             if (
-    //                 !pathName
-    //                     .toLowerCase()
-    //                     .includes((role as string).toLowerCase())
-    //             ) {
-    //                 return NextResponse.redirect(
-    //                     new URL(
-    //                         `/${(role as string).toLowerCase()}`,
-    //                         request.url
-    //                     )
-    //                 )
-    //             }
-    //         } else {
-    //             return NextResponse.redirect(
-    //                 new URL("/auth/signin", request.url)
-    //             )
-    //         }
-    //     } else {
-    //         return NextResponse.redirect(new URL("/auth/signin", request.url))
-    //     }
-    // }
+    if (!pathName.includes("signin")) {
+        if (token) {
+            const role = token.role
+            if (role) {
+                if (
+                    !pathName
+                        .toLowerCase()
+                        .includes((role as string).toLowerCase())
+                ) {
+                    return NextResponse.redirect(
+                        new URL(
+                            `/${(role as string).toLowerCase()}`,
+                            request.url
+                        )
+                    )
+                }
+            } else {
+                return NextResponse.redirect(
+                    new URL("/auth/signin", request.url)
+                )
+            }
+        } else {
+            return NextResponse.redirect(new URL("/auth/signin", request.url))
+        }
+    }
 })
 
 export const config = {
