@@ -4,59 +4,90 @@ import dynamic from "next/dynamic"
 import { Button, Flex } from "antd"
 import delay from "delay"
 import { formTemplate } from "@/app/(types)/eProduct"
+import { myWork, eFormTask } from "@/app/(types)/teller/mywork"
 import { choosenBlock } from "@/app/teller/(components)/context"
 import { block } from "@/app/(types)/eProduct"
 import { DefaultParams } from "@/components/OzViewer"
-
+import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
 })
 type Props = {
-    EformTemplate: formTemplate[]
+    mywork: myWork
 }
-const Approver: React.FC<Props> = ({ EformTemplate }) => {
+const Approver: React.FC<Props> = ({ mywork }) => {
     const [keyOZviewr, setKeyOZviewr] = useState<number>(0)
     const resetEForm = () => {
         setKeyOZviewr(Math.random())
     }
-    console.log("EformTemplate", EformTemplate)
+    const HandelerPreview = async (listRight: DataTranfeCustom[]) => {
+        resetEForm()
+        await delay(2000)
+        const choosenBlock: choosenBlock[] = []
+
+        listRight.forEach((element) => {
+            let count = 0
+            element.block.forEach((block: block) => {
+                choosenBlock.push({
+                    name: block.name,
+                    location: count.toString(),
+                    ozrRepository: block.ozrRepository,
+                    idTemplate: element?.id
+                })
+            })
+        })
+
+        const oz = document.getElementById("OZViewer")
+        for (let i = choosenBlock.length - 1; i >= 0; i--) {
+            const block = choosenBlock[i]
+            oz!.CreateReportEx(
+                DefaultParams(
+                    process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                    "/" + block.ozrRepository + "/" + block.name,
+                    block.name
+                ),
+                ";"
+            )
+        }
+    }
     useEffect(() => {
-        const LoadEfrom = async () => {
-            if (EformTemplate.length > 0) {
-                resetEForm()
-                await delay(2000)
-                const choosenBlock: choosenBlock[] = []
-
-                EformTemplate.forEach((element) => {
-                    let count = 0
-                    const blocks = element?.block ?? []
-                    blocks.forEach((block: block) => {
-                        choosenBlock.push({
-                            name: block.name,
-                            location: count.toString(),
-                            ozrRepository: block.ozrRepository,
-                            idTemplate: element?._id ?? ""
-                        })
-                    })
+        const cusTomerFormtemplate = (
+            EformTask: eFormTask[]
+        ): formTemplate[] => {
+            const check: any = {}
+            const formTemplate: formTemplate[] = []
+            EformTask.forEach((task) => {
+                if (!check[`${task?.formTemplate?._id}`]) {
+                    formTemplate.push(task.formTemplate)
+                }
+                check[`${task?.formTemplate?._id}`] = true
+            })
+            return formTemplate
+        }
+        const CustomerListRight = (
+            formTemplate: formTemplate[]
+        ): DataTranfeCustom[] => {
+            const dataListRight: DataTranfeCustom[] = []
+            formTemplate.forEach((tempalate) => {
+                dataListRight.push({
+                    id: tempalate?._id ?? "",
+                    name: tempalate?.name ?? "",
+                    checkBox: false,
+                    block: tempalate.block ?? []
                 })
+            })
 
-                const oz = document.getElementById("OZViewer")
-                console.log(choosenBlock)
-                choosenBlock.forEach((block) => {
-                    oz!.CreateReportEx(
-                        DefaultParams(
-                            process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                            "/" + block.ozrRepository + "/" + block.name,
-                            block.name
-                        ),
-                        ";"
-                    )
-                    //oz!.Script("refresh")
-                })
+            return dataListRight
+        }
+        const GetEform = () => {
+            const formTemplate = cusTomerFormtemplate(mywork.eformTask)
+            const listRight = CustomerListRight(formTemplate)
+            if (listRight.length > 0) {
+                HandelerPreview(listRight)
             }
         }
-        LoadEfrom()
+        GetEform()
     }, [])
     return (
         <div>

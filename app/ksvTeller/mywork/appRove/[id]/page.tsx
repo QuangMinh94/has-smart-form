@@ -6,20 +6,29 @@ import { authOptions } from "@/app/api/auth/authOptions"
 import { cookies } from "next/headers"
 import { GetProduct } from "@/app/(service)/eProduct"
 import { eProduct } from "@/app/(types)/eProduct"
-const fetchApi = cache(async (idEproduct: string): Promise<eProduct[]> => {
+import { myWork } from "@/app/(types)/teller/mywork"
+import {
+    viewAppointMent,
+    seacrhAppointMent
+} from "@/app/(service)/appointments"
+const fetchApi = cache(async (codeAppointMent: string): Promise<myWork[]> => {
     try {
         const cookie = cookies()
         const session = await getServerSession(authOptions)
-        // const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
-        const res = await GetProduct({
-            bodyRequest: { _id: idEproduct },
+        const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
+        const res = await seacrhAppointMent({
+            bodyRequest: {
+                appointmentCode: codeAppointMent,
+                userRole: idRole
+            },
             session: cookie.get("session")?.value ?? "",
             token: cookie.get("token")?.value ?? ""
         })
 
         return res.data
     } catch (e: any) {
-        throw new Error(e)
+        console.log("err", e)
+        throw new Error("error")
     }
 })
 const KsvTellerPage = async ({
@@ -29,10 +38,11 @@ const KsvTellerPage = async ({
     params: { id: string }
     searchParams: { code: string }
 }) => {
-    console.log("searchParams", searchParams)
-    // const [idAppoinment, idEproduct] = params.id
-    // const eProducts = await fetchApi(idEproduct)
-    // const eProduct = eProducts.find((eProduct) => eProduct._id === idEproduct)
-    return <Approver EformTemplate={[]} />
+    const data = await fetchApi(searchParams.code)
+    const findMyMork = data.find(
+        (item) => item.appointmentCode === searchParams.code
+    )
+    console.log(findMyMork)
+    return <Approver mywork={findMyMork!} />
 }
 export default KsvTellerPage

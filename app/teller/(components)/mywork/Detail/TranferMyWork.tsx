@@ -37,7 +37,7 @@ const DetailFormUser = () => {
                     HidenUI={<HeaderUi />}
                     setChangeListFilter={setChangeListFilter}
                     ChangeListFilter={ChangeListFilter}
-                    title="Danh sách block"
+                    title="Danh sách biểu mẫu"
                     type={"left"}
                     setList={setListLeft}
                     list={listLeft}
@@ -56,7 +56,7 @@ const DetailFormUser = () => {
             }
             ColRight={
                 <Container
-                    title="Block được chọn"
+                    title="Biểu mẫu được chọn"
                     type="right"
                     setChangeListFilter={setChangeListFilter}
                     ChangeListFilter={ChangeListFilter}
