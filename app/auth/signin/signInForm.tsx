@@ -3,7 +3,7 @@
 import { Permission } from "@/app/(types)/Permission"
 import { Users } from "@/app/(types)/Users"
 import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
-import { Button, Col, Flex, Form, Input, Row } from "antd"
+import { Button, Col, Flex, Form, Input, Row, Spin } from "antd"
 import { signIn, useSession } from "next-auth/react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -18,8 +18,10 @@ const SigninForm = () => {
     //const router = useRouter()
     const [error, setError] = useState("")
     const { data: session } = useSession()
+    const [loading, setLoading] = useState(false)
     const router = useRouter()
     const onFinish = async (values: any) => {
+        setLoading(true)
         const signInResponse = await signIn("credentials", {
             username: values.username,
             password: values.password,
@@ -32,6 +34,7 @@ const SigninForm = () => {
             } else {
                 setError("Sai username hoặc mật khẩu")
             }
+            setLoading(false)
         }
     }
 
@@ -48,6 +51,7 @@ const SigninForm = () => {
             } else {
                 router.replace("/bu/mywork")
             }
+            setLoading(false)
         }
     }, [session])
 
@@ -144,16 +148,23 @@ const SigninForm = () => {
                             >
                                 <Input.Password style={{ width: "100%" }} />
                             </Form.Item>
-                            <Form.Item>
-                                <Button
-                                    type="primary"
-                                    className="bg-blue-500"
-                                    htmlType="submit"
-                                    style={{ width: "100%" }}
-                                >
-                                    Chuyên viên đăng nhập
-                                </Button>
-                            </Form.Item>
+                            {loading ? (
+                                <center>
+                                    <Spin />
+                                </center>
+                            ) : (
+                                <Form.Item>
+                                    <Button
+                                        type="primary"
+                                        className="bg-blue-500"
+                                        htmlType="submit"
+                                        style={{ width: "100%" }}
+                                    >
+                                        Chuyên viên đăng nhập
+                                    </Button>
+                                </Form.Item>
+                            )}
+
                             <br />
                             <center>
                                 <div className="text-red-600">{error}</div>
