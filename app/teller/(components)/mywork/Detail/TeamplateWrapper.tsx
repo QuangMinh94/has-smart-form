@@ -3,6 +3,12 @@ import { addEformTask } from "@/app/(service)/addEformTasks"
 import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
 import { DefaultParams } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+<<<<<<< HEAD
+=======
+
+import { block } from "@/app/(types)/eProduct"
+import { choosenBlock } from "@/app/teller/(components)/context"
+>>>>>>> 88ea67e999dea6af2349da253b94b7630bddc21a
 import { message } from "antd"
 import delay from "delay"
 import { useCookies } from "next-client-cookies"
@@ -13,11 +19,15 @@ import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
 import TranferMyWork from "./TranferMyWork"
+<<<<<<< HEAD
 import { block } from "@/app/(types)/eProduct"
 import { choosenBlock } from "@/app/teller/(components)/context"
 import { myWork, eFormTask } from "@/app/(types)/teller/mywork"
 import { formTemplate } from "@/app/(types)/eProduct"
 import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
+=======
+
+>>>>>>> 88ea67e999dea6af2349da253b94b7630bddc21a
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
@@ -139,7 +149,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 var inputdatas = JSON.parse(
                     oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
                 )
-                if (type === "SAVE") {
+                /* if (type === "SAVE") {
                     //get number of reports
                     const numOfReport: number =
                         oz.GetInformation("REPORT_COUNT")
@@ -163,7 +173,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                     numberArray.forEach((element) => {
                         oz.ReBind(element, "report", params, ";")
                     })
-                }
+                } */
 
                 console.log("My data where", inputdatas)
                 console.log("chossenBlock", choosenBlock?.choosenBlock)
@@ -208,7 +218,12 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         //rebind the data
         //get number of reports
         const oz = document.getElementById("OZViewer")
+
         if (oz) {
+            /*  const inputdatas = JSON.parse(
+                oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
+            )
+            console.log("Input ye", inputdatas) */
             const numOfReport: number = oz.GetInformation("REPORT_COUNT")
 
             //get report index

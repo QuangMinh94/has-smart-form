@@ -1,11 +1,11 @@
 "use client"
-import React, { useMemo } from "react"
-import { Button } from "antd"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
-    faChevronRight,
-    faChevronLeft
+    faChevronLeft,
+    faChevronRight
 } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Button, Flex } from "antd"
+import React, { useMemo } from "react"
 type Props = {
     listLeft: any[]
     listRight: any[]
@@ -58,7 +58,7 @@ const ButtonLeftandRight: React.FC<Props> = ({
         return !listRight.some((item) => item?.checkBox)
     }, [listRight])
     return (
-        <>
+        <Flex vertical align="center" justify="center">
             <Button
                 style={{ marginBottom: "6px" }}
                 onClick={() => HandlerAdditem("addRight")}
@@ -72,7 +72,7 @@ const ButtonLeftandRight: React.FC<Props> = ({
             >
                 <FontAwesomeIcon icon={faChevronLeft} />
             </Button>
-        </>
+        </Flex>
     )
 }
 export default ButtonLeftandRight
