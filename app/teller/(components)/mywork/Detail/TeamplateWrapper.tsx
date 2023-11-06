@@ -1,10 +1,4 @@
 "use client"
-import { message } from "antd"
-import dynamic from "next/dynamic"
-import React, { useState } from "react"
-import { DndProvider } from "react-dnd"
-import { HTML5Backend } from "react-dnd-html5-backend"
-import { useParams } from "next/navigation"
 import { addEformTask } from "@/app/(service)/addEformTasks"
 import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
 import { DefaultParams } from "@/components/OzViewer"
@@ -12,6 +6,11 @@ import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 
 import delay from "delay"
 import { useCookies } from "next-client-cookies"
+import dynamic from "next/dynamic"
+import { useParams } from "next/navigation"
+import React, { useState } from "react"
+import { DndProvider } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
 import TranferMyWork from "./TranferMyWork"
 import { block } from "@/app/(types)/eProduct"
@@ -155,6 +154,34 @@ const TemlateWrapper: React.FC = () => {
         }
     }
 
+    const onSync = () => {
+        //rebind the data
+        //get number of reports
+        const oz = document.getElementById("OZViewer")
+        if (oz) {
+            const numOfReport: number = oz.GetInformation("REPORT_COUNT")
+
+            //get report index
+            const currentReportIndex: number = oz.GetInformation(
+                "CURRENT_REPORT_INDEX"
+            )
+
+            //create the array with length of number of reports,exclude the currentReportIndex
+            const numberArray: number[] = []
+            for (let i = 0; i < numOfReport; i++) {
+                if (i !== currentReportIndex) numberArray.push(i)
+            }
+
+            //get input json of current report and sync with other reports
+            const input_data_current = oz.GetInformation("INPUT_JSON")
+
+            const params = "connection.inputjson=" + input_data_current + ";"
+            numberArray.forEach((element) => {
+                oz.ReBind(element, "report", params, ";")
+            })
+        }
+    }
+
     return (
         <div>
             {contextHolder}
@@ -167,6 +194,7 @@ const TemlateWrapper: React.FC = () => {
                         onPreview={onPreview}
                         onSave={onSave}
                         onSubmit={onSubmit}
+                        onSync={onSync}
                     />
                 </div>
                 <OzViewer viewerKey={viewerKey} />
