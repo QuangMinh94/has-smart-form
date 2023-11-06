@@ -19,7 +19,7 @@ const ButtonApprove: React.FC<Props> = ({ content, data }) => {
             onClick={() => {
                 router.push(
                     routers("ksvTeller").appRove.path({ id: data?._id ?? "" }) +
-                        `/${data?.eProduct?._id}`
+                        `?code=${data?.appointmentCode}`
                 )
             }}
             className="font-semibold cursor-pointer hover:brightness-150"

@@ -8,7 +8,7 @@ import { OptionTree, block } from "@/app/(types)/eProduct"
 import { DataTranfer } from "@/app/(types)/typeDataTranfe"
 import { uniqueValue } from "@/app/(utilities)/ArrayUtilities"
 
-interface DataTranfeCustom extends DataTranfer {
+export interface DataTranfeCustom extends DataTranfer {
     block: block[]
 }
 const HeaderUi = () => {
@@ -20,7 +20,7 @@ const HeaderUi = () => {
             setListLeft([])
         }
 
-        console.log(info)
+        console.log("info", info)
         const dataListLeft: DataTranfeCustom[] = []
         info.formTemplate.forEach((tempalate) => {
             dataListLeft.push({
