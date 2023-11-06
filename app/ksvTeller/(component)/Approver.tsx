@@ -7,7 +7,7 @@ import { formTemplate } from "@/app/(types)/eProduct"
 import { choosenBlock } from "@/app/teller/(components)/context"
 import { block } from "@/app/(types)/eProduct"
 import { DefaultParams } from "@/components/OzViewer"
-import Signature from "./Signature"
+
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
@@ -66,7 +66,6 @@ const Approver: React.FC<Props> = ({ EformTemplate }) => {
                     Not Approve
                 </Button>
             </Flex>
-            <Signature />
             <OzViewer viewerKey={keyOZviewr} />
         </div>
     )
