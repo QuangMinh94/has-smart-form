@@ -1,20 +1,13 @@
 "use client"
 import React, { useEffect } from "react"
-import { useQuery } from "@tanstack/react-query"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
-import axios from "axios"
 import "@/public/css/myWork/detailMyWork.css"
 import Container from "./CustomTranfDrag/Container"
 import ButtonLeftandRight from "./CustomTranfDrag/ButtonCusTom"
 import LayoutTranfer from "./CustomTranfDrag/LayoutTranfer"
-import { DataTranfer } from "@/app/(types)/typeDataTranfe"
-import { EformList } from "@/app/(types)/EformList"
-import Loading from "@/app/teller/mywork/loading"
-import SelectEproduct from "../../customSelect/SelectEproductTree"
+
 import HeaderUi from "../Detail/HeaderUiContent"
-interface DataTranfeCustom extends DataTranfer {
-    repository: string
-}
+
 const DetailFormUser = () => {
     const {
         listLeft,

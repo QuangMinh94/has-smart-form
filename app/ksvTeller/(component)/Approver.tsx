@@ -5,9 +5,12 @@ import { Button, Flex } from "antd"
 import delay from "delay"
 import { formTemplate } from "@/app/(types)/eProduct"
 import { myWork, eFormTask } from "@/app/(types)/teller/mywork"
-import { choosenBlock } from "@/app/teller/(components)/context"
+import {
+    choosenBlockcustom,
+    DefaultParamsInput
+} from "@/app/teller/(components)/mywork/Detail/TeamplateWrapper"
 import { block } from "@/app/(types)/eProduct"
-import { DefaultParams } from "@/components/OzViewer"
+
 import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
@@ -22,9 +25,16 @@ const Approver: React.FC<Props> = ({ mywork }) => {
         setKeyOZviewr(Math.random())
     }
     const HandelerPreview = async (listRight: DataTranfeCustom[]) => {
+        const eformTaskOBJ: any = {}
+
+        mywork.eformTask.forEach((eformTask) => {
+            eformTaskOBJ[
+                `${eformTask?.data?.ReportDisplayName}${eformTask.formTemplate._id}`
+            ] = eformTask.data
+        })
         resetEForm()
         await delay(2000)
-        const choosenBlock: choosenBlock[] = []
+        const choosenBlock: choosenBlockcustom[] = []
 
         listRight.forEach((element) => {
             let count = 0
@@ -33,7 +43,10 @@ const Approver: React.FC<Props> = ({ mywork }) => {
                     name: block.name,
                     location: count.toString(),
                     ozrRepository: block.ozrRepository,
-                    idTemplate: element?.id
+                    idTemplate: element?.id,
+                    Input: JSON.stringify(
+                        eformTaskOBJ[`${block?.name}${element?.id}`]?.Input
+                    )
                 })
             })
         })
@@ -42,10 +55,11 @@ const Approver: React.FC<Props> = ({ mywork }) => {
         for (let i = choosenBlock.length - 1; i >= 0; i--) {
             const block = choosenBlock[i]
             oz!.CreateReportEx(
-                DefaultParams(
+                DefaultParamsInput(
                     process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                     "/" + block.ozrRepository + "/" + block.name,
-                    block.name
+                    block.name,
+                    block.Input
                 ),
                 ";"
             )
@@ -83,6 +97,7 @@ const Approver: React.FC<Props> = ({ mywork }) => {
         const GetEform = () => {
             const formTemplate = cusTomerFormtemplate(mywork.eformTask)
             const listRight = CustomerListRight(formTemplate)
+
             if (listRight.length > 0) {
                 HandelerPreview(listRight)
             }

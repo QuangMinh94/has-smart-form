@@ -42,7 +42,7 @@ const KsvTellerPage = async ({
     const findMyMork = data.find(
         (item) => item.appointmentCode === searchParams.code
     )
-    console.log(findMyMork)
+
     return <Approver mywork={findMyMork!} />
 }
 export default KsvTellerPage

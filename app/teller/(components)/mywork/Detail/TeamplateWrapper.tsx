@@ -22,6 +22,10 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
 })
+export interface choosenBlockcustom extends choosenBlock {
+    Input: any
+}
+
 type Props = { mywork: myWork }
 const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const cookies = useCookies()
@@ -33,40 +37,6 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         useContextMyWorkDetail()
     const resetEForm = () => {
         setViewerKey(Math.random())
-    }
-    const HandelerPreview = async (listRight: DataTranfeCustom[]) => {
-        resetEForm()
-        await delay(2000)
-        const choosenBlock: choosenBlock[] = []
-
-        listRight.forEach((element) => {
-            let count = 0
-            element.block.forEach((block: block) => {
-                choosenBlock.push({
-                    name: block.name,
-                    location: count.toString(),
-                    ozrRepository: block.ozrRepository,
-                    idTemplate: element?.id
-                })
-            })
-        })
-
-        const oz = document.getElementById("OZViewer")
-        for (let i = choosenBlock.length - 1; i >= 0; i--) {
-            const block = choosenBlock[i]
-            oz!.CreateReportEx(
-                DefaultParams(
-                    process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                    "/" + block.ozrRepository + "/" + block.name,
-                    block.name
-                ),
-                ";"
-            )
-        }
-        setChoosenBlock({
-            choosenBlock: choosenBlock,
-            changeBlock: 0
-        })
     }
 
     useEffect(() => {
@@ -98,19 +68,94 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             setListRight(dataListRight)
             return dataListRight
         }
-        const GetEform = () => {
+        const GetEform = async () => {
             const formTemplate = cusTomerFormtemplate(mywork.eformTask)
             const listRight = CustomerListRight(formTemplate)
+            const eformTaskOBJ: any = {}
+
+            mywork.eformTask.forEach((eformTask) => {
+                eformTaskOBJ[
+                    `${eformTask?.data?.ReportDisplayName}${eformTask.formTemplate._id}`
+                ] = eformTask.data
+            })
+
             if (listRight.length > 0) {
-                HandelerPreview(listRight)
+                resetEForm()
+                await delay(2000)
+                const choosenBlock: choosenBlockcustom[] = []
+
+                listRight.forEach((element) => {
+                    let count = 0
+                    element.block.forEach((block: block) => {
+                        choosenBlock.push({
+                            name: block.name,
+                            location: count.toString(),
+                            ozrRepository: block.ozrRepository,
+                            idTemplate: element?.id,
+                            Input: JSON.stringify(
+                                eformTaskOBJ[`${block?.name}${element?.id}`]
+                                    ?.Input
+                            )
+                        })
+                    })
+                })
+                console.log("choosenBlock", choosenBlock)
+                const oz = document.getElementById("OZViewer")
+                for (let i = choosenBlock.length - 1; i >= 0; i--) {
+                    const block = choosenBlock[i]
+                    oz!.CreateReportEx(
+                        DefaultParamsInput(
+                            process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                            "/" + block.ozrRepository + "/" + block.name,
+                            block.name,
+                            block.Input
+                        ),
+                        ";"
+                    )
+                }
+                setChoosenBlock({
+                    choosenBlock: choosenBlock,
+                    changeBlock: 0
+                })
             }
         }
         GetEform()
     }, [])
 
-    const onPreview = () => {
+    const onPreview = async () => {
         if (listRight.length > 0) {
-            HandelerPreview(listRight)
+            resetEForm()
+            await delay(2000)
+            const choosenBlock: choosenBlock[] = []
+
+            listRight.forEach((element) => {
+                let count = 0
+                element.block.forEach((block: block) => {
+                    choosenBlock.push({
+                        name: block.name,
+                        location: count.toString(),
+                        ozrRepository: block.ozrRepository,
+                        idTemplate: element?.id
+                    })
+                })
+            })
+
+            const oz = document.getElementById("OZViewer")
+            for (let i = choosenBlock.length - 1; i >= 0; i--) {
+                const block = choosenBlock[i]
+                oz!.CreateReportEx(
+                    DefaultParams(
+                        process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                        "/" + block.ozrRepository + "/" + block.name,
+                        block.name
+                    ),
+                    ";"
+                )
+            }
+            setChoosenBlock({
+                choosenBlock: choosenBlock,
+                changeBlock: 0
+            })
         } else {
             messageApi.error("Please choose at least 1 block")
         }
@@ -129,7 +174,8 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         setLoading(true)
         HandlerActionEform("SAVE")
     }
-
+    const oz = document.getElementById("OZViewer")
+    console.log("oz", oz)
     const HandlerActionEform = async (type: "SAVE" | "SUBMIT") => {
         try {
             const oz = document.getElementById("OZViewer")
@@ -139,31 +185,6 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 var inputdatas = JSON.parse(
                     oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
                 )
-                /* if (type === "SAVE") {
-                    //get number of reports
-                    const numOfReport: number =
-                        oz.GetInformation("REPORT_COUNT")
-
-                    //get report index
-                    const currentReportIndex: number = oz.GetInformation(
-                        "CURRENT_REPORT_INDEX"
-                    )
-
-                    //create the array with length of number of reports,exclude the currentReportIndex
-                    const numberArray: number[] = []
-                    for (let i = 0; i < numOfReport; i++) {
-                        if (i !== currentReportIndex) numberArray.push(i)
-                    }
-
-                    //get input json of current report and sync with other reports
-                    const input_data_current = oz.GetInformation("INPUT_JSON")
-
-                    const params =
-                        "connection.inputjson=" + input_data_current + ";"
-                    numberArray.forEach((element) => {
-                        oz.ReBind(element, "report", params, ";")
-                    })
-                } */
 
                 console.log("My data where", inputdatas)
                 console.log("chossenBlock", choosenBlock?.choosenBlock)
@@ -257,5 +278,26 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         </div>
     )
 }
-
+export const DefaultParamsInput = (
+    url: string,
+    reportName: string,
+    displayname: string,
+    inputJson: string = "",
+    index: string = "0"
+) => {
+    return `connection.servlet=${url};
+connection.reportname=${reportName};
+global.concatthumbnail=true;
+connection.refreshperiod=1;
+viewer.createreport_doc_index=${index};
+    global.concatpreview=false;
+    viewer.showtab=true;
+    connection.displayname=${displayname};
+    connection.inputjson=${inputJson};
+    viewer.thumbnailsection_showclosebutton=true;
+    information.debug=true;
+    eform.signpad_zoom=50;
+    eform.signpad_type=dialog;
+    viewer.reportchangecommand=true;`
+}
 export default TemlateWrapper

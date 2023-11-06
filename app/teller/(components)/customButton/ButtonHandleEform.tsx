@@ -20,41 +20,41 @@ const CustomButtonGroup = ({
             <Flex justify="flex-end" gap={10}>
                 <Button
                     loading={loading}
-                    className="w-20"
+                    className="min-w-100"
                     type="primary"
                     onClick={onPreview}
                 >
-                    Preview
+                    Xem trước
                 </Button>
             </Flex>
             <Flex justify="flex-end" gap={10} className="mt-5">
-                <Button className="w-20" type="primary" onClick={onSync}>
-                    Sync
+                <Button className="min-w-100" type="primary" onClick={onSync}>
+                    Đồng bộ
                 </Button>
-                  <Button
+                <Button
                     loading={loading}
-                    className="w-20"
+                    className="min-w-100"
                     type="primary"
                     onClick={onSubmit}
                 >
-                    Submit
+                    Nộp
                 </Button>
                 <Button
                     loading={loading}
-                    className="w-20"
+                    className="min-w-100"
                     type="primary"
                     onClick={onSave}
                 >
-                    Save
+                    Lưu
                 </Button>
                 <Button
-                    className="w-20"
+                    className="min-w-100"
                     danger
                     type="primary"
                     onClick={onCancel}
                     loading={loading}
                 >
-                    Cancel
+                    Hủy
                 </Button>
             </Flex>
         </Flex>

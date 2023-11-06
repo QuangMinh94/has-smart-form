@@ -165,7 +165,7 @@ const MyDropTarget: React.FC<typeProps> = ({
                                 list.every((item) => !!item?.checkBox)
                             }
                         >
-                            Check All
+                            Chọn toàn bộ
                         </Checkbox>
                     </div>
                 </div>
