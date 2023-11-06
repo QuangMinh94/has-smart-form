@@ -66,6 +66,7 @@ const fetchApi = cache(
 
             return res.data
         } catch (e: any) {
+            console.log("loi", e)
             throw new Error("error fetching", e)
         }
     }
