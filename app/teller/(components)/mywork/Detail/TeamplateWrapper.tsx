@@ -8,67 +8,113 @@ import delay from "delay"
 import { useCookies } from "next-client-cookies"
 import dynamic from "next/dynamic"
 import { useParams } from "next/navigation"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
 import TranferMyWork from "./TranferMyWork"
 import { block } from "@/app/(types)/eProduct"
 import { choosenBlock } from "@/app/teller/(components)/context"
+import { myWork, eFormTask } from "@/app/(types)/teller/mywork"
+import { formTemplate } from "@/app/(types)/eProduct"
+import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
 })
-
-const TemlateWrapper: React.FC = () => {
+type Props = { mywork: myWork }
+const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const cookies = useCookies()
     const params = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [messageApi, contextHolder] = message.useMessage()
     const [viewerKey, setViewerKey] = useState<number>(0)
-    const { listRight, setChoosenBlock, choosenBlock } =
+    const { listRight, setChoosenBlock, choosenBlock, setListRight } =
         useContextMyWorkDetail()
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
-    const onPreview = async () => {
-        if (listRight.length > 0) {
-            resetEForm()
-            await delay(2000)
-            const choosenBlock: choosenBlock[] = []
+    const HandelerPreview = async (listRight: DataTranfeCustom[]) => {
+        resetEForm()
+        await delay(2000)
+        const choosenBlock: choosenBlock[] = []
 
-            listRight.forEach((element) => {
-                let count = 0
-                element.block.forEach((block: block) => {
-                    choosenBlock.push({
-                        name: block.name,
-                        location: count.toString(),
-                        ozrRepository: block.ozrRepository,
-                        idTemplate: element?.id
-                    })
+        listRight.forEach((element) => {
+            let count = 0
+            element.block.forEach((block: block) => {
+                choosenBlock.push({
+                    name: block.name,
+                    location: count.toString(),
+                    ozrRepository: block.ozrRepository,
+                    idTemplate: element?.id
                 })
             })
+        })
 
-            const oz = document.getElementById("OZViewer")
-            for (let i = choosenBlock.length - 1; i >= 0; i--) {
-                const block = choosenBlock[i]
-                oz!.CreateReportEx(
-                    DefaultParams(
-                        process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                        "/" + block.ozrRepository + "/" + block.name,
-                        block.name
-                    ),
-                    ";"
-                )
-            }
-            setChoosenBlock({
-                choosenBlock: choosenBlock,
-                changeBlock: 0
+        const oz = document.getElementById("OZViewer")
+        for (let i = choosenBlock.length - 1; i >= 0; i--) {
+            const block = choosenBlock[i]
+            oz!.CreateReportEx(
+                DefaultParams(
+                    process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                    "/" + block.ozrRepository + "/" + block.name,
+                    block.name
+                ),
+                ";"
+            )
+        }
+        setChoosenBlock({
+            choosenBlock: choosenBlock,
+            changeBlock: 0
+        })
+    }
+    useEffect(() => {
+        const cusTomerFormtemplate = (
+            EformTask: eFormTask[]
+        ): formTemplate[] => {
+            const check: any = {}
+            const formTemplate: formTemplate[] = []
+            EformTask.forEach((task) => {
+                if (!check[`${task?.formTemplate?._id}`]) {
+                    formTemplate.push(task.formTemplate)
+                }
+                check[`${task?.formTemplate?._id}`] = true
             })
+            return formTemplate
+        }
+        const CustomerListRight = (
+            formTemplate: formTemplate[]
+        ): DataTranfeCustom[] => {
+            const dataListRight: DataTranfeCustom[] = []
+            formTemplate.forEach((tempalate) => {
+                dataListRight.push({
+                    id: tempalate?._id ?? "",
+                    name: tempalate?.name ?? "",
+                    checkBox: false,
+                    block: tempalate.block ?? []
+                })
+            })
+            setListRight(dataListRight)
+            return dataListRight
+        }
+        const GetEform = () => {
+            const formTemplate = cusTomerFormtemplate(mywork.eformTask)
+            const listRight = CustomerListRight(formTemplate)
+            if (listRight.length > 0) {
+                HandelerPreview(listRight)
+            }
+        }
+        GetEform()
+    }, [])
+    const onPreview = () => {
+        if (listRight.length > 0) {
+            HandelerPreview(listRight)
         } else {
             messageApi.error("Please choose at least 1 block")
         }
     }
+    const oz = document.getElementById("OZViewer")
+
     const onCancel = () => {
         resetEForm()
     }
@@ -121,7 +167,7 @@ const TemlateWrapper: React.FC = () => {
                 inputdatas.forEach((inputdata: any, index: number) => {
                     eformTasks.push({
                         data: inputdata,
-                        fromTemplate:
+                        formTemplate:
                             choosenBlock?.choosenBlock?.[index]?.idTemplate ??
                             "",
                         documentId: "test"

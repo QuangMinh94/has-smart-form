@@ -22,10 +22,17 @@ const fetchApi = cache(async (idEproduct: string): Promise<eProduct[]> => {
         throw new Error(e)
     }
 })
-const KsvTellerPage = async ({ params }: { params: { id: string[] } }) => {
-    const [idAppoinment, idEproduct] = params.id
-    const eProducts = await fetchApi(idEproduct)
-    const eProduct = eProducts.find((eProduct) => eProduct._id === idEproduct)
-    return <Approver EformTemplate={eProduct?.formTemplate ?? []} />
+const KsvTellerPage = async ({
+    params,
+    searchParams
+}: {
+    params: { id: string }
+    searchParams: { code: string }
+}) => {
+    console.log("searchParams", searchParams)
+    // const [idAppoinment, idEproduct] = params.id
+    // const eProducts = await fetchApi(idEproduct)
+    // const eProduct = eProducts.find((eProduct) => eProduct._id === idEproduct)
+    return <Approver EformTemplate={[]} />
 }
 export default KsvTellerPage

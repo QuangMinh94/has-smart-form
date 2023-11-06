@@ -1,6 +1,6 @@
 export interface taskEform {
     data: any
-    fromTemplate: string
+    formTemplate: string
     documentId: string
 }
 export interface RequestEformTaks {

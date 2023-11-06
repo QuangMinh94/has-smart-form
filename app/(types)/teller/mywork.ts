@@ -1,5 +1,6 @@
-import { eProduct } from "../eProduct"
+import { eProduct, formTemplate } from "../eProduct"
 import { status } from "../status"
+
 interface eProductforMywork {
     image?: {
         data: string
@@ -16,6 +17,18 @@ interface eProductforMywork {
     type?: string
     children?: eProduct[]
 }
+interface eFormTask {
+    _id: string
+    createdDate: string
+    creator: string
+    data: {
+        ReportDisplayName: string
+        Input: any
+    }
+    formTemplate: formTemplate
+    documentId: string
+    __v: number
+}
 export interface myWork {
     key: string
     _id?: string
@@ -27,4 +40,5 @@ export interface myWork {
     implementer?: string
     appointmentCode: string
     appointmentTime: string
+    eformTask: eFormTask[]
 }

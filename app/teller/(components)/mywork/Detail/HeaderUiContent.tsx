@@ -20,7 +20,7 @@ const HeaderUi = () => {
             setListLeft([])
         }
 
-        console.log(info)
+        console.log("info", info)
         const dataListLeft: DataTranfeCustom[] = []
         info.formTemplate.forEach((tempalate) => {
             dataListLeft.push({
