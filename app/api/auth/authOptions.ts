@@ -1,4 +1,5 @@
 import { Permission } from "@/app/(types)/Permission"
+import { Role } from "@/app/(types)/Role"
 import { Users } from "@/app/(types)/Users"
 import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import axios from "axios"
@@ -64,17 +65,21 @@ export const authOptions: NextAuthOptions = {
             if (user) {
                 const myUser = JSON.parse(JSON.stringify(user)) as Users
                 const permission = myUser.permission as Permission[]
-                const role = FindPermission(permission, "children", "VisibleBU")
+                const role = !FindPermission(
+                    permission,
+                    "children",
+                    "VisibleBU"
+                )
                     ? FindPermission(permission, "children", "VisibleTeller")
                         ? FindPermission(
                               permission,
                               "children",
                               "VisibleCVCTReviewer"
                           )
-                            ? "KSVTELLER"
-                            : "TELLER"
-                        : "BU"
-                    : "TELLER"
+                            ? Role.KSVTELLER
+                            : Role.TELLER
+                        : Role.BU
+                    : Role.BU
                 token.uid = user.token
                 token.name = JSON.stringify(user)
                 token.role = role
@@ -86,6 +91,7 @@ export const authOptions: NextAuthOptions = {
                 //session.user.session = token.name as string
                 session.user.token = token.uid
                 session.user.userInfo = JSON.parse(token.name!)
+                session.user.role = token.role
             }
             return session
         }

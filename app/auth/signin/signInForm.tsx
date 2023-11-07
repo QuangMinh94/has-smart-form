@@ -1,8 +1,5 @@
 "use client"
 
-import { Permission } from "@/app/(types)/Permission"
-import { Users } from "@/app/(types)/Users"
-import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import {
     faEye,
     faEyeSlash,
@@ -49,7 +46,7 @@ const SigninForm = () => {
 
     useEffect(() => {
         if (session) {
-            const userInfo = session.user.userInfo as Users
+            /*    const userInfo = session.user.userInfo as Users
             const permission = userInfo.permission as Permission[]
             if (FindPermission(permission, "children", "VisibleBU")) {
                 router.replace("/bu/mywork")
@@ -60,7 +57,9 @@ const SigninForm = () => {
             } else {
                 router.replace("/bu/mywork")
             }
-            setLoading(false)
+            setLoading(false) */
+            const role = session.user.role
+            router.replace(`/${role.toString().toLowerCase()}`)
         }
     }, [session])
 

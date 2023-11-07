@@ -14,12 +14,13 @@ export default withAuth(function middleware(request: NextRequestWithAuth) {
     if (!pathName.includes("signin")) {
         if (token) {
             const role = token.role
+            let pathList: string[] = pathName.split("/")
+            let lowerPath = pathList.map((element) => {
+                return element.toLowerCase()
+            })
+            //console.log("Path list", role)
             if (role) {
-                if (
-                    !pathName
-                        .toLowerCase()
-                        .includes((role as string).toLowerCase())
-                ) {
+                if (lowerPath.indexOf(role.toString().toLowerCase()) < 0) {
                     return NextResponse.redirect(
                         new URL(
                             `/${(role as string).toLowerCase()}`,
@@ -39,7 +40,7 @@ export default withAuth(function middleware(request: NextRequestWithAuth) {
 })
 
 export const config = {
-    matcher: ["/dashboard", "/bu/:path*", "/teller/:path*"]
+    matcher: ["/dashboard", "/bu/:path*", "/teller/:path*", "/ksvTeller/:path*"]
 }
 
 /* const protectedPaths = ["/dashboard", "/bu"]
