@@ -37,10 +37,10 @@ const CustomButtonGroup = ({
                 "children",
                 "VisibleSubmitButtonGroup"
             ) ? (
-                <Flex className="mb-3" vertical gap={10}>
+                <Flex className="mb-3 mt-3" vertical gap={10}>
                     <Flex justify="flex-end">
                         <Button
-                            className="w-20"
+                            className="w-fit"
                             type="primary"
                             onClick={onPreview}
                             loading={isDisabled}
@@ -50,15 +50,15 @@ const CustomButtonGroup = ({
                     </Flex>
                     <Flex justify="flex-end" gap={10}>
                         <Button
-                            className="w-20"
+                            className="w-fit"
                             type="primary"
                             onClick={onSubmit}
                             loading={isDisabled}
                         >
-                            Chuyển phê duyệt
+                            Nộp
                         </Button>
                         <Button
-                            className="w-20"
+                            className="w-fit"
                             type="primary"
                             onClick={onSave}
                             loading={isDisabled}
@@ -66,7 +66,7 @@ const CustomButtonGroup = ({
                             Lưu
                         </Button>
                         <Button
-                            className="w-20"
+                            className="w-fit"
                             danger
                             type="primary"
                             onClick={onCancel}
