@@ -7,6 +7,7 @@ import ButtonLeftandRight from "./CustomTranfDrag/ButtonCusTom"
 import LayoutTranfer from "./CustomTranfDrag/LayoutTranfer"
 
 import HeaderUi from "../Detail/HeaderUiContent"
+import { list } from "postcss"
 
 const DetailFormUser = () => {
     const {
@@ -20,7 +21,12 @@ const DetailFormUser = () => {
     } = useContextMyWorkDetail()
 
     useEffect(() => {
-        setListRight([])
+        if (listRight.length > 0) {
+            setListRight([])
+        }
+        if (listLeft.length > 0) {
+            setListLeft([])
+        }
     }, [])
 
     return (
