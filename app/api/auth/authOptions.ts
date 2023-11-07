@@ -66,7 +66,13 @@ export const authOptions: NextAuthOptions = {
                 const permission = myUser.permission as Permission[]
                 const role = FindPermission(permission, "children", "VisibleBU")
                     ? FindPermission(permission, "children", "VisibleTeller")
-                        ? "TELLER"
+                        ? FindPermission(
+                              permission,
+                              "children",
+                              "VisibleCVCTReviewer"
+                          )
+                            ? "KSVTELLER"
+                            : "TELLER"
                         : "BU"
                     : "TELLER"
                 token.uid = user.token
