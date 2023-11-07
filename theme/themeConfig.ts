@@ -19,10 +19,16 @@ const theme: ThemeConfig = {
             headerSortActiveBg: "#0E7490",
             headerSortHoverBg: "#0E7490",
             algorithm: true
+        },
+        Form: {
+            labelRequiredMarkColor: "#991B1B",
+            colorError: "#991B1B",
+            itemMarginBottom: 1
         }
     },
     token: {
-        colorPrimary: "#0E7490"
+        colorPrimary: "#0E7490",
+        colorTextPlaceholder: "white"
     }
 }
 
