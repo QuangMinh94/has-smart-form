@@ -45,7 +45,7 @@ const CustomButtonGroup = ({
                             onClick={onPreview}
                             loading={isDisabled}
                         >
-                            Preview
+                            Xem trước
                         </Button>
                     </Flex>
                     <Flex justify="flex-end" gap={10}>
@@ -55,7 +55,7 @@ const CustomButtonGroup = ({
                             onClick={onSubmit}
                             loading={isDisabled}
                         >
-                            Submit
+                            Chuyển phê duyệt
                         </Button>
                         <Button
                             className="w-20"
@@ -63,7 +63,7 @@ const CustomButtonGroup = ({
                             onClick={onSave}
                             loading={isDisabled}
                         >
-                            Save
+                            Lưu
                         </Button>
                         <Button
                             className="w-20"
@@ -72,7 +72,7 @@ const CustomButtonGroup = ({
                             onClick={onCancel}
                             loading={isDisabled}
                         >
-                            Cancel
+                            Hủy
                         </Button>
                     </Flex>
                 </Flex>
@@ -86,7 +86,7 @@ const CustomButtonGroup = ({
                             loading={isDisabled}
                             icon={<FontAwesomeIcon icon={faArrowLeft} />}
                         >
-                            Back
+                            Quay lại
                         </Button>
                     </Flex>
                     <Flex className="mb-3" justify="flex-end" gap={10}>
