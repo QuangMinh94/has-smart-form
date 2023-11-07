@@ -73,8 +73,8 @@ export const DefaultParams = (
     url: string,
     reportName: string,
     displayname: string,
-    index: string = "0",
-    inputJson: string = ""
+    inputJson: string = "",
+    index: string = "0"
 ) => {
     return `connection.servlet=${url};
 connection.reportname=${reportName};

@@ -91,7 +91,7 @@ const SideMenu = ({ children, title }: Props) => {
                 >
                     <ProviderMyworkDetail>
                         <div className="my-6">
-                            <Filter rootPath="ksvTeller" />
+                            <Filter rootPath="ksvteller" />
                         </div>
                         <div>{children}</div>
                     </ProviderMyworkDetail>

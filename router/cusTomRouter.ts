@@ -1,4 +1,4 @@
-export type rootPath = "teller" | "ksvTeller"
+export type rootPath = "teller" | "ksvteller"
 export const APP_ROVE = "appRove"
 export const DE_TAIL = "detail"
 const routers = (root: rootPath) => {

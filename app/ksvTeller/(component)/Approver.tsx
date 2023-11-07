@@ -5,13 +5,12 @@ import { Button, Flex } from "antd"
 import delay from "delay"
 import { formTemplate } from "@/app/(types)/eProduct"
 import { myWork, eFormTask } from "@/app/(types)/teller/mywork"
-import {
-    choosenBlockcustom,
-    DefaultParamsInput
-} from "@/app/teller/(components)/mywork/Detail/TeamplateWrapper"
+import { choosenBlockCustom } from "@/app/teller/(components)/mywork/Detail/TeamplateWrapper"
 import { block } from "@/app/(types)/eProduct"
 
 import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
+import { DefaultParams } from "@/components/OzViewer"
+import ButtonNotApprove from "./BtnNotApproveAndApprove"
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
@@ -25,55 +24,60 @@ const Approver: React.FC<Props> = ({ mywork }) => {
         setKeyOZviewr(Math.random())
     }
     const HandelerPreview = async (listRight: DataTranfeCustom[]) => {
-        const eformTaskOBJ: any = {}
-
-        mywork.eformTask.forEach((eformTask) => {
-            eformTaskOBJ[
-                `${eformTask?.data?.ReportDisplayName}${eformTask.formTemplate._id}`
-            ] = eformTask.data
-        })
+        const eformTaskCheck: any = mywork.eformTask.reduce(
+            (acc: any, item) => {
+                acc[
+                    `${item?.data?.ReportDisplayName}${item?.formTemplate?._id}`
+                ] = item?.data
+                return acc
+            },
+            {}
+        )
         resetEForm()
         await delay(2000)
-        const choosenBlock: choosenBlockcustom[] = []
+        const choosenBlock: choosenBlockCustom[] = []
 
         listRight.forEach((element) => {
             let count = 0
             element.block.forEach((block: block) => {
                 choosenBlock.push({
-                    name: block.name,
-                    location: count.toString(),
-                    ozrRepository: block.ozrRepository,
+                    name: block?.name,
+                    location: count?.toString(),
+                    ozrRepository: block?.ozrRepository,
                     idTemplate: element?.id,
                     Input: JSON.stringify(
-                        eformTaskOBJ[`${block?.name}${element?.id}`]?.Input
+                        eformTaskCheck[`${block?.name}${element?.id}`]?.Input
                     )
                 })
             })
         })
 
         const oz = document.getElementById("OZViewer")
-        for (let i = choosenBlock.length - 1; i >= 0; i--) {
-            const block = choosenBlock[i]
-            oz!.CreateReportEx(
-                DefaultParamsInput(
-                    process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                    "/" + block.ozrRepository + "/" + block.name,
-                    block.name,
-                    block.Input
-                ),
-                ";"
-            )
+        if (oz) {
+            for (let i = choosenBlock.length - 1; i >= 0; i--) {
+                const block = choosenBlock[i]
+                oz.CreateReportEx(
+                    DefaultParams(
+                        process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                        "/" + block?.ozrRepository + "/" + block?.name,
+                        block?.name,
+                        block?.Input
+                    ),
+                    ";"
+                )
+            }
         }
     }
+
     useEffect(() => {
         const cusTomerFormtemplate = (
             EformTask: eFormTask[]
         ): formTemplate[] => {
             const check: any = {}
             const formTemplate: formTemplate[] = []
-            EformTask.forEach((task) => {
+            EformTask?.forEach((task) => {
                 if (!check[`${task?.formTemplate?._id}`]) {
-                    formTemplate.push(task.formTemplate)
+                    formTemplate.push(task?.formTemplate)
                 }
                 check[`${task?.formTemplate?._id}`] = true
             })
@@ -88,7 +92,7 @@ const Approver: React.FC<Props> = ({ mywork }) => {
                     id: tempalate?._id ?? "",
                     name: tempalate?.name ?? "",
                     checkBox: false,
-                    block: tempalate.block ?? []
+                    block: tempalate?.block ?? []
                 })
             })
 
@@ -102,15 +106,16 @@ const Approver: React.FC<Props> = ({ mywork }) => {
                 HandelerPreview(listRight)
             }
         }
-        GetEform()
+        if (mywork?.eformTask && mywork.eformTask.length > 0) {
+            GetEform()
+        }
     }, [])
+
     return (
         <div>
             <Flex justify="flex-end" gap={10} className="mt-10 mb-2">
-                <Button type="primary">Approve</Button>
-                <Button type="primary" danger>
-                    Not Approve
-                </Button>
+                <ButtonNotApprove type="approve" />
+                <ButtonNotApprove type="notApprove" />
             </Flex>
             <OzViewer viewerKey={keyOZviewr} />
         </div>

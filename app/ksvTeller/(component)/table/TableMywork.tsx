@@ -7,7 +7,7 @@ import type { ColumnsType } from "antd/es/table"
 import routers from "@/router/cusTomRouter"
 import { myWork } from "@/app/(types)/teller/mywork"
 import dayjs from "dayjs"
-import ButtonApprove from "@/app/ksvTeller/(component)/ButonApprove"
+import ButtonApprove from "@/app/ksvteller/(component)/ButonApprove"
 import { useRouter } from "next/navigation"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 type Props = {
@@ -16,7 +16,6 @@ type Props = {
 const TableMyWork: React.FC<Props> = ({ data }) => {
     const { setDataGlobal } = useContextMyWorkDetail()
     const router = useRouter()
-    console.log("data", data)
     const CustomClickPath = async (row: myWork) => {
         try {
             setDataGlobal({
@@ -24,7 +23,7 @@ const TableMyWork: React.FC<Props> = ({ data }) => {
                 nameEproduct: row?.eProduct?.name ?? ""
             })
             router.push(
-                `${routers("ksvTeller").detailMywork.path({
+                `${routers("ksvteller").detailMywork.path({
                     id: row?._id ?? ""
                 })}?CCCD=${row?.citizenId}&Name=${row.name}&code=${
                     row.appointmentCode
@@ -102,11 +101,15 @@ const TableMyWork: React.FC<Props> = ({ data }) => {
             dataIndex: "implementer"
         },
         {
+            width: "10%",
             align: "center",
             key: "action",
             title: "Hành Động",
             render: (row: myWork) => (
-                <ButtonApprove data={row} content="Duyệt" />
+                <ButtonApprove
+                    onClick={() => CustomClickPath(row)}
+                    content="Duyệt"
+                />
             )
         }
     ]
