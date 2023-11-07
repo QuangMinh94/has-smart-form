@@ -8,3 +8,9 @@ export interface RequestEformTaks {
     appointment: string
     button: "SAVE" | "SUBMIT" | "CANCEL"
 }
+
+export interface RequestVeRiFyEformTaks {
+    id: string
+    rejectReason?: string
+    button: "SUBMIT" | "REJECT"
+}

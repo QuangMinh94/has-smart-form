@@ -1,5 +1,5 @@
 "use client"
-import { addEformTask } from "@/app/(service)/addEformTasks"
+import { addEformTask } from "@/app/(service)/EformTemplate"
 import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
 import { DefaultParams } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
@@ -22,7 +22,7 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
 })
-export interface choosenBlockcustom extends choosenBlock {
+export interface choosenBlockCustom extends choosenBlock {
     Input: any
 }
 
@@ -62,7 +62,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                     id: tempalate?._id ?? "",
                     name: tempalate?.name ?? "",
                     checkBox: false,
-                    block: tempalate.block ?? []
+                    block: tempalate?.block ?? []
                 })
             })
             setListRight(dataListRight)
@@ -71,18 +71,20 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         const GetEform = async () => {
             const formTemplate = cusTomerFormtemplate(mywork.eformTask)
             const listRight = CustomerListRight(formTemplate)
-            const eformTaskOBJ: any = {}
-
-            mywork.eformTask.forEach((eformTask) => {
-                eformTaskOBJ[
-                    `${eformTask?.data?.ReportDisplayName}${eformTask.formTemplate._id}`
-                ] = eformTask.data
-            })
+            const eformTaskCheck: any = mywork.eformTask.reduce(
+                (acc: any, item) => {
+                    acc[
+                        `${item.data?.ReportDisplayName}${item?.formTemplate._id}`
+                    ] = item.data
+                    return acc
+                },
+                {}
+            )
 
             if (listRight.length > 0) {
                 resetEForm()
                 await delay(2000)
-                const choosenBlock: choosenBlockcustom[] = []
+                const choosenBlock: choosenBlockCustom[] = []
 
                 listRight.forEach((element) => {
                     let count = 0
@@ -93,7 +95,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                             ozrRepository: block.ozrRepository,
                             idTemplate: element?.id,
                             Input: JSON.stringify(
-                                eformTaskOBJ[`${block?.name}${element?.id}`]
+                                eformTaskCheck[`${block?.name}${element?.id}`]
                                     ?.Input
                             )
                         })
@@ -104,7 +106,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 for (let i = choosenBlock.length - 1; i >= 0; i--) {
                     const block = choosenBlock[i]
                     oz!.CreateReportEx(
-                        DefaultParamsInput(
+                        DefaultParams(
                             process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                             "/" + block.ozrRepository + "/" + block.name,
                             block.name,
@@ -119,7 +121,9 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 })
             }
         }
-        GetEform()
+        if (mywork?.eformTask && mywork.eformTask.length > 0) {
+            GetEform()
+        }
     }, [])
 
     const onPreview = async () => {
@@ -174,8 +178,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         setLoading(true)
         HandlerActionEform("SAVE")
     }
-    const oz = document.getElementById("OZViewer")
-    console.log("oz", oz)
+
     const HandlerActionEform = async (type: "SAVE" | "SUBMIT") => {
         try {
             const oz = document.getElementById("OZViewer")
@@ -278,26 +281,5 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         </div>
     )
 }
-export const DefaultParamsInput = (
-    url: string,
-    reportName: string,
-    displayname: string,
-    inputJson: string = "",
-    index: string = "0"
-) => {
-    return `connection.servlet=${url};
-connection.reportname=${reportName};
-global.concatthumbnail=true;
-connection.refreshperiod=1;
-viewer.createreport_doc_index=${index};
-    global.concatpreview=false;
-    viewer.showtab=true;
-    connection.displayname=${displayname};
-    connection.inputjson=${inputJson};
-    viewer.thumbnailsection_showclosebutton=true;
-    information.debug=true;
-    eform.signpad_zoom=50;
-    eform.signpad_type=dialog;
-    viewer.reportchangecommand=true;`
-}
+
 export default TemlateWrapper

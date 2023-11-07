@@ -1,5 +1,6 @@
+"use client"
 import { Button, Flex } from "antd"
-
+import { useSession } from "next-auth/react"
 const CustomButtonGroup = ({
     onPreview,
     onSubmit,
@@ -15,25 +16,31 @@ const CustomButtonGroup = ({
     onCancel: () => void
     onSync?: () => void
 }) => {
+    const { data: session, status } = useSession()
+    console.log("sesion", session?.user.userInfo)
     return (
         <Flex className="mb-3" vertical gap={10}>
             <Flex justify="flex-end" gap={10}>
                 <Button
                     loading={loading}
-                    className="min-w-100"
+                    className="min-w-[100px]"
                     type="primary"
                     onClick={onPreview}
                 >
-                    Xem trước
+                    Sử dụng
                 </Button>
             </Flex>
             <Flex justify="flex-end" gap={10} className="mt-5">
-                <Button className="min-w-100" type="primary" onClick={onSync}>
+                <Button
+                    className="min-w-[100px]"
+                    type="primary"
+                    onClick={onSync}
+                >
                     Đồng bộ
                 </Button>
                 <Button
                     loading={loading}
-                    className="min-w-100"
+                    className="min-w-[100px]"
                     type="primary"
                     onClick={onSubmit}
                 >
@@ -41,14 +48,14 @@ const CustomButtonGroup = ({
                 </Button>
                 <Button
                     loading={loading}
-                    className="min-w-100"
+                    className="min-w-[100px]"
                     type="primary"
                     onClick={onSave}
                 >
                     Lưu
                 </Button>
                 <Button
-                    className="min-w-100"
+                    className="min-w-[100px]"
                     danger
                     type="primary"
                     onClick={onCancel}
