@@ -5,6 +5,7 @@ import { veriFyEformTask } from "@/app/(service)/EformTemplate"
 import { useCookies } from "next-client-cookies"
 import { useParams, useRouter } from "next/navigation"
 import routers from "@/router/cusTomRouter"
+import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 const { TextArea } = Input
 const confirm = (cbAsync: () => Promise<void>) => {
     return cbAsync()
@@ -18,7 +19,7 @@ type Props = {
     type: "approve" | "notApprove"
 }
 const App: React.FC<Props> = ({ type }) => {
-    const cookies = useCookies()
+    const { token, session } = useCustomCookies()
     const params = useParams()
     const Router = useRouter()
     const [valueText, setValueText] = useState<string>("")
@@ -31,8 +32,8 @@ const App: React.FC<Props> = ({ type }) => {
                     rejectReason: valueText,
                     button: type === "approve" ? "SUBMIT" : "REJECT"
                 },
-                token: cookies.get("token") ?? "",
-                session: cookies.get("session") ?? ""
+                token: token,
+                session: session
             })
 
             if (res.status === 200) {
@@ -41,7 +42,7 @@ const App: React.FC<Props> = ({ type }) => {
                         ? "Phê duyệt thành công "
                         : "Từ chối thành công"
                 )
-                Router.replace(routers("ksvTeller").mywork.path, {
+                Router.replace(routers("ksvteller").mywork.path, {
                     scroll: true
                 })
             }
@@ -69,8 +70,12 @@ const App: React.FC<Props> = ({ type }) => {
                 okText="Đồng ý"
                 cancelText="Hủy bỏ"
             >
-                <Button danger={type === "notApprove"} type="primary">
-                    {type === "approve" ? "Đồng ý" : "Từ chối"}
+                <Button
+                    className="min-w-[100px]"
+                    danger={type === "notApprove"}
+                    type="primary"
+                >
+                    {type === "approve" ? "Phê duyệt" : "Từ chối"}
                 </Button>
             </Popconfirm>
         </>

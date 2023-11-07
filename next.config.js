@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: false,
-    async redirects() {
+  reactStrictMode: false,
+  async redirects() {
     return [
       {
         source: '/',
@@ -11,6 +11,23 @@ const nextConfig = {
       {
         source: '/bu',
         destination: '/bu/template',
+        permanent: true,
+      },
+
+      {
+        source: '/teller',
+        destination: '/teller/mywork',
+        permanent: true,
+      },
+      {
+        source: '/mywork',
+        destination: '/teller/mywork',
+        permanent: true,
+      },
+
+      {
+        source: '/ksvteller',
+        destination: '/ksvteller/mywork',
         permanent: true,
       },
     ]

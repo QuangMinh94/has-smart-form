@@ -14,6 +14,7 @@ export default withAuth(function middleware(request: NextRequestWithAuth) {
     if (!pathName.includes("signin")) {
         if (token) {
             const role = token.role
+            console.log("role", role)
             if (role) {
                 if (
                     !pathName

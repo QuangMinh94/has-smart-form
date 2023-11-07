@@ -71,10 +71,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         const GetEform = async () => {
             const formTemplate = cusTomerFormtemplate(mywork.eformTask)
             const listRight = CustomerListRight(formTemplate)
-            const eformTaskCheck: any = mywork.eformTask.reduce(
+            const eformTaskCheck: any = mywork?.eformTask?.reduce(
                 (acc: any, item) => {
                     acc[
-                        `${item.data?.ReportDisplayName}${item?.formTemplate._id}`
+                        `${item?.data?.ReportDisplayName}${item?.formTemplate?._id}`
                     ] = item.data
                     return acc
                 },
@@ -103,17 +103,19 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 })
                 console.log("choosenBlock", choosenBlock)
                 const oz = document.getElementById("OZViewer")
-                for (let i = choosenBlock.length - 1; i >= 0; i--) {
-                    const block = choosenBlock[i]
-                    oz!.CreateReportEx(
-                        DefaultParams(
-                            process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                            "/" + block.ozrRepository + "/" + block.name,
-                            block.name,
-                            block.Input
-                        ),
-                        ";"
-                    )
+                if (oz) {
+                    for (let i = choosenBlock.length - 1; i >= 0; i--) {
+                        const block = choosenBlock[i]
+                        oz.CreateReportEx(
+                            DefaultParams(
+                                process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                                "/" + block.ozrRepository + "/" + block.name,
+                                block.name,
+                                block.Input
+                            ),
+                            ";"
+                        )
+                    }
                 }
                 setChoosenBlock({
                     choosenBlock: choosenBlock,
@@ -121,6 +123,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 })
             }
         }
+
         if (mywork?.eformTask && mywork.eformTask.length > 0) {
             GetEform()
         }

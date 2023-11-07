@@ -9,7 +9,7 @@ import {
     OptionTree
 } from "@/app/(types)/eProduct"
 import { GetProductTree } from "@/app/(service)/eProduct"
-import { useCookies } from "next-client-cookies"
+import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { ToFilterName } from "../../../../util/formatText"
 
 type Props = {
@@ -51,10 +51,10 @@ const CustomerSelect: React.FC<Props> = ({
     defalutValue
 }) => {
     const [enabledFecth, setenabledFecth] = useState<boolean>(false)
-    const cookies = useCookies()
+    const { token, session } = useCustomCookies()
     const { isLoading, error, data } = UseFecthApi(
-        cookies?.get("token") ?? "",
-        cookies?.get("session") ?? "",
+        token,
+        session,
         {},
         typeQuery,
         enabledFecth
