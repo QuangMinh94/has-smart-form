@@ -27,6 +27,7 @@ const SigninForm = () => {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const onFinish = async (values: any) => {
+        setError("")
         setLoading(true)
         const signInResponse = await signIn("credentials", {
             username: values.username,
@@ -46,18 +47,6 @@ const SigninForm = () => {
 
     useEffect(() => {
         if (session) {
-            /*    const userInfo = session.user.userInfo as Users
-            const permission = userInfo.permission as Permission[]
-            if (FindPermission(permission, "children", "VisibleBU")) {
-                router.replace("/bu/mywork")
-            } else if (
-                FindPermission(permission, "children", "VisibleTeller")
-            ) {
-                router.replace("/teller")
-            } else {
-                router.replace("/bu/mywork")
-            }
-            setLoading(false) */
             const role = session.user.role
             router.replace(`/${role.toString().toLowerCase()}`)
         }
