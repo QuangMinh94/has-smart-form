@@ -1,15 +1,15 @@
 "use client"
 
-import React from "react"
 import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
+import React from "react"
 
-import routers from "@/router/cusTomRouter"
 import { myWork } from "@/app/(types)/teller/mywork"
-import dayjs from "dayjs"
-import ButtonApprove from "@/app/ksvteller/(component)/ButonApprove"
-import { useRouter } from "next/navigation"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+import routers from "@/router/cusTomRouter"
+import dayjs from "dayjs"
+import { useRouter } from "next/navigation"
+import ButtonApprove from "../ButonApprove"
 type Props = {
     data: myWork[]
 }

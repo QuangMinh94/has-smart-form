@@ -1,13 +1,13 @@
-import { cache } from "react"
-import { cookies } from "next/headers"
-import { getServerSession } from "next-auth"
+import {
+    seacrhAppointMent,
+    viewAppointMent
+} from "@/app/(service)/appointments"
+import { myWork } from "@/app/(types)/teller/mywork"
 import { authOptions } from "@/app/api/auth/authOptions"
 import TemlateWrapper from "@/app/teller/(components)/mywork/Detail/TeamplateWrapper"
-import { myWork } from "@/app/(types)/teller/mywork"
-import {
-    viewAppointMent,
-    seacrhAppointMent
-} from "@/app/(service)/appointments"
+import { getServerSession } from "next-auth"
+import { cookies } from "next/headers"
+import { cache } from "react"
 const fetchApi = cache(
     async (
         idAppointMent: string,
@@ -52,7 +52,12 @@ const DetailMyWork = async ({
     const findMyMork = data.find(
         (item) => item.appointmentCode === searchParams.code
     )
-    return <TemlateWrapper mywork={findMyMork!} />
+    return (
+        <>
+            {/* <p id="disableInput" /> */}
+            <TemlateWrapper mywork={findMyMork!} />
+        </>
+    )
 }
 
 export default DetailMyWork

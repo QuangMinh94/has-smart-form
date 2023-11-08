@@ -1,23 +1,23 @@
 "use client"
 import { addEformTask } from "@/app/(service)/EformTemplate"
 import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
+import { block, formTemplate } from "@/app/(types)/eProduct"
+import { eFormTask, myWork } from "@/app/(types)/teller/mywork"
+import { choosenBlock } from "@/app/teller/(components)/context"
+import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
 import { DefaultParams } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import { message } from "antd"
+import axios from "axios"
 import delay from "delay"
 import { useCookies } from "next-client-cookies"
 import dynamic from "next/dynamic"
 import { useParams } from "next/navigation"
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
 import TranferMyWork from "./TranferMyWork"
-import { block } from "@/app/(types)/eProduct"
-import { choosenBlock } from "@/app/teller/(components)/context"
-import { myWork, eFormTask } from "@/app/(types)/teller/mywork"
-import { formTemplate } from "@/app/(types)/eProduct"
-import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
@@ -178,8 +178,71 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     }
 
     const onSave = async () => {
-        setLoading(true)
-        HandlerActionEform("SAVE")
+        //setLoading(true)
+        HandlerGetAllData()
+        //HandlerActionEform("SAVE")
+    }
+
+    const HandlerSign = async () => {
+        const request = {
+            ozrNameArray: {
+                templateName: "",
+                templateData: ""
+            },
+            exportFormat: "pdf",
+            exportFileName: new Date().toTimeString()
+        }
+    }
+
+    const HandlerGetAllData = async () => {
+        const oz = document.getElementById("OZViewer")
+
+        if (oz) {
+            const inputdatas = JSON.parse(
+                oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
+            )
+            console.log("Inputdata", inputdatas)
+
+            //map print data
+            const _printData: any[] = []
+            inputdatas.forEach((inputdata: any, index: number) => {
+                _printData.push({
+                    templateName:
+                        choosenBlock?.choosenBlock?.[index].ozrRepository +
+                        "/" +
+                        choosenBlock?.choosenBlock?.[index].name,
+                    templateArray: inputdata.Input
+                })
+            })
+
+            if (_printData.length !== 0) {
+                //prepareData
+                const requestBody = {
+                    ozrNameArray: JSON.stringify(_printData),
+                    exportFormat: "pdf",
+                    exportFileName: "Teuhajhsjsbn.pdf"
+                }
+
+                try {
+                    //calling axios
+                    const request = await axios.post(
+                        "http://10.4.18.92/training/script/exportToPdf.jsp",
+                        requestBody,
+                        {
+                            headers: {
+                                "Content-Type":
+                                    "application/x-www-form-urlencoded"
+                            }
+                        }
+                    )
+                    console.log("request data", request.data)
+                } catch (error: any) {
+                    console.log("OH SHIT ERROR", error.response)
+                }
+            } else {
+                messageApi.error("Không có document để phê duyệt")
+            }
+        }
     }
 
     const HandlerActionEform = async (type: "SAVE" | "SUBMIT") => {

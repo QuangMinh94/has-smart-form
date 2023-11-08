@@ -1,10 +1,12 @@
 "use client"
 
+import { EncryptedString } from "@/app/(utilities)/Crypto"
 import DateFormatter from "@/app/(utilities)/DateFormatter"
 import CustomLink from "@/components/CustomLink"
 import { Table } from "antd"
 import { ColumnsType } from "antd/es/table"
-import { usePathname } from "next/navigation"
+import { useCookies } from "next-client-cookies"
+import { usePathname, useRouter } from "next/navigation"
 
 export type DataTableType = {
     key?: string
@@ -16,12 +18,17 @@ export type DataTableType = {
 
 const TemplateTable = ({
     data,
-    ksvPermission
+    ksvPermission,
+    readOnly
 }: {
     data: DataTableType[]
     ksvPermission: boolean
+    readOnly: boolean
 }) => {
     const pathName = usePathname()
+    const router = useRouter()
+    const cookies = useCookies()
+
     const columns: ColumnsType<DataTableType> = [
         {
             title: "Tên biểu mẫu",
@@ -29,11 +36,32 @@ const TemplateTable = ({
             ellipsis: true,
             width: "6vw",
             render(_value, record, _index) {
+                if (!readOnly) {
+                    return (
+                        <span>
+                            <CustomLink href={`/bu/template/${record.key}`}>
+                                {record.formName!}
+                            </CustomLink>
+                            {/* <div className="block md:hidden">
+                        <IssueStatusBadge status={record.status} />
+                    </div> */}
+                        </span>
+                    )
+                }
                 return (
                     <span>
-                        <CustomLink href={`/bu/template/${record.key}`}>
+                        <p
+                            className="text-blue-600 cursor-pointer"
+                            onClick={() => {
+                                const encryptedString = EncryptedString(
+                                    record.key!
+                                )
+                                cookies.set("encryptedId", encryptedString)
+                                router.push("/bu/template/details")
+                            }}
+                        >
                             {record.formName!}
-                        </CustomLink>
+                        </p>
                         {/* <div className="block md:hidden">
                         <IssueStatusBadge status={record.status} />
                     </div> */}

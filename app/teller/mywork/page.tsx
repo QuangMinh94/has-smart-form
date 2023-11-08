@@ -20,12 +20,14 @@ const MyWork = async ({
     const ListMyworks = await fetchApi({ search, idSearch })
 
     return (
-        <TableMywork
-            data={ListMyworks.map((item) => ({
-                ...item,
-                key: item?._id ?? ""
-            }))}
-        />
+        <>
+            <TableMywork
+                data={ListMyworks.map((item) => ({
+                    ...item,
+                    key: item?._id ?? ""
+                }))}
+            />
+        </>
     )
 }
 const fetchApi = cache(
