@@ -271,9 +271,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
 
                         console.log("Docu response", docuResponse.data)
                     } else {
-                        messageApi.error(
-                            "Xuất file PDF thất bại.Xin hãy thử lại sau"
-                        )
+                        messageApi.error("Ký thất bại.Xin hãy thử lại sau")
                     }
                 } catch (error: any) {
                     console.log("OH SHIT ERROR", error.response)
