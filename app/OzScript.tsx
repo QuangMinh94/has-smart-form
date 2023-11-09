@@ -51,6 +51,12 @@ const OzScript = () => {
                         console.log('Got it');
                     }
                 }
+                 function OZErrorCommand_OZViewer(code, message, detailmessage, reportname) {
+                     console.log("ErrorCode",code);
+                     console.log("ErrorMessage",message);
+                     console.log("DetailMessage",detailmessage);
+                     console.log("At report",reportname);
+                    }
                 `}
             </Script>
         </>

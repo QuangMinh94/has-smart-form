@@ -2,7 +2,7 @@
 import { Button, Flex } from "antd"
 import { useEffect, useState } from "react"
 
-import BtnNotApproveAndApprove from "@/app/ksvteller/(component)/BtnNotApproveAndApprove"
+import BtnNotApproveAndApprove from "@/app/ksvTeller/(component)/BtnNotApproveAndApprove"
 import useGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
 
 const CustomButtonGroup = ({
