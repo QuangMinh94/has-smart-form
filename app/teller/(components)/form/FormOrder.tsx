@@ -3,7 +3,7 @@ import React, { memo, useCallback } from "react"
 
 import { Button, Form, Input, InputNumber } from "antd"
 import SelectEproduct from "@/app/teller/(components)/customSelect/SelectForm"
-import InputCCCD from "@/app/teller/(components)/Input/CusTomInputDropdow"
+
 const onFinish = (values: any) => {
     console.log("Success:", values)
 }
@@ -57,7 +57,7 @@ const FormOder: React.FC = () => {
                     }
                 ]}
             >
-                <InputCCCD />
+                <Input />
             </Form.Item>
 
             <Form.Item

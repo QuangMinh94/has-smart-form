@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, memo } from "react"
-import FormOder from "../form/FormOrder"
+import FormgetCCCD from "../form/FormgetCCCD"
 import { Button, Modal } from "antd"
 
 type Props = {
@@ -35,7 +35,7 @@ const App: React.FC<Props> = ({ type, titleModal }) => {
                 footer={null}
             >
                 <div className="mt-[20px]">
-                    <FormOder />
+                    <FormgetCCCD />
                 </div>
             </Modal>
         </>

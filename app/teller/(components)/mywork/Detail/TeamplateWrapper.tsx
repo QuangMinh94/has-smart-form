@@ -181,102 +181,103 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         HandlerActionEform("SAVE")
     }
 
-    const HandlerSigning = async () => {
-        const m = new Date()
-        const dateString =
-            m.getUTCFullYear() +
-            "" +
-            (m.getUTCMonth() + 1) +
-            "" +
-            m.getUTCDate() +
-            "" +
-            m.getUTCHours() +
-            "" +
-            m.getUTCMinutes() +
-            "" +
-            m.getUTCSeconds() +
-            "" +
-            m.getMilliseconds()
-        const oz = document.getElementById("OZViewer")
+    // const HandlerSigning = async () => {
+    //     const m = new Date()
+    //     const dateString =
+    //         m.getUTCFullYear() +
+    //         "" +
+    //         (m.getUTCMonth() + 1) +
+    //         "" +
+    //         m.getUTCDate() +
+    //         "" +
+    //         m.getUTCHours() +
+    //         "" +
+    //         m.getUTCMinutes() +
+    //         "" +
+    //         m.getUTCSeconds() +
+    //         "" +
+    //         m.getMilliseconds()
+    //     const oz = document.getElementById("OZViewer")
 
-        if (oz) {
-            const inputdatas = JSON.parse(
-                oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
-            )
-            //console.log("Inputdata", inputdatas)
+    //     if (oz) {
+    //         const inputdatas = JSON.parse(
+    //             oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
+    //         )
+    //         //console.log("Inputdata", inputdatas)
 
-            //map print data
-            const _printData: any[] = []
-            inputdatas.forEach((inputdata: any, index: number) => {
-                _printData.push({
-                    templateName:
-                        choosenBlock?.choosenBlock?.[index].ozrRepository +
-                        "/" +
-                        choosenBlock?.choosenBlock?.[index].name,
-                    templateArray: inputdata.Input
-                })
-            })
+    //         //map print data
+    //         const _printData: any[] = []
+    //         inputdatas.forEach((inputdata: any, index: number) => {
+    //             _printData.push({
+    //                 templateName:
+    //                     choosenBlock?.choosenBlock?.[index].ozrRepository +
+    //                     "/" +
+    //                     choosenBlock?.choosenBlock?.[index].name,
+    //                 templateArray: inputdata.Input
+    //             })
+    //         })
 
-            if (_printData.length !== 0) {
-                //preparing data to export to pdf
-                const requestBody = {
-                    ozrNameArray: JSON.stringify(_printData),
-                    exportFormat: "pdf",
-                    exportFileName: dateString + ".pdf"
-                }
+    //         if (_printData.length !== 0) {
+    //             //preparing data to export to pdf
+    //             const requestBody = {
+    //                 ozrNameArray: JSON.stringify(_printData),
+    //                 exportFormat: "pdf",
+    //                 exportFileName: dateString + ".pdf"
+    //             }
 
-                try {
-                    //calling axios to export
-                    const response = await axios.post(
-                        process.env.NEXT_PUBLIC_EXPORT_SERVICE!,
-                        requestBody,
-                        {
-                            headers: {
-                                "Content-Type":
-                                    "application/x-www-form-urlencoded"
-                            }
-                        }
-                    )
-                    //return exportFileName if success, return empty string if failed
-                    const responseData: string = response.data.toString().trim()
-                    if (responseData !== "") {
-                        //prepareing data
-                        const signRequest = {
-                            signerEmail: session?.user.userInfo.mail,
-                            signerName: session?.user.userInfo.userName,
-                            signLocation: "~3",
-                            eFormTaskId: mywork._id,
-                            filePath:
-                                process.env.NEXT_PUBLIC_EXPORT_FOLDER! +
-                                "/" +
-                                responseData
-                        }
-                        //console.log("Sign request", signRequest)
-                        //call docusign service
-                        const docuResponse = await axios.post(
-                            process.env.NEXT_PUBLIC_EFORM_SIGNING!,
-                            signRequest,
-                            {
-                                headers: {
-                                    Authorization:
-                                        "Bearer " + cookies.get("token"),
-                                    Session: cookies.get("session")
-                                }
-                            }
-                        )
-
-                        console.log("Docu response", docuResponse.data)
-                    } else {
-                        messageApi.error("Ký thất bại.Xin hãy thử lại sau")
-                    }
-                } catch (error: any) {
-                    console.log("OH SHIT ERROR", error.response)
-                }
-            } else {
-                messageApi.error("Không có document để phê duyệt")
-            }
-        }
-    }
+    //             try {
+    //                 //calling axios to export
+    //                 const response = await axios.post(
+    //                     process.env.NEXT_PUBLIC_EXPORT_SERVICE!,
+    //                     requestBody,
+    //                     {
+    //                         headers: {
+    //                             "Content-Type":
+    //                                 "application/x-www-form-urlencoded"
+    //                         }
+    //                     }
+    //                 )
+    //                 //return exportFileName if success, return empty string if failed
+    //                 const responseData: string = response.data.toString().trim()
+    //                 if (responseData !== "") {
+    //                     //prepareing data
+    //                     const signRequest = {
+    //                         signerEmail: session?.user.userInfo.mail,
+    //                         signerName: session?.user.userInfo.userName,
+    //                         signLocation: "~3",
+    //                         eFormTaskId: mywork._id,
+    //                         filePath:
+    //                             process.env.NEXT_PUBLIC_EXPORT_FOLDER! +
+    //                             "/" +
+    //                             responseData
+    //                     }
+    //                     //console.log("Sign request", signRequest)
+    //                     //call docusign service
+    //                     const docuResponse = await axios.post(
+    //                         process.env.NEXT_PUBLIC_EFORM_SIGNING!,
+    //                         signRequest,
+    //                         {
+    //                             headers: {
+    //                                 Authorization:
+    //                                     "Bearer " + cookies.get("token"),
+    //                                 Session: cookies.get("session")
+    //                             }
+    //                         }
+    //                     )
+    //                     console.log("Docu response", docuResponse.data)
+    //                 } else {
+    //                     messageApi.error(
+    //                         "Xuất file PDF thất bại.Xin hãy thử lại sau"
+    //                     )
+    //                 }
+    //             } catch (error: any) {
+    //                 console.log("OH SHIT ERROR", error.response)
+    //             }
+    //         } else {
+    //             messageApi.error("Không có document để phê duyệt")
+    //         }
+    //     }
+    // }
 
     const HandlerActionEform = async (type: "SAVE" | "SUBMIT") => {
         try {
