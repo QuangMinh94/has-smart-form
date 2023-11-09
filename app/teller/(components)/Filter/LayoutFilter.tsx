@@ -246,14 +246,14 @@ const Filter = ({ rootPath }: { rootPath: rootPath }) => {
                 )}
             </Col>
             <Col span={4}>
-                {condition.pagemywork.isMyworkpath && rootPath === "teller" && (
+                {/* {condition.pagemywork.isMyworkpath && rootPath === "teller" && (
                     <div className="flex justify-end">
                         <ButtonModal
                             type="ADD_MODAL"
                             titleModal="Tạo đơn khách hàng"
                         />
                     </div>
-                )}
+                )} */}
                 {(condition.pagemywork.isDetailMyorkpath ||
                     condition.pagemywork.isAppRoverPath) && (
                     <div className="flex justify-end">

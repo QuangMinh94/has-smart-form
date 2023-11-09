@@ -1,4 +1,5 @@
 import { EformTemplate } from "@/app/(types)/EformTemplate"
+import { Role } from "@/app/(types)/Group"
 import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import { authOptions } from "@/app/api/auth/authOptions"
 import axios from "axios"
@@ -24,15 +25,17 @@ const TemplatePage = async ({
     if (!session) notFound()
 
     const permission = session.user.userInfo.permission
+    const userRole = session.user.userInfo.defaultGroup?.role as Role[]
 
     if (!FindPermission(permission, "children", "VisibleTemplateBU")) notFound()
 
-    const data: EformTemplate[] = await fetchTemplate(
+    let data: EformTemplate[] = []
+    let _data: DataTableType[] = []
+
+    data = await fetchTemplate(
         process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
         searchParams.name ? { name: searchParams.name } : {}
     )
-
-    const _data: DataTableType[] = []
     data.forEach((element) => {
         _data.push({
             key: element._id,
@@ -57,6 +60,7 @@ const TemplatePage = async ({
                     )}
                 >
                     <TemplateTable
+                        readOnly={true}
                         data={_data}
                         ksvPermission={FindPermission(
                             permission,

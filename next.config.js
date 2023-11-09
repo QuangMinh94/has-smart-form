@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         source: '/bu',
-        destination: '/bu/template',
+        destination: '/bu/mywork',
         permanent: true,
       },
 

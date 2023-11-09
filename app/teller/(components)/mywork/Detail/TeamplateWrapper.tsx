@@ -1,24 +1,25 @@
 "use client"
 import { addEformTask } from "@/app/(service)/EformTemplate"
 import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
+import { block, formTemplate } from "@/app/(types)/eProduct"
+import { eFormTask, myWork } from "@/app/(types)/teller/mywork"
+import { choosenBlock } from "@/app/teller/(components)/context"
+import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
 import { DefaultParams } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import { message } from "antd"
+import axios from "axios"
 import delay from "delay"
+import { useSession } from "next-auth/react"
 import { useCookies } from "next-client-cookies"
 import dynamic from "next/dynamic"
-import { useParams } from "next/navigation"
-import React, { useState, useEffect } from "react"
+import { useParams, useRouter } from "next/navigation"
+import React, { useEffect, useState } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
 import TranferMyWork from "./TranferMyWork"
-import { block } from "@/app/(types)/eProduct"
-import { choosenBlock } from "@/app/teller/(components)/context"
-import { myWork, eFormTask } from "@/app/(types)/teller/mywork"
-import { formTemplate } from "@/app/(types)/eProduct"
-import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
-import { list } from "postcss"
+import routers from "@/router/cusTomRouter"
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
@@ -29,15 +30,22 @@ type Props = { mywork: myWork }
 const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const cookies = useCookies()
     const params = useParams()
+    const router = useRouter()
     const [loading, setLoading] = useState<boolean>(false)
     const [messageApi, contextHolder] = message.useMessage()
     const [viewerKey, setViewerKey] = useState<number>(0)
     const [idFormTempLate, setIdFormTempLate] = useState<string[]>([])
-    const { listRight, setChoosenBlock, setListRight, setDataGlobal } =
-        useContextMyWorkDetail()
+    const {
+        listRight,
+        setChoosenBlock,
+        choosenBlock,
+        setListRight,
+        setDataGlobal
+    } = useContextMyWorkDetail()
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
+    const { data: session } = useSession()
 
     useEffect(() => {
         setDataGlobal((data) => ({ ...data, myworkDetail: mywork }))
@@ -100,6 +108,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                     }
                 }
                 setIdFormTempLate(listRight.map((item) => item?.id))
+                setChoosenBlock({
+                    choosenBlock: choosenBlock,
+                    changeBlock: 0
+                })
             }
         }
 
@@ -145,6 +157,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 )
             }
             setIdFormTempLate(listRight.map((item) => item?.id))
+            setChoosenBlock({
+                choosenBlock: choosenBlock,
+                changeBlock: 0
+            })
         } else {
             messageApi.error("Please choose at least 1 block")
         }
@@ -161,7 +177,107 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
 
     const onSave = async () => {
         setLoading(true)
+        //HandlerSigning()
         HandlerActionEform("SAVE")
+    }
+
+    const HandlerSigning = async () => {
+        const m = new Date()
+        const dateString =
+            m.getUTCFullYear() +
+            "" +
+            (m.getUTCMonth() + 1) +
+            "" +
+            m.getUTCDate() +
+            "" +
+            m.getUTCHours() +
+            "" +
+            m.getUTCMinutes() +
+            "" +
+            m.getUTCSeconds() +
+            "" +
+            m.getMilliseconds()
+        const oz = document.getElementById("OZViewer")
+
+        if (oz) {
+            const inputdatas = JSON.parse(
+                oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
+            )
+            //console.log("Inputdata", inputdatas)
+
+            //map print data
+            const _printData: any[] = []
+            inputdatas.forEach((inputdata: any, index: number) => {
+                _printData.push({
+                    templateName:
+                        choosenBlock?.choosenBlock?.[index].ozrRepository +
+                        "/" +
+                        choosenBlock?.choosenBlock?.[index].name,
+                    templateArray: inputdata.Input
+                })
+            })
+
+            if (_printData.length !== 0) {
+                //preparing data to export to pdf
+                const requestBody = {
+                    ozrNameArray: JSON.stringify(_printData),
+                    exportFormat: "pdf",
+                    exportFileName: dateString + ".pdf"
+                }
+
+                try {
+                    //calling axios to export
+                    const response = await axios.post(
+                        process.env.NEXT_PUBLIC_EXPORT_SERVICE!,
+                        requestBody,
+                        {
+                            headers: {
+                                "Content-Type":
+                                    "application/x-www-form-urlencoded"
+                            }
+                        }
+                    )
+                    //return exportFileName if success, return empty string if failed
+                    const responseData: string = response.data.toString().trim()
+                    if (responseData !== "") {
+                        //prepareing data
+                        const signRequest = {
+                            signerEmail: session?.user.userInfo.mail,
+                            signerName: session?.user.userInfo.userName,
+                            signLocation: "~3",
+                            eFormTaskId: mywork._id,
+                            filePath:
+                                process.env.NEXT_PUBLIC_EXPORT_FOLDER! +
+                                "/" +
+                                responseData
+                        }
+                        //console.log("Sign request", signRequest)
+                        //call docusign service
+                        const docuResponse = await axios.post(
+                            process.env.NEXT_PUBLIC_EFORM_SIGNING!,
+                            signRequest,
+                            {
+                                headers: {
+                                    Authorization:
+                                        "Bearer " + cookies.get("token"),
+                                    Session: cookies.get("session")
+                                }
+                            }
+                        )
+
+                        console.log("Docu response", docuResponse.data)
+                    } else {
+                        messageApi.error(
+                            "Xuất file PDF thất bại.Xin hãy thử lại sau"
+                        )
+                    }
+                } catch (error: any) {
+                    console.log("OH SHIT ERROR", error.response)
+                }
+            } else {
+                messageApi.error("Không có document để phê duyệt")
+            }
+        }
     }
 
     const HandlerActionEform = async (type: "SAVE" | "SUBMIT") => {
@@ -194,6 +310,11 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 })
                 if (res.status === 200) {
                     messageApi.success("success")
+                    if (type === "SUBMIT") {
+                        router.replace(routers("ksvteller").mywork.path, {
+                            scroll: true
+                        })
+                    }
                 }
                 setLoading(false)
                 // }

@@ -39,7 +39,17 @@ const OzScript = () => {
                     console.log('DocinDex',docindex);
                 }
                 function OZProgressCommand_OZViewer(step,state,reportname) {
-                    console.log("State", state)
+                    const input = document.getElementById("disableInput");
+                    if(input){
+                        console.log('Yes');
+                    if(step === "4" && state === "2"){
+                        const oz = document.getElementById("OZViewer");
+                        oz.Script("disable_input_all")
+                    }
+                    }
+                    else{
+                        console.log('Got it');
+                    }
                 }
                 `}
             </Script>

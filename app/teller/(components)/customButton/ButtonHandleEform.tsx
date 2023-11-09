@@ -1,13 +1,10 @@
 "use client"
 import { Button, Flex } from "antd"
-import { useEffect } from "react"
-import ButtonApprove from "@/app/ksvteller/(component)/BtnNotApproveAndApprove"
+import { useEffect, useState } from "react"
 
+import BtnNotApproveAndApprove from "@/app/ksvteller/(component)/BtnNotApproveAndApprove"
 import useGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
-const permission: any = {
-    VisibleCVCTTeller: false,
-    VisibleCVCTReviewer: false
-}
+
 const CustomButtonGroup = ({
     onPreview,
     onSubmit,
@@ -24,8 +21,14 @@ const CustomButtonGroup = ({
     onSync?: () => void
 }) => {
     const { InFoUser } = useGetInfoUser()
-    // const InFoUser: Users = session?.user.userInfo
+    const [permission, setPermission] = useState<any>({
+        VisibleCVCTTeller: false,
+        VisibleCVCTReviewer: false
+    })
     useEffect(() => {
+        const permissions: any = {
+            permission
+        }
         const VisibleTeller = InFoUser?.permission?.find(
             (p) =>
                 p.name.toLowerCase() === "VisibleTeller".toLowerCase() &&
@@ -33,8 +36,9 @@ const CustomButtonGroup = ({
         )
         if (VisibleTeller) {
             VisibleTeller?.children?.forEach((element: any) => {
-                permission[element.name] = element?.value
+                permissions[element.name] = element?.value
             })
+            setPermission(permissions)
         }
     }, [])
 
@@ -90,8 +94,8 @@ const CustomButtonGroup = ({
             )}
             {permission?.VisibleCVCTReviewer && (
                 <Flex justify="flex-end" gap={10} className="mt-10 mb-2">
-                    <ButtonApprove type="approve" />
-                    <ButtonApprove type="notApprove" />
+                    <BtnNotApproveAndApprove type="approve" />
+                    <BtnNotApproveAndApprove type="notApprove" />
                 </Flex>
             )}
         </>

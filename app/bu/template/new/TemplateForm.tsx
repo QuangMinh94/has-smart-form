@@ -89,7 +89,7 @@ const TemplateForm = ({
         }
     }
     return (
-        <>
+        <div className="mb-5">
             {contextHolder}
             <Form
                 scrollToFirstError
@@ -225,7 +225,7 @@ const TemplateForm = ({
                     </Col>
                 </Row>
             </Form>
-        </>
+        </div>
     )
 }
 

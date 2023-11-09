@@ -6,6 +6,7 @@ import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import routers from "@/router/cusTomRouter"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+
 const { TextArea } = Input
 const confirm = (cbAsync: () => Promise<void>) => {
     return cbAsync()
@@ -17,11 +18,11 @@ const cancel = (setValueText: React.Dispatch<React.SetStateAction<string>>) => {
 type Props = {
     type: "approve" | "notApprove"
 }
-const BtnComponent: React.FC<Props> = ({ type }) => {
+const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
+    const { token, session } = useCustomCookies()
     const params = useParams()
     const Router = useRouter()
     const searchParams = useSearchParams()
-    const { token, session } = useCustomCookies()
     const [valueText, setValueText] = useState<string>("")
     const [messageApi, contextHolder] = message.useMessage()
     const { dataGlobal } = useContextMyWorkDetail()
@@ -87,4 +88,4 @@ const BtnComponent: React.FC<Props> = ({ type }) => {
     )
 }
 
-export default memo(BtnComponent)
+export default memo(BtnNotApproveAndApprove)

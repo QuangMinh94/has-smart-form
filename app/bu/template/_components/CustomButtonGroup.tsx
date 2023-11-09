@@ -37,42 +37,42 @@ const CustomButtonGroup = ({
                 "children",
                 "VisibleSubmitButtonGroup"
             ) ? (
-                <Flex className="mb-3" vertical gap={10}>
+                <Flex className="mb-3 mt-3" vertical gap={10}>
                     <Flex justify="flex-end">
                         <Button
-                            className="w-20"
+                            className="w-fit"
                             type="primary"
                             onClick={onPreview}
                             loading={isDisabled}
                         >
-                            Preview
+                            Xem trước
                         </Button>
                     </Flex>
                     <Flex justify="flex-end" gap={10}>
                         <Button
-                            className="w-20"
+                            className="w-fit"
                             type="primary"
                             onClick={onSubmit}
                             loading={isDisabled}
                         >
-                            Submit
+                            Nộp
                         </Button>
                         <Button
-                            className="w-20"
+                            className="w-fit"
                             type="primary"
                             onClick={onSave}
                             loading={isDisabled}
                         >
-                            Save
+                            Lưu
                         </Button>
                         <Button
-                            className="w-20"
+                            className="w-fit"
                             danger
                             type="primary"
                             onClick={onCancel}
                             loading={isDisabled}
                         >
-                            Cancel
+                            Hủy
                         </Button>
                     </Flex>
                 </Flex>
@@ -86,7 +86,7 @@ const CustomButtonGroup = ({
                             loading={isDisabled}
                             icon={<FontAwesomeIcon icon={faArrowLeft} />}
                         >
-                            Back
+                            Quay lại
                         </Button>
                     </Flex>
                     <Flex className="mb-3" justify="flex-end" gap={10}>

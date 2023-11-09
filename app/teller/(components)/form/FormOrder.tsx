@@ -46,6 +46,7 @@ const FormOder: React.FC = () => {
             </Form.Item>
 
             <Form.Item
+                style={{ marginTop: "25px" }}
                 label="CCCD"
                 name="CCCD"
                 rules={[
@@ -58,7 +59,9 @@ const FormOder: React.FC = () => {
             >
                 <InputCCCD />
             </Form.Item>
+
             <Form.Item
+                style={{ marginTop: "25px" }}
                 label="Họ và tên"
                 name="name"
                 rules={[
@@ -72,6 +75,7 @@ const FormOder: React.FC = () => {
                 <Input />
             </Form.Item>
             <Form.Item
+                style={{ marginTop: "25px" }}
                 label="Số điện thoại"
                 name="phoneNumber"
                 rules={[
@@ -85,6 +89,7 @@ const FormOder: React.FC = () => {
                 <InputNumber style={{ width: "100%" }} />
             </Form.Item>
             <Form.Item
+                style={{ marginTop: "25px" }}
                 label="Email"
                 name="email"
                 rules={[

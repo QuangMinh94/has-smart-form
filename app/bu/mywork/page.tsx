@@ -59,6 +59,7 @@ const MyWorkPage = async ({
                     )}
                 >
                     <TemplateTable
+                        readOnly={false}
                         data={_data}
                         ksvPermission={FindPermission(
                             permission,

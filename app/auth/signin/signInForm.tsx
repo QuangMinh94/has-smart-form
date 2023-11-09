@@ -1,8 +1,12 @@
 "use client"
 
-import { Permission } from "@/app/(types)/Permission"
-import { Users } from "@/app/(types)/Users"
-import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
+import {
+    faEye,
+    faEyeSlash,
+    faLock,
+    faUser
+} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Col, Flex, Form, Input, Row, Spin } from "antd"
 import { signIn, useSession } from "next-auth/react"
 import Image from "next/image"
@@ -16,11 +20,14 @@ type FieldType = {
 
 const SigninForm = () => {
     //const router = useRouter()
+    const [userNameTitle, setUserNameTitle] = useState<boolean>(false)
+    const [passwordTitle, setPasswordTitle] = useState<boolean>(false)
     const [error, setError] = useState("")
     const { data: session } = useSession()
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const onFinish = async (values: any) => {
+        setError("")
         setLoading(true)
         const signInResponse = await signIn("credentials", {
             username: values.username,
@@ -40,18 +47,8 @@ const SigninForm = () => {
 
     useEffect(() => {
         if (session) {
-            const userInfo = session.user.userInfo as Users
-            const permission = userInfo.permission as Permission[]
-            if (FindPermission(permission, "children", "VisibleBU")) {
-                router.replace("/bu/mywork")
-            } else if (
-                FindPermission(permission, "children", "VisibleTeller")
-            ) {
-                router.replace("/teller")
-            } else {
-                router.replace("/bu/mywork")
-            }
-            setLoading(false)
+            const role = session.user.role
+            router.replace(`/${role.toString().toLowerCase()}`)
         }
     }, [session])
 
@@ -61,7 +58,7 @@ const SigninForm = () => {
     }
 
     return (
-        <div className="h-full w-full">
+        <div className="h-2/3 w-full">
             {/*  <Image
                 className="z-0 object-cover bg-inherit"
                 fill
@@ -92,62 +89,106 @@ const SigninForm = () => {
                         style={{
                             //border: "70px solid thin rgba(190, 220, 247, 0.65)",
                             borderStyle: "solid",
-                            borderWidth: "60px",
+                            borderWidth: "40px",
                             borderColor: "transparent",
                             //color: "rgba(190, 220, 247, 0.65)",
                             //color: "#BEDCF7A6",
                             backgroundColor: "#BEDCF7A6",
                             borderRadius: 20
                         }}
-                        gap={20}
+                        gap={10}
                     >
-                        <center>
-                            <Image
-                                width={60}
-                                height={60}
-                                src={"/img/hptIconKnowingIT.png"}
-                                alt={"hpticon"}
-                            />
-                        </center>
-                        <h3
-                            style={{
-                                color: "rgb(21,92,209)",
-                                fontSize: "36px",
-                                fontWeight: "bold",
-                                textAlign: "center",
-                                alignItems: "center",
-                                height: "10vh"
-                            }}
-                        >
-                            Đăng nhập
-                        </h3>
-
+                        <div>
+                            <center>
+                                <Image
+                                    width={80}
+                                    height={80}
+                                    src={"/img/hptIconKnowingIT.png"}
+                                    alt={"hpticon"}
+                                />
+                            </center>
+                            {/* <h3
+                                style={{
+                                    color: "rgb(21,92,209)",
+                                    fontSize: "36px",
+                                    fontWeight: "bold",
+                                    textAlign: "center",
+                                    alignItems: "center",
+                                    height: "10vh"
+                                }}
+                            >
+                                Đăng nhập
+                            </h3> */}
+                        </div>
                         <Form
                             name="basic"
                             // labelCol={{ span: 8 }}
                             // wrapperCol={{ span: 16 }}
-
+                            style={{ marginTop: "20px" }}
                             initialValues={{ remember: true }}
                             onFinish={onFinish}
                             onFinishFailed={onFinishFailed}
                             autoComplete="off"
                         >
-                            <b>Tên đăng nhập</b>
-                            <Form.Item<FieldType>
-                                // label="Username"
-                                name="username"
-                                rules={[{ required: true }]}
-                            >
-                                <Input style={{ width: "100%" }} />
-                            </Form.Item>
-                            <b>Mật khẩu</b>
-                            <Form.Item<FieldType>
-                                // label="Password"
-                                name="password"
-                                rules={[{ required: true }]}
-                            >
-                                <Input.Password style={{ width: "100%" }} />
-                            </Form.Item>
+                            <div className="border-b-2 border-white mb-10">
+                                {/*  {userNameTitle && <b>Tên đăng nhập</b>} */}
+                                <Form.Item<FieldType>
+                                    // label="Username"
+                                    name="username"
+                                    rules={[{ required: true }]}
+                                    style={{ marginBottom: 0 }}
+                                >
+                                    <Input
+                                        prefix={
+                                            <FontAwesomeIcon
+                                                icon={faUser}
+                                                color="white"
+                                            />
+                                        }
+                                        style={{ width: "100%" }}
+                                        bordered={false}
+                                        onFocus={() => setUserNameTitle(true)}
+                                        onBlur={() => setUserNameTitle(false)}
+                                        placeholder="Tên đăng nhập"
+                                    />
+                                </Form.Item>
+                            </div>
+                            <div className="border-b-2 border-white mb-10">
+                                {/* {passwordTitle && <b>Mật khẩu</b>} */}
+                                <Form.Item<FieldType>
+                                    // label="Password"
+                                    name="password"
+                                    rules={[{ required: true }]}
+                                    style={{ marginBottom: 0 }}
+                                >
+                                    <Input.Password
+                                        prefix={
+                                            <FontAwesomeIcon
+                                                icon={faLock}
+                                                color="white"
+                                            />
+                                        }
+                                        style={{ width: "100%" }}
+                                        bordered={false}
+                                        onFocus={() => setPasswordTitle(true)}
+                                        onBlur={() => setPasswordTitle(false)}
+                                        iconRender={(visible) =>
+                                            visible ? (
+                                                <FontAwesomeIcon
+                                                    icon={faEye}
+                                                    color="white"
+                                                />
+                                            ) : (
+                                                <FontAwesomeIcon
+                                                    icon={faEyeSlash}
+                                                    color="white"
+                                                />
+                                            )
+                                        }
+                                        placeholder="Mật khẩu"
+                                    />
+                                </Form.Item>
+                            </div>
                             {loading ? (
                                 <center>
                                     <Spin />
@@ -158,16 +199,16 @@ const SigninForm = () => {
                                         type="primary"
                                         className="bg-blue-500"
                                         htmlType="submit"
-                                        style={{ width: "100%" }}
+                                        style={{
+                                            width: "100%"
+                                        }}
                                     >
-                                        Chuyên viên đăng nhập
+                                        Đăng nhập
                                     </Button>
                                 </Form.Item>
                             )}
-
-                            <br />
                             <center>
-                                <div className="text-red-600">{error}</div>
+                                <div className="text-red-800">{error}</div>
                             </center>
                         </Form>
                         {/* <center>
