@@ -10,6 +10,7 @@ import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import { message } from "antd"
 import axios from "axios"
 import delay from "delay"
+import { useSession } from "next-auth/react"
 import { useCookies } from "next-client-cookies"
 import dynamic from "next/dynamic"
 import { useParams } from "next/navigation"
@@ -38,6 +39,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
+    const { data: session } = useSession()
 
     useEffect(() => {
         const cusTomerFormtemplate = (
@@ -178,30 +180,34 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     }
 
     const onSave = async () => {
-        //setLoading(true)
-        HandlerGetAllData()
-        //HandlerActionEform("SAVE")
+        setLoading(true)
+        //HandlerSigning()
+        HandlerActionEform("SAVE")
     }
 
-    const HandlerSign = async () => {
-        const request = {
-            ozrNameArray: {
-                templateName: "",
-                templateData: ""
-            },
-            exportFormat: "pdf",
-            exportFileName: new Date().toTimeString()
-        }
-    }
-
-    const HandlerGetAllData = async () => {
+    const HandlerSigning = async () => {
+        const m = new Date()
+        const dateString =
+            m.getUTCFullYear() +
+            "" +
+            (m.getUTCMonth() + 1) +
+            "" +
+            m.getUTCDate() +
+            "" +
+            m.getUTCHours() +
+            "" +
+            m.getUTCMinutes() +
+            "" +
+            m.getUTCSeconds() +
+            "" +
+            m.getMilliseconds()
         const oz = document.getElementById("OZViewer")
 
         if (oz) {
             const inputdatas = JSON.parse(
                 oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
             )
-            console.log("Inputdata", inputdatas)
+            //console.log("Inputdata", inputdatas)
 
             //map print data
             const _printData: any[] = []
@@ -216,17 +222,17 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             })
 
             if (_printData.length !== 0) {
-                //prepareData
+                //preparing data to export to pdf
                 const requestBody = {
                     ozrNameArray: JSON.stringify(_printData),
                     exportFormat: "pdf",
-                    exportFileName: "Teuhajhsjsbn.pdf"
+                    exportFileName: dateString + ".pdf"
                 }
 
                 try {
-                    //calling axios
-                    const request = await axios.post(
-                        "http://10.4.18.92/training/script/exportToPdf.jsp",
+                    //calling axios to export
+                    const response = await axios.post(
+                        process.env.NEXT_PUBLIC_EXPORT_SERVICE!,
                         requestBody,
                         {
                             headers: {
@@ -235,7 +241,40 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                             }
                         }
                     )
-                    console.log("request data", request.data)
+                    //return exportFileName if success, return empty string if failed
+                    const responseData: string = response.data.toString().trim()
+                    if (responseData !== "") {
+                        //prepareing data
+                        const signRequest = {
+                            signerEmail: session?.user.userInfo.mail,
+                            signerName: session?.user.userInfo.userName,
+                            signLocation: "~3",
+                            eFormTaskId: mywork._id,
+                            filePath:
+                                process.env.NEXT_PUBLIC_EXPORT_FOLDER! +
+                                "/" +
+                                responseData
+                        }
+                        //console.log("Sign request", signRequest)
+                        //call docusign service
+                        const docuResponse = await axios.post(
+                            process.env.NEXT_PUBLIC_EFORM_SIGNING!,
+                            signRequest,
+                            {
+                                headers: {
+                                    Authorization:
+                                        "Bearer " + cookies.get("token"),
+                                    Session: cookies.get("session")
+                                }
+                            }
+                        )
+
+                        console.log("Docu response", docuResponse.data)
+                    } else {
+                        messageApi.error(
+                            "Xuất file PDF thất bại.Xin hãy thử lại sau"
+                        )
+                    }
                 } catch (error: any) {
                     console.log("OH SHIT ERROR", error.response)
                 }

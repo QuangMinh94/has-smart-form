@@ -6,10 +6,10 @@ import { cookies } from "next/headers"
 import { cache } from "react"
 import TableMywork from "../(component)/table/TableMywork"
 
-axios.interceptors.request.use((request) => {
+/* axios.interceptors.request.use((request) => {
     console.log("Starting Request", JSON.stringify(request, null, 2))
     return request
-})
+}) */
 
 const MyWork = async ({
     searchParams

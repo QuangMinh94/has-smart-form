@@ -11,7 +11,7 @@ export interface Users extends Token {
     key?: number | string
     _id?: string
     enterReportToMe?: boolean
-    username?: string
+    userName?: string
     password?: string
     name?: string
     role?: Role
