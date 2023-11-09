@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Checkbox, Empty, Input, Spin, theme } from "antd"
 import update from "immutability-helper"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, useMemo } from "react"
 import { useDrop } from "react-dnd"
 
 export type typeKey = "left" | "right"
@@ -53,14 +53,16 @@ const MyDropTarget: React.FC<typeProps> = ({
         }
     }
     const RemoveList = (id: string) => {
-        setRomoveList((ListRemove) => ListRemove.filter((row) => row.id !== id))
+        setRomoveList((ListRemove) =>
+            ListRemove.filter((row) => row?.id !== id)
+        )
     }
     const [, drop] = useDrop({
         accept: "CARD",
         drop(item: TypeDragItem) {
             if (item.type !== type) {
                 setList((List) => {
-                    if (List.some((row) => row.id === item.rowData.id)) {
+                    if (List.some((row) => row?.id === item.rowData.id)) {
                         return [...List]
                     }
                     RemoveList(item.rowData.id)
@@ -79,7 +81,7 @@ const MyDropTarget: React.FC<typeProps> = ({
                         [dragIndex, 1],
                         [hoverIndex, 0, list[dragIndex]]
                     ]
-                })
+                }).filter((item) => !!item)
             }
             if (type === typeRow) {
                 if (valueSearch.length <= 0) {
@@ -137,6 +139,20 @@ const MyDropTarget: React.FC<typeProps> = ({
         )
     }
     const data = valueSearch.length > 0 ? listFilter : list
+    const List = useMemo(() => {
+        return data.map((item, index) => (
+            <div key={item?.id}>
+                <DragItem
+                    type={type}
+                    HanderCheckItem={HanderCheckItem}
+                    rowData={item}
+                    index={index}
+                    moveCard={moveCard}
+                    addCard={addCard}
+                />
+            </div>
+        ))
+    }, [JSON.stringify(data)])
     return (
         <div
             className="shadow-md h-full"
@@ -198,18 +214,7 @@ const MyDropTarget: React.FC<typeProps> = ({
                 ) : data.length <= 0 ? (
                     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 ) : (
-                    data.map((item, index) => (
-                        <div key={item.id}>
-                            <DragItem
-                                type={type}
-                                HanderCheckItem={HanderCheckItem}
-                                rowData={item}
-                                index={index}
-                                moveCard={moveCard}
-                                addCard={addCard}
-                            />
-                        </div>
-                    ))
+                    List
                 )}
             </ul>
         </div>

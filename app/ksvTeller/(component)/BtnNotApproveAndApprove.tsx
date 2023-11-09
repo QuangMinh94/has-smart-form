@@ -1,16 +1,17 @@
 "use client"
+import React, { useState, memo } from "react"
+import { Button, message, Popconfirm, Input } from "antd"
 import { veriFyEformTask } from "@/app/(service)/EformTemplate"
-import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import routers from "@/router/cusTomRouter"
-import { Button, Input, Popconfirm, message } from "antd"
-import { useParams, useRouter } from "next/navigation"
-import React, { useState } from "react"
+import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+
 const { TextArea } = Input
 const confirm = (cbAsync: () => Promise<void>) => {
     return cbAsync()
 }
 const cancel = (setValueText: React.Dispatch<React.SetStateAction<string>>) => {
-    // message.error("Click on No")
     setValueText("")
 }
 
@@ -21,15 +22,21 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
     const { token, session } = useCustomCookies()
     const params = useParams()
     const Router = useRouter()
+    const searchParams = useSearchParams()
     const [valueText, setValueText] = useState<string>("")
     const [messageApi, contextHolder] = message.useMessage()
+    const { dataGlobal } = useContextMyWorkDetail()
+
     const HandlerSubmit = async () => {
         try {
+            const data = dataGlobal.myworkDetail.eformTask?.[0].data
             const res = await veriFyEformTask({
                 bodyRequest: {
                     id: `${params?.id}`,
                     rejectReason: valueText,
-                    button: type === "approve" ? "SUBMIT" : "REJECT"
+                    button: type === "approve" ? "SUBMIT" : "REJECT",
+                    citizenId: searchParams.get("CCCD") ?? "",
+                    data: data
                 },
                 token: token,
                 session: session
@@ -81,4 +88,4 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
     )
 }
 
-export default BtnNotApproveAndApprove
+export default memo(BtnNotApproveAndApprove)

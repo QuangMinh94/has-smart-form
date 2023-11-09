@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from "react"
+import React, { useEffect, memo } from "react"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import "@/public/css/myWork/detailMyWork.css"
 import Container from "./CustomTranfDrag/Container"
@@ -7,7 +7,6 @@ import ButtonLeftandRight from "./CustomTranfDrag/ButtonCusTom"
 import LayoutTranfer from "./CustomTranfDrag/LayoutTranfer"
 
 import HeaderUi from "../Detail/HeaderUiContent"
-import { list } from "postcss"
 
 const DetailFormUser = () => {
     const {
@@ -68,4 +67,4 @@ const DetailFormUser = () => {
     )
 }
 
-export default DetailFormUser
+export default memo(DetailFormUser)

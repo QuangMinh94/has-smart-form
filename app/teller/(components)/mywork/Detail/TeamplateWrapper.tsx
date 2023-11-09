@@ -13,47 +13,48 @@ import delay from "delay"
 import { useSession } from "next-auth/react"
 import { useCookies } from "next-client-cookies"
 import dynamic from "next/dynamic"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import React, { useEffect, useState } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
 import TranferMyWork from "./TranferMyWork"
+import routers from "@/router/cusTomRouter"
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
 })
-export interface choosenBlockCustom extends choosenBlock {
-    Input: any
-}
+export interface choosenBlockCustom extends choosenBlock {}
 
 type Props = { mywork: myWork }
 const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const cookies = useCookies()
     const params = useParams()
+    const router = useRouter()
     const [loading, setLoading] = useState<boolean>(false)
     const [messageApi, contextHolder] = message.useMessage()
     const [viewerKey, setViewerKey] = useState<number>(0)
-    const { listRight, setChoosenBlock, choosenBlock, setListRight } =
-        useContextMyWorkDetail()
+    const [idFormTempLate, setIdFormTempLate] = useState<string[]>([])
+    const {
+        listRight,
+        setChoosenBlock,
+        choosenBlock,
+        setListRight,
+        setDataGlobal
+    } = useContextMyWorkDetail()
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
     const { data: session } = useSession()
 
     useEffect(() => {
+        setDataGlobal((data) => ({ ...data, myworkDetail: mywork }))
+    }, [])
+    useEffect(() => {
         const cusTomerFormtemplate = (
             EformTask: eFormTask[]
         ): formTemplate[] => {
-            const check: any = {}
-            const formTemplate: formTemplate[] = []
-            EformTask.forEach((task) => {
-                if (!check[`${task?.formTemplate?._id}`]) {
-                    formTemplate.push(task.formTemplate)
-                }
-                check[`${task?.formTemplate?._id}`] = true
-            })
-            return formTemplate
+            return EformTask[0]?.formTemplate ?? []
         }
         const CustomerListRight = (
             formTemplate: formTemplate[]
@@ -71,23 +72,13 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             return dataListRight
         }
         const GetEform = async () => {
-            const formTemplate = cusTomerFormtemplate(mywork.eformTask)
+            const formTemplate = cusTomerFormtemplate(mywork?.eformTask ?? [])
             const listRight = CustomerListRight(formTemplate)
-            const eformTaskCheck: any = mywork?.eformTask?.reduce(
-                (acc: any, item) => {
-                    acc[
-                        `${item?.data?.ReportDisplayName}${item?.formTemplate?._id}`
-                    ] = item.data
-                    return acc
-                },
-                {}
-            )
 
             if (listRight.length > 0) {
                 resetEForm()
                 await delay(2000)
                 const choosenBlock: choosenBlockCustom[] = []
-
                 listRight.forEach((element) => {
                     let count = 0
                     element.block.forEach((block: block) => {
@@ -95,15 +86,12 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                             name: block.name,
                             location: count.toString(),
                             ozrRepository: block.ozrRepository,
-                            idTemplate: element?.id,
-                            Input: JSON.stringify(
-                                eformTaskCheck[`${block?.name}${element?.id}`]
-                                    ?.Input
-                            )
+                            idTemplate: element?.id
                         })
                     })
                 })
                 console.log("choosenBlock", choosenBlock)
+                const data = JSON.stringify(mywork?.eformTask?.[0].data)
                 const oz = document.getElementById("OZViewer")
                 if (oz) {
                     for (let i = choosenBlock.length - 1; i >= 0; i--) {
@@ -113,12 +101,13 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                                 process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                                 "/" + block.ozrRepository + "/" + block.name,
                                 block.name,
-                                block.Input
+                                data
                             ),
                             ";"
                         )
                     }
                 }
+                setIdFormTempLate(listRight.map((item) => item?.id))
                 setChoosenBlock({
                     choosenBlock: choosenBlock,
                     changeBlock: 0
@@ -136,22 +125,28 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             resetEForm()
             await delay(2000)
             const choosenBlock: choosenBlock[] = []
-
+            const checkDuplicateBlock = new Set()
             listRight.forEach((element) => {
                 let count = 0
                 element.block.forEach((block: block) => {
-                    choosenBlock.push({
-                        name: block.name,
-                        location: count.toString(),
-                        ozrRepository: block.ozrRepository,
-                        idTemplate: element?.id
-                    })
+                    const idBlockCustom: string = `${block.name}${block.ozrRepository}`
+
+                    if (!checkDuplicateBlock.has(idBlockCustom)) {
+                        choosenBlock.push({
+                            name: block.name,
+                            location: count.toString(),
+                            ozrRepository: block.ozrRepository,
+                            idTemplate: element?.id
+                        })
+                        checkDuplicateBlock.add(idBlockCustom)
+                    }
                 })
             })
 
             const oz = document.getElementById("OZViewer")
             for (let i = choosenBlock.length - 1; i >= 0; i--) {
                 const block = choosenBlock[i]
+
                 oz!.CreateReportEx(
                     DefaultParams(
                         process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
@@ -161,6 +156,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                     ";"
                 )
             }
+            setIdFormTempLate(listRight.map((item) => item?.id))
             setChoosenBlock({
                 choosenBlock: choosenBlock,
                 changeBlock: 0
@@ -288,25 +284,19 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             if (oz) {
                 // if (oz.GetInformation("INPUT_CHECK_VALIDITY") == "valid") {
 
-                var inputdatas = JSON.parse(
-                    oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
+                // var inputdatas = JSON.parse(
+                //     oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
+                // )
+                const inputdata = JSON.parse(
+                    oz.GetInformation("INPUT_JSON_ALL")
                 )
+                console.log("datagop", inputdata)
 
-                console.log("My data where", inputdatas)
-                console.log("chossenBlock", choosenBlock?.choosenBlock)
-                const eformTasks: taskEform[] = []
-                inputdatas.forEach((inputdata: any, index: number) => {
-                    eformTasks.push({
-                        data: inputdata,
-                        formTemplate:
-                            choosenBlock?.choosenBlock?.[index]?.idTemplate ??
-                            "",
-                        documentId: "test"
-                    })
-                })
                 const body: RequestEformTaks = {
-                    eformTasks: eformTasks,
-                    appointment: `${params?.id}`,
+                    data: inputdata,
+                    formTemplate: idFormTempLate,
+                    appointmentId: `${params?.id}`,
+                    documentId: "test",
                     button: type
                 }
                 console.log("requestbody", body)
@@ -318,6 +308,11 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 })
                 if (res.status === 200) {
                     messageApi.success("success")
+                    if (type === "SUBMIT") {
+                        router.replace(routers("ksvteller").mywork.path, {
+                            scroll: true
+                        })
+                    }
                 }
                 setLoading(false)
                 // }

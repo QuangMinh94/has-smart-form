@@ -3,7 +3,7 @@ import { authOptions } from "@/app/api/auth/authOptions"
 import axios from "axios"
 import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
-import { cache } from "react"
+// import { cache } from "react"
 import TableMywork from "../(component)/table/TableMywork"
 
 /* axios.interceptors.request.use((request) => {
@@ -28,48 +28,46 @@ const MyWork = async ({
         />
     )
 }
-const fetchApi = cache(
-    async ({
-        search,
-        idSearch
-    }: {
-        search: "MGD" | "CDDD"
-        idSearch: string | null
-    }): Promise<myWork[]> => {
-        const cookie = cookies()
-        const session = await getServerSession(authOptions)
-        if (!session) {
-            return []
-        }
-        const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
-
-        const KeySearch: "citizenId" | "appointmentCode" =
-            search === "CDDD" ? "citizenId" : "appointmentCode"
-        const bodyRequest: any = {
-            [KeySearch]: idSearch,
-            userRole: idRole
-        }
-        if (!idSearch) {
-            delete bodyRequest[KeySearch]
-        }
-        try {
-            const res = await axios.post(
-                process.env.NEXT_PUBLIC_APPOINT_MENTS!,
-                bodyRequest,
-                {
-                    headers: {
-                        Authorization: "Bearer " + cookie.get("token")?.value,
-                        Session: cookie.get("session")?.value
-                    }
-                }
-            )
-
-            return res.data
-        } catch (e: any) {
-            throw new Error("error fetching", e)
-        }
+const fetchApi = async ({
+    search,
+    idSearch
+}: {
+    search: "MGD" | "CDDD"
+    idSearch: string | null
+}): Promise<myWork[]> => {
+    const cookie = cookies()
+    const session = await getServerSession(authOptions)
+    if (!session) {
+        return []
     }
-)
-// export const dynamic = "auto"
-// export const dynamic = "force-dynamic"
+    const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
+
+    const KeySearch: "citizenId" | "appointmentCode" =
+        search === "CDDD" ? "citizenId" : "appointmentCode"
+    const bodyRequest: any = {
+        [KeySearch]: idSearch,
+        userRole: idRole
+    }
+    if (!idSearch) {
+        delete bodyRequest[KeySearch]
+    }
+    try {
+        const res = await axios.post(
+            process.env.NEXT_PUBLIC_APPOINT_MENTS!,
+            bodyRequest,
+            {
+                headers: {
+                    Authorization: "Bearer " + cookie.get("token")?.value,
+                    Session: cookie.get("session")?.value
+                }
+            }
+        )
+
+        return res.data
+    } catch (e: any) {
+        throw new Error("error fetching", e)
+    }
+}
+
+export const dynamic = "force-dynamic"
 export default MyWork

@@ -7,6 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { RadioChangeEvent, Row, Col, theme } from "antd"
 import { Radio, Button, Input } from "antd"
+import ButtonModal from "../customButton/ButtonModal"
 import React, { useEffect, memo, useCallback, useMemo } from "react"
 
 import {
@@ -245,6 +246,14 @@ const Filter = ({ rootPath }: { rootPath: rootPath }) => {
                 )}
             </Col>
             <Col span={4}>
+                {/* {condition.pagemywork.isMyworkpath && rootPath === "teller" && (
+                    <div className="flex justify-end">
+                        <ButtonModal
+                            type="ADD_MODAL"
+                            titleModal="Tạo đơn khách hàng"
+                        />
+                    </div>
+                )} */}
                 {(condition.pagemywork.isDetailMyorkpath ||
                     condition.pagemywork.isAppRoverPath) && (
                     <div className="flex justify-end">
