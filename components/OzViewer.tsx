@@ -90,7 +90,8 @@ viewer.createreport_doc_index=${index};
     eform.signpad_zoom=50;
     eform.signpad_type=dialog;
     viewer.reportchangecommand=true;
-    viewer.progresscommand=true;`
+    viewer.progresscommand=true;
+    global.use_preview_progressbar=true;`
 }
 
 export default OzViewer
