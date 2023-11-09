@@ -101,6 +101,7 @@ const TemplateWrapperDetail = ({
 
     return (
         <div>
+            <p id="disableInput" />
             <TemplateForm disabled={true} id={id} form={form} />
             <OzViewer viewerKey={viewerKey} />
         </div>
