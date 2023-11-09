@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useMemo, useCallback } from "react"
+import React, { useEffect } from "react"
 import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 
@@ -16,13 +16,21 @@ type Props = {
 const App: React.FC<Props> = ({ data }) => {
     const { setDataGlobal } = useContextMyWorkDetail()
     const router = useRouter()
+
     console.log("data", data)
+    useEffect(() => {
+        setDataGlobal((obj) => ({
+            ...obj,
+            dataMywork: data
+        }))
+    }, [])
     const CustomClickPath = async (row: myWork) => {
         try {
-            setDataGlobal({
+            setDataGlobal((data) => ({
+                ...data,
                 idEProduct: row?.eProduct?._id ?? "",
                 nameEproduct: row?.eProduct?.name ?? ""
-            })
+            }))
             router.push(
                 `${routers("teller").detailMywork.path({
                     id: row?._id ?? ""

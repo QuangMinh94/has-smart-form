@@ -1,9 +1,9 @@
 "use client"
-import React, { useState } from "react"
+import React, { useState, memo } from "react"
 import { Button, message, Popconfirm, Input } from "antd"
 import { veriFyEformTask } from "@/app/(service)/EformTemplate"
-import { useCookies } from "next-client-cookies"
-import { useParams, useRouter } from "next/navigation"
+import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import routers from "@/router/cusTomRouter"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 const { TextArea } = Input
@@ -11,26 +11,31 @@ const confirm = (cbAsync: () => Promise<void>) => {
     return cbAsync()
 }
 const cancel = (setValueText: React.Dispatch<React.SetStateAction<string>>) => {
-    // message.error("Click on No")
     setValueText("")
 }
 
 type Props = {
     type: "approve" | "notApprove"
 }
-const App: React.FC<Props> = ({ type }) => {
-    const { token, session } = useCustomCookies()
+const BtnComponent: React.FC<Props> = ({ type }) => {
     const params = useParams()
     const Router = useRouter()
+    const searchParams = useSearchParams()
+    const { token, session } = useCustomCookies()
     const [valueText, setValueText] = useState<string>("")
     const [messageApi, contextHolder] = message.useMessage()
+    const { dataGlobal } = useContextMyWorkDetail()
+
     const HandlerSubmit = async () => {
         try {
+            const data = dataGlobal.myworkDetail.eformTask?.[0].data
             const res = await veriFyEformTask({
                 bodyRequest: {
                     id: `${params?.id}`,
                     rejectReason: valueText,
-                    button: type === "approve" ? "SUBMIT" : "REJECT"
+                    button: type === "approve" ? "SUBMIT" : "REJECT",
+                    citizenId: searchParams.get("CCCD") ?? "",
+                    data: data
                 },
                 token: token,
                 session: session
@@ -82,4 +87,4 @@ const App: React.FC<Props> = ({ type }) => {
     )
 }
 
-export default App
+export default memo(BtnComponent)

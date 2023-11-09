@@ -71,5 +71,5 @@ const fetchApi = cache(
     }
 )
 // export const dynamic = "auto"
-// export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic"
 export default MyWork

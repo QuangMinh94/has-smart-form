@@ -26,15 +26,16 @@ const CustomButtonGroup = ({
     const { InFoUser } = useGetInfoUser()
     // const InFoUser: Users = session?.user.userInfo
     useEffect(() => {
-        const VisibleTeller = InFoUser.permission?.find(
+        const VisibleTeller = InFoUser?.permission?.find(
             (p) =>
                 p.name.toLowerCase() === "VisibleTeller".toLowerCase() &&
                 !!p.value
         )
-
-        VisibleTeller?.children.forEach((element: any) => {
-            permission[element.name] = element?.value
-        })
+        if (VisibleTeller) {
+            VisibleTeller?.children?.forEach((element: any) => {
+                permission[element.name] = element?.value
+            })
+        }
     }, [])
 
     return (

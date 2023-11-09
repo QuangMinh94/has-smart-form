@@ -18,10 +18,11 @@ const TableMyWork: React.FC<Props> = ({ data }) => {
     const router = useRouter()
     const CustomClickPath = async (row: myWork) => {
         try {
-            setDataGlobal({
+            setDataGlobal((data) => ({
+                ...data,
                 idEProduct: row?.eProduct?._id ?? "",
                 nameEproduct: row?.eProduct?.name ?? ""
-            })
+            }))
             router.push(
                 `${routers("ksvteller").detailMywork.path({
                     id: row?._id ?? ""

@@ -21,16 +21,13 @@ export interface eFormTask {
     _id: string
     createdDate: string
     creator: string
-    data: {
-        ReportDisplayName: string
-        Input: any
-    }
-    formTemplate: formTemplate
+    data: any
+    formTemplate: formTemplate[]
     documentId: string
     __v: number
 }
 export interface myWork {
-    key: string
+    key?: string
     _id?: string
     citizenId?: string
     name?: string
@@ -38,7 +35,7 @@ export interface myWork {
     createDate?: string
     status?: status
     implementer?: string
-    appointmentCode: string
-    appointmentTime: string
-    eformTask: eFormTask[]
+    appointmentCode?: string
+    appointmentTime?: string
+    eformTask?: eFormTask[]
 }

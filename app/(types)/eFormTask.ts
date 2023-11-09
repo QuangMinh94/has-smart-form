@@ -4,8 +4,10 @@ export interface taskEform {
     documentId: string
 }
 export interface RequestEformTaks {
-    eformTasks: taskEform[]
-    appointment: string
+    data: any
+    formTemplate: string[]
+    appointmentId: string
+    documentId: string
     button: "SAVE" | "SUBMIT" | "CANCEL"
 }
 
@@ -13,4 +15,6 @@ export interface RequestVeRiFyEformTaks {
     id: string
     rejectReason?: string
     button: "SUBMIT" | "REJECT"
+    citizenId: string
+    data: any
 }
