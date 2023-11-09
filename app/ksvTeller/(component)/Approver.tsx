@@ -1,16 +1,15 @@
 "use client"
-import React, { useState, useEffect } from "react"
-import dynamic from "next/dynamic"
-import { Button, Flex } from "antd"
-import delay from "delay"
-import { formTemplate } from "@/app/(types)/eProduct"
-import { myWork, eFormTask } from "@/app/(types)/teller/mywork"
+import { block, formTemplate } from "@/app/(types)/eProduct"
+import { eFormTask, myWork } from "@/app/(types)/teller/mywork"
 import { choosenBlockCustom } from "@/app/teller/(components)/mywork/Detail/TeamplateWrapper"
-import { block } from "@/app/(types)/eProduct"
+import { Flex } from "antd"
+import delay from "delay"
+import dynamic from "next/dynamic"
+import React, { useEffect, useState } from "react"
 
 import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
 import { DefaultParams } from "@/components/OzViewer"
-import ButtonNotApprove from "./BtnNotApproveAndApprove"
+import BtnNotApproveAndApprove from "./BtnNotApproveAndApprove"
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
@@ -114,8 +113,8 @@ const Approver: React.FC<Props> = ({ mywork }) => {
     return (
         <div>
             <Flex justify="flex-end" gap={10} className="mt-10 mb-2">
-                <ButtonNotApprove type="approve" />
-                <ButtonNotApprove type="notApprove" />
+                <BtnNotApproveAndApprove type="approve" />
+                <BtnNotApproveAndApprove type="notApprove" />
             </Flex>
             <OzViewer viewerKey={keyOZviewr} />
         </div>

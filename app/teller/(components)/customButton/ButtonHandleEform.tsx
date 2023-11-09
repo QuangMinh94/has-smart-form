@@ -1,8 +1,8 @@
 "use client"
 import { Button, Flex } from "antd"
 import { useEffect } from "react"
-import ButtonApprove from "@/app/ksvteller/(component)/BtnNotApproveAndApprove"
 
+import BtnNotApproveAndApprove from "@/app/ksvTeller/(component)/BtnNotApproveAndApprove"
 import useGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
 const permission: any = {
     VisibleCVCTTeller: false,
@@ -89,8 +89,8 @@ const CustomButtonGroup = ({
             )}
             {permission?.VisibleCVCTReviewer && (
                 <Flex justify="flex-end" gap={10} className="mt-10 mb-2">
-                    <ButtonApprove type="approve" />
-                    <ButtonApprove type="notApprove" />
+                    <BtnNotApproveAndApprove type="approve" />
+                    <BtnNotApproveAndApprove type="notApprove" />
                 </Flex>
             )}
         </>

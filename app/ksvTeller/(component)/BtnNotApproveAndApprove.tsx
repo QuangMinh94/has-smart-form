@@ -1,11 +1,10 @@
 "use client"
-import React, { useState } from "react"
-import { Button, message, Popconfirm, Input } from "antd"
 import { veriFyEformTask } from "@/app/(service)/EformTemplate"
-import { useCookies } from "next-client-cookies"
-import { useParams, useRouter } from "next/navigation"
-import routers from "@/router/cusTomRouter"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+import routers from "@/router/cusTomRouter"
+import { Button, Input, Popconfirm, message } from "antd"
+import { useParams, useRouter } from "next/navigation"
+import React, { useState } from "react"
 const { TextArea } = Input
 const confirm = (cbAsync: () => Promise<void>) => {
     return cbAsync()
@@ -18,7 +17,7 @@ const cancel = (setValueText: React.Dispatch<React.SetStateAction<string>>) => {
 type Props = {
     type: "approve" | "notApprove"
 }
-const App: React.FC<Props> = ({ type }) => {
+const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
     const { token, session } = useCustomCookies()
     const params = useParams()
     const Router = useRouter()
@@ -82,4 +81,4 @@ const App: React.FC<Props> = ({ type }) => {
     )
 }
 
-export default App
+export default BtnNotApproveAndApprove
