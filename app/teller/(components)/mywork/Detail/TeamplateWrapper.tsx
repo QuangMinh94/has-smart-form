@@ -35,13 +35,8 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const [messageApi, contextHolder] = message.useMessage()
     const [viewerKey, setViewerKey] = useState<number>(0)
     const [idFormTempLate, setIdFormTempLate] = useState<string[]>([])
-    const {
-        listRight,
-        setChoosenBlock,
-
-        setListRight,
-        setDataGlobal
-    } = useContextMyWorkDetail()
+    const { listRight, setChoosenBlock, setListRight, setDataGlobal } =
+        useContextMyWorkDetail()
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
@@ -168,6 +163,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                         process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                         "/" + block.ozrRepository + "/" + block.name,
                         block.name
+                        // JSON.stringify({ RadioButtonGroup1: "Nữ" })
                     ),
                     ";"
                 )

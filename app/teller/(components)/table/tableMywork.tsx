@@ -14,7 +14,7 @@ type Props = {
     data: myWork[]
 }
 const App: React.FC<Props> = ({ data }) => {
-    const { setDataGlobal } = useContextMyWorkDetail()
+    const { setDataGlobal, dataGlobal } = useContextMyWorkDetail()
     const router = useRouter()
 
     useEffect(() => {
@@ -114,7 +114,7 @@ const App: React.FC<Props> = ({ data }) => {
         <div>
             <Table
                 scroll={{
-                    y: 400,
+                    y: "60vh",
                     scrollToFirstRowOnChange: true
                 }}
                 pagination={{
@@ -123,7 +123,7 @@ const App: React.FC<Props> = ({ data }) => {
                     pageSizeOptions: ["5", "10", "20", "30"]
                 }}
                 columns={columns}
-                dataSource={data}
+                dataSource={[...dataGlobal.dataMywork].reverse()}
             />
         </div>
     )
