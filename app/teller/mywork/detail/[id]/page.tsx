@@ -33,6 +33,8 @@ const fetchApi = async (
                 })
             ])
 
+        console.log("WHERE THE FUCK IS APPOINTMENT", resSeacrhAppointMent.data)
+
         return resSeacrhAppointMent.data
     } catch (e: any) {
         console.log("err", e)

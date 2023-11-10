@@ -1,13 +1,13 @@
 "use client"
-import React, { useState, memo } from "react"
-import { Button, message, Popconfirm, Input } from "antd"
 import { veriFyEformTask } from "@/app/(service)/EformTemplate"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
-import { useParams, useRouter, useSearchParams } from "next/navigation"
-import routers from "@/router/cusTomRouter"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import UseGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
+import routers from "@/router/cusTomRouter"
+import { Button, Input, Popconfirm, message } from "antd"
 import axios from "axios"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
+import React, { memo, useState } from "react"
 const { TextArea } = Input
 const confirm = (cbAsync: () => Promise<void>) => {
     return cbAsync()
@@ -92,26 +92,27 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                             signerEmail: InFoUser?.mail,
                             signerName: InFoUser?.userName,
                             signLocation: "~3",
-                            eFormTaskId: dataGlobal.myworkDetail._id,
+                            eFormTaskId:
+                                dataGlobal.myworkDetail.eformTask![0]._id,
                             filePath:
                                 process.env.NEXT_PUBLIC_EXPORT_FOLDER! +
                                 "/" +
                                 responseData
                         }
-                        //console.log("Sign request", signRequest)
+                        console.log("Sign request", signRequest)
                         //call docusign service
-                        const docuResponse = await axios.post(
-                            process.env.NEXT_PUBLIC_EFORM_SIGNING!,
-                            signRequest,
-                            {
-                                headers: {
-                                    Authorization: "Bearer " + token,
-                                    Session: session
-                                }
-                            }
-                        )
+                        // const docuResponse = await axios.post(
+                        //     process.env.NEXT_PUBLIC_EFORM_SIGNING!,
+                        //     signRequest,
+                        //     {
+                        //         headers: {
+                        //             Authorization: "Bearer " + token,
+                        //             Session: session
+                        //         }
+                        //     }
+                        // )
 
-                        console.log("Docu response", docuResponse.data)
+                        // console.log("Docu response", docuResponse.data)
                         await HandlerSubmit()
                     } else {
                         messageApi.error("Ký thất bại.Xin hãy thử lại sau")

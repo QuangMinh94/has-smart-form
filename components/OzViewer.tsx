@@ -19,6 +19,7 @@ const Viewer = () => {
             window.SetOZParamters_OZViewer = () => {
                 const oz = document.getElementById("OZViewer")
                 oz!.sendToActionScript("viewer.emptyframe", "true")
+                oz!.sendToActionScript("viewer.errorcommand", "true")
                 //oz!.sendToActionScript("eform.signpad_type", "dialog")
             }
 
@@ -91,7 +92,8 @@ viewer.createreport_doc_index=${index};
     eform.signpad_type=dialog;
     viewer.reportchangecommand=true;
     viewer.progresscommand=true;
-    global.use_preview_progressbar=true;`
+    global.use_preview_progressbar=true;
+    viewer.errorcommand=true;`
 }
 
 export default OzViewer
