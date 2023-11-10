@@ -92,7 +92,8 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                             signerEmail: InFoUser?.mail,
                             signerName: InFoUser?.userName,
                             signLocation: "~3",
-                            eFormTaskId: dataGlobal.myworkDetail._id,
+                            eFormTaskId:
+                                dataGlobal.myworkDetail.eformTask![0]._id,
                             filePath:
                                 process.env.NEXT_PUBLIC_EXPORT_FOLDER! +
                                 "/" +
