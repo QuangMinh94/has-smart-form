@@ -157,6 +157,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
     }
     return (
         <>
+            <p id="disableInput" />
             {contextHolder}
             <Popconfirm
                 destroyTooltipOnHide={true}
