@@ -127,6 +127,7 @@ const CustomBtn: React.FC<{
                 condition().pagemywork.isAppRoverPath
             ) {
                 router.push(routers(rootPath).mywork.path)
+                router.refresh()
             }
         },
         Remove: () => {}

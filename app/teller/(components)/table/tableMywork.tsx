@@ -17,7 +17,6 @@ const App: React.FC<Props> = ({ data }) => {
     const { setDataGlobal } = useContextMyWorkDetail()
     const router = useRouter()
 
-    console.log("data", data)
     useEffect(() => {
         setDataGlobal((obj) => ({
             ...obj,
@@ -110,7 +109,7 @@ const App: React.FC<Props> = ({ data }) => {
             dataIndex: "implementer"
         }
     ]
-
+    console.log("table", data)
     return (
         <div>
             <Table

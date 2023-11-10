@@ -1,8 +1,9 @@
 "use client"
 import React, { memo, useCallback } from "react"
-
+import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import { Button, Form, Input, InputNumber } from "antd"
 import SelectEproduct from "@/app/teller/(components)/customSelect/SelectForm"
+import { info } from "console"
 
 const onFinish = (values: any) => {
     console.log("Success:", values)
@@ -14,6 +15,8 @@ const onFinishFailed = (errorInfo: any) => {
 
 const FormOder: React.FC = () => {
     const [form] = Form.useForm()
+    const { dataGlobal } = useContextMyWorkDetail()
+    const Info = dataGlobal.inFoUser
     const HandlerOnchangeEproduct = useCallback((value: string) => {
         form.setFieldsValue({ eProduct: value })
     }, [])
@@ -23,7 +26,12 @@ const FormOder: React.FC = () => {
             form={form}
             labelCol={{ span: 7 }}
             style={{ maxWidth: 600 }}
-            initialValues={{ username: "hoang" }}
+            initialValues={{
+                CCCD: Info?.citizenId ?? "",
+                name: Info?.fullName ?? "",
+                phoneNumber: Info?.mobilePhoneNumber ?? "",
+                email: Info?.emailAddress ?? ""
+            }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -46,7 +54,7 @@ const FormOder: React.FC = () => {
             </Form.Item>
 
             <Form.Item
-                style={{ marginTop: "25px" }}
+                style={{ marginTop: "15px" }}
                 label="CCCD"
                 name="CCCD"
                 rules={[
@@ -61,7 +69,7 @@ const FormOder: React.FC = () => {
             </Form.Item>
 
             <Form.Item
-                style={{ marginTop: "25px" }}
+                style={{ marginTop: "15px" }}
                 label="Họ và tên"
                 name="name"
                 rules={[
@@ -75,7 +83,7 @@ const FormOder: React.FC = () => {
                 <Input />
             </Form.Item>
             <Form.Item
-                style={{ marginTop: "25px" }}
+                style={{ marginTop: "15px" }}
                 label="Số điện thoại"
                 name="phoneNumber"
                 rules={[
@@ -89,7 +97,7 @@ const FormOder: React.FC = () => {
                 <InputNumber style={{ width: "100%" }} />
             </Form.Item>
             <Form.Item
-                style={{ marginTop: "25px" }}
+                style={{ marginTop: "15px" }}
                 label="Email"
                 name="email"
                 rules={[

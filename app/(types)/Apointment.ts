@@ -7,3 +7,8 @@ export interface RequestSeacrhApoinMent {
     userRole: string
     appointmentCode?: string
 }
+export interface RequestSeacrhCustomInfo {
+    citizenId: string
+    emailAddress?: string
+    mobilePhoneNumber?: string
+}

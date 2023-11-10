@@ -101,18 +101,18 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                         }
                         console.log("Sign request", signRequest)
                         //call docusign service
-                        const docuResponse = await axios.post(
-                            process.env.NEXT_PUBLIC_EFORM_SIGNING!,
-                            signRequest,
-                            {
-                                headers: {
-                                    Authorization: "Bearer " + token,
-                                    Session: session
-                                }
-                            }
-                        )
+                        // const docuResponse = await axios.post(
+                        //     process.env.NEXT_PUBLIC_EFORM_SIGNING!,
+                        //     signRequest,
+                        //     {
+                        //         headers: {
+                        //             Authorization: "Bearer " + token,
+                        //             Session: session
+                        //         }
+                        //     }
+                        // )
 
-                        console.log("Docu response", docuResponse.data)
+                        // console.log("Docu response", docuResponse.data)
                         await HandlerSubmit()
                     } else {
                         messageApi.error("Ký thất bại.Xin hãy thử lại sau")
@@ -150,6 +150,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                 Router.replace(routers("ksvteller").mywork.path, {
                     scroll: true
                 })
+                Router.refresh()
             }
         } catch (e: any) {
             messageApi.error("có lỗi vui lòng thử lại sau ")

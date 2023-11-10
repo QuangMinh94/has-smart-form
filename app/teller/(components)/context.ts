@@ -1,6 +1,7 @@
 "use client"
 import React, { createContext } from "react"
 import { myWork } from "@/app/(types)/teller/mywork"
+import { User } from "@/app/(types)/infoUser"
 export type choosenBlock = {
     name: string
     location: string
@@ -16,6 +17,7 @@ export type dataGlobal = {
     nameEproduct: string
     dataMywork: myWork[]
     myworkDetail: myWork
+    inFoUser: User
 }
 export interface typeContextMyworkDetail {
     setListLeft: React.Dispatch<React.SetStateAction<any[]>>
@@ -44,7 +46,16 @@ const contextMyworkDetail = createContext<typeContextMyworkDetail>({
         idEProduct: "",
         nameEproduct: "",
         dataMywork: [],
-        myworkDetail: {}
+        myworkDetail: {},
+        inFoUser: {
+            _id: "",
+            createDate: "",
+            citizenId: "",
+            dateOfBirth: "",
+            fullName: "",
+            mobilePhoneNumber: "",
+            emailAddress: ""
+        }
     },
     setDataGlobal: () => {},
     setLoading: () => {},

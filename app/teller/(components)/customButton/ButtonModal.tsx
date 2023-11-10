@@ -1,6 +1,7 @@
 "use client"
-import React, { useState, memo } from "react"
+import React, { useState, memo, useCallback } from "react"
 import FormgetCCCD from "../form/FormgetCCCD"
+import FormOrder from "../form/FormOrder"
 import { Button, Modal } from "antd"
 
 type Props = {
@@ -9,18 +10,20 @@ type Props = {
 }
 const App: React.FC<Props> = ({ type, titleModal }) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const [isModalOpenFormOder, setIsModalOpenFormOder] =
+        useState<boolean>(false)
 
     const showModal = () => {
         setIsModalOpen(true)
     }
 
-    const handleOk = () => {
+    const handleCancel = useCallback(() => {
         setIsModalOpen(false)
-    }
+    }, [])
 
-    const handleCancel = () => {
-        setIsModalOpen(false)
-    }
+    const showModalFormOder = useCallback(() => {
+        setIsModalOpenFormOder(true)
+    }, [])
 
     return (
         <>
@@ -35,7 +38,21 @@ const App: React.FC<Props> = ({ type, titleModal }) => {
                 footer={null}
             >
                 <div className="mt-[20px]">
-                    <FormgetCCCD />
+                    <FormgetCCCD
+                        showModalFormOder={showModalFormOder}
+                        handleCancel={handleCancel}
+                    />
+                </div>
+            </Modal>
+            <Modal
+                title={titleModal}
+                open={isModalOpenFormOder}
+                onCancel={() => setIsModalOpenFormOder(false)}
+                destroyOnClose={true}
+                footer={null}
+            >
+                <div className="mt-[20px]">
+                    <FormOrder />
                 </div>
             </Modal>
         </>
