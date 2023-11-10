@@ -93,7 +93,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                             signerName: InFoUser?.userName,
                             signLocation: "~3",
                             eFormTaskId:
-                                dataGlobal.myworkDetail.eformTask![0]._id,
+                                dataGlobal.myworkDetail.eformTask?.[0]._id,
                             filePath:
                                 process.env.NEXT_PUBLIC_EXPORT_FOLDER! +
                                 "/" +
@@ -101,18 +101,18 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                         }
                         console.log("Sign request", signRequest)
                         //call docusign service
-                        // const docuResponse = await axios.post(
-                        //     process.env.NEXT_PUBLIC_EFORM_SIGNING!,
-                        //     signRequest,
-                        //     {
-                        //         headers: {
-                        //             Authorization: "Bearer " + token,
-                        //             Session: session
-                        //         }
-                        //     }
-                        // )
+                        const docuResponse = await axios.post(
+                            process.env.NEXT_PUBLIC_EFORM_SIGNING!,
+                            signRequest,
+                            {
+                                headers: {
+                                    Authorization: "Bearer " + token,
+                                    Session: session
+                                }
+                            }
+                        )
 
-                        // console.log("Docu response", docuResponse.data)
+                        console.log("Docu response", docuResponse.data)
                         await HandlerSubmit()
                     } else {
                         messageApi.error("Ký thất bại.Xin hãy thử lại sau")
@@ -167,6 +167,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                 description={
                     type === "approve" ? undefined : (
                         <TextArea
+                            style={{ minWidth: "20vw", height: "10vw" }}
                             value={valueText}
                             onChange={(e) => setValueText(e.target.value)}
                         />
