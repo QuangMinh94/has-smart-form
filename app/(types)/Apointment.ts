@@ -12,3 +12,15 @@ export interface RequestSeacrhCustomInfo {
     emailAddress?: string
     mobilePhoneNumber?: string
 }
+export interface RequestAddApoinMent {
+    otp?: string
+    name: string
+    email: string
+    officeBranch: string
+    appointmentTime: string
+    channel: "COUNTER"
+    eProduct: string
+    citizenId: string
+    phoneNumber: string
+    checkOtp: boolean
+}

@@ -24,6 +24,9 @@ const App: React.FC<Props> = ({ type, titleModal }) => {
     const showModalFormOder = useCallback(() => {
         setIsModalOpenFormOder(true)
     }, [])
+    const handleCancelFormOder = useCallback(() => {
+        setIsModalOpenFormOder(false)
+    }, [])
 
     return (
         <>
@@ -52,7 +55,7 @@ const App: React.FC<Props> = ({ type, titleModal }) => {
                 footer={null}
             >
                 <div className="mt-[20px]">
-                    <FormOrder />
+                    <FormOrder handleCancelFormOder={handleCancelFormOder} />
                 </div>
             </Modal>
         </>
