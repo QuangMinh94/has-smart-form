@@ -20,7 +20,16 @@ const ProviderMyWorkDetail: React.FC<typeProvider> = ({ children }) => {
         idEProduct: "",
         nameEproduct: "",
         dataMywork: [],
-        myworkDetail: {}
+        myworkDetail: {},
+        inFoUser: {
+            _id: "",
+            createDate: "",
+            citizenId: "",
+            dateOfBirth: "",
+            fullName: "",
+            mobilePhoneNumber: "",
+            emailAddress: ""
+        }
     })
     const data: typeContextMyworkDetail = {
         setListLeft,

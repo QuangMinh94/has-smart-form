@@ -38,14 +38,13 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const {
         listRight,
         setChoosenBlock,
-        choosenBlock,
+
         setListRight,
         setDataGlobal
     } = useContextMyWorkDetail()
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
-    const { data: session } = useSession()
 
     useEffect(() => {
         setDataGlobal((data) => ({ ...data, myworkDetail: mywork }))
@@ -79,29 +78,46 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 resetEForm()
                 await delay(2000)
                 const choosenBlock: choosenBlockCustom[] = []
+                const checkDuplicateBlock = new Set()
                 listRight.forEach((element) => {
                     let count = 0
                     element.block.forEach((block: block) => {
-                        choosenBlock.push({
-                            name: block.name,
-                            location: count.toString(),
-                            ozrRepository: block.ozrRepository,
-                            idTemplate: element?.id
-                        })
+                        const idBlockCustom: string = `${block.name}${block.ozrRepository}`
+                        if (!checkDuplicateBlock.has(idBlockCustom)) {
+                            choosenBlock.push({
+                                name: block.name,
+                                location: count.toString(),
+                                ozrRepository: block.ozrRepository,
+                                idTemplate: element?.id
+                            })
+                        }
+                        checkDuplicateBlock.add(idBlockCustom)
                     })
                 })
                 console.log("choosenBlock", choosenBlock)
-                const data = JSON.stringify(mywork?.eformTask?.[0].data)
+
+                const dataInput = mywork?.eformTask?.[0]?.data?.data ?? []
+                const ObjDataInput: any = dataInput.reduce(
+                    (acc: any, item: any) => {
+                        acc[item?.ReportDisplayName] = item?.Input
+                        return acc
+                    },
+                    {}
+                )
+                console.log("Report", ObjDataInput)
                 const oz = document.getElementById("OZViewer")
                 if (oz) {
                     for (let i = choosenBlock.length - 1; i >= 0; i--) {
                         const block = choosenBlock[i]
+                        const dataInput = JSON.stringify(
+                            ObjDataInput[`${block.name}`]
+                        )
                         oz.CreateReportEx(
                             DefaultParams(
                                 process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                                 "/" + block.ozrRepository + "/" + block.name,
                                 block.name,
-                                data
+                                dataInput
                             ),
                             ";"
                         )
@@ -162,7 +178,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 changeBlock: 0
             })
         } else {
-            messageApi.error("Please choose at least 1 block")
+            messageApi.error("Vui lòng chọn một biểu mẫu")
         }
     }
 
@@ -171,131 +187,39 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     }
 
     const onSubmit = async () => {
-        setLoading(true)
-        HandlerActionEform("SUBMIT")
+        if (idFormTempLate.length > 0) {
+            HandlerActionEform("SUBMIT")
+        } else {
+            messageApi.error("Vui lòng chọn một biểu mẫu")
+        }
     }
 
     const onSave = async () => {
-        setLoading(true)
         //HandlerSigning()
-        HandlerActionEform("SAVE")
+        if (idFormTempLate.length > 0) {
+            HandlerActionEform("SAVE")
+        } else {
+            messageApi.error("Vui lòng chọn một biểu mẫu")
+        }
     }
-
-    // const HandlerSigning = async () => {
-    //     const m = new Date()
-    //     const dateString =
-    //         m.getUTCFullYear() +
-    //         "" +
-    //         (m.getUTCMonth() + 1) +
-    //         "" +
-    //         m.getUTCDate() +
-    //         "" +
-    //         m.getUTCHours() +
-    //         "" +
-    //         m.getUTCMinutes() +
-    //         "" +
-    //         m.getUTCSeconds() +
-    //         "" +
-    //         m.getMilliseconds()
-    //     const oz = document.getElementById("OZViewer")
-
-    //     if (oz) {
-    //         const inputdatas = JSON.parse(
-    //             oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
-    //         )
-    //         //console.log("Inputdata", inputdatas)
-
-    //         //map print data
-    //         const _printData: any[] = []
-    //         inputdatas.forEach((inputdata: any, index: number) => {
-    //             _printData.push({
-    //                 templateName:
-    //                     choosenBlock?.choosenBlock?.[index].ozrRepository +
-    //                     "/" +
-    //                     choosenBlock?.choosenBlock?.[index].name,
-    //                 templateArray: inputdata.Input
-    //             })
-    //         })
-
-    //         if (_printData.length !== 0) {
-    //             //preparing data to export to pdf
-    //             const requestBody = {
-    //                 ozrNameArray: JSON.stringify(_printData),
-    //                 exportFormat: "pdf",
-    //                 exportFileName: dateString + ".pdf"
-    //             }
-
-    //             try {
-    //                 //calling axios to export
-    //                 const response = await axios.post(
-    //                     process.env.NEXT_PUBLIC_EXPORT_SERVICE!,
-    //                     requestBody,
-    //                     {
-    //                         headers: {
-    //                             "Content-Type":
-    //                                 "application/x-www-form-urlencoded"
-    //                         }
-    //                     }
-    //                 )
-    //                 //return exportFileName if success, return empty string if failed
-    //                 const responseData: string = response.data.toString().trim()
-    //                 if (responseData !== "") {
-    //                     //prepareing data
-    //                     const signRequest = {
-    //                         signerEmail: session?.user.userInfo.mail,
-    //                         signerName: session?.user.userInfo.userName,
-    //                         signLocation: "~3",
-    //                         eFormTaskId: mywork._id,
-    //                         filePath:
-    //                             process.env.NEXT_PUBLIC_EXPORT_FOLDER! +
-    //                             "/" +
-    //                             responseData
-    //                     }
-    //                     //console.log("Sign request", signRequest)
-    //                     //call docusign service
-    //                     const docuResponse = await axios.post(
-    //                         process.env.NEXT_PUBLIC_EFORM_SIGNING!,
-    //                         signRequest,
-    //                         {
-    //                             headers: {
-    //                                 Authorization:
-    //                                     "Bearer " + cookies.get("token"),
-    //                                 Session: cookies.get("session")
-    //                             }
-    //                         }
-    //                     )
-
-    //                     console.log("Docu response", docuResponse.data)
-    //                 } else {
-    //                     messageApi.error(
-    //                         "Xuất file PDF thất bại.Xin hãy thử lại sau"
-    //                     )
-    //                 }
-    //             } catch (error: any) {
-    //                 console.log("OH SHIT ERROR", error.response)
-    //             }
-    //         } else {
-    //             messageApi.error("Không có document để phê duyệt")
-    //         }
-    //     }
-    // }
 
     const HandlerActionEform = async (type: "SAVE" | "SUBMIT") => {
         try {
+            setLoading(true)
             const oz = document.getElementById("OZViewer")
             if (oz) {
                 // if (oz.GetInformation("INPUT_CHECK_VALIDITY") == "valid") {
 
-                // var inputdatas = JSON.parse(
-                //     oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
-                // )
-                const inputdata = JSON.parse(
-                    oz.GetInformation("INPUT_JSON_ALL")
+                const inputdatas = JSON.parse(
+                    oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
                 )
-                console.log("datagop", inputdata)
+                // const inputdata = JSON.parse(
+                //     oz.GetInformation("INPUT_JSON_ALL")
+                // )
+                console.log("datagop", inputdatas)
 
                 const body: RequestEformTaks = {
-                    data: inputdata,
+                    data: { data: inputdatas },
                     formTemplate: idFormTempLate,
                     appointmentId: `${params?.id}`,
                     documentId: "test",
@@ -311,9 +235,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 if (res.status === 200) {
                     messageApi.success("success")
                     if (type === "SUBMIT") {
-                        router.replace(routers("ksvteller").mywork.path, {
+                        router.replace(routers("teller").mywork.path, {
                             scroll: true
                         })
+                        router.refresh()
                     }
                 }
                 setLoading(false)

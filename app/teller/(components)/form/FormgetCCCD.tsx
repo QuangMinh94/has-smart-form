@@ -1,19 +1,53 @@
 "use client"
-import React, { memo, useCallback } from "react"
+import React, { memo, useCallback, useState } from "react"
 
-import { Button, Form, Input, InputNumber } from "antd"
-import SelectEproduct from "@/app/teller/(components)/customSelect/SelectForm"
+import { Button, Form, Input } from "antd"
+import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 
-const onFinish = (values: any) => {
-    console.log("Success:", values)
-}
+import { User } from "@/app/(types)/infoUser"
+import { seacrhCustomInFo } from "@/app/(service)/appointments"
+import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 
 const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo)
 }
-
-const FormOder: React.FC = () => {
+type Props = {
+    showModalFormOder: () => void
+    handleCancel: () => void
+}
+const FormGetCCCD: React.FC<Props> = ({ showModalFormOder, handleCancel }) => {
     const [form] = Form.useForm()
+    const [lodingBtn, setLoadingBtn] = useState<boolean>(false)
+    const { setDataGlobal } = useContextMyWorkDetail()
+    const { token, session } = useCustomCookies()
+    const onFinish = (values: any) => {
+        const CCCD = values?.CCCD
+
+        seacrhCustomInFor(CCCD)
+    }
+    const seacrhCustomInFor = async (CCCD: string) => {
+        setLoadingBtn(true)
+        try {
+            const res = await seacrhCustomInFo({
+                bodyRequest: { citizenId: CCCD },
+                session,
+                token
+            })
+            setLoadingBtn(false)
+            if (res.status === 200) {
+                const User: User = res.data[0]
+                setDataGlobal((data) => ({
+                    ...data,
+                    inFoUser: { ...User, citizenId: CCCD }
+                }))
+                showModalFormOder()
+                handleCancel()
+            }
+        } catch (err) {
+            setLoadingBtn(false)
+            alert("có lỗi")
+        }
+    }
     return (
         <Form
             name="basic"
@@ -39,12 +73,11 @@ const FormOder: React.FC = () => {
             >
                 <Input />
             </Form.Item>
-
             <Form.Item
                 wrapperCol={{ offset: 10, span: 16 }}
                 style={{ marginTop: "50px" }}
             >
-                <Button type="primary" htmlType="submit">
+                <Button loading={lodingBtn} type="primary" htmlType="submit">
                     Xác nhận
                 </Button>
             </Form.Item>
@@ -52,4 +85,4 @@ const FormOder: React.FC = () => {
     )
 }
 
-export default memo(FormOder)
+export default memo(FormGetCCCD)
