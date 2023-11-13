@@ -47,4 +47,26 @@ const ContextTemplate = createContext<typeContextTemplate>({
     selectedTree: "",
     setSelectedTree: () => {}
 })
-export { ContextTemplate }
+
+export interface typeContextTranfer {
+    setListLeft: React.Dispatch<React.SetStateAction<any[]>>
+    listLeft: any[]
+    setListRight: React.Dispatch<React.SetStateAction<any[]>>
+    listRight: any[]
+    setChangeListFilter: React.Dispatch<React.SetStateAction<boolean>>
+    ChangeListFilter: boolean
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
+    loading: boolean
+}
+const contextTranfer = createContext<typeContextTranfer>({
+    setListLeft: () => {},
+    setListRight: () => {},
+    setChangeListFilter: () => {},
+    ChangeListFilter: false,
+    listLeft: [],
+    listRight: [],
+    setLoading: () => {},
+    loading: false
+})
+
+export { ContextTemplate, contextTranfer }
