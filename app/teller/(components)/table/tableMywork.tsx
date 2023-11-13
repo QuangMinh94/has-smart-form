@@ -14,7 +14,7 @@ type Props = {
     data: myWork[]
 }
 const App: React.FC<Props> = ({ data }) => {
-    const { setDataGlobal } = useContextMyWorkDetail()
+    const { setDataGlobal, dataGlobal } = useContextMyWorkDetail()
     const router = useRouter()
 
     useEffect(() => {
@@ -22,7 +22,7 @@ const App: React.FC<Props> = ({ data }) => {
             ...obj,
             dataMywork: data
         }))
-    }, [])
+    }, [JSON.stringify(data)])
     const CustomClickPath = async (row: myWork) => {
         try {
             setDataGlobal((data) => ({
@@ -79,6 +79,13 @@ const App: React.FC<Props> = ({ data }) => {
             }
         },
         {
+            key: "channel",
+            title: "Kênh",
+            render: (row: myWork) => {
+                return <>{row?.channel?.description}</>
+            }
+        },
+        {
             key: "createDate",
             title: "Ngày tạo",
             dataIndex: "createDate",
@@ -114,7 +121,7 @@ const App: React.FC<Props> = ({ data }) => {
         <div>
             <Table
                 scroll={{
-                    y: 400,
+                    y: "60vh",
                     scrollToFirstRowOnChange: true
                 }}
                 pagination={{
@@ -123,7 +130,7 @@ const App: React.FC<Props> = ({ data }) => {
                     pageSizeOptions: ["5", "10", "20", "30"]
                 }}
                 columns={columns}
-                dataSource={data}
+                dataSource={[...dataGlobal.dataMywork].reverse()}
             />
         </div>
     )

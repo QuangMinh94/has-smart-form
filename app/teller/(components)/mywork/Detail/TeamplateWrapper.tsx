@@ -13,37 +13,56 @@ import delay from "delay"
 import { useSession } from "next-auth/react"
 import { useCookies } from "next-client-cookies"
 import dynamic from "next/dynamic"
-import { useParams, useRouter } from "next/navigation"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import React, { useEffect, useState } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
 import TranferMyWork from "./TranferMyWork"
 import routers from "@/router/cusTomRouter"
+import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+import { seacrhCustomInFo } from "@/app/(service)/appointments"
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
 })
-export interface choosenBlockCustom extends choosenBlock {}
 
 type Props = { mywork: myWork }
 const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
-    const cookies = useCookies()
+    const { token, session } = useCustomCookies()
     const params = useParams()
     const router = useRouter()
+    const searchParams = useSearchParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [messageApi, contextHolder] = message.useMessage()
     const [viewerKey, setViewerKey] = useState<number>(0)
     const [idFormTempLate, setIdFormTempLate] = useState<string[]>([])
-    const {
-        listRight,
-        setChoosenBlock,
-
-        setListRight,
-        setDataGlobal
-    } = useContextMyWorkDetail()
+    const { listRight, setChoosenBlock, setListRight, setDataGlobal } =
+        useContextMyWorkDetail()
     const resetEForm = () => {
         setViewerKey(Math.random())
+    }
+
+    const Blocks = (listRightBlock: any[]): choosenBlock[] => {
+        const choosenBlock: choosenBlock[] = []
+        const checkDuplicateBlock = new Set()
+        listRightBlock.forEach((element) => {
+            let count = 0
+            element.block.forEach((block: block) => {
+                const idBlockCustom: string = `${block.name}${block.ozrRepository}`
+
+                if (!checkDuplicateBlock.has(idBlockCustom)) {
+                    choosenBlock.push({
+                        name: block.name,
+                        location: count.toString(),
+                        ozrRepository: block.ozrRepository,
+                        idTemplate: element?.id
+                    })
+                    checkDuplicateBlock.add(idBlockCustom)
+                }
+            })
+        })
+        return choosenBlock
     }
 
     useEffect(() => {
@@ -77,47 +96,36 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             if (listRight.length > 0) {
                 resetEForm()
                 await delay(2000)
-                const choosenBlock: choosenBlockCustom[] = []
-                const checkDuplicateBlock = new Set()
-                listRight.forEach((element) => {
-                    let count = 0
-                    element.block.forEach((block: block) => {
-                        const idBlockCustom: string = `${block.name}${block.ozrRepository}`
-                        if (!checkDuplicateBlock.has(idBlockCustom)) {
-                            choosenBlock.push({
-                                name: block.name,
-                                location: count.toString(),
-                                ozrRepository: block.ozrRepository,
-                                idTemplate: element?.id
-                            })
-                        }
-                        checkDuplicateBlock.add(idBlockCustom)
-                    })
-                })
+
+                const choosenBlock = Blocks(listRight)
                 console.log("choosenBlock", choosenBlock)
 
-                const dataInput = mywork?.eformTask?.[0]?.data?.data ?? []
-                const ObjDataInput: any = dataInput.reduce(
-                    (acc: any, item: any) => {
-                        acc[item?.ReportDisplayName] = item?.Input
-                        return acc
-                    },
-                    {}
-                )
-                console.log("Report", ObjDataInput)
+                // const dataInput = mywork?.eformTask?.[0]?.data?.data ?? []
+
+                // const ObjDataInput: any = dataInput.reduce(
+                //     (acc: any, item: any) => {
+                //         acc[item?.ReportDisplayName] = item?.Input
+                //         return acc
+                //     },
+                //     {}
+                // )
+
+                const dataGop = mywork?.eformTask?.[0]?.data?.Input
+                // console.log("Report", ObjDataInput)
+                console.log("ok", dataGop)
                 const oz = document.getElementById("OZViewer")
                 if (oz) {
                     for (let i = choosenBlock.length - 1; i >= 0; i--) {
                         const block = choosenBlock[i]
-                        const dataInput = JSON.stringify(
-                            ObjDataInput[`${block.name}`]
-                        )
+                        // const dataInput = JSON.stringify(
+                        //     ObjDataInput[`${block.name}`]
+                        // )
                         oz.CreateReportEx(
                             DefaultParams(
                                 process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                                 "/" + block.ozrRepository + "/" + block.name,
                                 block.name,
-                                dataInput
+                                JSON.stringify(dataGop)
                             ),
                             ";"
                         )
@@ -137,48 +145,42 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     }, [])
 
     const onPreview = async () => {
-        if (listRight.length > 0) {
-            resetEForm()
-            await delay(2000)
-            const choosenBlock: choosenBlock[] = []
-            const checkDuplicateBlock = new Set()
-            listRight.forEach((element) => {
-                let count = 0
-                element.block.forEach((block: block) => {
-                    const idBlockCustom: string = `${block.name}${block.ozrRepository}`
-
-                    if (!checkDuplicateBlock.has(idBlockCustom)) {
-                        choosenBlock.push({
-                            name: block.name,
-                            location: count.toString(),
-                            ozrRepository: block.ozrRepository,
-                            idTemplate: element?.id
-                        })
-                        checkDuplicateBlock.add(idBlockCustom)
-                    }
+        try {
+            if (listRight.length > 0) {
+                const res = await seacrhCustomInFo({
+                    bodyRequest: { citizenId: searchParams.get("CCCD") ?? "" },
+                    session,
+                    token
                 })
-            })
+                const info = res.data[0]
+                resetEForm()
+                await delay(2000)
+                const choosenBlock = Blocks(listRight)
+                const oz = document.getElementById("OZViewer")
 
-            const oz = document.getElementById("OZViewer")
-            for (let i = choosenBlock.length - 1; i >= 0; i--) {
-                const block = choosenBlock[i]
+                for (let i = choosenBlock.length - 1; i >= 0; i--) {
+                    const block = choosenBlock[i]
 
-                oz!.CreateReportEx(
-                    DefaultParams(
-                        process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
-                        "/" + block.ozrRepository + "/" + block.name,
-                        block.name
-                    ),
-                    ";"
-                )
+                    oz!.CreateReportEx(
+                        DefaultParams(
+                            process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                            "/" + block.ozrRepository + "/" + block.name,
+                            block.name,
+                            JSON.stringify({ ...info, Group2: info?.gender })
+                        ),
+                        ";"
+                    )
+                }
+                setIdFormTempLate(listRight.map((item) => item?.id))
+                setChoosenBlock({
+                    choosenBlock: choosenBlock,
+                    changeBlock: 0
+                })
+            } else {
+                messageApi.error("Vui lòng chọn một biểu mẫu")
             }
-            setIdFormTempLate(listRight.map((item) => item?.id))
-            setChoosenBlock({
-                choosenBlock: choosenBlock,
-                changeBlock: 0
-            })
-        } else {
-            messageApi.error("Vui lòng chọn một biểu mẫu")
+        } catch (e) {
+            messageApi.error("có lỗi vui lòng thử lại sau")
         }
     }
 
@@ -213,13 +215,15 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 const inputdatas = JSON.parse(
                     oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
                 )
-                // const inputdata = JSON.parse(
-                //     oz.GetInformation("INPUT_JSON_ALL")
-                // )
-                console.log("datagop", inputdatas)
+                const inputdata = JSON.parse(
+                    oz.GetInformation("INPUT_JSON_ALL")
+                )
+                // console.log("oh no", inputdata)
+                // console.log("i", inputdatas)
 
                 const body: RequestEformTaks = {
-                    data: { data: inputdatas },
+                    // data: { data: inputdatas },
+                    data: inputdata,
                     formTemplate: idFormTempLate,
                     appointmentId: `${params?.id}`,
                     documentId: "test",
@@ -229,8 +233,8 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
 
                 const res = await addEformTask({
                     bodyRequest: body,
-                    token: cookies.get("token") ?? "",
-                    session: cookies.get("session") ?? ""
+                    token,
+                    session
                 })
                 if (res.status === 200) {
                     messageApi.success("success")

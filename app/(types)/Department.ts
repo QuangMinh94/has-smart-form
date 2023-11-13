@@ -1,4 +1,3 @@
-
 import { Users } from "./Users"
 export interface Parent {
     Active: boolean
@@ -12,13 +11,15 @@ export interface Parent {
 
 export interface Department {
     _id: string
-    Name?: string
-    __v?: number
-    Active?: boolean
-    Description?: string
-    Parent?: Parent
-    Organization?: string
-    Manager?: Users
+    active: boolean
+    name: string
+    organization: string
+    parent: string
+    type: string
+    code: string
+    address: string
+    stage: string
+    distric: string
 }
 export interface bodyDepartmentRequest {
     Id: string

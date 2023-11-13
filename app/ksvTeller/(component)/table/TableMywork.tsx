@@ -72,6 +72,13 @@ const TableMyWork: React.FC<Props> = ({ data }) => {
             }
         },
         {
+            key: "channel",
+            title: "Kênh",
+            render: (row: myWork) => {
+                return <>{row?.channel?.description}</>
+            }
+        },
+        {
             key: "createDate",
             title: "Ngày tạo",
             dataIndex: "createDate",

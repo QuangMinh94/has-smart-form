@@ -4,7 +4,7 @@ import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import UseGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
 import routers from "@/router/cusTomRouter"
-import { Button, Input, Popconfirm, message } from "antd"
+import { Button, Input, Popconfirm, message, Modal } from "antd"
 import axios from "axios"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import React, { memo, useState } from "react"
@@ -12,14 +12,12 @@ const { TextArea } = Input
 const confirm = (cbAsync: () => Promise<void>) => {
     return cbAsync()
 }
-const cancel = (setValueText: React.Dispatch<React.SetStateAction<string>>) => {
-    setValueText("")
-}
-
 type Props = {
     type: "approve" | "notApprove"
 }
 const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const [loadingConfirm, setLoadingConfirm] = useState<boolean>(false)
     const { token, session } = useCustomCookies()
     const { InFoUser } = UseGetInfoUser()
     const params = useParams()
@@ -28,7 +26,9 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
     const [valueText, setValueText] = useState<string>("")
     const [messageApi, contextHolder] = message.useMessage()
     const { dataGlobal, choosenBlock } = useContextMyWorkDetail()
+
     const HandlerSigning = async () => {
+        setLoadingConfirm(true)
         const m = new Date()
         const dateString =
             m.getUTCFullYear() +
@@ -93,7 +93,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                             signerName: InFoUser?.userName,
                             signLocation: "~3",
                             eFormTaskId:
-                                dataGlobal.myworkDetail.eformTask![0]._id,
+                                dataGlobal.myworkDetail.eformTask?.[0]?._id,
                             filePath:
                                 process.env.NEXT_PUBLIC_EXPORT_FOLDER! +
                                 "/" +
@@ -101,18 +101,18 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                         }
                         console.log("Sign request", signRequest)
                         //call docusign service
-                        // const docuResponse = await axios.post(
-                        //     process.env.NEXT_PUBLIC_EFORM_SIGNING!,
-                        //     signRequest,
-                        //     {
-                        //         headers: {
-                        //             Authorization: "Bearer " + token,
-                        //             Session: session
-                        //         }
-                        //     }
-                        // )
+                        const docuResponse = await axios.post(
+                            process.env.NEXT_PUBLIC_EFORM_SIGNING!,
+                            signRequest,
+                            {
+                                headers: {
+                                    Authorization: "Bearer " + token,
+                                    Session: session
+                                }
+                            }
+                        )
 
-                        // console.log("Docu response", docuResponse.data)
+                        console.log("Docu response", docuResponse.data)
                         await HandlerSubmit()
                     } else {
                         messageApi.error("Ký thất bại.Xin hãy thử lại sau")
@@ -125,6 +125,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                 messageApi.error("Không có document để phê duyệt")
             }
         }
+        setLoadingConfirm(false)
     }
     const HandlerSubmit = async () => {
         try {
@@ -135,7 +136,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                     rejectReason: valueText,
                     button: type === "approve" ? "SUBMIT" : "REJECT",
                     citizenId: searchParams.get("CCCD") ?? "",
-                    data: data
+                    data: { Input: data }
                 },
                 token: token,
                 session: session
@@ -156,35 +157,44 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
             messageApi.error("có lỗi vui lòng thử lại sau ")
         }
     }
+    const handleCancel = () => {
+        setIsModalOpen(false)
+    }
+    const handleOpen = () => {
+        setIsModalOpen(true)
+    }
+
     return (
         <>
             <p id="disableInput" />
             {contextHolder}
-            <Popconfirm
-                destroyTooltipOnHide={true}
-                title={type === "approve" ? "Xác nhận" : "Lý do từ chối"}
-                placement="left"
-                description={
-                    type === "approve" ? undefined : (
-                        <TextArea
-                            value={valueText}
-                            onChange={(e) => setValueText(e.target.value)}
-                        />
-                    )
-                }
-                onConfirm={() => confirm(HandlerSigning)}
-                onCancel={() => cancel(setValueText)}
-                okText="Đồng ý"
-                cancelText="Hủy bỏ"
+
+            <Button
+                onClick={handleOpen}
+                className="min-w-[100px]"
+                danger={type === "notApprove"}
+                type="primary"
             >
-                <Button
-                    className="min-w-[100px]"
-                    danger={type === "notApprove"}
-                    type="primary"
-                >
-                    {type === "approve" ? "Phê duyệt" : "Từ chối"}
-                </Button>
-            </Popconfirm>
+                {type === "approve" ? "Phê duyệt" : "Từ chối"}
+            </Button>
+            <Modal
+                title={type === "approve" ? "Xác nhận" : "Lý do từ chối"}
+                open={isModalOpen}
+                onCancel={handleCancel}
+                confirmLoading={loadingConfirm}
+                destroyOnClose={true}
+                onOk={() => confirm(HandlerSigning)}
+                okText="Đồng ý"
+                cancelText="Hủy"
+            >
+                {type === "notApprove" && (
+                    <TextArea
+                        style={{ minWidth: "20vw", height: "10vw" }}
+                        value={valueText}
+                        onChange={(e) => setValueText(e.target.value)}
+                    />
+                )}
+            </Modal>
         </>
     )
 }

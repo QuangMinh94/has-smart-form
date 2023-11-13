@@ -1,6 +1,6 @@
 import { eProduct, formTemplate } from "../eProduct"
 import { status } from "../status"
-
+import { channel } from "../channel"
 interface eProductforMywork {
     image?: {
         data: string
@@ -21,7 +21,7 @@ export interface eFormTask {
     _id: string
     createdDate: string
     creator: string
-    data: any
+    data: { Input: any }
     formTemplate: formTemplate[]
     documentId: string
     __v: number
@@ -38,4 +38,5 @@ export interface myWork {
     appointmentCode?: string
     appointmentTime?: string
     eformTask?: eFormTask[]
+    channel?: channel
 }
