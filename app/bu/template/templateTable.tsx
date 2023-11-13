@@ -38,36 +38,28 @@ const TemplateTable = ({
             render(_value, record, _index) {
                 if (!readOnly) {
                     return (
-                        <span>
-                            <CustomLink href={`/bu/template/${record.key}`}>
-                                <p className="truncate ...">
-                                    <Tooltip title={record.formName!}>
-                                        {record.formName!}
-                                    </Tooltip>
-                                </p>
-                            </CustomLink>
-                            {/* <div className="block md:hidden">
-                        <IssueStatusBadge status={record.status} />
-                    </div> */}
-                        </span>
+                        <CustomLink href={`/bu/template/${record.key}`}>
+                            <p className="truncate ...">
+                                <Tooltip title={record.formName!}>
+                                    {record.formName!}
+                                </Tooltip>
+                            </p>
+                        </CustomLink>
                     )
                 }
                 return (
-                    <span>
-                        <p
-                            className="text-blue-600 cursor-pointer truncate ..."
-                            onClick={() => {
-                                const encryptedString = EncryptedString(
-                                    record.key!
-                                )
-                                cookies.set("encryptedId", encryptedString)
-                                router.push("/bu/template/details")
-                            }}
-                        ></p>
-                        {/* <div className="block md:hidden">
-                        <IssueStatusBadge status={record.status} />
-                    </div> */}
-                    </span>
+                    <p
+                        className="text-blue-600 cursor-pointer truncate ..."
+                        onClick={() => {
+                            const encryptedString = EncryptedString(record.key!)
+                            cookies.set("encryptedId", encryptedString)
+                            router.push("/bu/template/details")
+                        }}
+                    >
+                        <Tooltip title={record.formName!}>
+                            {record.formName!}
+                        </Tooltip>
+                    </p>
                 )
             }
         },
