@@ -4,6 +4,8 @@ import {
     contextMyworkDetail,
     typeContextMyworkDetail
 } from "../../app/teller/(components)/context"
+
+import { typeContextTranfer, contextTranfer } from "../context/context"
 function useContextMyWorkDetail(): typeContextMyworkDetail {
     const provider = useContext(contextMyworkDetail)
     return {
@@ -21,5 +23,17 @@ function useContextMyWorkDetail(): typeContextMyworkDetail {
         loading: provider.loading
     }
 }
-
-export { useContextMyWorkDetail }
+function useContextTranfer(): typeContextTranfer {
+    const provider = useContext(contextTranfer)
+    return {
+        setListLeft: provider.setListLeft,
+        setListRight: provider.setListRight,
+        listLeft: provider.listLeft,
+        listRight: provider.listRight,
+        setChangeListFilter: provider.setChangeListFilter,
+        ChangeListFilter: provider.ChangeListFilter,
+        setLoading: provider.setLoading,
+        loading: provider.loading
+    }
+}
+export { useContextMyWorkDetail, useContextTranfer }

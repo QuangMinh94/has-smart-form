@@ -22,7 +22,7 @@ const App: React.FC<Props> = ({ data }) => {
             ...obj,
             dataMywork: data
         }))
-    }, [])
+    }, [JSON.stringify(data)])
     const CustomClickPath = async (row: myWork) => {
         try {
             setDataGlobal((data) => ({
@@ -76,6 +76,13 @@ const App: React.FC<Props> = ({ data }) => {
             title: "Sản phẩm",
             render: (row: myWork) => {
                 return <>{row?.eProduct?.name}</>
+            }
+        },
+        {
+            key: "channel",
+            title: "Kênh",
+            render: (row: myWork) => {
+                return <>{row?.channel?.description}</>
             }
         },
         {
