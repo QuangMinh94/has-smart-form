@@ -110,7 +110,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 //     {}
                 // )
 
-                const dataGop = mywork?.eformTask?.[0]?.data
+                const dataInput = mywork?.eformTask?.[0]?.data
                 // console.log("Report", ObjDataInput)
                 const oz = document.getElementById("OZViewer")
                 if (oz) {
@@ -124,7 +124,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                                 process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                                 "/" + block.ozrRepository + "/" + block.name,
                                 block.name,
-                                JSON.stringify(dataGop)
+                                JSON.stringify(dataInput)
                             ),
                             ";"
                         )

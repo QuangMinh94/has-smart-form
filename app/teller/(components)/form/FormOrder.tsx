@@ -132,7 +132,7 @@ const FormOder: React.FC<Props> = ({ handleCancelFormOder }) => {
                     label="Điểm giao dịch"
                     name="address"
                 >
-                    <Input readOnly />
+                    <Input disabled />
                 </Form.Item>
 
                 <Form.Item
@@ -147,7 +147,7 @@ const FormOder: React.FC<Props> = ({ handleCancelFormOder }) => {
                         }
                     ]}
                 >
-                    <Input readOnly />
+                    <Input disabled />
                 </Form.Item>
 
                 <Form.Item
