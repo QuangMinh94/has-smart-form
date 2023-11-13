@@ -79,7 +79,7 @@ const TransferTemplate = ({ treeData }: { treeData: TreeDataType[] }) => {
                         HidenUI={<TreeSelectComp treeData={treeData} />}
                         setChangeListFilter={setChangeListFilter}
                         ChangeListFilter={ChangeListFilter}
-                        title="Danh sách block"
+                        title="Danh sách Khối thông tin"
                         type={"left"}
                         setList={setListLeft}
                         list={listLeft}
@@ -99,7 +99,7 @@ const TransferTemplate = ({ treeData }: { treeData: TreeDataType[] }) => {
                     <Container
                         setChangeListFilter={setChangeListFilter}
                         ChangeListFilter={ChangeListFilter}
-                        title="Block được chọn"
+                        title="Danh sách Khối thông tin được chọn"
                         type={"right"}
                         setList={setListRight}
                         list={listRight}
