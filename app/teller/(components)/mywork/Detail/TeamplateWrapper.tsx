@@ -110,7 +110,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 //     {}
                 // )
 
-                const dataGop = mywork?.eformTask?.[0]?.data
+                const dataGop = mywork?.eformTask?.[0]?.data?.Input
                 // console.log("Report", ObjDataInput)
                 console.log("ok", dataGop)
                 const oz = document.getElementById("OZViewer")
