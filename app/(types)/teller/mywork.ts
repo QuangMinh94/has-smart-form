@@ -21,7 +21,7 @@ export interface eFormTask {
     _id: string
     createdDate: string
     creator: string
-    data: any
+    data: { Input: any }
     formTemplate: formTemplate[]
     documentId: string
     __v: number

@@ -6,6 +6,8 @@ import React, { useState } from "react"
 import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
 
 import ProviderMyworkDetail from "@/app/teller/(components)/provider/ProviderMyworkDetail"
+import ProviderTranfer from "@/components/provider/ProviderTranfer"
+import ProviderBa from "./Provider"
 import Link from "next/link"
 import { faArchive } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -88,9 +90,11 @@ const SideMenu = ({ children, title }: Props) => {
                         overflowY: "scroll"
                     }}
                 >
-                    <ProviderMyworkDetail>
-                        <div>{children}</div>
-                    </ProviderMyworkDetail>
+                    <ProviderTranfer>
+                        <ProviderBa>
+                            <div>{children}</div>
+                        </ProviderBa>
+                    </ProviderTranfer>
                 </Content>
             </Layout>
         </Layout>
