@@ -11,6 +11,7 @@ import {
     Row,
     message
 } from "antd"
+import { RangePickerProps } from "antd/es/date-picker"
 import axios from "axios"
 import dayjs from "dayjs"
 import { useCookies } from "next-client-cookies"
@@ -88,6 +89,12 @@ const TemplateForm = ({
             setIsDisabled(false)
         }
     }
+
+    const disabledDate: RangePickerProps["disabledDate"] = (current) => {
+        const isPastDate = current && dayjs(current).isBefore(dayjs(), "day")
+
+        return isPastDate
+    }
     return (
         <div className="mb-5">
             {contextHolder}
@@ -158,6 +165,7 @@ const TemplateForm = ({
                                 >
                                     <DatePicker
                                         className="w-full"
+                                        disabledDate={disabledDate}
                                         //value={formData.validFrom}
                                     />
                                 </Form.Item>
