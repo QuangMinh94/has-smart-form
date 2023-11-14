@@ -9,7 +9,7 @@ import { RadioChangeEvent, Row, Col, theme } from "antd"
 import { Radio, Button, Input } from "antd"
 import ButtonModal from "../customButton/ButtonModal"
 import React, { useEffect, memo, useCallback, useMemo } from "react"
-
+import { debounce } from "lodash"
 import {
     usePathname,
     useParams,
@@ -24,7 +24,7 @@ type condisions = {
         isAppRoverPath: boolean
     }
 }
-export type typeSearch = "CDDD" | "MGD"
+export type typeSearch = "CCCD" | "MGD"
 
 const mywork = {
     TYPE_SEARCH: "search",
@@ -107,7 +107,7 @@ const RadioComponent: React.FC<{
                 onChange={onChange}
                 value={value}
             >
-                <Radio value={"CDDD"}>CDDD</Radio>
+                <Radio value={"CCCD"}>CCCD</Radio>
                 <Radio value={"MGD"}>Mã GD</Radio>
             </Radio.Group>
         </>
@@ -177,9 +177,9 @@ const CustomFilter: React.FC<{
             router.push(mywork.params(typeSearch, value))
         }
     }
-    const HandlerChange = (e: any) => {
+    const HandlerChange = debounce((e: any) => {
         HanderFilter[pathName](e.target.value)
-    }
+    }, 400)
     return (
         <>
             {condition().pagemywork.isDetailMyorkpath && (

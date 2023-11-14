@@ -1,15 +1,14 @@
 "use client"
-
+import routers from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
-
 import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
-
 import ProviderTranfer from "@/components/provider/ProviderTranfer"
 import ProviderBa from "./Provider"
 import Link from "next/link"
 import { faArchive } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { usePathname } from "next/navigation"
 const { Header, Sider, Content } = Layout
 
 const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
@@ -35,7 +34,9 @@ type Props = {
     children: React.ReactNode
 }
 const SideMenu = ({ children }: Props) => {
+    const pathname = usePathname()
     const [collapsed, setCollapsed] = useState(false)
+    console.log(pathname)
     const {
         token: { colorBgContainer, colorPrimary }
     } = theme.useToken()
