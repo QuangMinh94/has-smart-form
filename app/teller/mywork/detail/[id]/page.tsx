@@ -7,6 +7,7 @@ import { authOptions } from "@/app/api/auth/authOptions"
 import TemlateWrapper from "@/app/teller/(components)/mywork/Detail/TeamplateWrapper"
 import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
+
 // import { cache } from "react"
 const fetchApi = async (
     idAppointMent: string,
@@ -50,9 +51,11 @@ const DetailMyWork = async ({
     searchParams: { code: string; CCCD: string; Name: string }
 }) => {
     const data = await fetchApi(params.id, searchParams.code)
+
     const findMyMork = data.find(
         (item) => item.appointmentCode === searchParams.code
     )
+
     return (
         <>
             {/* <p id="disableInput" /> */}

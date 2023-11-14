@@ -4,7 +4,7 @@ export interface taskEform {
     documentId: string
 }
 export interface RequestEformTaks {
-    data: any
+    data: { Input: any }
     formTemplate: string[]
     appointmentId: string
     documentId: string
