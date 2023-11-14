@@ -1,10 +1,10 @@
 version: '3'
 
 services:
-  with-docker-multi-env-production:
+  has-smart-form-production:
     build:
       context: ../../
       dockerfile: ./Dockerfile
-    image: with-docker-multi-env-production
+    image: quangminh94/has-smart-form:v1.0
     ports:
-      - '3003:3000'
+      - '3000:3000'

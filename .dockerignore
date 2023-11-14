@@ -30,3 +30,5 @@ README.md
 .next
 docker
 .git
+.github
+.vscode
