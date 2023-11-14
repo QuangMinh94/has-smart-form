@@ -136,7 +136,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                     rejectReason: valueText,
                     button: type === "approve" ? "SUBMIT" : "REJECT",
                     citizenId: searchParams.get("CCCD") ?? "",
-                    data: { Input: data }
+                    data
                 },
                 token: token,
                 session: session

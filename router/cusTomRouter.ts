@@ -1,6 +1,9 @@
 export type rootPath = "teller" | "ksvteller" | "ba"
 export const APP_ROVE = "appRove"
 export const DE_TAIL = "detail"
+export const BLOCK = "block"
+export const PRODUCT = "product"
+
 const routers = (root: rootPath) => {
     const router = {
         // teller
@@ -17,8 +20,8 @@ const routers = (root: rootPath) => {
         },
 
         // ba
-        block: { path: `/${root}/block` },
-        product: { path: `/${root}/product` }
+        block: { path: `/${root}/${BLOCK}` },
+        product: { path: `/${root}/${PRODUCT}` }
     }
     return router
 }

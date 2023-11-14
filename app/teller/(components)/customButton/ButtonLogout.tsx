@@ -12,17 +12,13 @@ const items: MenuProps["items"] = []
 const ButtonLogOut: React.FC = () => {
     const { InFoUser } = useGetInfoUser()
     const router = useRouter()
+
     const items: MenuProps["items"] = [
         {
             label: (
                 <Flex
                     align="center"
-                    onClick={() =>
-                        router.push(
-                            process.env.NEXT_PUBLIC_SERVER_URL! +
-                                "/api/auth/signout"
-                        )
-                    }
+                    onClick={() => router.push("/api/auth/signout")}
                 >
                     <FontAwesomeIcon className="mr-2" icon={faSignOut} />{" "}
                     <div>Đăng xuất</div>

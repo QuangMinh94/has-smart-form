@@ -16,7 +16,5 @@ export interface RequestVeRiFyEformTaks {
     rejectReason?: string
     button: "SUBMIT" | "REJECT"
     citizenId: string
-    data: {
-        Input: any
-    }
+    data: any
 }
