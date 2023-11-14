@@ -1,5 +1,4 @@
 import { EformTemplate } from "@/app/(types)/EformTemplate"
-import { Role } from "@/app/(types)/Group"
 import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import { authOptions } from "@/app/api/auth/authOptions"
 import axios from "axios"
@@ -25,7 +24,6 @@ const TemplatePage = async ({
     if (!session) notFound()
 
     const permission = session.user.userInfo.permission
-    const userRole = session.user.userInfo.defaultGroup?.role as Role[]
 
     if (!FindPermission(permission, "children", "VisibleTemplateBU")) notFound()
 

@@ -3,7 +3,7 @@
 import { EncryptedString } from "@/app/(utilities)/Crypto"
 import DateFormatter from "@/app/(utilities)/DateFormatter"
 import CustomLink from "@/components/CustomLink"
-import { Table } from "antd"
+import { Table, Tooltip } from "antd"
 import { ColumnsType } from "antd/es/table"
 import { useCookies } from "next-client-cookies"
 import { usePathname, useRouter } from "next/navigation"
@@ -33,39 +33,33 @@ const TemplateTable = ({
         {
             title: "Tên biểu mẫu",
             dataIndex: "formName",
-            ellipsis: true,
+            //ellipsis: true,
             width: "6vw",
             render(_value, record, _index) {
                 if (!readOnly) {
                     return (
-                        <span>
-                            <CustomLink href={`/bu/template/${record.key}`}>
-                                {record.formName!}
-                            </CustomLink>
-                            {/* <div className="block md:hidden">
-                        <IssueStatusBadge status={record.status} />
-                    </div> */}
-                        </span>
+                        <CustomLink href={`/bu/template/${record.key}`}>
+                            <p className="truncate ...">
+                                <Tooltip title={record.formName!}>
+                                    {record.formName!}
+                                </Tooltip>
+                            </p>
+                        </CustomLink>
                     )
                 }
                 return (
-                    <span>
-                        <p
-                            className="text-blue-600 cursor-pointer"
-                            onClick={() => {
-                                const encryptedString = EncryptedString(
-                                    record.key!
-                                )
-                                cookies.set("encryptedId", encryptedString)
-                                router.push("/bu/template/details")
-                            }}
-                        >
+                    <p
+                        className="text-blue-600 cursor-pointer truncate ..."
+                        onClick={() => {
+                            const encryptedString = EncryptedString(record.key!)
+                            cookies.set("encryptedId", encryptedString)
+                            router.push("/bu/template/details")
+                        }}
+                    >
+                        <Tooltip title={record.formName!}>
                             {record.formName!}
-                        </p>
-                        {/* <div className="block md:hidden">
-                        <IssueStatusBadge status={record.status} />
-                    </div> */}
-                    </span>
+                        </Tooltip>
+                    </p>
                 )
             }
         },
