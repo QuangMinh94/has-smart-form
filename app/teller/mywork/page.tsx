@@ -14,7 +14,7 @@ import TableMywork from "../(components)/table/tableMywork"
 const MyWork = async ({
     searchParams
 }: {
-    searchParams: { search: "MGD" | "CDDD"; idSearch: string | null }
+    searchParams: { search: "MGD" | "CCCD"; idSearch: string | null }
 }) => {
     const { search, idSearch } = searchParams
     const ListMyworks = await fetchApi({ search, idSearch })
@@ -34,7 +34,7 @@ const fetchApi = async ({
     search,
     idSearch
 }: {
-    search: "MGD" | "CDDD"
+    search: "MGD" | "CCCD"
     idSearch: string | null
 }): Promise<myWork[]> => {
     const cookie = cookies()
@@ -45,7 +45,7 @@ const fetchApi = async ({
     const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
 
     const KeySearch: "citizenId" | "appointmentCode" =
-        search === "CDDD" ? "citizenId" : "appointmentCode"
+        search === "CCCD" ? "citizenId" : "appointmentCode"
     const bodyRequest: any = {
         [KeySearch]: idSearch,
         userRole: idRole

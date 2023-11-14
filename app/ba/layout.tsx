@@ -1,6 +1,7 @@
 import React from "react"
 import { ClientCookiesProvider } from "../ClientCookiesProvider"
 import { cookies } from "next/headers"
+import SideMenu from "./(component)/SideMenu"
 interface Props {
     children: React.ReactNode
 }
@@ -8,7 +9,7 @@ interface Props {
 const BaLayout = ({ children }: Props) => {
     return (
         <ClientCookiesProvider value={cookies().getAll()}>
-            {/* <SideMenu title="Công việc của tôi">{children}</SideMenu> */}
+            <SideMenu>{children}</SideMenu>
         </ClientCookiesProvider>
     )
 }

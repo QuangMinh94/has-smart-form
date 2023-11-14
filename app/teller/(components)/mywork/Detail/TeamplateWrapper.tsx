@@ -67,6 +67,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
 
     useEffect(() => {
         setDataGlobal((data) => ({ ...data, myworkDetail: mywork }))
+        router.refresh()
     }, [])
     useEffect(() => {
         const cusTomerFormtemplate = (
@@ -95,7 +96,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
 
             if (listRight.length > 0) {
                 resetEForm()
-                await delay(2000)
+                await delay(3000)
 
                 const choosenBlock = Blocks(listRight)
                 console.log("choosenBlock", choosenBlock)
@@ -111,7 +112,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 // )
 
                 const dataInput = mywork?.eformTask?.[0]?.data?.Input
+
                 // console.log("Report", ObjDataInput)
+
+                console.log("dataInput", dataInput)
                 const oz = document.getElementById("OZViewer")
                 if (oz) {
                     for (let i = choosenBlock.length - 1; i >= 0; i--) {
@@ -153,7 +157,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 })
                 const info = res.data[0]
                 resetEForm()
-                await delay(2000)
+                await delay(3000)
                 const choosenBlock = Blocks(listRight)
                 const oz = document.getElementById("OZViewer")
 
@@ -211,9 +215,6 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             if (oz) {
                 // if (oz.GetInformation("INPUT_CHECK_VALIDITY") == "valid") {
 
-                // const inputdatas = JSON.parse(
-                //     oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
-                // )
                 const inputdata = JSON.parse(
                     oz.GetInformation("INPUT_JSON_ALL")
                 )
