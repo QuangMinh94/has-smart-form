@@ -135,7 +135,7 @@ const TableMyWork: React.FC<Props> = ({ data }) => {
                     pageSizeOptions: ["5", "10", "20", "30"]
                 }}
                 columns={columns}
-                dataSource={data}
+                dataSource={[...data].reverse()}
             />
         </div>
     )

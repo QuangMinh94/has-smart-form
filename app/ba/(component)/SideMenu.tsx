@@ -5,7 +5,6 @@ import React, { useState } from "react"
 
 import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
 
-import ProviderMyworkDetail from "@/app/teller/(components)/provider/ProviderMyworkDetail"
 import ProviderTranfer from "@/components/provider/ProviderTranfer"
 import ProviderBa from "./Provider"
 import Link from "next/link"
@@ -34,9 +33,8 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
 }
 type Props = {
     children: React.ReactNode
-    title: string
 }
-const SideMenu = ({ children, title }: Props) => {
+const SideMenu = ({ children }: Props) => {
     const [collapsed, setCollapsed] = useState(false)
     const {
         token: { colorBgContainer, colorPrimary }
@@ -74,9 +72,7 @@ const SideMenu = ({ children, title }: Props) => {
                         style={{
                             color: colorPrimary
                         }}
-                    >
-                        {title}
-                    </h1>
+                    ></h1>
 
                     <ButtonLogOut />
                 </Header>

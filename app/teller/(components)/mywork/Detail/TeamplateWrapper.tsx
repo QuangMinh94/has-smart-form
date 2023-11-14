@@ -110,7 +110,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 //     {}
                 // )
 
-                const dataInput = mywork?.eformTask?.[0]?.data
+                const dataInput = mywork?.eformTask?.[0]?.data?.Input
                 // console.log("Report", ObjDataInput)
                 const oz = document.getElementById("OZViewer")
                 if (oz) {
@@ -211,9 +211,9 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             if (oz) {
                 // if (oz.GetInformation("INPUT_CHECK_VALIDITY") == "valid") {
 
-                const inputdatas = JSON.parse(
-                    oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
-                )
+                // const inputdatas = JSON.parse(
+                //     oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
+                // )
                 const inputdata = JSON.parse(
                     oz.GetInformation("INPUT_JSON_ALL")
                 )
@@ -222,7 +222,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
 
                 const body: RequestEformTaks = {
                     // data: { data: inputdatas },
-                    data: inputdata,
+                    data: { Input: inputdata },
                     formTemplate: idFormTempLate,
                     appointmentId: `${params?.id}`,
                     documentId: "test",
