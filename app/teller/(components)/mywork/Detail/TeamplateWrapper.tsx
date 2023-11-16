@@ -6,7 +6,7 @@ import { block, formTemplate } from "@/app/(types)/eProduct"
 import { eFormTask, myWork } from "@/app/(types)/teller/mywork"
 import { choosenBlock } from "@/app/teller/(components)/context"
 import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
-import { DefaultParams } from "@/components/OzViewer"
+import { DefaultParams, OzDelimiter } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import routers from "@/router/cusTomRouter"
@@ -127,9 +127,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                                 process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                                 "/" + block.ozrRepository + "/" + block.name,
                                 block.name,
+                                OzDelimiter(),
                                 JSON.stringify(dataInput)
                             ),
-                            ";"
+                            OzDelimiter()
                         )
                     }
                 }
@@ -168,9 +169,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                             process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                             "/" + block.ozrRepository + "/" + block.name,
                             block.name,
+                            OzDelimiter(),
                             JSON.stringify({ ...info, Group2: info?.gender })
                         ),
-                        ";"
+                        OzDelimiter()
                     )
                 }
                 setIdFormTempLate(listRight.map((item) => item?.id))
@@ -283,9 +285,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             //get input json of current report and sync with other reports
             const input_data_current = oz.GetInformation("INPUT_JSON")
 
-            const params = "connection.inputjson=" + input_data_current + ";"
+            const params =
+                "connection.inputjson=" + input_data_current + OzDelimiter()
             numberArray.forEach((element) => {
-                oz.ReBind(element, "report", params, ";")
+                oz.ReBind(element, "report", params, OzDelimiter())
             })
         }
     }
