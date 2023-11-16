@@ -9,13 +9,15 @@ import SelectEproduct from "@/app/teller/(components)/customSelect/SelectForm"
 import { addAppointMent, seacrhAppointMent } from "@/app/(service)/appointments"
 import { RequestAddApoinMent } from "@/app/(types)/Apointment"
 import { useRouter } from "next/navigation"
-
+import { useEnvContext } from "next-runtime-env"
 import dayjs from "dayjs"
 const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo)
 }
 type Props = { handleCancelFormOder: () => void }
 const FormOder: React.FC<Props> = ({ handleCancelFormOder }) => {
+    const { NEXT_PUBLIC_ADD_APPOINT_MENTS, NEXT_PUBLIC_APPOINT_MENTS } =
+        useEnvContext()
     const [form] = Form.useForm()
     const { token, session } = useCustomCookies()
     const { InFoUser } = useGetInfoUser()
@@ -58,6 +60,7 @@ const FormOder: React.FC<Props> = ({ handleCancelFormOder }) => {
         setLoadingBtn(true)
         try {
             const res = await addAppointMent({
+                url: NEXT_PUBLIC_ADD_APPOINT_MENTS!,
                 bodyRequest: body,
                 session,
                 token
@@ -66,6 +69,7 @@ const FormOder: React.FC<Props> = ({ handleCancelFormOder }) => {
                 const UserCustom: any = InFoUser?.defaultGroup.role
                 const idRole = UserCustom?.[0]?._id
                 const resSeacrh = await seacrhAppointMent({
+                    url: NEXT_PUBLIC_APPOINT_MENTS!,
                     bodyRequest: {
                         userRole: idRole,
                         appointmentCode: res?.data?.appointmentCode ?? ""
