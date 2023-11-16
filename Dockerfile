@@ -11,15 +11,12 @@ RUN apk add --update python3 make g++\
     && rm -rf /var/cache/apk/*
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-
-RUN npm ci
-
-#RUN \
-#   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-#  elif [ -f package-lock.json ]; then npm ci; \
-# elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i; \
-#else echo "Lockfile not found." && exit 1; \
-#fi
+RUN \
+    if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+    elif [ -f package-lock.json ]; then npm ci; \
+    elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i; \
+    else echo "Lockfile not found." && exit 1; \
+    fi
 
 
 # 2. Rebuild the source code only when needed
@@ -28,8 +25,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # This will do the trick, use the corresponding env file for each environment.
-COPY .env.production .env.production
-#RUN yarn build
+COPY .env.production.docker .env.production
+RUN yarn build
 
 # 3. Production image, copy all the files and run next
 FROM base AS runner
@@ -51,8 +48,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
 
 EXPOSE 3000
+EXPOSE 3011
 
 ENV PORT 3000
-ENV HOSTNAME localhost
+ENV HOSTNAME 0.0.0.0
 
 CMD ["node", "server.js"]
+#CMD ["npm", "start"]

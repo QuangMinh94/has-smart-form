@@ -38,9 +38,10 @@ const Viewer = () => {
                         DefaultParams(
                             process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                             "/" + element.type + "/" + element.name,
-                            element.name!
+                            element.name!,
+                            OzDelimiter()
                         ),
-                        ";"
+                        OzDelimiter()
                     )
                     count++
                 })
@@ -74,26 +75,31 @@ export const DefaultParams = (
     url: string,
     reportName: string,
     displayname: string,
+    delimiter: string,
     inputJson: string = "",
     index: string = "0"
 ) => {
-    return `connection.servlet=${url};
-connection.reportname=${reportName};
-global.concatthumbnail=true;
-connection.refreshperiod=1;
-viewer.createreport_doc_index=${index};
-    global.concatpreview=false;
-    viewer.showtab=true;
-    connection.displayname=${displayname};
-    connection.inputjson=${inputJson};
-    viewer.thumbnailsection_showclosebutton=true;
-    information.debug=true;
-    eform.signpad_zoom=50;
-    eform.signpad_type=dialog;
-    viewer.reportchangecommand=true;
-    viewer.progresscommand=true;
-    global.use_preview_progressbar=true;
-    viewer.errorcommand=true;`
+    return `connection.servlet=${url}${delimiter}
+connection.reportname=${reportName}${delimiter}
+global.concatthumbnail=true${delimiter}
+connection.refreshperiod=1${delimiter}
+viewer.createreport_doc_index=${index}${delimiter}
+    global.concatpreview=false${delimiter}
+    viewer.showtab=true${delimiter}
+    connection.displayname=${displayname}${delimiter}
+    connection.inputjson=${inputJson}${delimiter}
+    viewer.thumbnailsection_showclosebutton=true${delimiter}
+    information.debug=true${delimiter}
+    eform.signpad_zoom=50${delimiter}
+    eform.signpad_type=dialog${delimiter}
+    viewer.reportchangecommand=true${delimiter}
+    viewer.progresscommand=true${delimiter}
+    global.use_preview_progressbar=true${delimiter}
+    viewer.errorcommand=true${delimiter}`
+}
+
+export const OzDelimiter = () => {
+    return "==OZDelimiter=="
 }
 
 export default OzViewer

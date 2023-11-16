@@ -1,13 +1,16 @@
 "use client"
 
 import { addEformTask } from "@/app/(service)/EformTemplate"
-import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
+import { seacrhCustomInFo } from "@/app/(service)/appointments"
+import { RequestEformTaks } from "@/app/(types)/eFormTask"
 import { block, formTemplate } from "@/app/(types)/eProduct"
 import { eFormTask, myWork } from "@/app/(types)/teller/mywork"
 import { choosenBlock } from "@/app/teller/(components)/context"
 import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
-import { DefaultParams } from "@/components/OzViewer"
+import { DefaultParams, OzDelimiter } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+import routers from "@/router/cusTomRouter"
 import { message } from "antd"
 import delay from "delay"
 import dynamic from "next/dynamic"
@@ -22,9 +25,6 @@ import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
 import TranferMyWork from "./TranferMyWork"
-import routers from "@/router/cusTomRouter"
-import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
-import { seacrhCustomInFo } from "@/app/(service)/appointments"
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
@@ -71,9 +71,11 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     }
 
     useEffect(() => {
+        //console.log("Here")
         setDataGlobal((data) => ({ ...data, myworkDetail: mywork }))
         router.refresh()
     }, [])
+
     useEffect(() => {
         const cusTomerFormtemplate = (
             EformTask: eFormTask[]
@@ -133,9 +135,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                                 process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                                 "/" + block.ozrRepository + "/" + block.name,
                                 block.name,
+                                OzDelimiter(),
                                 JSON.stringify(dataInput)
                             ),
-                            ";"
+                            OzDelimiter()
                         )
                     }
                 }
@@ -174,9 +177,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                             process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
                             "/" + block.ozrRepository + "/" + block.name,
                             block.name,
+                            OzDelimiter(),
                             JSON.stringify({ ...info, Group2: info?.gender })
                         ),
-                        ";"
+                        OzDelimiter()
                     )
                 }
                 setIdFormTempLate(listRight.map((item) => item?.id))
@@ -223,7 +227,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 const inputdata = JSON.parse(
                     oz.GetInformation("INPUT_JSON_ALL")
                 )
-                // console.log("oh no", inputdata)
+                //console.log("oh no", inputdata)
                 // console.log("i", inputdatas)
 
                 const body: RequestEformTaks = {
@@ -247,6 +251,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                         router.replace(routers("teller").mywork.path, {
                             scroll: true
                         })
+
                         router.refresh()
                     }
                 }
@@ -288,9 +293,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             //get input json of current report and sync with other reports
             const input_data_current = oz.GetInformation("INPUT_JSON")
 
-            const params = "connection.inputjson=" + input_data_current + ";"
+            const params =
+                "connection.inputjson=" + input_data_current + OzDelimiter()
             numberArray.forEach((element) => {
-                oz.ReBind(element, "report", params, ";")
+                oz.ReBind(element, "report", params, OzDelimiter())
             })
         }
     }
