@@ -22,6 +22,7 @@ const App: React.FC<Props> = ({ data }) => {
             ...obj,
             dataMywork: data
         }))
+        router.refresh()
     }, [JSON.stringify(data)])
     const CustomClickPath = async (row: myWork) => {
         try {

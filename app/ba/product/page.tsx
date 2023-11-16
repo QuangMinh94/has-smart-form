@@ -1,10 +1,26 @@
 import { cookies } from "next/headers"
-import { GetProductTree } from "@/app/(service)/eProduct"
 import { eProduct } from "@/app/(types)/eProduct"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/authOptions"
 import FillterProduct from "../(component)/fillter/FillterProduct"
 import LayoutTreeView from "../(component)/table/TreeViewProduct"
+import { requestBodyEproductTree } from "@/app/(types)/eProduct"
+import axios from "axios"
+const GetProductTree = async (pram: {
+    bodyRequest: requestBodyEproductTree
+    token: string
+    session: string
+}) => {
+    const { bodyRequest, token, session } = pram
+    const res = await axios.post(process.env.EPRODUCT_TREEDATA!, bodyRequest, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Session: session
+        }
+    })
+    return res
+}
+
 const fetchApi = async (): Promise<eProduct[]> => {
     const cookie = cookies()
     // const session = await getServerSession(authOptions)

@@ -24,7 +24,7 @@ export interface eFormTask {
     data: { Input: any }
     formTemplate: formTemplate[]
     documentId: string
-    __v: number
+    __v?: number
 }
 export interface myWork {
     key?: string

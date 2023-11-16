@@ -5,5 +5,4 @@ const BUPage = () => {
     return <></>
 }
 
-export const dynamic = "force-dynamic"
 export default BUPage

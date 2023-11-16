@@ -1,0 +1,6 @@
+.ant-modal-wrap:hover .actionHover {
+    display: flex !important;
+}
+.boxAction:hover > .actionHover {
+    display: flex !important;
+}

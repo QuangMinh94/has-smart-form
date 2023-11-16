@@ -55,7 +55,7 @@ const fetchApi = async ({
     }
     try {
         const res = await axios.post(
-            process.env.NEXT_PUBLIC_APPOINT_MENTS!,
+            process.env.SEARCH_APPOINT_MENTS!,
             bodyRequest,
             {
                 headers: {

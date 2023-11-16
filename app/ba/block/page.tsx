@@ -3,9 +3,29 @@ import TableBlock from "../(component)/table/TableBlock"
 import { authOptions } from "@/app/api/auth/authOptions"
 import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
-import { SeacrhEformTemplate } from "@/app/(service)/EformTemplate"
+
 import { RequestSeacrhEformTemplate } from "@/app/(types)/eFormTask"
 import { EformTemplate } from "@/app/(types)/EformTemplate"
+import axios from "axios"
+const SeacrhEformTemplate = async (pram: {
+    bodyRequest: RequestSeacrhEformTemplate
+    token: string
+    session: string
+}) => {
+    const { bodyRequest, token, session } = pram
+    const res = await axios.post(
+        process.env.EFORM_SEARCH_TEMPLATE!,
+        bodyRequest,
+        {
+            headers: {
+                Authorization: "Bearer " + token,
+                Session: session
+            }
+        }
+    )
+    return res
+}
+
 const fetchApi = async ({
     nameSearch
 }: {

@@ -8,6 +8,7 @@ import OzScript from "./OzScript"
 import QueryClientProvider from "./QueryClientProvider"
 import AuthProvider from "./auth/Provider"
 import AntdProvider from "./globalTheme"
+
 import "./globals.css"
 
 config.autoAddCss = false

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { debounce } from "lodash"
 import Routers from "@/router/cusTomRouter"
 import React from "react"
-const FillterBlock: React.FC = () => {
+const FillterProduct: React.FC = () => {
     const router = useRouter()
     const {
         token: { colorPrimary }
@@ -19,4 +19,4 @@ const FillterBlock: React.FC = () => {
         </div>
     )
 }
-export default FillterBlock
+export default FillterProduct
