@@ -3,6 +3,7 @@ import { config } from "@fortawesome/fontawesome-svg-core"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import { ConfigProvider } from "antd"
 import type { Metadata } from "next"
+import { PublicEnvProvider } from "next-runtime-env"
 import { inter } from "./(utilities)/Fonts"
 import OzScript from "./OzScript"
 import QueryClientProvider from "./QueryClientProvider"
@@ -27,15 +28,17 @@ export default function RootLayout({
         <html lang="en">
             <OzScript />
             <body className={inter.className}>
-                <QueryClientProvider>
-                    <AuthProvider>
-                        <ConfigProvider theme={theme}>
-                            <AntdProvider>
-                                <main>{children}</main>
-                            </AntdProvider>
-                        </ConfigProvider>
-                    </AuthProvider>
-                </QueryClientProvider>
+                <PublicEnvProvider>
+                    <QueryClientProvider>
+                        <AuthProvider>
+                            <ConfigProvider theme={theme}>
+                                <AntdProvider>
+                                    <main>{children}</main>
+                                </AntdProvider>
+                            </ConfigProvider>
+                        </AuthProvider>
+                    </QueryClientProvider>
+                </PublicEnvProvider>
             </body>
         </html>
     )

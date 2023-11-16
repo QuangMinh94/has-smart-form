@@ -1,8 +1,6 @@
-import routers from "@/router/cusTomRouter"
-import { redirect } from "next/navigation"
-const BUPage = () => {
+const TellerPage = () => {
     // redirect(routers("teller").mywork.path)
     return <></>
 }
 
-export default BUPage
+export default TellerPage

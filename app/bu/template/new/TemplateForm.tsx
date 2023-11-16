@@ -15,6 +15,7 @@ import { RangePickerProps } from "antd/es/date-picker"
 import axios from "axios"
 import dayjs from "dayjs"
 import { useCookies } from "next-client-cookies"
+import { useEnvContext } from "next-runtime-env"
 import { useRouter } from "next/navigation"
 import { useContext } from "react"
 const { TextArea } = Input
@@ -36,6 +37,8 @@ const TemplateForm = ({
     form?: FormInstance<any>
     disabled: boolean
 }) => {
+    const { NEXT_PUBLIC_EFORM_TEMPLATE, NEXT_PUBLIC_EFORM_UPDATE_TEMPLATE } =
+        useEnvContext()
     const cookies = useCookies()
     const [messageApi, contextHolder] = message.useMessage()
     const router = useRouter()
@@ -56,20 +59,16 @@ const TemplateForm = ({
 
         try {
             if (isInsert) {
-                await axios.post(
-                    process.env.NEXT_PUBLIC_EFORM_TEMPLATE!,
-                    inputValue,
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: "Bearer " + cookies.get("token"),
-                            Session: cookies.get("session")
-                        }
+                await axios.post(NEXT_PUBLIC_EFORM_TEMPLATE!, inputValue, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + cookies.get("token"),
+                        Session: cookies.get("session")
                     }
-                )
+                })
             } else {
                 await axios.post(
-                    process.env.NEXT_PUBLIC_EFORM_UPDATE_TEMPLATE!,
+                    NEXT_PUBLIC_EFORM_UPDATE_TEMPLATE!,
                     { id: id, ...inputValue },
                     {
                         headers: {

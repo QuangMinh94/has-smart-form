@@ -2,9 +2,9 @@ version: '3'
 
 services:
   has-smart-form-production:
-    build:
-      context: ../../
-      dockerfile: ./Dockerfile
-    image: quangminh94/has-smart-form:v1.0
+    #build:
+      #context: ../../
+      #dockerfile: ./Dockerfile
+    image: quangminh94/has-smart-form:master
     ports:
-      - '3000:3000'
+      - '3003:3003'

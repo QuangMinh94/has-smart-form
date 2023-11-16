@@ -2,6 +2,7 @@
 
 import delay from "delay"
 import { reverse } from "lodash"
+import { useEnvContext } from "next-runtime-env"
 import { useCallback, useContext, useEffect } from "react"
 import { ContextTemplate } from "./context/context"
 
@@ -10,6 +11,8 @@ const OzViewer = ({ viewerKey }: { viewerKey: number }) => {
 }
 
 const Viewer = () => {
+    const { NEXT_PUBLIC_EFORM_SERVER, NEXT_PUBLIC_EFORM_SERVER_APP } =
+        useEnvContext()
     const { listRight } = useContext(ContextTemplate)
     const reverseListRight: any[] = reverse(
         JSON.parse(JSON.stringify(listRight))
@@ -25,7 +28,7 @@ const Viewer = () => {
 
             window.start_ozjs(
                 "OZViewer",
-                `${process.env.NEXT_PUBLIC_EFORM_SERVER}/html5viewer/`
+                `${NEXT_PUBLIC_EFORM_SERVER}/html5viewer/`
             )
 
             await delay(3000)
@@ -36,7 +39,7 @@ const Viewer = () => {
                     const oz = document.getElementById("OZViewer")
                     oz!.CreateReportEx(
                         DefaultParams(
-                            process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                            NEXT_PUBLIC_EFORM_SERVER_APP!,
                             "/" + element.type + "/" + element.name,
                             element.name!,
                             OzDelimiter()

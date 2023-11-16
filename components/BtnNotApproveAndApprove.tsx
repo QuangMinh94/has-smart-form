@@ -4,10 +4,10 @@ import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import UseGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
 import routers from "@/router/cusTomRouter"
-import { Button, Input, Popconfirm, message, Modal } from "antd"
+import { Button, Input, Modal, message } from "antd"
 import axios from "axios"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
-import React, { memo, useState } from "react"
+import React, { useState } from "react"
 const { TextArea } = Input
 const confirm = (cbAsync: () => Promise<void>) => {
     return cbAsync()
@@ -199,4 +199,4 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
     )
 }
 
-export default memo(BtnNotApproveAndApprove)
+export default BtnNotApproveAndApprove
