@@ -27,9 +27,6 @@ const NewTemplate = async () => {
 
     const treeDataView: TreeDataType[] = MappingChildren(treeData)
 
-    /* const _option = await fetchRepositoryList(
-        process.env.NEXT_PUBLIC_EFORM_LIST!
-    ) */
     return (
         <ProviderTemplate>
             <TemplateWrapper treeData={treeDataView} listLeft={[]} data={[]} />

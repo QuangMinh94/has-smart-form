@@ -6,9 +6,10 @@ import UseGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
 import routers from "@/router/cusTomRouter"
 import { Button, Input, Modal, message } from "antd"
 import axios from "axios"
+import { useEnvContext } from "next-runtime-env"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import React, { useState } from "react"
-import { useEnvContext } from "next-runtime-env"
+
 const { TextArea } = Input
 const confirm = (cbAsync: () => Promise<void>) => {
     return cbAsync()
@@ -28,6 +29,11 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
     const [valueText, setValueText] = useState<string>("")
     const [messageApi, contextHolder] = message.useMessage()
     const { dataGlobal, choosenBlock } = useContextMyWorkDetail()
+    const {
+        NEXT_PUBLIC_EXPORT_FOLDER,
+        NEXT_PUBLIC_EXPORT_SERVICE,
+        NEXT_PUBLIC_EFORM_SIGNING
+    } = useEnvContext()
 
     const HandlerSigning = async () => {
         setLoadingConfirm(true)
@@ -77,7 +83,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                 try {
                     //calling axios to export
                     const response = await axios.post(
-                        process.env.NEXT_PUBLIC_EXPORT_SERVICE!,
+                        NEXT_PUBLIC_EXPORT_SERVICE!,
                         requestBody,
                         {
                             headers: {
@@ -97,14 +103,12 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                             eFormTaskId:
                                 dataGlobal.myworkDetail.eformTask?.[0]?._id,
                             filePath:
-                                process.env.NEXT_PUBLIC_EXPORT_FOLDER! +
-                                "/" +
-                                responseData
+                                NEXT_PUBLIC_EXPORT_FOLDER! + "/" + responseData
                         }
                         console.log("Sign request", signRequest)
                         //call docusign service
                         const docuResponse = await axios.post(
-                            process.env.NEXT_PUBLIC_EFORM_SIGNING!,
+                            NEXT_PUBLIC_EFORM_SIGNING!,
                             signRequest,
                             {
                                 headers: {
