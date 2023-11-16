@@ -18,3 +18,8 @@ export interface RequestVeRiFyEformTaks {
     citizenId: string
     data: any
 }
+export interface RequestSeacrhEformTemplate {
+    userRole: string
+    name?: string
+    onlyApprove: boolean
+}

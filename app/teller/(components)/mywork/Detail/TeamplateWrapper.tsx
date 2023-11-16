@@ -1,4 +1,5 @@
 "use client"
+
 import { addEformTask } from "@/app/(service)/EformTemplate"
 import { RequestEformTaks, taskEform } from "@/app/(types)/eFormTask"
 import { block, formTemplate } from "@/app/(types)/eProduct"
@@ -8,12 +9,14 @@ import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/Header
 import { DefaultParams } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import { message } from "antd"
-import axios from "axios"
 import delay from "delay"
-import { useSession } from "next-auth/react"
-import { useCookies } from "next-client-cookies"
 import dynamic from "next/dynamic"
-import { useParams, useRouter, useSearchParams } from "next/navigation"
+import {
+    useParams,
+    useRouter,
+    useSearchParams,
+    usePathname
+} from "next/navigation"
 import React, { useEffect, useState } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
@@ -26,12 +29,14 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
 })
+import "./viewoz.css"
 
 type Props = { mywork: myWork }
 const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const { token, session } = useCustomCookies()
     const params = useParams()
     const router = useRouter()
+    const pathname = usePathname()
     const searchParams = useSearchParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [messageApi, contextHolder] = message.useMessage()
@@ -294,7 +299,13 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         <div>
             {contextHolder}
             <DndProvider backend={HTML5Backend}>
+                {/* {pathname.startsWith("/teller") ? ( */}
                 <TranferMyWork />
+                {/* ) : ( */}
+                {/* <CustomCollapse
+                    formTemplate={mywork?.eformTask?.[0].formTemplate ?? []}
+                /> */}
+                {/* )} */}
                 <div className="mt-10">
                     <ButtonHandleEform
                         loading={loading}
