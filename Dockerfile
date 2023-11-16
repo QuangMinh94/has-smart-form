@@ -51,7 +51,7 @@ EXPOSE 3003
 EXPOSE 3011
 
 ENV PORT 3003
-ENV HOSTNAME 0.0.0.0
+ENV HOSTNAME 10.4.18.152
 
 CMD ["node", "server.js"]
 #CMD ["npm", "start"]
