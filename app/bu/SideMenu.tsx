@@ -14,7 +14,7 @@ import {
     Skeleton,
     theme
 } from "antd"
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { PropsWithChildren, useEffect, useState } from "react"
@@ -161,15 +161,14 @@ const SideMenu = ({ children }: PropsWithChildren) => {
                                             },
                                             {
                                                 label: (
-                                                    <Link
-                                                        href={
-                                                            process.env
-                                                                .NEXT_PUBLIC_SERVER_URL! +
-                                                            "/api/auth/signout"
+                                                    <p
+                                                        className="cursor-pointer"
+                                                        onClick={async () =>
+                                                            await signOut()
                                                         }
                                                     >
                                                         Đăng xuất
-                                                    </Link>
+                                                    </p>
                                                 ),
                                                 key: "1"
                                             }
