@@ -147,6 +147,7 @@ const SideMenu = ({ children }: PropsWithChildren) => {
                             <h1 className="text-xl" color={colorPrimary}>
                                 {documentName}
                             </h1>
+                            <h1>{process.env.NEXT_PUBLIC_TEST}</h1>
                         </Flex>
 
                         {status === "authenticated" && (
