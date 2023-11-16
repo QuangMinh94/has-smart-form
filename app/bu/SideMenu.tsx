@@ -17,7 +17,7 @@ import {
 import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { PropsWithChildren, useEffect, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { DocumentName } from "./_types/DocumentName"
 
 const { Header, Sider, Content } = Layout
@@ -77,7 +77,13 @@ const CustomMenu = () => {
     )
 }
 
-const SideMenu = ({ children }: PropsWithChildren) => {
+const SideMenu = ({
+    children,
+    level
+}: {
+    children: ReactNode
+    level: string
+}) => {
     const [collapsed, setCollapsed] = useState(false)
     const [documentName, setDocumentName] = useState<string>("")
     const pathName = usePathname()
@@ -147,7 +153,7 @@ const SideMenu = ({ children }: PropsWithChildren) => {
                             <h1 className="text-xl" color={colorPrimary}>
                                 {documentName}
                             </h1>
-                            <h1>{process.env.NEXT_PUBLIC_TEST}</h1>
+                            <h1>{level}</h1>
                         </Flex>
 
                         {status === "authenticated" && (
