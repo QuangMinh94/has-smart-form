@@ -29,7 +29,7 @@ const TemplateDetailPage = async () => {
     if (!FindPermission(permission, "children", "VisibleTemplateBU")) notFound()
 
     const data: EformTemplate[] = await fetchTemplate(
-        process.env.NEXT_PUBLIC_EFORM_GET_UPDATE_TEMPLATE!,
+        process.env.EFORM_GET_UPDATE_TEMPLATE!,
         {
             id: decryptedId,
             userRole: userRole[0]._id
