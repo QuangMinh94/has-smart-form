@@ -5,56 +5,51 @@ import {
     RequestSeacrhEformTemplate
 } from "@/app/(types)/eFormTask"
 export const addEformTask = async (pram: {
+    url: string
     bodyRequest: RequestEformTaks
     token: string
     session: string
 }) => {
-    const { bodyRequest, token, session } = pram
-    const res = await axios.post(
-        process.env.NEXT_PUBLIC_EFORM_TASK!,
-        bodyRequest,
-        {
-            headers: {
-                Authorization: "Bearer " + token,
-                Session: session
-            }
+    // process.env.NEXT_PUBLIC_EFORM_TASK!,
+    const { bodyRequest, token, session, url } = pram
+    const res = await axios.post(url, bodyRequest, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Session: session
         }
-    )
+    })
     return res
 }
 export const veriFyEformTask = async (pram: {
+    url: string
     bodyRequest: RequestVeRiFyEformTaks
     token: string
     session: string
 }) => {
-    const { bodyRequest, token, session } = pram
-    const res = await axios.post(
-        process.env.NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE_APPOINT_MENTS!,
-        bodyRequest,
-        {
-            headers: {
-                Authorization: "Bearer " + token,
-                Session: session
-            }
+    // NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE_APPOINT_MENTS
+    const { bodyRequest, token, session, url } = pram
+    const res = await axios.post(url, bodyRequest, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Session: session
         }
-    )
+    })
     return res
 }
 export const SeacrhEformTemplate = async (pram: {
+    url: string
     bodyRequest: RequestSeacrhEformTemplate
     token: string
     session: string
 }) => {
-    const { bodyRequest, token, session } = pram
-    const res = await axios.post(
-        process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
-        bodyRequest,
-        {
-            headers: {
-                Authorization: "Bearer " + token,
-                Session: session
-            }
+    // NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE
+
+    const { bodyRequest, token, session, url } = pram
+    const res = await axios.post(url, bodyRequest, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Session: session
         }
-    )
+    })
     return res
 }

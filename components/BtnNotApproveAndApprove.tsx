@@ -9,6 +9,7 @@ import axios from "axios"
 import { useEnvContext } from "next-runtime-env"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import React, { useState } from "react"
+
 const { TextArea } = Input
 const confirm = (cbAsync: () => Promise<void>) => {
     return cbAsync()
@@ -17,6 +18,7 @@ type Props = {
     type: "approve" | "notApprove"
 }
 const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
+    const { NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE_APPOINT_MENTS } = useEnvContext()
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [loadingConfirm, setLoadingConfirm] = useState<boolean>(false)
     const { token, session } = useCustomCookies()
@@ -135,6 +137,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
         try {
             const data = dataGlobal.myworkDetail.eformTask?.[0].data
             const res = await veriFyEformTask({
+                url: NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE_APPOINT_MENTS!,
                 bodyRequest: {
                     id: `${params?.id}`,
                     rejectReason: valueText,

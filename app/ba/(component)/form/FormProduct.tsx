@@ -25,17 +25,18 @@ const FormOder: React.FC<Props> = ({ rowData, type }) => {
         form.setFieldsValue({ eProduct: value })
     }, [])
     const onFinish = ({
-        eProduct,
-        CCCD,
+        idProduct,
         name,
-        phoneNumber,
-        email
+        description,
+        imageProduct
     }: {
-        eProduct: string
-        CCCD: string
+        idProduct: string
+        imageProduct: {
+            thumbUrl: string
+            type: string
+        }
         name: string
-        phoneNumber: string
-        email: string
+        description: string
     }) => {}
     console.log("row", rowData)
     return (
