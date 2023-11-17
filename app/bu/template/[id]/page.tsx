@@ -34,7 +34,7 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
 
     //get tree data
     const treeData: TreeProduct[] = await fetchTemplate(
-        process.env.EPRODUCT_TREEDATA!,
+        process.env.EPRODUCT_TREEDATA_PUBLIC!,
         {}
     )
     const treeDataView: TreeDataType[] = MappingChildren(treeData)

@@ -13,23 +13,24 @@ import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import routers from "@/router/cusTomRouter"
 import { message } from "antd"
 import delay from "delay"
+import { useEnvContext } from "next-runtime-env"
 import dynamic from "next/dynamic"
 import {
     useParams,
+    usePathname,
     useRouter,
-    useSearchParams,
-    usePathname
+    useSearchParams
 } from "next/navigation"
 import React, { useEffect, useState } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
 import TranferMyWork from "./TranferMyWork"
+import "./viewoz.css"
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
 })
-import "./viewoz.css"
 
 type Props = { mywork: myWork }
 const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
@@ -48,6 +49,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
+    const { NEXT_PUBLIC_EFORM_SERVER_APP } = useEnvContext()
 
     const Blocks = (listRightBlock: any[]): choosenBlock[] => {
         const choosenBlock: choosenBlock[] = []
@@ -121,7 +123,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
 
                         oz.CreateReportEx(
                             DefaultParams(
-                                process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                                NEXT_PUBLIC_EFORM_SERVER_APP!,
                                 "/" + block.ozrRepository + "/" + block.name,
                                 block.name,
                                 OzDelimiter(),
@@ -163,7 +165,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
 
                     oz!.CreateReportEx(
                         DefaultParams(
-                            process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                            NEXT_PUBLIC_EFORM_SERVER_APP!,
                             "/" + block.ozrRepository + "/" + block.name,
                             block.name,
                             OzDelimiter(),
