@@ -5,7 +5,6 @@ import Container from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/C
 import LayoutTranfer from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/LayoutTranfer"
 import { useContextTemplate } from "@/components/cusTomHook/useContextTemplate"
 import "@/public/css/myWork/detailMyWork.css"
-import env from "@beam-australia/react-env"
 import { TreeSelect } from "antd"
 import axios from "axios"
 import { DndProvider } from "react-dnd"
@@ -18,7 +17,7 @@ const TreeSelectComp = ({ treeData }: { treeData: TreeDataType[] }) => {
 
     const updateListLeft = async (selectedKeys: any) => {
         console.log("ListRIght", listRight)
-        const response = await axios.post(env("EFORM_LIST"), {
+        const response = await axios.post(process.env.NEXT_PUBLIC_EFORM_LIST!, {
             repository: selectedKeys
         })
         const res_1 = response.data as {

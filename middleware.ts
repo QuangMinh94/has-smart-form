@@ -42,3 +42,38 @@ export default withAuth(function middleware(request: NextRequestWithAuth) {
 export const config = {
     matcher: ["/dashboard", "/bu/:path*", "/teller/:path*", "/ksvteller/:path*"]
 }
+
+/* const protectedPaths = ["/dashboard", "/bu"]
+
+export async function middleware(req: NextRequest) {
+    const pathname = req.nextUrl.pathname
+    const isPathProtected = protectedPaths?.some((path) => pathname === path)
+    const res = NextResponse.next()
+    if (isPathProtected) {
+        const token = await getToken({ req })
+        if (!token) {
+            const url = new URL(`/auth/signin`, req.url)
+            url.searchParams.set(
+                "callbackUrl",
+                process.env.NEXT_PUBLIC_SERVER_URL + "/" + pathname
+            )
+            return NextResponse.redirect(url)
+        } else {
+            const role = token.role
+            if (role === "BU") {
+                return NextResponse.redirect(
+                    new URL("/bu/template", process.env.NEXT_PUBLIC_SERVER_URL)
+                )
+            } else if (role === "TELLER") {
+                return NextResponse.redirect(
+                    new URL("/teller", process.env.NEXT_PUBLIC_SERVER_URL)
+                )
+            } else {
+                return NextResponse.redirect(
+                    new URL("/auth/login", process.env.NEXT_PUBLIC_SERVER_URL)
+                )
+            }
+        }
+    }
+    return res
+} */

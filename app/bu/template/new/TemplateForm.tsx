@@ -1,7 +1,6 @@
 "use client"
 
 import { ContextTemplate } from "@/components/context/context"
-import env from "@beam-australia/react-env"
 import {
     Col,
     DatePicker,
@@ -57,16 +56,20 @@ const TemplateForm = ({
 
         try {
             if (isInsert) {
-                await axios.post(env("EFORM_TEMPLATE"), inputValue, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: "Bearer " + cookies.get("token"),
-                        Session: cookies.get("session")
+                await axios.post(
+                    process.env.NEXT_PUBLIC_EFORM_TEMPLATE!,
+                    inputValue,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer " + cookies.get("token"),
+                            Session: cookies.get("session")
+                        }
                     }
-                })
+                )
             } else {
                 await axios.post(
-                    env("EFORM_UPDATE_TEMPLATE"),
+                    process.env.NEXT_PUBLIC_EFORM_UPDATE_TEMPLATE!,
                     { id: id, ...inputValue },
                     {
                         headers: {

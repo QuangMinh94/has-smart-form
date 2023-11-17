@@ -4,7 +4,6 @@ import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import UseGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
 import routers from "@/router/cusTomRouter"
-import env from "@beam-australia/react-env"
 import { Button, Input, Modal, message } from "antd"
 import axios from "axios"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
@@ -76,7 +75,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                 try {
                     //calling axios to export
                     const response = await axios.post(
-                        env("EXPORT_SERVICE"),
+                        process.env.NEXT_PUBLIC_EXPORT_SERVICE!,
                         requestBody,
                         {
                             headers: {
@@ -95,12 +94,15 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
                             signLocation: "~3",
                             eFormTaskId:
                                 dataGlobal.myworkDetail.eformTask?.[0]?._id,
-                            filePath: env("EXPORT_FOLDER") + "/" + responseData
+                            filePath:
+                                process.env.NEXT_PUBLIC_EXPORT_FOLDER! +
+                                "/" +
+                                responseData
                         }
                         console.log("Sign request", signRequest)
                         //call docusign service
                         const docuResponse = await axios.post(
-                            env("EFORM_SIGNING"),
+                            process.env.NEXT_PUBLIC_EFORM_SIGNING!,
                             signRequest,
                             {
                                 headers: {
