@@ -31,7 +31,7 @@ const TemplatePage = async ({
     let _data: DataTableType[] = []
 
     data = await fetchTemplate(
-        process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
+        process.env.EFORM_SEARCH_TEMPLATE!,
         searchParams.name ? { name: searchParams.name } : {}
     )
     data.forEach((element) => {

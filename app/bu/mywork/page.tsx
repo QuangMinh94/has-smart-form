@@ -30,7 +30,7 @@ const MyWorkPage = async ({
         const permission = session.user.userInfo.permission as Permission[]
 
         const data = await fetchTemplateData(
-            process.env.NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
+            process.env.EFORM_SEARCH_TEMPLATE!,
             searchParams.name
                 ? { name: searchParams.name, userRole: userRole[0]._id }
                 : { userRole: userRole[0]._id }
