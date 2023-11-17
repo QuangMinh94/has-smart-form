@@ -3,6 +3,7 @@ import { config } from "@fortawesome/fontawesome-svg-core"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import { ConfigProvider } from "antd"
 import type { Metadata } from "next"
+import Script from "next/script"
 import { inter } from "./(utilities)/Fonts"
 import OzScript from "./OzScript"
 import QueryClientProvider from "./QueryClientProvider"
@@ -24,6 +25,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
+            <Script src="/__ENV.js" strategy="beforeInteractive" />
             <OzScript />
             <body className={inter.className}>
                 <QueryClientProvider>

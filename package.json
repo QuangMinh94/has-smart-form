@@ -3,13 +3,14 @@
     "version": "0.1.1",
     "private": true,
     "scripts": {
-        "dev": "next dev --turbo",
+        "dev": "react-env --prefix NEXT_PUBLIC -- next dev --turbo",
         "build": "next build",
-        "start": "next start -p 3003",
+        "start": "react-env --prefix NEXT_PUBLIC -- next start -p 3003",
         "lint": "next lint"
     },
     "dependencies": {
         "@ant-design/cssinjs": "^1.17.2",
+        "@beam-australia/react-env": "^3.1.1",
         "@fortawesome/fontawesome-svg-core": "^6.4.2",
         "@fortawesome/free-solid-svg-icons": "^6.4.2",
         "@fortawesome/react-fontawesome": "^0.2.0",
