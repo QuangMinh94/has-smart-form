@@ -25,7 +25,7 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
     const userRole = session.user.userInfo.defaultGroup?.role as Role[]
 
     const data: EformTemplate[] = await fetchTemplate(
-        process.env.NEXT_PUBLIC_EFORM_GET_UPDATE_TEMPLATE!,
+        process.env.EFORM_GET_UPDATE_TEMPLATE!,
         {
             id: params.id,
             userRole: userRole[0]._id

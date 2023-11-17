@@ -10,6 +10,7 @@ import { DefaultParams, OzDelimiter } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import routers from "@/router/cusTomRouter"
+import env from "@beam-australia/react-env"
 import { message } from "antd"
 import delay from "delay"
 import dynamic from "next/dynamic"
@@ -124,7 +125,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                         // )
                         oz.CreateReportEx(
                             DefaultParams(
-                                process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                                env("EFORM_SERVER_APP"),
                                 "/" + block.ozrRepository + "/" + block.name,
                                 block.name,
                                 OzDelimiter(),
@@ -166,7 +167,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
 
                     oz!.CreateReportEx(
                         DefaultParams(
-                            process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                            env("EFORM_SERVER_APP"),
                             "/" + block.ozrRepository + "/" + block.name,
                             block.name,
                             OzDelimiter(),
