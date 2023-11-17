@@ -9,9 +9,12 @@ on:
   schedule:
     - cron: '23 4 * * *'
   push:
-    branches: [ "master" ]
+    paths:
+      - package.json
+  #push:
+    #branches: [ "master" ]
     # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
+    #tags: [ 'v*.*.*' ]
   #pull_request:
     #branches: [ "master" ]
 
