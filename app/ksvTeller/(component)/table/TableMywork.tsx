@@ -121,7 +121,7 @@ const TableMyWork: React.FC<Props> = ({ data }) => {
             )
         }
     ]
-
+    console.log("data", data)
     return (
         <div>
             <Table

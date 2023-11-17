@@ -1,4 +1,5 @@
 export interface EformTemplate {
+    key?: string
     _id?: string
     name?: string
     approver?: any
@@ -8,13 +9,7 @@ export interface EformTemplate {
     createdDate?: Date
     creator?: string
     fromReference?: string
-    block?: [
-        {
-            name?: string
-            location?: string
-            ozrRepository?: string
-        }
-    ]
+    block?: Block[]
     updatedDate?: string | Date
     updateBy?: string
     validFrom?: string | Date
@@ -31,4 +26,10 @@ export interface Status {
     type: string
     active: boolean
     description: string
+}
+export interface Block {
+    name?: string
+    location?: string
+    ozrRepository?: string
+    _id?: string
 }

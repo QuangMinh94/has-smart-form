@@ -1,4 +1,5 @@
 "use client"
+
 import { addEformTask } from "@/app/(service)/EformTemplate"
 import { seacrhCustomInFo } from "@/app/(service)/appointments"
 import { RequestEformTaks } from "@/app/(types)/eFormTask"
@@ -13,7 +14,12 @@ import routers from "@/router/cusTomRouter"
 import { message } from "antd"
 import delay from "delay"
 import dynamic from "next/dynamic"
-import { useParams, useRouter, useSearchParams } from "next/navigation"
+import {
+    useParams,
+    useRouter,
+    useSearchParams,
+    usePathname
+} from "next/navigation"
 import React, { useEffect, useState } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
@@ -23,12 +29,15 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
     ssr: false
 })
+import "./viewoz.css"
 
 type Props = { mywork: myWork }
 const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
+    const [DataMywork, setMyWork] = useState<myWork>(mywork)
     const { token, session } = useCustomCookies()
     const params = useParams()
     const router = useRouter()
+    const pathname = usePathname()
     const searchParams = useSearchParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [messageApi, contextHolder] = message.useMessage()
@@ -64,7 +73,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
 
     useEffect(() => {
         //console.log("Here")
-        setDataGlobal((data) => ({ ...data, myworkDetail: mywork }))
+        setDataGlobal((data) => ({ ...data, myworkDetail: DataMywork }))
         router.refresh()
     }, [])
 
@@ -90,7 +99,9 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             return dataListRight
         }
         const GetEform = async () => {
-            const formTemplate = cusTomerFormtemplate(mywork?.eformTask ?? [])
+            const formTemplate = cusTomerFormtemplate(
+                DataMywork?.eformTask ?? []
+            )
             const listRight = CustomerListRight(formTemplate)
 
             if (listRight.length > 0) {
@@ -100,28 +111,14 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 const choosenBlock = Blocks(listRight)
                 console.log("choosenBlock", choosenBlock)
 
-                // const dataInput = mywork?.eformTask?.[0]?.data?.data ?? []
-
-                // const ObjDataInput: any = dataInput.reduce(
-                //     (acc: any, item: any) => {
-                //         acc[item?.ReportDisplayName] = item?.Input
-                //         return acc
-                //     },
-                //     {}
-                // )
-
-                const dataInput = mywork?.eformTask?.[0]?.data?.Input
-
-                // console.log("Report", ObjDataInput)
+                const dataInput = DataMywork?.eformTask?.[0]?.data?.Input
 
                 console.log("dataInput", dataInput)
                 const oz = document.getElementById("OZViewer")
                 if (oz) {
                     for (let i = choosenBlock.length - 1; i >= 0; i--) {
                         const block = choosenBlock[i]
-                        // const dataInput = JSON.stringify(
-                        //     ObjDataInput[`${block.name}`]
-                        // )
+
                         oz.CreateReportEx(
                             DefaultParams(
                                 process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
@@ -142,10 +139,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             }
         }
 
-        if (mywork?.eformTask && mywork.eformTask.length > 0) {
+        if (DataMywork?.eformTask && DataMywork.eformTask.length > 0) {
             GetEform()
         }
-    }, [])
+    }, [JSON.stringify(DataMywork)])
 
     const onPreview = async () => {
         try {
@@ -160,7 +157,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 await delay(3000)
                 const choosenBlock = Blocks(listRight)
                 const oz = document.getElementById("OZViewer")
-
+                const dataInput = DataMywork?.eformTask?.[0]?.data?.Input
                 for (let i = choosenBlock.length - 1; i >= 0; i--) {
                     const block = choosenBlock[i]
 
@@ -170,7 +167,11 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                             "/" + block.ozrRepository + "/" + block.name,
                             block.name,
                             OzDelimiter(),
-                            JSON.stringify({ ...info, Group2: info?.gender })
+                            JSON.stringify({
+                                ...info,
+                                ...dataInput,
+                                Group2: info?.gender
+                            })
                         ),
                         OzDelimiter()
                     )
@@ -219,17 +220,15 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 const inputdata = JSON.parse(
                     oz.GetInformation("INPUT_JSON_ALL")
                 )
-                //console.log("oh no", inputdata)
-                // console.log("i", inputdatas)
 
                 const body: RequestEformTaks = {
-                    // data: { data: inputdatas },
                     data: { Input: inputdata },
                     formTemplate: idFormTempLate,
                     appointmentId: `${params?.id}`,
                     documentId: "test",
                     button: type
                 }
+
                 console.log("requestbody", body)
 
                 const res = await addEformTask({
@@ -239,6 +238,19 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 })
                 if (res.status === 200) {
                     messageApi.success("success")
+                    DataMywork?.eformTask?.[0]?.data?.Input
+                    setMyWork((data) => {
+                        const eformTask: any = data?.eformTask?.[0]
+                        return {
+                            ...data,
+                            eformTask: [
+                                {
+                                    ...eformTask,
+                                    data: { Input: inputdata }
+                                }
+                            ]
+                        }
+                    })
                     if (type === "SUBMIT") {
                         router.replace(routers("teller").mywork.path, {
                             scroll: true

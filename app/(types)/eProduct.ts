@@ -54,3 +54,17 @@ export interface OptionTree {
     children: OptionTree[]
     formTemplate: formTemplate[]
 }
+
+export interface requestBodyAddEproduct {
+    name: string
+    description: string
+    active: boolean
+    code: string
+    type: "P" | "B"
+    parent: string
+    formTemplate: string[]
+    image: {
+        Data: string
+        ContentType: string
+    }
+}

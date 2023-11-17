@@ -31,6 +31,11 @@ const nextConfig = {
         destination: '/ksvteller/mywork',
         permanent: true,
       },
+      {
+        source: '/ba',
+        destination: '/ba/block',
+        permanent: true,
+      },
     ]
   },
 }

@@ -15,16 +15,25 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
     return (
         <Menu
             style={{ backgroundColor }}
-            defaultSelectedKeys={["mywork"]}
+            defaultSelectedKeys={["block"]}
             items={[
                 {
-                    key: "mywork",
+                    key: "block",
                     icon: (
-                        <Link href={"/teller/mywork"}>
+                        <Link href={`${routers("ba").block.path}`}>
                             <FontAwesomeIcon icon={faArchive} />
                         </Link>
                     ),
-                    label: "Công việc của tôi"
+                    label: "Khối thông tin"
+                },
+                {
+                    key: "product",
+                    icon: (
+                        <Link href={`${routers("ba").product.path}`}>
+                            <FontAwesomeIcon icon={faArchive} />
+                        </Link>
+                    ),
+                    label: "Sản phẩm"
                 }
             ]}
         />
@@ -36,7 +45,7 @@ type Props = {
 const SideMenu = ({ children }: Props) => {
     const pathname = usePathname()
     const [collapsed, setCollapsed] = useState(false)
-    console.log(pathname)
+
     const {
         token: { colorBgContainer, colorPrimary }
     } = theme.useToken()
@@ -73,7 +82,11 @@ const SideMenu = ({ children }: Props) => {
                         style={{
                             color: colorPrimary
                         }}
-                    ></h1>
+                    >
+                        {pathname.startsWith(routers("ba").block.path)
+                            ? "Biểu Mẫu"
+                            : "Sản Phẩm"}
+                    </h1>
 
                     <ButtonLogOut />
                 </Header>
