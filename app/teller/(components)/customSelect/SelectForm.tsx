@@ -11,7 +11,7 @@ import {
 import { GetProduct, GetProductTree } from "@/app/(service)/eProduct"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { ToFilterName } from "../../../../util/formatText"
-
+import { useEnvContext } from "next-runtime-env"
 type Type = "getEProduct"
 type Props = {
     type: Type
@@ -33,9 +33,12 @@ const UseFecthApi = ({
     type: Type
     enabled: boolean
 }) => {
+    const { NEXT_PUBLIC_GET_EPRODUCT, NEXT_PUBLIC_EPRODUCT_TREEDATA } =
+        useEnvContext()
     const Service: any = {
         getEProduct: async (): Promise<Option[]> => {
             const res = await GetProduct({
+                url: NEXT_PUBLIC_GET_EPRODUCT!,
                 bodyRequest: { type: "P" },
                 token,
                 session
@@ -50,6 +53,7 @@ const UseFecthApi = ({
         },
         getTreeEProduct: async (): Promise<Option[]> => {
             const res = await GetProductTree({
+                url: NEXT_PUBLIC_EPRODUCT_TREEDATA!,
                 bodyRequest: { type: "P" },
                 token,
                 session

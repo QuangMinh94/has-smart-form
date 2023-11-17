@@ -10,7 +10,7 @@ import {
 import { GetProductTree } from "@/app/(service)/eProduct"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { ToFilterName } from "../../../../util/formatText"
-
+import { useEnvContext } from "next-runtime-env"
 type Props = {
     typeQuery: string
     placeholder: string
@@ -25,10 +25,12 @@ const UseFecthApi = (
     type: string,
     enabled: boolean
 ) => {
+    const { NEXT_PUBLIC_EPRODUCT_TREEDATA } = useEnvContext()
     const { isLoading, error, data, refetch } = useQuery<eProduct[]>({
         queryKey: [type],
         queryFn: async () => {
             const res = await GetProductTree({
+                url: NEXT_PUBLIC_EPRODUCT_TREEDATA!,
                 bodyRequest: body,
                 token,
                 session

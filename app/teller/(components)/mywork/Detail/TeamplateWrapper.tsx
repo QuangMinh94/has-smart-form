@@ -1,7 +1,7 @@
 "use client"
-
+import { useEnvContext } from "next-runtime-env"
 import { addEformTask } from "@/app/(service)/EformTemplate"
-import { seacrhCustomInFo } from "@/app/(service)/appointments"
+import { SeacrhCustomInFo } from "@/app/(service)/appointments"
 import { RequestEformTaks } from "@/app/(types)/eFormTask"
 import { block, formTemplate } from "@/app/(types)/eProduct"
 import { eFormTask, myWork } from "@/app/(types)/teller/mywork"
@@ -13,7 +13,7 @@ import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import routers from "@/router/cusTomRouter"
 import { message } from "antd"
 import delay from "delay"
-import { useEnvContext } from "next-runtime-env"
+
 import dynamic from "next/dynamic"
 import {
     useParams,
@@ -34,6 +34,8 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
 
 type Props = { mywork: myWork }
 const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
+    const { NEXT_PUBLIC_SEARCH_CUSTOMER_INFO, NEXT_PUBLIC_EFORM_TASK } =
+        useEnvContext()
     const [DataMywork, setMyWork] = useState<myWork>(mywork)
     const { token, session } = useCustomCookies()
     const params = useParams()
@@ -149,7 +151,8 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const onPreview = async () => {
         try {
             if (listRight.length > 0) {
-                const res = await seacrhCustomInFo({
+                const res = await SeacrhCustomInFo({
+                    url: NEXT_PUBLIC_SEARCH_CUSTOMER_INFO!,
                     bodyRequest: { citizenId: searchParams.get("CCCD") ?? "" },
                     session,
                     token
@@ -234,6 +237,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 console.log("requestbody", body)
 
                 const res = await addEformTask({
+                    url: NEXT_PUBLIC_EFORM_TASK!,
                     bodyRequest: body,
                     token,
                     session
