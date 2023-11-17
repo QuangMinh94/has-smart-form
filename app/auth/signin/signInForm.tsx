@@ -33,7 +33,7 @@ const SigninForm = () => {
             username: values.username,
             password: values.password,
             redirect: false
-            //callbackUrl: process.env.NEXT_PUBLIC_SERVER_URL! + "/bu"
+            //callbackUrl: env("SERVER_URL! + "/bu"
         })
         if (signInResponse?.error) {
             if (signInResponse.status !== 401) {

@@ -1,5 +1,6 @@
 "use client"
 
+import env from "@beam-australia/react-env"
 import delay from "delay"
 import { reverse } from "lodash"
 import { useCallback, useContext, useEffect } from "react"
@@ -23,10 +24,7 @@ const Viewer = () => {
                 //oz!.sendToActionScript("eform.signpad_type", "dialog")
             }
 
-            window.start_ozjs(
-                "OZViewer",
-                `${process.env.NEXT_PUBLIC_EFORM_SERVER}/html5viewer/`
-            )
+            window.start_ozjs("OZViewer", `${env("EFORM_SERVER")}/html5viewer/`)
 
             await delay(3000)
 
@@ -36,7 +34,7 @@ const Viewer = () => {
                     const oz = document.getElementById("OZViewer")
                     oz!.CreateReportEx(
                         DefaultParams(
-                            process.env.NEXT_PUBLIC_EFORM_SERVER_APP!,
+                            env("EFORM_SERVER_APP"),
                             "/" + element.type + "/" + element.name,
                             element.name!,
                             OzDelimiter()

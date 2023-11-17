@@ -52,16 +52,12 @@ const fetchApi = async ({
         delete bodyRequest[KeySearch]
     }
     try {
-        const res = await axios.post(
-            process.env.NEXT_PUBLIC_APPOINT_MENTS!,
-            bodyRequest,
-            {
-                headers: {
-                    Authorization: "Bearer " + cookie.get("token")?.value,
-                    Session: cookie.get("session")?.value
-                }
+        const res = await axios.post(process.env.APPOINT_MENTS!, bodyRequest, {
+            headers: {
+                Authorization: "Bearer " + cookie.get("token")?.value,
+                Session: cookie.get("session")?.value
             }
-        )
+        })
 
         return res.data
     } catch (e: any) {

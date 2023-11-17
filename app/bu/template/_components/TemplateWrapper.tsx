@@ -6,6 +6,7 @@ import { Permission } from "@/app/(types)/Permission"
 import { FindPermission, uniqueValue } from "@/app/(utilities)/ArrayUtilities"
 import { timeStampToDayjs } from "@/app/(utilities)/TimeStampToDayjs"
 import { ContextTemplate } from "@/components/context/context"
+import env from "@beam-australia/react-env"
 import { Form, message } from "antd"
 import axios from "axios"
 import dayjs from "dayjs"
@@ -172,7 +173,7 @@ const TemplateWrapper = ({
         setIsDisabled(true)
         try {
             await axios.post(
-                process.env.NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
+                env("EFORM_VERIFY_TEMPLATE"),
                 {
                     id: id,
                     button: BUTTON_TYPE.SUBMIT
@@ -206,7 +207,7 @@ const TemplateWrapper = ({
         setIsDisabled(true)
         try {
             await axios.post(
-                process.env.NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
+                env("EFORM_VERIFY_TEMPLATE"),
                 {
                     id: id,
                     button: BUTTON_TYPE.REJECT
