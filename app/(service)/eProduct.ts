@@ -2,7 +2,8 @@ import axios from "axios"
 import {
     requestBodyEproduct,
     requestBodyEproductTree,
-    requestBodyAddEproduct
+    requestBodyAddEproduct,
+    requestBodyUpdateEproduct
 } from "@/app/(types)/eProduct"
 
 export const GetProduct = async (pram: {
@@ -45,6 +46,22 @@ export const AddEproduct = async (pram: {
     session: string
 }) => {
     // NEXT_PUBLIC_ADD_EPRODUCT
+    const { bodyRequest, token, session, url } = pram
+    const res = await axios.post(url, bodyRequest, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Session: session
+        }
+    })
+    return res
+}
+export const UpdateEproduct = async (pram: {
+    url: string
+    bodyRequest: requestBodyUpdateEproduct
+    token: string
+    session: string
+}) => {
+    // NEXT_PUBLIC_UPDATE_EPRODUCT
     const { bodyRequest, token, session, url } = pram
     const res = await axios.post(url, bodyRequest, {
         headers: {

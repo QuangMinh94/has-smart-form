@@ -1,14 +1,14 @@
 "use client"
 import React, { useEffect, memo } from "react"
-import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+import { useContextTranfer } from "@/components/cusTomHook/useContext"
 import "@/public/css/myWork/detailMyWork.css"
-import Container from "./CustomTranfDrag/Container"
-import ButtonLeftandRight from "./CustomTranfDrag/ButtonCusTom"
-import LayoutTranfer from "./CustomTranfDrag/LayoutTranfer"
-import { usePathname } from "next/navigation"
-import HeaderUi from "../Detail/HeaderUiContent"
+import Container from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/Container"
+import ButtonLeftandRight from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/ButtonCusTom"
+import LayoutTranfer from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/LayoutTranfer"
 
-const DetailFormUser = () => {
+import HeaderUi from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
+
+const TranferNV = () => {
     const {
         listLeft,
         listRight,
@@ -17,9 +17,8 @@ const DetailFormUser = () => {
         ChangeListFilter,
         setChangeListFilter,
         loading
-    } = useContextMyWorkDetail()
+    } = useContextTranfer()
 
-    const pathName = usePathname()
     useEffect(() => {
         if (listRight.length > 0) {
             setListRight([])
@@ -31,10 +30,10 @@ const DetailFormUser = () => {
 
     return (
         <LayoutTranfer
-            HiddenColLeft={pathName.startsWith("/ksvteller")}
+            isCollapse={false}
             ColLeft={
                 <Container
-                    HidenUI={<HeaderUi />}
+                    // HidenUI={<HeaderUi />}
                     setChangeListFilter={setChangeListFilter}
                     ChangeListFilter={ChangeListFilter}
                     title="Danh sách biểu mẫu"
@@ -42,7 +41,6 @@ const DetailFormUser = () => {
                     setList={setListLeft}
                     list={listLeft}
                     setRomoveList={setListRight}
-                    loading={loading}
                 />
             }
             Button={
@@ -56,17 +54,18 @@ const DetailFormUser = () => {
             }
             ColRight={
                 <Container
-                    title="Biểu mẫu được chọn"
+                    title="Biểu mẫu của nghiệp vụ"
                     type="right"
                     setChangeListFilter={setChangeListFilter}
                     ChangeListFilter={ChangeListFilter}
                     setList={setListRight}
                     list={listRight}
                     setRomoveList={setListLeft}
+                    loading={loading}
                 />
             }
         />
     )
 }
 
-export default memo(DetailFormUser)
+export default memo(TranferNV)

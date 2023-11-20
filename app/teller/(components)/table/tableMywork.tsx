@@ -3,18 +3,18 @@
 import React, { useEffect } from "react"
 import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
-
 import routers from "@/router/cusTomRouter"
 import { myWork } from "@/app/(types)/teller/mywork"
 import dayjs from "dayjs"
-
 import { useRouter } from "next/navigation"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+
 type Props = {
     data: myWork[]
 }
 const App: React.FC<Props> = ({ data }) => {
     const { setDataGlobal, dataGlobal } = useContextMyWorkDetail()
+
     const router = useRouter()
 
     useEffect(() => {
@@ -42,6 +42,7 @@ const App: React.FC<Props> = ({ data }) => {
             alert("error")
         }
     }
+
     const columns: ColumnsType<myWork> = [
         {
             key: "_id",

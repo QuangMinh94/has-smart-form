@@ -1,5 +1,6 @@
 export enum Role {
     TELLER = "TELLER",
     KSVTELLER = "KSVTELLER",
-    BU = "BU"
+    BU = "BU",
+    BA = "BA"
 }
