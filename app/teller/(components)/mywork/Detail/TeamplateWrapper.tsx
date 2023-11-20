@@ -13,7 +13,6 @@ import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import routers from "@/router/cusTomRouter"
 import { message } from "antd"
 import delay from "delay"
-
 import dynamic from "next/dynamic"
 import {
     useParams,
@@ -26,6 +25,7 @@ import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import ButtonHandleEform from "../../customButton/ButtonHandleEform"
 import TranferMyWork from "./TranferMyWork"
+
 import "./viewoz.css"
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <div style={{ color: "red" }}>Loading eform...</div>,
@@ -40,7 +40,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const { token, session } = useCustomCookies()
     const params = useParams()
     const router = useRouter()
-    const pathname = usePathname()
+
     const searchParams = useSearchParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [messageApi, contextHolder] = message.useMessage()

@@ -6,6 +6,7 @@ import {
 } from "../../app/teller/(components)/context"
 
 import { typeContextTranfer, contextTranfer } from "../context/context"
+import { typeContextBa, contextBa } from "@/app/ba/(component)/content"
 function useContextMyWorkDetail(): typeContextMyworkDetail {
     const provider = useContext(contextMyworkDetail)
     return {
@@ -36,4 +37,14 @@ function useContextTranfer(): typeContextTranfer {
         loading: provider.loading
     }
 }
-export { useContextMyWorkDetail, useContextTranfer }
+function useContextBa(): typeContextBa {
+    const provider = useContext(contextBa)
+    return {
+        setDataGlobal: provider.setDataGlobal,
+        dataGlobal: provider.dataGlobal,
+        messageApi: provider.messageApi,
+        setTreeFilter: provider.setTreeFilter,
+        treeFilter: provider.treeFilter
+    }
+}
+export { useContextMyWorkDetail, useContextTranfer, useContextBa }

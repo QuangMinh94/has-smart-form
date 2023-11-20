@@ -65,11 +65,8 @@ export const authOptions: NextAuthOptions = {
             if (user) {
                 const myUser = JSON.parse(JSON.stringify(user)) as Users
                 const permission = myUser.permission as Permission[]
-                const role = !FindPermission(
-                    permission,
-                    "children",
-                    "VisibleBU"
-                )
+
+                let role = !FindPermission(permission, "children", "VisibleBU")
                     ? FindPermission(permission, "children", "VisibleTeller")
                         ? FindPermission(
                               permission,
@@ -80,6 +77,10 @@ export const authOptions: NextAuthOptions = {
                             : Role.TELLER
                         : Role.BU
                     : Role.BU
+
+                if (FindPermission(permission, "children", "VisibleBA")) {
+                    role = Role.BA
+                }
                 token.uid = user.token
                 token.name = JSON.stringify(user)
                 token.role = role

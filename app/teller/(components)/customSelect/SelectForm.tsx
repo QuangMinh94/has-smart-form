@@ -12,13 +12,14 @@ import { GetProduct, GetProductTree } from "@/app/(service)/eProduct"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { ToFilterName } from "../../../../util/formatText"
 import { useEnvContext } from "next-runtime-env"
-type Type = "getEProduct"
+type Type = "getEProduct" | "getTreeEProduct"
 type Props = {
     type: Type
     placeholder?: string
     onSelect?: (selectedKeys: string, dataRow: any) => void
     onChange: (value: string) => void
     defalutValue?: string
+    disabled?: boolean
 }
 type Option = { label: string; value: string; dataRow: any }
 
@@ -88,7 +89,8 @@ const CustomerSelect: React.FC<Props> = ({
     onChange,
     type,
     placeholder,
-    defalutValue
+    defalutValue,
+    disabled
 }) => {
     const [enabledFecth, setenabledFecth] = useState<boolean>(false)
     const { token, session } = useCustomCookies()
@@ -111,6 +113,7 @@ const CustomerSelect: React.FC<Props> = ({
             onClick={() => {
                 setenabledFecth(true)
             }}
+            disabled={disabled}
             filterOption={HandlerfilterOption}
             allowClear
             showSearch
