@@ -15,7 +15,9 @@ const SigninForm = dynamic(() => import("./signInForm"), {
                 //zIndex: 1
             }}
         >
-            <Spin />
+            <center>
+                <Spin />
+            </center>
         </div>
     ),
     ssr: false
