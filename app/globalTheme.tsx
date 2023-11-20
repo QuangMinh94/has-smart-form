@@ -1,23 +1,27 @@
 "use client"
 
+import type Entity from "@ant-design/cssinjs/es/Cache"
 import { useServerInsertedHTML } from "next/navigation"
-import { PropsWithChildren, useState } from "react"
+import { useMemo, useRef } from "react"
 
 import { createCache, extractStyle, StyleProvider } from "@ant-design/cssinjs"
 
-const AntdProvider = ({ children }: PropsWithChildren) => {
-    const [cache] = useState(() => createCache())
-
+const AntdProvider = ({ children }: React.PropsWithChildren) => {
+    const cache = useMemo<Entity>(() => createCache(), [])
+    const isServerInserted = useRef<boolean>(false)
     useServerInsertedHTML(() => {
+        // avoid duplicate css insert
+        if (isServerInserted.current) {
+            return
+        }
+        isServerInserted.current = true
         return (
-            <script
-                dangerouslySetInnerHTML={{
-                    __html: `</script>${extractStyle(cache)}<script>`
-                }}
+            <style
+                id="antd"
+                dangerouslySetInnerHTML={{ __html: extractStyle(cache, true) }}
             />
         )
     })
-
     return (
         <StyleProvider hashPriority="high" cache={cache}>
             {children}
