@@ -1,5 +1,5 @@
 "use client"
-import routers from "@/router/cusTomRouter"
+import routers, { BLOCK, PRODUCT } from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
 import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
@@ -9,25 +9,36 @@ import Link from "next/link"
 import { faArchive } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { usePathname } from "next/navigation"
+
 const { Header, Sider, Content } = Layout
 
 const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
+    const pathname = usePathname()
+    const selectedKeys: string[] = []
+    if (pathname.startsWith(`/ba/${BLOCK}`)) {
+        selectedKeys.push(BLOCK)
+    }
+    if (pathname.startsWith(`/ba/${PRODUCT}`)) {
+        selectedKeys.push(PRODUCT)
+    }
+
     return (
         <Menu
             style={{ backgroundColor }}
-            defaultSelectedKeys={["block"]}
+            defaultSelectedKeys={[BLOCK]}
+            selectedKeys={selectedKeys}
             items={[
                 {
-                    key: "block",
+                    key: BLOCK,
                     icon: (
                         <Link href={`${routers("ba").block.path}`}>
                             <FontAwesomeIcon icon={faArchive} />
                         </Link>
                     ),
-                    label: "Khối thông tin"
+                    label: "Biểu mẫu"
                 },
                 {
-                    key: "product",
+                    key: PRODUCT,
                     icon: (
                         <Link href={`${routers("ba").product.path}`}>
                             <FontAwesomeIcon icon={faArchive} />

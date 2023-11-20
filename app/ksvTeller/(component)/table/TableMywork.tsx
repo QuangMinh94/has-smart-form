@@ -2,7 +2,7 @@
 
 import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
-import React from "react"
+import React, { useEffect } from "react"
 
 import { myWork } from "@/app/(types)/teller/mywork"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
@@ -121,7 +121,9 @@ const TableMyWork: React.FC<Props> = ({ data }) => {
             )
         }
     ]
-    console.log("data", data)
+    useEffect(() => {
+        router.refresh()
+    }, [])
     return (
         <div>
             <Table

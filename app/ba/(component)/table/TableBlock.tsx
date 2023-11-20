@@ -1,11 +1,10 @@
 "use client"
 
-import React, { useEffect } from "react"
+import React from "react"
 import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { EformTemplate } from "@/app/(types)/EformTemplate"
 import dayjs from "dayjs"
-import { useRouter } from "next/navigation"
 
 type Props = {
     data: EformTemplate[]

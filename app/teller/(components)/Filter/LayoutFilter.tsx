@@ -16,7 +16,7 @@ import {
     useRouter,
     useSearchParams
 } from "next/navigation"
-
+import { useTransition } from "react"
 type condisions = {
     pagemywork: {
         isMyworkpath: boolean
@@ -165,12 +165,12 @@ const CustomFilter: React.FC<{
     condition: () => condisions
 }> = memo(({ pathName, condition, rootPath }) => {
     const router = useRouter()
-    const searchQuery = useSearchParams()
+    const [isPending, startTransition] = useTransition()
     const searchParams = useSearchParams()
     const appointmentCode: string = searchParams.get("code") ?? ""
     const typeSearch: any = useMemo(
-        () => searchQuery.get(mywork.TYPE_SEARCH),
-        [searchQuery.get(mywork.TYPE_SEARCH)]
+        () => searchParams.get(mywork.TYPE_SEARCH),
+        [searchParams.get(mywork.TYPE_SEARCH)]
     )
     const HanderFilter = {
         [`${routers(rootPath).mywork.path}`]: (value: string) => {
@@ -178,8 +178,11 @@ const CustomFilter: React.FC<{
         }
     }
     const HandlerChange = debounce((e: any) => {
-        HanderFilter[pathName](e.target.value)
+        startTransition(() => {
+            HanderFilter[pathName](e.target.value)
+        })
     }, 400)
+
     return (
         <>
             {condition().pagemywork.isDetailMyorkpath && (
@@ -188,7 +191,11 @@ const CustomFilter: React.FC<{
                 </CustomerLabel>
             )}
             {condition().pagemywork.isMyworkpath && (
-                <Input onChange={HandlerChange} placeholder="Tìm Kiếm" />
+                <Input.Search
+                    onChange={HandlerChange}
+                    placeholder="Tìm Kiếm"
+                    loading={isPending}
+                />
             )}
         </>
     )

@@ -5,6 +5,7 @@ import { authOptions } from "@/app/api/auth/authOptions"
 import FillterProduct from "../(component)/fillter/FillterProduct"
 import LayoutTreeView from "../(component)/table/TreeViewProduct"
 import { requestBodyEproductTree } from "@/app/(types)/eProduct"
+import ButtonOpenModal from "@/app/ba/(component)/ButtonOpenModal"
 import axios from "axios"
 const GetProductTree = async (pram: {
     bodyRequest: requestBodyEproductTree
@@ -45,8 +46,20 @@ const ProductPage = async () => {
     console.log("tree", tree)
     return (
         <div>
-            <div className="mb-[20px] w-[30%]">
-                <FillterProduct />
+            <div className="mb-[20px] flex items-center">
+                <div className="flex-1">
+                    <div className="w-[30%]">
+                        <FillterProduct />
+                    </div>
+                </div>
+                <div>
+                    <ButtonOpenModal
+                        type="ADD_MODAL"
+                        titleModal="Tạo sản phẩm"
+                        typeRow="P"
+                        clickBtn={true}
+                    />
+                </div>
             </div>
             <LayoutTreeView TreeEProduct={tree} />
         </div>

@@ -35,6 +35,7 @@ export interface eProduct {
     description?: string
     type?: string
     children?: eProduct[]
+    parent: { _id: string; name: string }
 }
 export interface requestBodyEproduct {
     type?: string
@@ -56,15 +57,18 @@ export interface OptionTree {
 }
 
 export interface requestBodyAddEproduct {
-    name: string
-    description: string
+    name?: string
+    description?: string
     active: boolean
-    code: string
-    type: "P" | "B"
-    parent: string
-    formTemplate: string[]
-    image: {
+    code?: string
+    type?: "P" | "B"
+    parent?: string
+    formTemplate?: string[]
+    image?: {
         Data: string
         ContentType: string
     }
+}
+export interface requestBodyUpdateEproduct extends requestBodyAddEproduct {
+    id: string
 }
