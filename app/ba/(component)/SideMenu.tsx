@@ -6,7 +6,7 @@ import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
 import ProviderTranfer from "@/components/provider/ProviderTranfer"
 import ProviderBa from "./Provider"
 import Link from "next/link"
-import { faArchive } from "@fortawesome/free-solid-svg-icons"
+import { faArchive, faProcedures } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { usePathname } from "next/navigation"
 

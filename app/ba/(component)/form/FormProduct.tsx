@@ -16,8 +16,8 @@ import {
 } from "@/app/(types)/eProduct"
 import { AddEproduct, UpdateEproduct } from "@/app/(service)/eProduct"
 import { useEnvContext } from "next-runtime-env"
-const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo)
+const onFinishFailed = async (errorInfo: any) => {
+    console.log("Failed:", await errorInfo)
 }
 type Props = { type: setting; rowData?: eProduct; cancelModel: () => void }
 const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
@@ -52,8 +52,8 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                 parent: `${rowData?._id}`,
                 type: "P",
                 image: {
-                    Data: imageProduct?.thumbUrl,
-                    ContentType: imageProduct?.type
+                    data: imageProduct?.thumbUrl,
+                    contentType: imageProduct?.type
                 }
             }
             if (!imageProduct?.thumbUrl || !imageProduct?.type) {
@@ -74,8 +74,8 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                 code: idProduct,
                 type: "P",
                 image: {
-                    Data: imageProduct?.thumbUrl,
-                    ContentType: imageProduct?.type
+                    data: imageProduct?.thumbUrl,
+                    contentType: imageProduct?.type
                 }
             }
             if (!imageProduct?.thumbUrl || !imageProduct?.type) {
@@ -103,11 +103,11 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                     function addEProduct(eProduct: eProduct[]) {
                         const dataAdd = {
                             ...resEproduct,
-                            children: [],
-                            image: {
-                                data: body?.image?.Data ?? "",
-                                contentType: body?.image?.ContentType ?? ""
-                            }
+                            children: []
+                            // image: {
+                            //     data: body?.image?.data ?? "",
+                            //     contentType: body?.image?.contentType ?? ""
+                            // }
                         }
                         if (!body?.parent) {
                             eProduct.push(dataAdd)
@@ -127,7 +127,7 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                     }
 
                     addEProduct(eProducts)
-                    console.log("voaday44", eProducts)
+
                     return {
                         ...data,
                         eProducts: eProducts
@@ -246,6 +246,14 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                                 imageProduct: data
                             })
                         }}
+                        image={
+                            rowData
+                                ? {
+                                      data: `${rowData?.image?.data}`,
+                                      type: `${rowData?.image?.contentType}`
+                                  }
+                                : undefined
+                        }
                     />
                 </Form.Item>
                 <Form.Item

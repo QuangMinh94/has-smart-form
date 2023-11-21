@@ -14,6 +14,7 @@ export type dataGlobal = {
     choosenBlock: choosenBlock[]
     eProducts: eProduct[]
     DataNode: DataNode[]
+    checkedForm: boolean
 }
 export type TreeFilter = {
     expandedKeys: React.Key[]
@@ -31,7 +32,8 @@ const contextBa = createContext<typeContextBa>({
     dataGlobal: {
         choosenBlock: [],
         eProducts: [],
-        DataNode: []
+        DataNode: [],
+        checkedForm: true
     },
     setDataGlobal: () => {},
     messageApi: () => {},
