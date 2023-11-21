@@ -14,6 +14,7 @@ import utc from "dayjs/plugin/utc"
 import delay from "delay"
 import { useSession } from "next-auth/react"
 import { useCookies } from "next-client-cookies"
+import { useEnvContext } from "next-runtime-env"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
 import { useContext, useEffect, useState } from "react"
@@ -48,6 +49,7 @@ const TemplateWrapper = ({
     const router = useRouter()
     const [form] = Form.useForm()
     const cookies = useCookies()
+    const { NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE } = useEnvContext()
 
     const [messageApi, contextHolder] = message.useMessage()
     const {
@@ -172,7 +174,7 @@ const TemplateWrapper = ({
         setIsDisabled(true)
         try {
             await axios.post(
-                process.env.NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
+                NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
                 {
                     id: id,
                     button: BUTTON_TYPE.SUBMIT
@@ -206,7 +208,7 @@ const TemplateWrapper = ({
         setIsDisabled(true)
         try {
             await axios.post(
-                process.env.NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
+                NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
                 {
                     id: id,
                     button: BUTTON_TYPE.REJECT
