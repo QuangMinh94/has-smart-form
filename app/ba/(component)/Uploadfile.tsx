@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react"
+import React, { useState, memo, useEffect } from "react"
 
 import { Modal, Upload, Button } from "antd"
 import type { RcFile, UploadProps } from "antd/es/upload"
@@ -15,39 +15,61 @@ const getBase64 = (file: RcFile): Promise<string> =>
 
 type Props = {
     onChange: (data: { thumbUrl: string; type: string }) => void
+    image?: {
+        data: string
+        type: string
+    }
 }
-const App: React.FC<Props> = ({ onChange }) => {
+const App: React.FC<Props> = ({ onChange, image }) => {
     const [previewOpen, setPreviewOpen] = useState(false)
     const [previewImage, setPreviewImage] = useState("")
-    const [previewTitle, setPreviewTitle] = useState("")
-    const [fileList, setFileList] = useState<UploadFile[]>([])
+
+    const [fileList, setFileList] = useState<any[]>(
+        image
+            ? [
+                  {
+                      thumbUrl: `data:${image.type};base64,${image.data}`,
+                      status: "done",
+                      type: "image/jpeg"
+                  }
+              ]
+            : []
+    )
 
     const handleCancel = () => {
         setPreviewOpen(false)
     }
 
     const handlePreview = async (file: UploadFile) => {
-        if (!file.url && !file.preview) {
+        if (!file.url && !file.preview && file.originFileObj) {
             file.preview = await getBase64(file.originFileObj as RcFile)
         }
 
-        setPreviewImage(file.url || (file.preview as string))
+        const url = file.preview ? file?.preview : file?.thumbUrl
+        setPreviewImage(`${url}`)
         setPreviewOpen(true)
-        setPreviewTitle(
-            file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
-        )
     }
 
     const handleChange: UploadProps["onChange"] = async (info) => {
         let thumbUrl = ""
+
         info.file.status = "done"
         const file = info?.fileList[0]
         if (file?.originFileObj) {
             thumbUrl = await getBase64(file?.originFileObj as RcFile)
         }
-        thumbUrl = thumbUrl.substring(thumbUrl.indexOf(",") + 1)
+
+        // setTimeout(() => {
+        if (file?.thumbUrl) {
+            thumbUrl = file?.thumbUrl?.substring(
+                file?.thumbUrl.indexOf(",") + 1
+            )
+        } else {
+            thumbUrl = thumbUrl.substring(thumbUrl.indexOf(",") + 1)
+        }
 
         onChange({ thumbUrl, type: file?.type ?? "" })
+        // }, 500)
 
         setFileList(info.fileList)
     }
@@ -66,7 +88,7 @@ const App: React.FC<Props> = ({ onChange }) => {
             </Upload>
             <Modal
                 open={previewOpen}
-                title={previewTitle}
+                title={"Hình ảnh"}
                 footer={null}
                 onCancel={handleCancel}
             >
