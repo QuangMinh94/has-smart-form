@@ -10,6 +10,7 @@ import QueryClientProvider from "./QueryClientProvider"
 import AuthProvider from "./auth/Provider"
 import AntdProvider from "./globalTheme"
 
+import Layout from "./clientLayout"
 import "./globals.css"
 
 config.autoAddCss = false
@@ -33,7 +34,8 @@ export default function RootLayout({
                         <AuthProvider>
                             <ConfigProvider theme={theme}>
                                 <AntdProvider>
-                                    <main>{children}</main>
+                                    {/* <main>{children}</main> */}
+                                    <Layout>{children}</Layout>
                                 </AntdProvider>
                             </ConfigProvider>
                         </AuthProvider>

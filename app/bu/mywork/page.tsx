@@ -7,6 +7,7 @@ import { authOptions } from "@/app/api/auth/authOptions"
 import axios from "axios"
 import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
+import { RedirectType, redirect } from "next/navigation"
 import { cache } from "react"
 import PageHeader from "../_components/PageHeader"
 import { SearchParamProvider } from "../_context/provider"
@@ -23,55 +24,52 @@ const MyWorkPage = async ({
     searchParams: { name: string }
 }) => {
     const session = await getServerSession(authOptions)
+    if (!session) redirect("/auth/signin", RedirectType.replace)
 
-    if (session) {
-        const userInfo = session.user.userInfo as Users
-        const userRole = userInfo.defaultGroup?.role as Role[]
-        const permission = session.user.userInfo.permission as Permission[]
+    const userInfo = session.user.userInfo as Users
+    const userRole = userInfo.defaultGroup?.role as Role[]
+    const permission = session.user.userInfo.permission as Permission[]
 
-        const data = await fetchTemplateData(
-            process.env.EFORM_SEARCH_TEMPLATE!,
-            searchParams.name
-                ? { name: searchParams.name, userRole: userRole[0]._id }
-                : { userRole: userRole[0]._id }
-        )
+    const data = await fetchTemplateData(
+        process.env.EFORM_SEARCH_TEMPLATE!,
+        searchParams.name
+            ? { name: searchParams.name, userRole: userRole[0]._id }
+            : { userRole: userRole[0]._id }
+    )
 
-        const _data: DataTableType[] = []
-        console.log("Data", data)
-        data.forEach((element) => {
-            _data.push({
-                key: element._id,
-                formName: element.name,
-                approval: element.approver,
-                validFrom: element.validFrom,
-                status: element.status?.description
-            })
+    const _data: DataTableType[] = []
+    data.forEach((element) => {
+        _data.push({
+            key: element._id,
+            formName: element.name,
+            approval: element.approver,
+            validFrom: element.validFrom,
+            status: element.status?.description
         })
+    })
 
-        return (
-            <SearchParamProvider>
-                <PageHeader
-                    path="/bu/mywork"
-                    addNewPermission={FindPermission(
+    return (
+        <SearchParamProvider>
+            <PageHeader
+                path="/bu/mywork"
+                addNewPermission={FindPermission(
+                    permission,
+                    "children",
+                    "VisibleAddNew"
+                )}
+            >
+                <TemplateTable
+                    readOnly={false}
+                    data={_data}
+                    ksvPermission={FindPermission(
                         permission,
                         "children",
-                        "VisibleAddNew"
+                        "VisibleVerifyButton"
                     )}
-                >
-                    <TemplateTable
-                        readOnly={false}
-                        data={_data}
-                        ksvPermission={FindPermission(
-                            permission,
-                            "children",
-                            "VisibleVerifyButton"
-                        )}
-                    />
-                </PageHeader>
-            </SearchParamProvider>
-        )
-    }
-    return null
+                />
+            </PageHeader>
+        </SearchParamProvider>
+    )
 }
 
 const fetchTemplateData = cache(async (url: string, searchInput: any) => {
