@@ -6,8 +6,10 @@ import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
 
 import ProviderMyworkDetail from "@/app/teller/(components)/provider/ProviderMyworkDetail"
+import CustomSpin from "@/components/CustomSpin"
 import { faArchive } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
 const { Header, Sider, Content } = Layout
 
@@ -35,11 +37,37 @@ type Props = {
     children: React.ReactNode
     title: string
 }
-const SideMenu = ({ children, title }: Props) => {
+const SideMenu = async ({ children, title }: Props) => {
     const [collapsed, setCollapsed] = useState(false)
+    const { status } = useSession()
     const {
         token: { colorBgContainer, colorPrimary }
     } = theme.useToken()
+
+    if (status === "loading") {
+        return (
+            <CustomSpin
+                noImage={true}
+                theme={{
+                    components: {
+                        Spin: {
+                            colorPrimary: "black"
+                        }
+                    }
+                }}
+            />
+        )
+    }
+    if (status === "unauthenticated")
+        return (
+            <p>
+                Session expired.Please{" "}
+                <Link className="nav-link" href="api/auth/signin">
+                    login
+                </Link>{" "}
+                again
+            </p>
+        )
     return (
         <Layout className="h-screen">
             <Sider

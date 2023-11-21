@@ -2,6 +2,7 @@ import { EformTemplate } from "@/app/(types)/EformTemplate"
 import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import { authOptions } from "@/app/api/auth/authOptions"
 import axios from "axios"
+import delay from "delay"
 import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
 import { RedirectType, notFound, redirect } from "next/navigation"
@@ -20,6 +21,7 @@ const TemplatePage = async ({
 }: {
     searchParams: { name: string }
 }) => {
+    await delay(2000)
     const session = await getServerSession(authOptions)
     if (!session) redirect("/auth/signin", RedirectType.replace)
 
@@ -48,26 +50,24 @@ const TemplatePage = async ({
 
     return (
         <SearchParamProvider>
-            <div>
-                <PageHeader
-                    path="/bu/template"
-                    addNewPermission={FindPermission(
+            <PageHeader
+                path="/bu/template"
+                addNewPermission={FindPermission(
+                    permission,
+                    "children",
+                    "VisibleAddNew"
+                )}
+            >
+                <TemplateTable
+                    readOnly={true}
+                    data={_data}
+                    ksvPermission={FindPermission(
                         permission,
                         "children",
-                        "VisibleAddNew"
+                        "VisibleVerifyButton"
                     )}
-                >
-                    <TemplateTable
-                        readOnly={true}
-                        data={_data}
-                        ksvPermission={FindPermission(
-                            permission,
-                            "children",
-                            "VisibleVerifyButton"
-                        )}
-                    />
-                </PageHeader>
-            </div>
+                />
+            </PageHeader>
         </SearchParamProvider>
     )
 }

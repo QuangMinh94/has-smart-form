@@ -3,7 +3,7 @@
 import { EncryptedString } from "@/app/(utilities)/Crypto"
 import DateFormatter from "@/app/(utilities)/DateFormatter"
 import CustomLink from "@/components/CustomLink"
-import { Table, Tooltip } from "antd"
+import { Skeleton, Table, Tooltip } from "antd"
 import { ColumnsType } from "antd/es/table"
 import { useCookies } from "next-client-cookies"
 import { usePathname, useRouter } from "next/navigation"
@@ -19,15 +19,77 @@ export type DataTableType = {
 const TemplateTable = ({
     data,
     ksvPermission,
-    readOnly
+    readOnly,
+    prerender
 }: {
     data: DataTableType[]
     ksvPermission: boolean
     readOnly: boolean
+    prerender?: boolean
 }) => {
     const pathName = usePathname()
     const router = useRouter()
     const cookies = useCookies()
+    const skeletonColumns: ColumnsType<DataTableType> = [
+        {
+            title: "Tên biểu mẫu",
+            dataIndex: "formName",
+            //ellipsis: true,
+            width: "6vw",
+            render() {
+                return <Skeleton.Input active />
+            }
+        },
+        {
+            title: "Người phê duyệt",
+            dataIndex: "approval",
+            align: "center",
+            ellipsis: true,
+            width: "6vw",
+            render() {
+                return <Skeleton.Input active />
+            }
+        },
+        {
+            title: "Ngày hiệu lực",
+            dataIndex: "validFrom",
+            align: "center",
+            ellipsis: true,
+            width: "6vw",
+            render() {
+                return <Skeleton.Input active />
+            }
+        },
+        {
+            title: "Trạng thái",
+            dataIndex: "status",
+            align: "center",
+            ellipsis: true,
+            width: "6vw",
+            responsive: ["md"],
+            sorter: (a, b) => a.status!.localeCompare(b.status!),
+            render() {
+                return <Skeleton.Input active />
+            }
+        },
+        {
+            ...(ksvPermission && !pathName.includes("/bu/template")
+                ? {
+                      title: "Hành động",
+                      key: "Edit",
+                      //dataIndex: 'action',
+                      align: "center",
+                      width: "5vw",
+                      fixed: "right",
+                      render() {
+                          return <Skeleton.Input active />
+                      }
+                  }
+                : {
+                      width: "0vw"
+                  })
+        }
+    ]
 
     const columns: ColumnsType<DataTableType> = [
         {
@@ -112,7 +174,12 @@ const TemplateTable = ({
         }
     ]
 
-    return <Table dataSource={data} columns={columns}></Table>
+    return (
+        <Table
+            dataSource={data}
+            columns={prerender ? skeletonColumns : columns}
+        ></Table>
+    )
 }
 
 export default TemplateTable

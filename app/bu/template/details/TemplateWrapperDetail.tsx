@@ -5,20 +5,25 @@ import { EformTemplate } from "@/app/(types)/EformTemplate"
 import { uniqueValue } from "@/app/(utilities)/ArrayUtilities"
 import { timeStampToDayjs } from "@/app/(utilities)/TimeStampToDayjs"
 import { ContextTemplate } from "@/components/context/context"
-import { Form } from "antd"
+import { Form, Skeleton } from "antd"
 import dayjs from "dayjs"
 import tz from "dayjs/plugin/timezone"
 import utc from "dayjs/plugin/utc"
 import dynamic from "next/dynamic"
 import { useContext, useEffect, useState } from "react"
 import { OptionProps } from "../[id]/page"
-import TemplateForm from "../new/TemplateForm"
+//import TemplateForm from "../new/TemplateForm"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
 
 const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     loading: () => <>Loading eform...</>,
+    ssr: false
+})
+
+const TemplateForm = dynamic(() => import("../new/TemplateForm"), {
+    loading: () => <Skeleton active />,
     ssr: false
 })
 

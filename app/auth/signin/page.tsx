@@ -1,7 +1,7 @@
 import CustomSpin from "@/components/CustomSpin"
 import dynamic from "next/dynamic"
 const SigninForm = dynamic(() => import("./signInForm"), {
-    loading: () => <CustomSpin />,
+    loading: () => <CustomSpin noImage={false} />,
     ssr: false
 })
 
