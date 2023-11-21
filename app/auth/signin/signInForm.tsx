@@ -8,10 +8,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Col, Flex, Form, Input, Row, Spin } from "antd"
-import { signIn, useSession } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useState } from "react"
 
 type FieldType = {
     username: string
@@ -23,9 +23,10 @@ const SigninForm = () => {
     const [userNameTitle, setUserNameTitle] = useState<boolean>(false)
     const [passwordTitle, setPasswordTitle] = useState<boolean>(false)
     const [error, setError] = useState("")
-    const { data: session } = useSession()
+    //const { data: session } = useSession()
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+    const params = useSearchParams()
     const onFinish = async (values: any) => {
         setError("")
         setLoading(true)
@@ -42,15 +43,22 @@ const SigninForm = () => {
                 setError("Sai username hoặc mật khẩu")
             }
             setLoading(false)
+        } else {
+            const callBackURL = params.get("callbackUrl")
+            if (callBackURL) {
+                router.replace(callBackURL)
+            } else {
+                router.replace("/")
+            }
         }
     }
 
-    useEffect(() => {
+    /*  useEffect(() => {
         if (session) {
             const role = session.user.role
             router.replace(`/${role.toString().toLowerCase()}`)
         }
-    }, [session])
+    }, [session]) */
 
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo)

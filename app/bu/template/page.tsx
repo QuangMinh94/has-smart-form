@@ -4,7 +4,7 @@ import { authOptions } from "@/app/api/auth/authOptions"
 import axios from "axios"
 import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
-import { notFound } from "next/navigation"
+import { RedirectType, notFound, redirect } from "next/navigation"
 import { cache } from "react"
 import PageHeader from "../_components/PageHeader"
 import { SearchParamProvider } from "../_context/provider"
@@ -21,7 +21,7 @@ const TemplatePage = async ({
     searchParams: { name: string }
 }) => {
     const session = await getServerSession(authOptions)
-    if (!session) notFound()
+    if (!session) redirect("/auth/signin", RedirectType.replace)
 
     const permission = session.user.userInfo.permission
 
@@ -30,7 +30,7 @@ const TemplatePage = async ({
     let data: EformTemplate[] = []
     let _data: DataTableType[] = []
 
-    data = await fetchTemplate(
+    data = await fetchTemplatePage(
         process.env.EFORM_SEARCH_TEMPLATE!,
         searchParams.name ? { name: searchParams.name } : {}
     )
@@ -72,7 +72,7 @@ const TemplatePage = async ({
     )
 }
 
-const fetchTemplate = cache(async (url: string, searchInput: any) => {
+const fetchTemplatePage = cache(async (url: string, searchInput: any) => {
     const cookie = cookies()
     try {
         const res = await axios.post(url, searchInput, {
