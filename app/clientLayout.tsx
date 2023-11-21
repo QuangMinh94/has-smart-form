@@ -4,10 +4,9 @@ import React, { useEffect } from "react"
 import { useIdleTimer } from "react-idle-timer"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-    const { data: session, status, update } = useSession()
-    const CHECK_SESSION_EXP_TIME = 300000 // 5 mins
-    const SESSION_IDLE_TIME = 300000 // 5 mins
-    const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
+    const { data: session, update } = useSession()
+    const CHECK_SESSION_EXP_TIME = 300000
+    const SESSION_IDLE_TIME = 30 * 60 * 1000
 
     const onUserIdle = () => {
         console.log("IDLE")
@@ -25,7 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     })
 
     useEffect(() => {
-        const checkUserSession = setInterval(() => {
+        const checkUserSession = setInterval(async () => {
             const expiresTimeTimestamp = Math.floor(
                 new Date(session?.expires || "").getTime()
             )
@@ -36,14 +35,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             // and the user is not idle, then we want to refresh the session
             // on the client and request a token refresh on the backend
             if (!isIdle() && timeRemaining < CHECK_SESSION_EXP_TIME) {
-                update() // extend the client session
-
+                await update() // extend the client session
                 // request refresh of backend token here
             } else if (timeRemaining < 0) {
                 // session has expired, logout the user and display session expiration message
-                signOut({
-                    callbackUrl: BASE_URL + "/login?error=SessionExpired"
-                })
+                await signOut()
             }
         }, CHECK_SESSION_EXP_TIME)
 
