@@ -6,8 +6,7 @@ import Container from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/C
 import ButtonLeftandRight from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/ButtonCusTom"
 import LayoutTranfer from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/LayoutTranfer"
 
-import HeaderUi from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
-
+import CheckboxForm from "./CheckboxFormLeft"
 const TranferNV = () => {
     const {
         listLeft,
@@ -33,7 +32,7 @@ const TranferNV = () => {
             isCollapse={false}
             ColLeft={
                 <Container
-                    // HidenUI={<HeaderUi />}
+                    HidenUI={<CheckboxForm />}
                     setChangeListFilter={setChangeListFilter}
                     ChangeListFilter={ChangeListFilter}
                     title="Danh sách biểu mẫu"

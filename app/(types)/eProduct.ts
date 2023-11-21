@@ -35,7 +35,7 @@ export interface eProduct {
     description?: string
     type?: string
     children?: eProduct[]
-    parent: { _id: string; name: string }
+    parent?: { _id: string; name: string }
 }
 export interface requestBodyEproduct {
     type?: string
@@ -65,8 +65,8 @@ export interface requestBodyAddEproduct {
     parent?: string
     formTemplate?: string[]
     image?: {
-        Data: string
-        ContentType: string
+        data: string
+        contentType: string
     }
 }
 export interface requestBodyUpdateEproduct extends requestBodyAddEproduct {

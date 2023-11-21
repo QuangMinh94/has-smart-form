@@ -10,7 +10,8 @@ const ProviderBa: React.FC<typeProvider> = ({ children }) => {
     const [dataGlobal, setDataGlobal] = useState<dataGlobal>({
         choosenBlock: [],
         eProducts: [],
-        DataNode: []
+        DataNode: [],
+        checkedForm: true
     })
     const [treeFilter, setTreeFilter] = useState<TreeFilter>({
         expandedKeys: [],
