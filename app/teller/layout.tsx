@@ -1,7 +1,7 @@
 import SideMenu from "./(components)/SideMenu"
 
-import { ClientCookiesProvider } from "../ClientCookiesProvider"
 import { cookies } from "next/headers"
+import { ClientCookiesProvider } from "../ClientCookiesProvider"
 interface Props {
     children: any
 }

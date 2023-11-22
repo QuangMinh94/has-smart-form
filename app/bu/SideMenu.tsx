@@ -1,5 +1,6 @@
 "use client"
 
+import CustomSpin from "@/components/CustomSpin"
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
 import { faArchive, faFile, faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -11,7 +12,6 @@ import {
     Image,
     Layout,
     Menu,
-    Skeleton,
     theme
 } from "antd"
 import { signOut, useSession } from "next-auth/react"
@@ -101,13 +101,28 @@ const SideMenu = ({
     }, [pathName])
 
     if (status === "loading")
-        return <Skeleton.Avatar shape="circle" active={true} />
+        return (
+            <CustomSpin
+                noImage={true}
+                theme={{
+                    components: {
+                        Spin: {
+                            colorPrimary: "black"
+                        }
+                    }
+                }}
+            />
+        )
 
     if (status === "unauthenticated")
         return (
-            <Link className="nav-link" href="api/auth/signin">
-                Login
-            </Link>
+            <p>
+                Session expired.Please{" "}
+                <Link className="nav-link" href="api/auth/signin">
+                    login
+                </Link>{" "}
+                again
+            </p>
         )
 
     return (

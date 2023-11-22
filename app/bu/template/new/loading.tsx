@@ -1,5 +1,5 @@
-const TemplateLoading = () => {
+const TemplateNewLoading = () => {
     return <div>NewTemplateLoading...</div>
 }
 
-export default TemplateLoading
+export default TemplateNewLoading
