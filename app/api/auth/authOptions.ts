@@ -74,6 +74,12 @@ export const authOptions: NextAuthOptions = {
                               "VisibleCVCTReviewer"
                           )
                             ? Role.KSVTELLER
+                            : FindPermission(
+                                  permission,
+                                  "children",
+                                  "VisibleBA"
+                              )
+                            ? Role.BA
                             : Role.TELLER
                         : Role.BU
                     : Role.BU
