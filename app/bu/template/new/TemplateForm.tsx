@@ -122,14 +122,14 @@ const TemplateForm = ({
                                                 "Please input the form name"
                                         }
                                     ]}
-                                    className="w-full"
+                                    className="w-3/6"
                                     shouldUpdate={(prevValues, curValues) =>
                                         prevValues !== curValues
                                     }
                                 >
                                     <Input />
                                 </Form.Item>
-                                {/*  <Form.Item<FieldType>
+                                <Form.Item<FieldType>
                                     label="Mã form"
                                     name="formCode"
                                     rules={[
@@ -137,6 +137,9 @@ const TemplateForm = ({
                                             required: true,
                                             message:
                                                 "Please input the form code"
+                                            /* async validator(_, value) {
+                                                await axios.post("", {})
+                                            } */
                                         }
                                     ]}
                                     className="w-3/6"
@@ -145,7 +148,7 @@ const TemplateForm = ({
                                     }
                                 >
                                     <Input />
-                                </Form.Item> */}
+                                </Form.Item>
                             </Flex>
                             <Flex gap={8}>
                                 <Form.Item<FieldType>
