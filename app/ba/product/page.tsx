@@ -1,12 +1,13 @@
 import { cookies } from "next/headers"
+
 import { eProduct } from "@/app/(types)/eProduct"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/authOptions"
+
 import FillterProduct from "../(component)/fillter/FillterProduct"
 import LayoutTreeView from "../(component)/table/TreeViewProduct"
 import { requestBodyEproductTree } from "@/app/(types)/eProduct"
 import ButtonOpenModal from "@/app/ba/(component)/ButtonOpenModal"
 import axios from "axios"
+
 const GetProductTree = async (pram: {
     bodyRequest: requestBodyEproductTree
     token: string
@@ -43,7 +44,7 @@ const fetchApi = async (): Promise<eProduct[]> => {
 }
 const ProductPage = async () => {
     const tree = await fetchApi()
-    console.log("tree", tree)
+
     return (
         <div>
             <div className="mb-[20px] flex items-center">

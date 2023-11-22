@@ -40,7 +40,7 @@ const SideMenu = ({ children, title }: Props) => {
         token: { colorBgContainer, colorPrimary }
     } = theme.useToken()
     return (
-        <Layout className="h-screen">
+        <Layout hasSider={true} className="h-screen">
             <Sider
                 collapsible
                 collapsed={collapsed}
@@ -59,6 +59,7 @@ const SideMenu = ({ children, title }: Props) => {
                 </center>
                 <CustomMenu backgroundColor={colorPrimary} />
             </Sider>
+
             <Layout>
                 <Header
                     className="flex items-center"

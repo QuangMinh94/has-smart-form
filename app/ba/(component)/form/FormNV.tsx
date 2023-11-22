@@ -20,7 +20,10 @@ import {
 import { AddEproduct, UpdateEproduct } from "@/app/(service)/eProduct"
 import { useEnvContext } from "next-runtime-env"
 import { EformTemplate } from "@/app/(types)/EformTemplate"
-import { SeacrhEformTemplate } from "@/app/(service)/EformTemplate"
+import {
+    SeacrhEformTemplate,
+    GethEformTemplate
+} from "@/app/(service)/EformTemplate"
 import { useQuery } from "@tanstack/react-query"
 import { DataTranfer } from "@/app/(types)/typeDataTranfe"
 const onFinishFailed = (errorInfo: any) => {
@@ -28,35 +31,63 @@ const onFinishFailed = (errorInfo: any) => {
 }
 type Props = { type: setting; rowData?: eProduct; cancelModel: () => void }
 
-const UseFecthApi = () => {
-    const { NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE } = useEnvContext()
+const UseFecthApiFormAll = ({
+    urlSeacrhEform,
+    urlGetEform,
+    token,
+    session
+}: {
+    urlSeacrhEform: string
+    urlGetEform: string
+    token: string
+    session: string
+}) => {
     const { InFoUser } = useGetInfoUser()
-    const { token, session } = useCustomCookies()
+
     const Role: any = InFoUser?.defaultGroup.role?.[0]
     const idRole = Role?._id
-    const { isLoading, error, data, refetch } = useQuery<EformTemplate[]>({
-        queryKey: ["formtemplates"],
+    const { isLoading, error, data, refetch } = useQuery<any>({
+        queryKey: ["formtemplatesAll"],
         queryFn: async () => {
-            const res = await SeacrhEformTemplate({
-                url: NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
-                bodyRequest: { userRole: idRole, onlyApprove: true },
-                token,
-                session
-            })
+            const resAll = await Promise.all([
+                await SeacrhEformTemplate({
+                    url: urlSeacrhEform!,
+                    bodyRequest: { userRole: idRole, onlyApprove: true },
+                    token,
+                    session
+                }),
+                await GethEformTemplate({
+                    url: urlGetEform!,
+                    bodyRequest: {},
+                    token,
+                    session
+                })
+            ])
 
-            return res.data
+            return resAll
         },
         retry: 3,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false
     })
 
-    return { isLoading, error, data, refetch }
+    return {
+        isLoading,
+        error,
+        FormAll: data?.[0].data,
+        FormNotUse: data?.[1].data,
+        refetch
+    }
 }
+
 const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
     const [form] = Form.useForm()
-    const { NEXT_PUBLIC_ADD_EPRODUCT, NEXT_PUBLIC_UPDATE_EPRODUCT } =
-        useEnvContext()
+    const {
+        NEXT_PUBLIC_ADD_EPRODUCT,
+        NEXT_PUBLIC_UPDATE_EPRODUCT,
+        NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE,
+        NEXT_PUBLIC_GET_EFORM_TEMPLATE
+    } = useEnvContext()
     const { token, session } = useCustomCookies()
     const { messageApi, setDataGlobal, dataGlobal } = useContextBa()
     const [loadingBtn, setLoadingBtn] = useState<boolean>(false)
@@ -67,31 +98,38 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
         setLoading,
         setChangeListFilter
     } = useContextTranfer()
+    const { FormNotUse, FormAll, isLoading } = UseFecthApiFormAll({
+        urlSeacrhEform: NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
+        urlGetEform: NEXT_PUBLIC_GET_EFORM_TEMPLATE!,
+        session,
+        token
+    })
+    console.log("allform", FormAll)
+    console.log("getForm", FormNotUse)
+    // const templateInNv = (eProduct: eProduct[]): any => {
+    //     const objID: any = {}
+    //     const ForIdTemplate = (eProduct: eProduct[]) => {
+    //         eProduct.forEach((item) => {
+    //             if (item.formTemplate && item.formTemplate.length > 0) {
+    //                 item.formTemplate.forEach((template) => {
+    //                     objID[`${template?._id}`] = template.name
+    //                 })
+    //             }
+    //             if (item?.children && item.children.length > 0) {
+    //                 ForIdTemplate(item?.children)
+    //             }
+    //         })
+    //     }
+    //     ForIdTemplate(eProduct)
+    //     return objID
+    // }
 
-    const { data, isLoading } = UseFecthApi()
-    const templateInNv = (eProduct: eProduct[]): any => {
-        const objID: any = {}
-        const ForIdTemplate = (eProduct: eProduct[]) => {
-            eProduct.forEach((item) => {
-                if (item.formTemplate && item.formTemplate.length > 0) {
-                    item.formTemplate.forEach((template) => {
-                        objID[`${template?._id}`] = template.name
-                    })
-                }
-                if (item?.children && item.children.length > 0) {
-                    ForIdTemplate(item?.children)
-                }
-            })
-        }
-        ForIdTemplate(eProduct)
-        return objID
-    }
     useEffect(() => {
         setLoading(isLoading)
-        if (data) {
+        if (FormAll) {
             const dataListRight: DataTranfer[] = []
             const dataListLeft: DataTranfer[] = []
-            const IdCheckTemplate = templateInNv(dataGlobal.eProducts)
+            // const IdCheckTemplate = templateInNv(dataGlobal.eProducts)
             let objIDTemplate: any = {}
             if (type === "UPDATE_MODAL") {
                 //check duplicates
@@ -102,7 +140,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                     },
                     {}
                 )
-                data.forEach((template) => {
+                FormAll.forEach((template: any) => {
                     if (objIDTemplate[`${template?._id}`]) {
                         dataListRight.push({
                             id: template?._id ?? "",
@@ -113,10 +151,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                 })
             }
 
-            const templates = data.filter(
-                (item) => !IdCheckTemplate[`${item._id}`]
-            )
-            templates.forEach((template) => {
+            FormNotUse.forEach((template: any) => {
                 if (!objIDTemplate[`${template?._id}`]) {
                     dataListLeft.push({
                         id: template?._id ?? "",
@@ -125,18 +160,20 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                     })
                 }
             })
-            console.log("listR1", dataListRight)
+
             setListLeft(dataListLeft)
             setListRight(dataListRight)
         }
-        console.log("sao ay nhi")
-    }, [isLoading, data?.length])
+        return () => {
+            setDataGlobal((data) => ({ ...data, checkedForm: true }))
+        }
+    }, [isLoading])
 
     //check form
     useEffect(() => {
-        if (data) {
+        if (FormAll && FormNotUse) {
             const dataListLeft: DataTranfer[] = []
-            const IdCheckTemplate = templateInNv(dataGlobal.eProducts)
+            // const IdCheckTemplate = templateInNv(dataGlobal.eProducts)
             let objIDTemplate: any = {}
 
             //check duplicates
@@ -144,15 +181,13 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                 acc[`${item?.id}`] = true
                 return acc
             }, {})
-            console.log("listRight", listRight)
-            let templates = data.filter(
-                (item) => !IdCheckTemplate[`${item._id}`]
-            )
-            if (!dataGlobal.checkedForm) {
-                templates = data
+
+            let templates = FormAll
+            if (dataGlobal.checkedForm) {
+                templates = FormNotUse
             }
 
-            templates.forEach((tempalate) => {
+            templates.forEach((tempalate: any) => {
                 if (!objIDTemplate[`${tempalate?._id}`]) {
                     dataListLeft.push({
                         id: tempalate?._id ?? "",
@@ -302,9 +337,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
         }
         setLoadingBtn(false)
     }
-    const HandlerOnchangeEproduct = useCallback((value: string) => {
-        form.setFieldsValue({ eProduct: value })
-    }, [])
+
     return (
         <Form
             layout="vertical"

@@ -1,40 +1,40 @@
 "use client"
-
-import React from "react"
-import { Table } from "antd"
+import React, { useEffect } from "react"
+import { Table, Tooltip } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { EformTemplate } from "@/app/(types)/EformTemplate"
 import dayjs from "dayjs"
-
+import { EncryptedString } from "@/app/(utilities)/Crypto"
+import { useCookies } from "next-client-cookies"
+import { useRouter, usePathname } from "next/navigation"
+import Router from "@/router/cusTomRouter"
 type Props = {
     data: EformTemplate[]
 }
 const TableBlock: React.FC<Props> = ({ data }) => {
-    // const router = useRouter()
-
-    // const CustomClickPath = async (row: myWork) => {
-    //     try {
-    //         setDataGlobal((data) => ({
-    //             ...data,
-    //             idEProduct: row?.eProduct?._id ?? "",
-    //             nameEproduct: row?.eProduct?.name ?? ""
-    //         }))
-    //         router.push(
-    //             `${routers("teller").detailMywork.path({
-    //                 id: row?._id ?? ""
-    //             })}?CCCD=${row?.citizenId}&Name=${row.name}&code=${
-    //                 row.appointmentCode
-    //             }`
-    //         )
-    //     } catch (e) {
-    //         alert("error")
-    //     }
-    // }
+    const router = useRouter()
+    const cookies = useCookies()
+    const pathName = usePathname()
     const columns: ColumnsType<EformTemplate> = [
         {
             key: "name",
             title: "Tên biểu mẫu",
-            dataIndex: "name"
+
+            render(row: EformTemplate) {
+                return (
+                    <p
+                        className="text-blue-600 cursor-pointer truncate ..."
+                        onClick={() => {
+                            const encryptedString = EncryptedString(row._id!)
+                            cookies.set("encryptedId", encryptedString)
+
+                            router.push(Router("ba").blockDetail())
+                        }}
+                    >
+                        <Tooltip title={row.name!}>{row.name!}</Tooltip>
+                    </p>
+                )
+            }
         },
         {
             key: "approver",
@@ -70,23 +70,24 @@ const TableBlock: React.FC<Props> = ({ data }) => {
             }
         }
     ]
-    console.log("table", data)
+    useEffect(() => {
+        if (pathName.startsWith(Router("ba").block.path))
+            router.push(Router("ba").block.path)
+    }, [])
     return (
-        <div>
-            <Table
-                scroll={{
-                    y: "60vh",
-                    scrollToFirstRowOnChange: true
-                }}
-                pagination={{
-                    defaultPageSize: 10,
-                    showSizeChanger: true,
-                    pageSizeOptions: ["5", "10", "20", "30"]
-                }}
-                columns={columns}
-                dataSource={[...data].reverse()}
-            />
-        </div>
+        <Table
+            scroll={{
+                y: "60vh",
+                scrollToFirstRowOnChange: true
+            }}
+            pagination={{
+                defaultPageSize: 10,
+                showSizeChanger: true,
+                pageSizeOptions: ["5", "10", "20", "30"]
+            }}
+            columns={columns}
+            dataSource={[...data].reverse()}
+        />
     )
 }
 

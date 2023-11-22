@@ -1,5 +1,5 @@
 const BAPage = () => {
-    return <></>
+    return <div>BA</div>
 }
 
 export default BAPage

@@ -21,7 +21,10 @@ const routers = (root: rootPath) => {
 
         // ba
         block: { path: `/${root}/${BLOCK}` },
-        product: { path: `/${root}/${PRODUCT}` }
+        product: { path: `/${root}/${PRODUCT}` },
+        blockDetail() {
+            return `${this.block.path}/${DE_TAIL}`
+        }
     }
     return router
 }
