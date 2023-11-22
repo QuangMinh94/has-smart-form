@@ -3,6 +3,7 @@ import "@/public/css/ui.dynatree.css"
 import Script from "next/script"
 
 const OzScript = () => {
+    const url = process.env.EFORM_SERVER
     return (
         <>
             <Script
@@ -16,22 +17,22 @@ const OzScript = () => {
 
             <Script
                 type="text/javascript"
-                src="http://10.4.18.92/html5viewer/jquery.dynatree.js"
+                src={url + "/html5viewer/jquery.dynatree.js"}
                 // strategy="beforeInteractive"
             />
             <Script
                 type="text/javascript"
-                src="http://10.4.18.92/html5viewer/OZJSViewer.js"
+                src={url + "/html5viewer/OZJSViewer.js"}
                 //strategy="beforeInteractive"
             />
             <Script
                 type="text/javascript"
-                src="http://10.4.18.92/html5viewer/pdf_js/web/compatibility.js"
+                src={url + "/html5viewer/pdf_js/web/compatibility.js"}
                 // strategy="beforeInteractive"
             />
             <Script
                 type="text/javascript"
-                src="http://10.4.18.92/html5viewer/pdf_js/build/pdf.js"
+                src={url + "/html5viewer/pdf_js/build/pdf.js"}
                 // strategy="beforeInteractive"
             />
             <Script id={"ozScript"}>
