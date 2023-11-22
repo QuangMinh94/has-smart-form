@@ -1,5 +1,7 @@
-const TemplateLoading = () => {
-    return <div>TemplateLoading...</div>
+import { Skeleton } from "antd"
+
+const TemplateIdLoading = () => {
+    return <Skeleton active />
 }
 
-export default TemplateLoading
+export default TemplateIdLoading
