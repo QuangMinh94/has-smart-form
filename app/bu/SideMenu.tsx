@@ -111,7 +111,7 @@ const SideMenu = ({
         )
 
     return (
-        <Layout className="h-screen">
+        <Layout className="h-screen flex">
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <center>
                     <Image

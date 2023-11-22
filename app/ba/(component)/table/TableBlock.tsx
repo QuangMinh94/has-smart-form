@@ -1,5 +1,4 @@
 "use client"
-
 import React from "react"
 import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
@@ -10,26 +9,6 @@ type Props = {
     data: EformTemplate[]
 }
 const TableBlock: React.FC<Props> = ({ data }) => {
-    // const router = useRouter()
-
-    // const CustomClickPath = async (row: myWork) => {
-    //     try {
-    //         setDataGlobal((data) => ({
-    //             ...data,
-    //             idEProduct: row?.eProduct?._id ?? "",
-    //             nameEproduct: row?.eProduct?.name ?? ""
-    //         }))
-    //         router.push(
-    //             `${routers("teller").detailMywork.path({
-    //                 id: row?._id ?? ""
-    //             })}?CCCD=${row?.citizenId}&Name=${row.name}&code=${
-    //                 row.appointmentCode
-    //             }`
-    //         )
-    //     } catch (e) {
-    //         alert("error")
-    //     }
-    // }
     const columns: ColumnsType<EformTemplate> = [
         {
             key: "name",
@@ -70,23 +49,21 @@ const TableBlock: React.FC<Props> = ({ data }) => {
             }
         }
     ]
-    console.log("table", data)
+
     return (
-        <div>
-            <Table
-                scroll={{
-                    y: "60vh",
-                    scrollToFirstRowOnChange: true
-                }}
-                pagination={{
-                    defaultPageSize: 10,
-                    showSizeChanger: true,
-                    pageSizeOptions: ["5", "10", "20", "30"]
-                }}
-                columns={columns}
-                dataSource={[...data].reverse()}
-            />
-        </div>
+        <Table
+            scroll={{
+                y: "60vh",
+                scrollToFirstRowOnChange: true
+            }}
+            pagination={{
+                defaultPageSize: 10,
+                showSizeChanger: true,
+                pageSizeOptions: ["5", "10", "20", "30"]
+            }}
+            columns={columns}
+            dataSource={[...data].reverse()}
+        />
     )
 }
 

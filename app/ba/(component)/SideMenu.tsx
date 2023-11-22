@@ -6,7 +6,7 @@ import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
 import ProviderTranfer from "@/components/provider/ProviderTranfer"
 import ProviderBa from "./Provider"
 import Link from "next/link"
-import { faArchive, faProcedures } from "@fortawesome/free-solid-svg-icons"
+import { faArchive } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { usePathname } from "next/navigation"
 
@@ -61,7 +61,7 @@ const SideMenu = ({ children }: Props) => {
         token: { colorBgContainer, colorPrimary }
     } = theme.useToken()
     return (
-        <Layout className="h-screen">
+        <Layout hasSider={true} className="h-screen ">
             <Sider
                 collapsible
                 collapsed={collapsed}

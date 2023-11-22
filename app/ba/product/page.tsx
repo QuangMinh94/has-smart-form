@@ -43,7 +43,7 @@ const fetchApi = async (): Promise<eProduct[]> => {
 }
 const ProductPage = async () => {
     const tree = await fetchApi()
-    console.log("tree", tree)
+
     return (
         <div>
             <div className="mb-[20px] flex items-center">

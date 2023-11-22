@@ -41,7 +41,7 @@ const SideMenu = ({ children, title }: Props) => {
         token: { colorBgContainer, colorPrimary }
     } = theme.useToken()
     return (
-        <Layout className="h-screen">
+        <Layout hasSider={true} className="h-screen">
             <Sider
                 collapsible
                 collapsed={collapsed}
