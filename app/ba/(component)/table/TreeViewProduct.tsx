@@ -6,7 +6,7 @@ import { eProduct } from "@/app/(types)/eProduct"
 import ButtonOpenModal from "../ButtonOpenModal"
 import { useContextBa } from "@/components/cusTomHook/useContext"
 import "./TreeViewProduct.css"
-
+import ProviderBa from "@/app/ba/(component)/Provider"
 import { ToFilterName } from "@/util/formatText"
 type TypeProps = {
     TreeEProduct: eProduct[]
@@ -79,20 +79,19 @@ const LayoutTreeView: React.FC<TypeProps> = ({ TreeEProduct }) => {
         token: { colorPrimary }
     } = theme.useToken()
 
-    const Treecustom = useMemo(() => {
+    useEffect(() => {
         const dataTree = TreeCustom(
             dataGlobal.eProducts,
             searchValue,
             colorPrimary
         )
         setDataGlobal((data) => ({ ...data, DataNode: dataTree }))
-        return dataTree
     }, [JSON.stringify(dataGlobal.eProducts), searchValue])
 
     useEffect(() => {
         setDataGlobal((data) => ({ ...data, eProducts: TreeEProduct }))
-    }, [TreeEProduct.length])
-    console.log("data", TreeEProduct)
+    }, [])
+    console.log("data4", TreeEProduct)
     const onExpand = (newExpandedKeys: React.Key[]) => {
         setTreeFilter((data) => ({
             ...data,
@@ -103,7 +102,7 @@ const LayoutTreeView: React.FC<TypeProps> = ({ TreeEProduct }) => {
     return (
         <Tree
             expandedKeys={expandedKeys}
-            treeData={Treecustom}
+            treeData={dataGlobal.DataNode}
             onExpand={onExpand}
             autoExpandParent={autoExpandParent}
         />

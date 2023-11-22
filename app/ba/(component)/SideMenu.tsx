@@ -6,7 +6,7 @@ import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
 import ProviderTranfer from "@/components/provider/ProviderTranfer"
 import ProviderBa from "./Provider"
 import Link from "next/link"
-import { faArchive, faProcedures } from "@fortawesome/free-solid-svg-icons"
+import { faArchive, faFile } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { usePathname } from "next/navigation"
 
@@ -32,7 +32,7 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
                     key: BLOCK,
                     icon: (
                         <Link href={`${routers("ba").block.path}`}>
-                            <FontAwesomeIcon icon={faArchive} />
+                            <FontAwesomeIcon icon={faFile} />
                         </Link>
                     ),
                     label: "Biểu mẫu"
@@ -61,7 +61,7 @@ const SideMenu = ({ children }: Props) => {
         token: { colorBgContainer, colorPrimary }
     } = theme.useToken()
     return (
-        <Layout className="h-screen">
+        <Layout hasSider={true} className="h-screen ">
             <Sider
                 collapsible
                 collapsed={collapsed}
@@ -111,11 +111,11 @@ const SideMenu = ({ children }: Props) => {
                         overflowY: "scroll"
                     }}
                 >
-                    <ProviderTranfer>
-                        <ProviderBa>
+                    <ProviderBa>
+                        <ProviderTranfer>
                             <div>{children}</div>
-                        </ProviderBa>
-                    </ProviderTranfer>
+                        </ProviderTranfer>
+                    </ProviderBa>
                 </Content>
             </Layout>
         </Layout>

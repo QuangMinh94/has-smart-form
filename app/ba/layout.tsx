@@ -2,6 +2,7 @@ import React from "react"
 import { ClientCookiesProvider } from "../ClientCookiesProvider"
 import { cookies } from "next/headers"
 import SideMenu from "./(component)/SideMenu"
+
 interface Props {
     children: React.ReactNode
 }

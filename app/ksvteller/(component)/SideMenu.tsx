@@ -69,7 +69,7 @@ const SideMenu = async ({ children, title }: Props) => {
             </p>
         )
     return (
-        <Layout className="h-screen">
+        <Layout hasSider={true} className="h-screen">
             <Sider
                 collapsible
                 collapsed={collapsed}

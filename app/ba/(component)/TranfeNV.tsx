@@ -40,6 +40,7 @@ const TranferNV = () => {
                     setList={setListLeft}
                     list={listLeft}
                     setRomoveList={setListRight}
+                    loading={loading}
                 />
             }
             Button={
@@ -60,7 +61,6 @@ const TranferNV = () => {
                     setList={setListRight}
                     list={listRight}
                     setRomoveList={setListLeft}
-                    loading={loading}
                 />
             }
         />

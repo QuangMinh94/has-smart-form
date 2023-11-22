@@ -40,7 +40,7 @@ const FillterProduct: React.FC = () => {
     const { DataNode } = dataGlobal
     const dataList = useMemo(() => {
         return getDataList(DataNode)
-    }, [DataNode.length])
+    }, [JSON.stringify(DataNode)])
 
     const {
         token: { colorPrimary }

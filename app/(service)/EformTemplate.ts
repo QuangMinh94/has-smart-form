@@ -53,3 +53,20 @@ export const SeacrhEformTemplate = async (pram: {
     })
     return res
 }
+export const GethEformTemplate = async (pram: {
+    url: string
+    bodyRequest: { notBelongToEProduct?: boolean }
+    token: string
+    session: string
+}) => {
+    //NEXT_PUBLIC_GET_EFORM_TEMPLATE
+
+    const { bodyRequest, token, session, url } = pram
+    const res = await axios.post(url, bodyRequest, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Session: session
+        }
+    })
+    return res
+}
