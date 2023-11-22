@@ -20,6 +20,7 @@ import {
     theme
 } from "antd"
 import { signOut, useSession } from "next-auth/react"
+import { useEnvContext } from "next-runtime-env"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { ReactNode, useEffect, useState } from "react"
@@ -96,8 +97,12 @@ const SideMenu = ({
     const {
         token: { colorBgContainer, colorPrimary }
     } = theme.useToken()
+    const {
+        NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER,
+        NEXT_PUBLIC_BACKEND_URL,
+        NEXT_PUBLIC_SOCKET_URL
+    } = useEnvContext()
 
-    const [description, setDescription] = useState("")
     const onNotificationClick = (message: any) => {
         // your logic to handle the notification click
         if (message?.cta?.data?.url) {
@@ -131,7 +136,7 @@ const SideMenu = ({
         return (
             <p>
                 Session expired.Please{" "}
-                <Link className="nav-link" href="api/auth/signin">
+                <Link className="nav-link" href="/api/auth/signin">
                     login
                 </Link>{" "}
                 again
@@ -186,14 +191,16 @@ const SideMenu = ({
                         {status === "authenticated" && (
                             <Flex className="mr-4" gap={10} align="center">
                                 <NovuProvider
-                                    subscriberId="655c6ebc0aa666dcba7512fe"
-                                    applicationIdentifier="ZHHu33gXpWnc"
+                                    subscriberId={session.user.userInfo._id}
+                                    applicationIdentifier={
+                                        NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER!
+                                    }
                                     initialFetchingStrategy={{
                                         fetchNotifications: true,
                                         fetchUserPreferences: true
                                     }}
-                                    backendUrl="http://10.4.18.149:3000"
-                                    socketUrl="http://10.4.18.149:3002"
+                                    backendUrl={NEXT_PUBLIC_BACKEND_URL!}
+                                    socketUrl={NEXT_PUBLIC_SOCKET_URL!}
                                 >
                                     <PopoverNotificationCenter
                                         //customize each item list
