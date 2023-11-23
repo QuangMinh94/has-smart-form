@@ -1,12 +1,17 @@
 "use client"
 import React, { useEffect, memo } from "react"
-import { useContextTranfer } from "@/components/cusTomHook/useContext"
+import {
+    useContextTranfer,
+    useContextBa
+} from "@/components/cusTomHook/useContext"
+
 import "@/public/css/myWork/detailMyWork.css"
 import Container from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/Container"
 import ButtonLeftandRight from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/ButtonCusTom"
 import LayoutTranfer from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/LayoutTranfer"
 
 import CheckboxForm from "./CheckboxFormLeft"
+import TreeSelectEproduct from "./TreeSelectEproduct"
 const TranferNV = () => {
     const {
         listLeft,
@@ -17,7 +22,7 @@ const TranferNV = () => {
         setChangeListFilter,
         loading
     } = useContextTranfer()
-
+    const { dataGlobal } = useContextBa()
     useEffect(() => {
         if (listRight.length > 0) {
             setListRight([])
@@ -32,7 +37,16 @@ const TranferNV = () => {
             isCollapse={false}
             ColLeft={
                 <Container
-                    HidenUI={<CheckboxForm />}
+                    HidenUI={
+                        <>
+                            <CheckboxForm />
+                            {dataGlobal.checkedForm || (
+                                <div className="mt-[8px]">
+                                    <TreeSelectEproduct />
+                                </div>
+                            )}
+                        </>
+                    }
                     setChangeListFilter={setChangeListFilter}
                     ChangeListFilter={ChangeListFilter}
                     title="Danh sách biểu mẫu"

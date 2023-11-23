@@ -136,7 +136,7 @@ const SideMenu = ({ children }: Props) => {
         isTellerMywork: pathname.startsWith(keyPath.TELLER_MYWORK)
     }
     return (
-        <Layout hasSider={true} className="h-screen ">
+        <Layout hasSider={true} className="h-screen flex">
             <Sider
                 collapsible
                 collapsed={collapsed}
