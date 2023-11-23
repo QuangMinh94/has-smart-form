@@ -1,19 +1,17 @@
 "use client"
-import routers, {
-    BLOCK,
-    PRODUCT,
-    MYWORK,
-    rootPath
-} from "@/router/cusTomRouter"
+import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
+import routers, { BLOCK, MYWORK, PRODUCT } from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
-import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
 
 import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
-import Link from "next/link"
 import { faArchive, faFile } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useSession } from "next-auth/react"
+import { useEnvContext } from "next-runtime-env"
+import Link from "next/link"
 import { usePathname } from "next/navigation"
+import NovuComponent from "./NovuComponent"
 type KeyPath = {
     BA_BLOCK: string
     BA_PRODUCT: string
@@ -135,6 +133,14 @@ const SideMenu = ({ children }: Props) => {
         isKsvMywork: pathname.startsWith(keyPath.KSV_MYWORK),
         isTellerMywork: pathname.startsWith(keyPath.TELLER_MYWORK)
     }
+
+    const { data: session } = useSession()
+    const {
+        NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER,
+        NEXT_PUBLIC_BACKEND_URL,
+        NEXT_PUBLIC_SOCKET_URL
+    } = useEnvContext()
+
     return (
         <Layout hasSider={true} className="h-screen flex">
             <Sider
@@ -179,7 +185,25 @@ const SideMenu = ({ children }: Props) => {
                             conditionPath.isTellerMywork) &&
                             "Công việc của tôi"}
                     </h1>
-
+                    <NovuComponent
+                        novuProps={{
+                            subscriberId: session!.user.userInfo._id,
+                            applicationIdentifier:
+                                NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER!,
+                            initialFetchingStrategy: {
+                                fetchNotifications: true,
+                                fetchUserPreferences: true
+                            },
+                            backendUrl: NEXT_PUBLIC_BACKEND_URL!,
+                            socketUrl: NEXT_PUBLIC_SOCKET_URL!
+                        }}
+                        popOverProps={{
+                            colorScheme: "light",
+                            //onNotificationClick: onNotificationClick,
+                            showUserPreferences: false,
+                            footer: () => <></>
+                        }}
+                    />
                     <ButtonLogOut />
                 </Header>
                 <Content

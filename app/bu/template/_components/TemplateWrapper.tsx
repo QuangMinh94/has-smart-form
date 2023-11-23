@@ -165,10 +165,33 @@ const TemplateWrapper = ({
         form.submit()
     }
 
-    const onNeedCorrecion = () => {
+    const onNeedCorrecion = async () => {
         setIsDisabled(true)
-        setSubmitType("CANCEL")
-        form.submit()
+        try {
+            await axios.post(
+                NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
+                {
+                    id: id,
+                    button: BUTTON_TYPE.NEED_CORRECTION
+                },
+                {
+                    headers: {
+                        Authorization: "Bearer " + cookies.get("token"),
+                        Session: cookies.get("session")
+                    }
+                }
+            )
+            messageApi.success("Gửi lại đơn thành công")
+
+            setTimeout(() => {
+                router.push("/bu/mywork")
+                router.refresh()
+            }, 2000)
+        } catch (error) {
+            console.log(error)
+            messageApi.error("Hủy đơn thất bại. Xin hãy thử lại sau")
+            setIsDisabled(false)
+        }
     }
 
     const onCancel = () => {
