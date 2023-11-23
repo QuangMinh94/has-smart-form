@@ -59,6 +59,7 @@ const TemplateWrapper = ({
         listRight,
         setListRight,
         setSubmitType,
+        isInsert,
         setIsInsert,
         setIsDisabled
     } = useContext(ContextTemplate)
@@ -124,6 +125,36 @@ const TemplateWrapper = ({
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
+
+    const HandlerVerify = async (buttonType: string) => {
+        setIsDisabled(true)
+        try {
+            await axios.post(
+                NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
+                {
+                    id: id,
+                    button: buttonType
+                },
+                {
+                    headers: {
+                        Authorization: "Bearer " + cookies.get("token"),
+                        Session: cookies.get("session")
+                    }
+                }
+            )
+            messageApi.success("Thao tác thành công")
+
+            setTimeout(() => {
+                router.push("/bu/mywork")
+                router.refresh()
+            }, 1000)
+        } catch (error) {
+            console.log(error)
+            messageApi.error("Thao tác thất bại. Xin hãy thử lại sau")
+            setIsDisabled(false)
+        }
+    }
+
     const onPreview = async () => {
         setIsDisabled(true)
         if (listRight.length > 0) {
@@ -154,6 +185,7 @@ const TemplateWrapper = ({
         }
         setIsDisabled(false)
     }
+
     const onSubmit = () => {
         setIsDisabled(true)
         setSubmitType("SUBMIT")
@@ -166,67 +198,22 @@ const TemplateWrapper = ({
     }
 
     const onNeedCorrecion = async () => {
-        setIsDisabled(true)
-        try {
-            await axios.post(
-                NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
-                {
-                    id: id,
-                    button: BUTTON_TYPE.NEED_CORRECTION
-                },
-                {
-                    headers: {
-                        Authorization: "Bearer " + cookies.get("token"),
-                        Session: cookies.get("session")
-                    }
-                }
-            )
-            messageApi.success("Gửi lại đơn thành công")
-
-            setTimeout(() => {
-                router.push("/bu/mywork")
-                router.refresh()
-            }, 2000)
-        } catch (error) {
-            console.log(error)
-            messageApi.error("Hủy đơn thất bại. Xin hãy thử lại sau")
-            setIsDisabled(false)
-        }
+        HandlerVerify(BUTTON_TYPE.NEED_CORRECTION)
     }
 
     const onCancel = () => {
-        setIsDisabled(true)
-        setSubmitType("CANCEL")
-        form.submit()
+        if (!isInsert) {
+            setIsDisabled(true)
+            setSubmitType("CANCEL")
+            form.submit()
+        } else {
+            router.push("/bu/mywork")
+            router.refresh()
+        }
     }
 
     const onVerify = async () => {
-        setIsDisabled(true)
-        try {
-            await axios.post(
-                NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
-                {
-                    id: id,
-                    button: BUTTON_TYPE.SUBMIT
-                },
-                {
-                    headers: {
-                        Authorization: "Bearer " + cookies.get("token"),
-                        Session: cookies.get("session")
-                    }
-                }
-            )
-            messageApi.success("Phê duyệt thành công")
-
-            setTimeout(() => {
-                router.push("/bu/mywork")
-                router.refresh()
-            }, 1000)
-        } catch (error) {
-            console.log(error)
-            messageApi.error("Phê duyệt thất bại. Xin hãy thử lại sau")
-            setIsDisabled(false)
-        }
+        HandlerVerify(BUTTON_TYPE.SUBMIT)
     }
 
     const onBack = () => {
@@ -235,32 +222,7 @@ const TemplateWrapper = ({
     }
 
     const onReject = async () => {
-        setIsDisabled(true)
-        try {
-            await axios.post(
-                NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
-                {
-                    id: id,
-                    button: BUTTON_TYPE.REJECT
-                },
-                {
-                    headers: {
-                        Authorization: "Bearer " + cookies.get("token"),
-                        Session: cookies.get("session")
-                    }
-                }
-            )
-            messageApi.success("Hủy đơn thành công")
-
-            setTimeout(() => {
-                router.push("/bu/mywork")
-                router.refresh()
-            }, 2000)
-        } catch (error) {
-            console.log(error)
-            messageApi.error("Hủy đơn thất bại. Xin hãy thử lại sau")
-            setIsDisabled(false)
-        }
+        HandlerVerify(BUTTON_TYPE.REJECT)
     }
 
     return (
