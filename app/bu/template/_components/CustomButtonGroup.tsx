@@ -14,6 +14,7 @@ const CustomButtonGroup = ({
     onSave,
     onCancel,
     onVerify,
+    onNeedCorrection,
     onReject,
     onBack,
     permission,
@@ -24,6 +25,7 @@ const CustomButtonGroup = ({
     onSave: () => void
     onCancel: () => void
     onVerify?: () => void
+    onNeedCorrection?: () => void
     onReject?: () => void
     onBack?: () => void
     permission: Permission[] | []
@@ -98,6 +100,16 @@ const CustomButtonGroup = ({
                             loading={isDisabled}
                         >
                             Phê duyệt
+                        </Button>
+                        <Button
+                            type="primary"
+                            danger
+                            onClick={() => {
+                                if (onNeedCorrection) onNeedCorrection()
+                            }}
+                            loading={isDisabled}
+                        >
+                            Yêu cầu bổ sung
                         </Button>
                         <Button
                             type="primary"

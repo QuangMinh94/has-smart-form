@@ -47,7 +47,7 @@ const fetchApi = async ({
     const KeySearch: "citizenId" | "appointmentCode" =
         search === "CCCD" ? "citizenId" : "appointmentCode"
     const bodyRequest: any = {
-        [KeySearch]: idSearch,
+        [KeySearch]: idSearch?.trim(),
         userRole: idRole
     }
     if (!idSearch) {

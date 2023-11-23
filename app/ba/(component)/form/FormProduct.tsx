@@ -204,6 +204,13 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                     style={{ marginBottom: "25px" }}
                     label="Mã sản phẩm"
                     name="idProduct"
+                    rules={[
+                        {
+                            required: true,
+                            whitespace: true,
+                            message: "Vui lòng nhập mã sản phẩm!"
+                        }
+                    ]}
                 >
                     <Input />
                 </Form.Item>

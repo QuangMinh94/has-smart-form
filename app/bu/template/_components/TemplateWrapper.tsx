@@ -164,6 +164,13 @@ const TemplateWrapper = ({
         setSubmitType("SAVE")
         form.submit()
     }
+
+    const onNeedCorrecion = () => {
+        setIsDisabled(true)
+        setSubmitType("CANCEL")
+        form.submit()
+    }
+
     const onCancel = () => {
         setIsDisabled(true)
         setSubmitType("CANCEL")
@@ -258,6 +265,7 @@ const TemplateWrapper = ({
                 onVerify={onVerify}
                 onBack={onBack}
                 onReject={onReject}
+                onNeedCorrection={onNeedCorrecion}
             />
             <OzViewer viewerKey={viewerKey} />
         </div>

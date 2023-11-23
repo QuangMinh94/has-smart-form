@@ -8,6 +8,7 @@ import {
     Form,
     FormInstance,
     Input,
+    InputRef,
     Row,
     message
 } from "antd"
@@ -17,12 +18,12 @@ import dayjs from "dayjs"
 import { useCookies } from "next-client-cookies"
 import { useEnvContext } from "next-runtime-env"
 import { useRouter } from "next/navigation"
-import { useContext } from "react"
+import { useContext, useRef, useState } from "react"
 const { TextArea } = Input
 
 type FieldType = {
     formName: string
-    formCode?: string
+    formCode: string
     validFrom?: any
     validTo?: any
     description: string
@@ -37,13 +38,19 @@ const TemplateForm = ({
     form?: FormInstance<any>
     disabled: boolean
 }) => {
-    const { NEXT_PUBLIC_EFORM_TEMPLATE, NEXT_PUBLIC_EFORM_UPDATE_TEMPLATE } =
-        useEnvContext()
+    const {
+        NEXT_PUBLIC_EFORM_TEMPLATE,
+        NEXT_PUBLIC_EFORM_UPDATE_TEMPLATE,
+        NEXT_PUBLIC_CHECK_DUPLICATE
+    } = useEnvContext()
     const cookies = useCookies()
     const [messageApi, contextHolder] = message.useMessage()
     const router = useRouter()
     const { choosenBlock, submitType, isInsert, setIsDisabled } =
         useContext(ContextTemplate)
+    const [disabledValidTo, setDisableValidTo] = useState(true)
+
+    const codeRef = useRef<InputRef>(null)
     const onFinish = async (values: any) => {
         const inputValue = {
             description: values.description,
@@ -51,13 +58,28 @@ const TemplateForm = ({
             validTo: values.validTo
                 ? dayjs(values.validTo).toString()
                 : undefined,
-            code: Math.random().toString(),
+            code: values.formCode,
             name: values.formName,
             block: choosenBlock.choosenBlock,
             button: submitType
         }
 
         try {
+            //validate formCode
+            const response = await formCodeValidator(values.formCode.trim())
+            if (response !== "") {
+                form!.setFields([
+                    {
+                        name: "formCode",
+                        errors: [response]
+                    }
+                ])
+                setIsDisabled(false)
+                if (codeRef.current) {
+                    codeRef.current.focus()
+                }
+                return
+            }
             if (isInsert) {
                 await axios.post(NEXT_PUBLIC_EFORM_TEMPLATE!, inputValue, {
                     headers: {
@@ -94,6 +116,38 @@ const TemplateForm = ({
 
         return isPastDate
     }
+
+    const formCodeValidator = async (value: string) => {
+        type ResponseType = {
+            exists: boolean
+            message: string
+        }
+        try {
+            const response = await axios.post(
+                NEXT_PUBLIC_CHECK_DUPLICATE!,
+                { code: value },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + cookies.get("token"),
+                        Session: cookies.get("session")
+                    }
+                }
+            )
+
+            const data = response.data as ResponseType
+            if (data.exists) {
+                //code đã tồn tại
+                return data.message
+            } else {
+                //code chưa tồn tại
+                return ""
+            }
+        } catch {
+            return "Service error"
+        }
+    }
+
     return (
         <div className="mb-5">
             {contextHolder}
@@ -135,11 +189,16 @@ const TemplateForm = ({
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                "Please input the form code"
-                                            /* async validator(_, value) {
-                                                await axios.post("", {})
-                                            } */
+                                            validator: (_, value) => {
+                                                if (value.trim() === "") {
+                                                    return Promise.reject(
+                                                        new Error(
+                                                            "Please input form code"
+                                                        )
+                                                    )
+                                                }
+                                                return Promise.resolve()
+                                            }
                                         }
                                     ]}
                                     className="w-3/6"
@@ -147,7 +206,16 @@ const TemplateForm = ({
                                         prevValues !== curValues
                                     }
                                 >
-                                    <Input />
+                                    <Input
+                                        onInput={(e) =>
+                                            ((
+                                                e.target as HTMLInputElement
+                                            ).value = (
+                                                e.target as HTMLInputElement
+                                            ).value.toUpperCase())
+                                        }
+                                        ref={codeRef}
+                                    />
                                 </Form.Item>
                             </Flex>
                             <Flex gap={8}>
@@ -168,6 +236,17 @@ const TemplateForm = ({
                                     <DatePicker
                                         className="w-full"
                                         disabledDate={disabledDate}
+                                        onChange={(value) => {
+                                            if (value) {
+                                                setDisableValidTo(false)
+                                            } else {
+                                                setDisableValidTo(true)
+                                                form?.setFieldValue(
+                                                    "validTo",
+                                                    null
+                                                )
+                                            }
+                                        }}
                                         //value={formData.validFrom}
                                     />
                                 </Form.Item>
@@ -191,6 +270,7 @@ const TemplateForm = ({
                                                     )
                                                 if (endDatetime !== null) {
                                                     if (startDatetime != null) {
+                                                        setDisableValidTo(false)
                                                         if (
                                                             endDatetime <=
                                                             startDatetime
@@ -207,6 +287,7 @@ const TemplateForm = ({
                                 >
                                     <DatePicker
                                         className="w-full"
+                                        disabled={disabledValidTo}
                                         //value={formData.validTo}
                                     />
                                 </Form.Item>

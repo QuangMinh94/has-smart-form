@@ -1,46 +1,142 @@
 "use client"
-
+import routers, {
+    BLOCK,
+    PRODUCT,
+    MYWORK,
+    rootPath
+} from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
-import Filter from "./Filter/LayoutFilter"
-import ButtonLogOut from "./customButton/ButtonLogout"
+import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
 
-import ProviderMyworkDetail from "./provider/ProviderMyworkDetail"
+import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
 import Link from "next/link"
-import { faArchive } from "@fortawesome/free-solid-svg-icons"
+import { faArchive, faFile } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { usePathname } from "next/navigation"
+type KeyPath = {
+    BA_BLOCK: string
+    BA_PRODUCT: string
+    KSV_MYWORK: string
+    TELLER_MYWORK: string
+}
+type conditionPath = {
+    isBaBlock: boolean
+    isBaProduct: boolean
+    isKsvMywork: boolean
+    isTellerMywork: boolean
+}
 const { Header, Sider, Content } = Layout
 
-const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
+const CustomMenu = ({
+    backgroundColor,
+    keyPath,
+    conditionPath
+}: {
+    backgroundColor: string
+    keyPath: KeyPath
+    conditionPath: conditionPath
+}) => {
+    const selectedKeys: string[] = []
+    let items: any = []
+
+    // set slectkey
+    if (conditionPath.isBaBlock) {
+        selectedKeys.push(keyPath.BA_BLOCK)
+    }
+    if (conditionPath.isBaProduct) {
+        selectedKeys.push(keyPath.BA_PRODUCT)
+    }
+    if (conditionPath.isKsvMywork) {
+        selectedKeys.push(keyPath.KSV_MYWORK)
+    }
+    if (conditionPath.isTellerMywork) {
+        selectedKeys.push(keyPath.TELLER_MYWORK)
+    }
+
+    //set item
+    if (conditionPath.isBaBlock || conditionPath.isBaProduct) {
+        items = [
+            {
+                key: keyPath.BA_BLOCK,
+                icon: (
+                    <Link href={`${routers("ba").block.path}`}>
+                        <FontAwesomeIcon icon={faFile} />
+                    </Link>
+                ),
+                label: "Biểu mẫu"
+            },
+            {
+                key: keyPath.BA_PRODUCT,
+                icon: (
+                    <Link href={`${routers("ba").product.path}`}>
+                        <FontAwesomeIcon icon={faArchive} />
+                    </Link>
+                ),
+                label: "Sản phẩm"
+            }
+        ]
+    }
+    if (conditionPath.isKsvMywork) {
+        items = [
+            {
+                key: keyPath.KSV_MYWORK,
+                icon: (
+                    <Link href={`${routers("ksvteller").mywork.path}`}>
+                        ,
+                        <FontAwesomeIcon icon={faArchive} />
+                    </Link>
+                ),
+                label: "Công việc của tôi"
+            }
+        ]
+    }
+    if (conditionPath.isTellerMywork) {
+        items = [
+            {
+                key: keyPath.TELLER_MYWORK,
+                icon: (
+                    <Link href={`${routers("teller").mywork.path}`}>
+                        ,
+                        <FontAwesomeIcon icon={faArchive} />
+                    </Link>
+                ),
+                label: "Công việc của tôi"
+            }
+        ]
+    }
     return (
         <Menu
             style={{ backgroundColor }}
-            defaultSelectedKeys={["mywork"]}
-            items={[
-                {
-                    key: "mywork",
-                    icon: (
-                        <Link href={"/teller/mywork"}>
-                            <FontAwesomeIcon icon={faArchive} />
-                        </Link>
-                    ),
-                    label: "Công việc của tôi"
-                }
-            ]}
+            defaultSelectedKeys={[BLOCK]}
+            selectedKeys={selectedKeys}
+            items={items}
         />
     )
 }
 type Props = {
     children: React.ReactNode
-    title: string
 }
-const SideMenu = ({ children, title }: Props) => {
+const SideMenu = ({ children }: Props) => {
+    const pathname = usePathname()
     const [collapsed, setCollapsed] = useState(false)
     const {
         token: { colorBgContainer, colorPrimary }
     } = theme.useToken()
+    const keyPath: KeyPath = {
+        BA_BLOCK: `/ba/${BLOCK}`,
+        BA_PRODUCT: `/ba/${PRODUCT}`,
+        KSV_MYWORK: `/ksvteller/${MYWORK}`,
+        TELLER_MYWORK: `/teller/${MYWORK}`
+    }
+    const conditionPath: conditionPath = {
+        isBaBlock: pathname.startsWith(keyPath.BA_BLOCK),
+        isBaProduct: pathname.startsWith(keyPath.BA_PRODUCT),
+        isKsvMywork: pathname.startsWith(keyPath.KSV_MYWORK),
+        isTellerMywork: pathname.startsWith(keyPath.TELLER_MYWORK)
+    }
     return (
-        <Layout hasSider={true} className="h-screen">
+        <Layout hasSider={true} className="h-screen flex">
             <Sider
                 collapsible
                 collapsed={collapsed}
@@ -57,9 +153,12 @@ const SideMenu = ({ children, title }: Props) => {
                         alt="Icon"
                     />
                 </center>
-                <CustomMenu backgroundColor={colorPrimary} />
+                <CustomMenu
+                    keyPath={keyPath}
+                    conditionPath={conditionPath}
+                    backgroundColor={colorPrimary}
+                />
             </Sider>
-
             <Layout>
                 <Header
                     className="flex items-center"
@@ -74,7 +173,11 @@ const SideMenu = ({ children, title }: Props) => {
                             color: colorPrimary
                         }}
                     >
-                        {title}
+                        {conditionPath.isBaBlock && "Biểu Mẫu"}
+                        {conditionPath.isBaProduct && "Sản Phẩm"}
+                        {(conditionPath.isKsvMywork ||
+                            conditionPath.isTellerMywork) &&
+                            "Công việc của tôi"}
                     </h1>
 
                     <ButtonLogOut />
@@ -89,12 +192,15 @@ const SideMenu = ({ children, title }: Props) => {
                         overflowY: "scroll"
                     }}
                 >
-                    <ProviderMyworkDetail>
-                        <div className="my-6">
+                    <div className="my-6">
+                        {conditionPath.isTellerMywork && (
                             <Filter rootPath="teller" />
-                        </div>
-                        <div>{children}</div>
-                    </ProviderMyworkDetail>
+                        )}
+                        {conditionPath.isKsvMywork && (
+                            <Filter rootPath="ksvteller" />
+                        )}
+                    </div>
+                    <div>{children}</div>
                 </Content>
             </Layout>
         </Layout>
