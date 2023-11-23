@@ -132,6 +132,7 @@ const TemplateForm = ({
                                 <Form.Item<FieldType>
                                     label="Mã form"
                                     name="formCode"
+                                    validateTrigger="onBlur"
                                     rules={[
                                         {
                                             required: true,
