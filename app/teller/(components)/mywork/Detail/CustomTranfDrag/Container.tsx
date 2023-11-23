@@ -141,7 +141,7 @@ const MyDropTarget: React.FC<typeProps> = ({
     const data = valueSearch.length > 0 ? listFilter : list
     const List = useMemo(() => {
         return data.map((item, index) => (
-            <div key={item?.id}>
+            <div key={item?.id + index}>
                 <DragItem
                     type={type}
                     HanderCheckItem={HanderCheckItem}
