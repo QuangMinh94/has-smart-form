@@ -24,6 +24,9 @@ const theme: ThemeConfig = {
             labelRequiredMarkColor: "#991B1B",
             colorError: "#991B1B",
             itemMarginBottom: 1
+        },
+        Avatar: {
+            colorBgContainer: "black"
         }
     },
     token: {

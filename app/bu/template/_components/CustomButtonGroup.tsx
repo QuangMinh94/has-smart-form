@@ -105,21 +105,21 @@ const CustomButtonGroup = ({
                             type="primary"
                             danger
                             onClick={() => {
-                                if (onNeedCorrection) onNeedCorrection()
-                            }}
-                            loading={isDisabled}
-                        >
-                            Yêu cầu bổ sung
-                        </Button>
-                        <Button
-                            type="primary"
-                            danger
-                            onClick={() => {
                                 if (onReject) onReject()
                             }}
                             loading={isDisabled}
                         >
                             Từ chối
+                        </Button>
+                        <Button
+                            type="primary"
+                            danger
+                            onClick={() => {
+                                if (onNeedCorrection) onNeedCorrection()
+                            }}
+                            loading={isDisabled}
+                        >
+                            Yêu cầu bổ sung
                         </Button>
                     </Flex>
                 </Flex>
