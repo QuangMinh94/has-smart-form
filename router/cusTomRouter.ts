@@ -3,11 +3,12 @@ export const APP_ROVE = "appRove"
 export const DE_TAIL = "detail"
 export const BLOCK = "block"
 export const PRODUCT = "product"
+export const MYWORK = "mywork"
 
 const routers = (root: rootPath) => {
     const router = {
         // teller
-        mywork: { path: `/${root}/mywork` },
+        mywork: { path: `/${root}/${MYWORK}` },
         detailMywork: {
             path(params: { id: string }): string {
                 return `${router.mywork.path}/${DE_TAIL}/${params.id}`
