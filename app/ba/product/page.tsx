@@ -25,11 +25,6 @@ const GetProductTree = async (pram: {
 
 const fetchApi = async (): Promise<eProduct[]> => {
     const cookie = cookies()
-    // const session = await getServerSession(authOptions)
-    // if (!session) {
-    //     return []
-    // }
-    // const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
 
     try {
         const res = await GetProductTree({

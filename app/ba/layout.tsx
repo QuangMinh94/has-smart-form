@@ -1,8 +1,9 @@
 import React from "react"
 import { ClientCookiesProvider } from "../ClientCookiesProvider"
 import { cookies } from "next/headers"
-import SideMenu from "./(component)/SideMenu"
-
+import SideMenu from "@/components/SideMenu"
+import ProviderTranfer from "@/components/provider/ProviderTranfer"
+import ProviderBa from "@/app/ba/(component)/Provider"
 interface Props {
     children: React.ReactNode
 }
@@ -10,7 +11,11 @@ interface Props {
 const BaLayout = ({ children }: Props) => {
     return (
         <ClientCookiesProvider value={cookies().getAll()}>
-            <SideMenu>{children}</SideMenu>
+            <ProviderBa>
+                <ProviderTranfer>
+                    <SideMenu>{children}</SideMenu>
+                </ProviderTranfer>
+            </ProviderBa>
         </ClientCookiesProvider>
     )
 }

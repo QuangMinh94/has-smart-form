@@ -104,8 +104,8 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
         session,
         token
     })
-    console.log("allform", FormAll)
-    console.log("getForm", FormNotUse)
+    // console.log("allform", FormAll)
+    // console.log("getForm", FormNotUse)
     // const templateInNv = (eProduct: eProduct[]): any => {
     //     const objID: any = {}
     //     const ForIdTemplate = (eProduct: eProduct[]) => {
@@ -149,6 +149,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                         })
                     }
                 })
+                setListRight(dataListRight)
             }
 
             FormNotUse.forEach((template: any) => {
@@ -162,16 +163,16 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
             })
 
             setListLeft(dataListLeft)
-            setListRight(dataListRight)
         }
         return () => {
             setDataGlobal((data) => ({ ...data, checkedForm: true }))
+            setListRight([])
         }
     }, [isLoading])
 
     //check form
     useEffect(() => {
-        if (FormAll && FormNotUse) {
+        if (FormNotUse) {
             const dataListLeft: DataTranfer[] = []
             // const IdCheckTemplate = templateInNv(dataGlobal.eProducts)
             let objIDTemplate: any = {}
@@ -182,10 +183,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                 return acc
             }, {})
 
-            let templates = FormAll
-            if (dataGlobal.checkedForm) {
-                templates = FormNotUse
-            }
+            const templates = dataGlobal.checkedForm ? FormNotUse : []
 
             templates.forEach((tempalate: any) => {
                 if (!objIDTemplate[`${tempalate?._id}`]) {
@@ -198,9 +196,8 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
             })
 
             setListLeft(dataListLeft)
-            setChangeListFilter((p) => !p)
         }
-    }, [dataGlobal.checkedForm, JSON.stringify(listRight)])
+    }, [dataGlobal.checkedForm])
 
     const onFinish = ({
         idNV,

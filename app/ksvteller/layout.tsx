@@ -1,5 +1,5 @@
-import SideMenu from "./(component)/SideMenu"
-
+import SideMenu from "@/components/SideMenu"
+import ProviderMyworkDetail from "@/app/teller/(components)/provider/ProviderMyworkDetail"
 import { ClientCookiesProvider } from "../ClientCookiesProvider"
 import { cookies } from "next/headers"
 interface Props {
@@ -9,7 +9,9 @@ interface Props {
 const Layout = ({ children }: Props) => {
     return (
         <ClientCookiesProvider value={cookies().getAll()}>
-            <SideMenu title="Công việc của tôi">{children}</SideMenu>
+            <ProviderMyworkDetail>
+                <SideMenu>{children}</SideMenu>
+            </ProviderMyworkDetail>
         </ClientCookiesProvider>
     )
 }
