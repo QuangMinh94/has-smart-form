@@ -113,7 +113,7 @@ const CustomButtonGroup = ({
                         </Button>
                         <Button
                             type="primary"
-                            danger
+                            style={{ backgroundColor: "#e79f38" }}
                             onClick={() => {
                                 if (onNeedCorrection) onNeedCorrection()
                             }}
