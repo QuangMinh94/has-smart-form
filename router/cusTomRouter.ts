@@ -1,9 +1,10 @@
-export type rootPath = "teller" | "ksvteller" | "ba"
+export type rootPath = "teller" | "ksvteller" | "ba" | "administrator"
 export const APP_ROVE = "appRove"
 export const DE_TAIL = "detail"
 export const BLOCK = "block"
 export const PRODUCT = "product"
 export const MYWORK = "mywork"
+export const USER = "user"
 
 const routers = (root: rootPath) => {
     const router = {
@@ -25,7 +26,9 @@ const routers = (root: rootPath) => {
         product: { path: `/${root}/${PRODUCT}` },
         blockDetail() {
             return `${this.block.path}/${DE_TAIL}`
-        }
+        },
+        // admninistrator
+        user: { path: `/${root}/${USER}` }
     }
     return router
 }

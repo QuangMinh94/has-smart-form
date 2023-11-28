@@ -36,6 +36,12 @@ const nextConfig = {
         destination: '/ba/block',
         permanent: true,
       },
+      {
+        source: '/administrator',
+        destination: '/administrator/user',
+        permanent: true,
+      },
+
     ]
   },
 }
