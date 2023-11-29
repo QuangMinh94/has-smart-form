@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react"
 import { useEnvContext } from "next-runtime-env"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import CustomSpin from "./CustomSpin"
 import NovuComponent from "./NovuComponent"
 type KeyPath = {
     BA_BLOCK: string
@@ -134,12 +135,37 @@ const SideMenu = ({ children }: Props) => {
         isTellerMywork: pathname.startsWith(keyPath.TELLER_MYWORK)
     }
 
-    const { data: session } = useSession()
+    const { status, data: session } = useSession()
     const {
         NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER,
         NEXT_PUBLIC_BACKEND_URL,
         NEXT_PUBLIC_SOCKET_URL
     } = useEnvContext()
+
+    if (status === "loading")
+        return (
+            <CustomSpin
+                noImage={true}
+                theme={{
+                    components: {
+                        Spin: {
+                            colorPrimary: "black"
+                        }
+                    }
+                }}
+            />
+        )
+
+    if (status === "unauthenticated")
+        return (
+            <p>
+                Session expired.Please{" "}
+                <Link className="nav-link" href="/api/auth/signin">
+                    login
+                </Link>{" "}
+                again
+            </p>
+        )
 
     return (
         <Layout hasSider={true} className="h-screen flex">
@@ -185,25 +211,27 @@ const SideMenu = ({ children }: Props) => {
                             conditionPath.isTellerMywork) &&
                             "Công việc của tôi"}
                     </h1>
-                    <NovuComponent
-                        novuProps={{
-                            subscriberId: session!.user.userInfo._id,
-                            applicationIdentifier:
-                                NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER!,
-                            initialFetchingStrategy: {
-                                fetchNotifications: true,
-                                fetchUserPreferences: true
-                            },
-                            backendUrl: NEXT_PUBLIC_BACKEND_URL!,
-                            socketUrl: NEXT_PUBLIC_SOCKET_URL!
-                        }}
-                        popOverProps={{
-                            colorScheme: "light",
-                            //onNotificationClick: onNotificationClick,
-                            showUserPreferences: false,
-                            footer: () => <></>
-                        }}
-                    />
+                    {status === "authenticated" && (
+                        <NovuComponent
+                            novuProps={{
+                                subscriberId: session.user.userInfo._id,
+                                applicationIdentifier:
+                                    NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER!,
+                                initialFetchingStrategy: {
+                                    fetchNotifications: true,
+                                    fetchUserPreferences: true
+                                },
+                                backendUrl: NEXT_PUBLIC_BACKEND_URL!,
+                                socketUrl: NEXT_PUBLIC_SOCKET_URL!
+                            }}
+                            popOverProps={{
+                                colorScheme: "light",
+                                //onNotificationClick: onNotificationClick,
+                                showUserPreferences: false,
+                                footer: () => <></>
+                            }}
+                        />
+                    )}
                     <ButtonLogOut />
                 </Header>
                 <Content

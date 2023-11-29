@@ -24,3 +24,21 @@ export interface RequestAddApoinMent {
     phoneNumber: string
     checkOtp: boolean
 }
+
+export interface Appointment {
+    name: string //
+    citizenId: string //
+    address: string
+    createDate: Date | undefined
+    email: string //
+    phoneNumber: string //
+    cif: string
+    active: boolean
+    appointmentCode: string
+    appointmentTime: Date | undefined //
+    officeBranch: string | any //
+    channel: string | any
+    eProduct: string | any //
+    executor: string | any
+    status: string | any
+}

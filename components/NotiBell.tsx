@@ -8,6 +8,7 @@ const NotiBell = (props: INotificationBellProps) => {
         <Badge className="cursor-pointer" count={props.unseenCount}>
             <Avatar
                 className="cursor-pointer"
+                style={{ backgroundColor: "white" }}
                 icon={<FontAwesomeIcon icon={faBell} color="black" />}
             />
         </Badge>
