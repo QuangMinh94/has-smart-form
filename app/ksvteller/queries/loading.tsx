@@ -1,5 +1,5 @@
-const QueriesLoadingPage = () => {
+const KSVQueriesLoadingPage = () => {
     return <div>QueriesLoadingPage...</div>
 }
 
-export default QueriesLoadingPage
+export default KSVQueriesLoadingPage

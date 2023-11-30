@@ -107,7 +107,7 @@ const QueriesPage = async ({
 
     return (
         <QueriesTemplate>
-            <FilterOption />
+            <FilterOption route="/teller/queries" />
             <ResultTable data={_dataTable} />
         </QueriesTemplate>
     )

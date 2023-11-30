@@ -30,7 +30,7 @@ import RemoteSelectorUser from "./selector/RemoteSelectorUser"
 
 const { Search } = Input
 
-const FilterOption = () => {
+const FilterOption = ({ route }: { route: string }) => {
     const [openFilter, setOpenFilter] = useState(false)
     const params = useSearchParams()
     const router = useRouter()
@@ -82,7 +82,6 @@ const FilterOption = () => {
     }
 
     useEffect(() => {
-        console.log("Params", params)
         initValue()
     }, [params])
 
@@ -108,7 +107,7 @@ const FilterOption = () => {
         if (lastChar === "&") {
             routeParams = routeParams.slice(0, -1)
         }
-        router.replace("/teller/queries/" + routeParams)
+        router.replace(route + routeParams)
     }
     return (
         <Flex align="center" gap={10}>
