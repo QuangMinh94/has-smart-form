@@ -1,7 +1,7 @@
 "use client"
 import { Dispatch, SetStateAction, createContext } from "react"
 
-export type createDate = { from: Date; to: Date }
+export type createDate = { from: number; to: number }
 
 export type QueriesContextType = {
     setCitizenId: Dispatch<SetStateAction<string>>
