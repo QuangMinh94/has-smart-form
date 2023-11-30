@@ -1,7 +1,6 @@
 "use client"
 
 import { CategoryTypes } from "@/app/(types)/Categories"
-import { EndDateFormat, StartDateFormat } from "@/app/(utilities)/DateFormatter"
 import {
     faFilter,
     faFilterCircleXmark
@@ -94,8 +93,12 @@ const FilterOption = () => {
         routeParams = MapParams(routeParams, "name", name)
         routeParams = MapParams(routeParams, "channel", channel)
         if (createDate) {
-            MapParams(routeParams, "from", createDate.from.toString())
-            MapParams(routeParams, "to", createDate.to.toString())
+            routeParams = MapParams(
+                routeParams,
+                "from",
+                createDate.from.toString()
+            )
+            routeParams = MapParams(routeParams, "to", createDate.to.toString())
         }
         routeParams = MapParams(routeParams, "status", status)
         routeParams = MapParams(routeParams, "executor", executor)
@@ -254,8 +257,8 @@ const FilterComponent = ({
     ) => {
         if (value) {
             const dateFilter: createDate = {
-                from: StartDateFormat(value[0]!),
-                to: EndDateFormat(value[1]!)
+                from: dayjs(value[0]!).unix(),
+                to: dayjs(value[1]!).unix()
             }
 
             setCreateDate(dateFilter)
@@ -337,6 +340,18 @@ const FilterComponent = ({
                                 onChange={onRangeDueDateChange}
                                 style={{ width: "100%" }}
                                 placeholder={["From", "To"]}
+                                defaultValue={
+                                    params.get("from")
+                                        ? [
+                                              dayjs.unix(
+                                                  parseInt(params.get("from")!)
+                                              ),
+                                              dayjs.unix(
+                                                  parseInt(params.get("to")!)
+                                              )
+                                          ]
+                                        : undefined
+                                }
                             />
                         }
                     />
