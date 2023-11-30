@@ -86,7 +86,7 @@ async function fetchCategories(
         .then((response) => response.data as Category[])
         .then((body) =>
             body.map((element) => ({
-                label: element.name,
+                label: element.description!,
                 value: element._id
             }))
         )

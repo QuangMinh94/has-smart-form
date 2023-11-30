@@ -26,9 +26,11 @@ export type ResultTableType = {
 
 const ResultTable = ({
     data,
+    route,
     prerender
 }: {
     data: ResultTableType[]
+    route: any
     prerender?: boolean
 }) => {
     const router = useRouter()
@@ -166,11 +168,11 @@ const ResultTable = ({
 
     return (
         <Table
-            className="mt-4"
+            className="mt-4 cursor-pointer"
             dataSource={data}
             columns={prerender ? skeletonColumns : columns}
             onRow={(i) => ({
-                onClick: (e) => router.push("/teller/queries/" + i.key)
+                onDoubleClick: (e) => router.push(route + i.key)
             })}
             scroll={{
                 y: "50vh",
