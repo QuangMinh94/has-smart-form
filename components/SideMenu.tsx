@@ -1,11 +1,11 @@
 "use client"
 import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
-import routers, { BLOCK, MYWORK, PRODUCT } from "@/router/cusTomRouter"
+import routers, { BLOCK, MYWORK, PRODUCT, QUERIES } from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
 
 import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
-import { faArchive, faFile } from "@fortawesome/free-solid-svg-icons"
+import { faArchive, faFile, faSearch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useSession } from "next-auth/react"
 import { useEnvContext } from "next-runtime-env"
@@ -18,6 +18,7 @@ type KeyPath = {
     BA_PRODUCT: string
     KSV_MYWORK: string
     TELLER_MYWORK: string
+    TELLER_QUERIES: string
 }
 type conditionPath = {
     isBaBlock: boolean
@@ -96,11 +97,19 @@ const CustomMenu = ({
                 key: keyPath.TELLER_MYWORK,
                 icon: (
                     <Link href={`${routers("teller").mywork.path}`}>
-                        ,
                         <FontAwesomeIcon icon={faArchive} />
                     </Link>
                 ),
                 label: "Công việc của tôi"
+            },
+            {
+                key: keyPath.TELLER_QUERIES,
+                icon: (
+                    <Link href={`${routers("teller").queries.path}`}>
+                        <FontAwesomeIcon icon={faSearch} />
+                    </Link>
+                ),
+                label: "Truy vấn giao dịch"
             }
         ]
     }
@@ -126,7 +135,8 @@ const SideMenu = ({ children }: Props) => {
         BA_BLOCK: `/ba/${BLOCK}`,
         BA_PRODUCT: `/ba/${PRODUCT}`,
         KSV_MYWORK: `/ksvteller/${MYWORK}`,
-        TELLER_MYWORK: `/teller/${MYWORK}`
+        TELLER_MYWORK: `/teller/`,
+        TELLER_QUERIES: `/teller/${QUERIES}`
     }
     const conditionPath: conditionPath = {
         isBaBlock: pathname.startsWith(keyPath.BA_BLOCK),
