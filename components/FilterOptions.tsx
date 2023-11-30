@@ -12,20 +12,28 @@ import { RangePickerProps } from "antd/es/date-picker"
 import dayjs, { Dayjs } from "dayjs"
 import { useCookies } from "next-client-cookies"
 import { useEnvContext } from "next-runtime-env"
-import { useRouter } from "next/navigation"
-import { ReactNode, useContext, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { ReactNode, useContext, useEffect, useState } from "react"
 import QueriesContext, { createDate } from "./context/queriesContext"
 import RemoteSelectorCategory from "./selector/RemoteSelectorCategory"
+import RemoteSelectorDepartment from "./selector/RemoteSelectorDepartment"
 import RemoteSelectorUser from "./selector/RemoteSelectorUser"
 
 const { Search } = Input
 
 const FilterOption = () => {
     const [openFilter, setOpenFilter] = useState(false)
+    const params = useSearchParams()
     const router = useRouter()
     const {
         citizenId,
         setCitizenId,
+        setAppointmentCode,
+        setEProduct,
+        setName,
+        setChannel,
+        setStatus,
+        setOfficeBranch,
         appointmentCode,
         name,
         channel,
@@ -36,24 +44,55 @@ const FilterOption = () => {
         officeBranch
     } = useContext(QueriesContext)
 
+    const initValue = () => {
+        setCitizenId(
+            params.get("citizenId") ? params.get("citizenId")!.toString() : ""
+        )
+        setAppointmentCode(
+            params.get("appointmentCode")
+                ? params.get("appointmentCode")!.toString()
+                : ""
+        )
+        setAppointmentCode(
+            params.get("name") ? params.get("name")!.toString() : ""
+        )
+        setAppointmentCode(
+            params.get("channel") ? params.get("channel")!.toString() : ""
+        )
+        setAppointmentCode(
+            params.get("status") ? params.get("status")!.toString() : ""
+        )
+        setAppointmentCode(
+            params.get("executor") ? params.get("executor")!.toString() : ""
+        )
+        setAppointmentCode(
+            params.get("eProduct") ? params.get("eProduct")!.toString() : ""
+        )
+        setAppointmentCode(
+            params.get("officeBranch")
+                ? params.get("officeBranch")!.toString()
+                : ""
+        )
+    }
+
+    useEffect(() => {
+        initValue()
+    }, [params])
+
     const onEnterKeyPress = () => {
         let routeParams = "?"
         routeParams = MapParams(routeParams, "citizenId", citizenId)
         routeParams = MapParams(routeParams, "appointmentCode", appointmentCode)
         routeParams = MapParams(routeParams, "name", name)
-        routeParams = MapParams(routeParams, "channel", channel.toString())
+        routeParams = MapParams(routeParams, "channel", channel)
         if (createDate) {
             MapParams(routeParams, "from", createDate.from.toString())
             MapParams(routeParams, "to", createDate.to.toString())
         }
-        routeParams = MapParams(routeParams, "status", status.toString())
-        routeParams = MapParams(routeParams, "executor", executor.toString())
-        routeParams = MapParams(routeParams, "eProduct", eProduct.toString())
-        routeParams = MapParams(
-            routeParams,
-            "officeBranch",
-            officeBranch.toString()
-        )
+        routeParams = MapParams(routeParams, "status", status)
+        routeParams = MapParams(routeParams, "executor", executor)
+        routeParams = MapParams(routeParams, "eProduct", eProduct)
+        routeParams = MapParams(routeParams, "officeBranch", officeBranch)
         const lastChar = routeParams.substring(routeParams.length - 1) // => "1"
         if (lastChar === "&") {
             routeParams = routeParams.slice(0, -1)
@@ -63,10 +102,15 @@ const FilterOption = () => {
     return (
         <Flex align="center" gap={10}>
             <Search
+                key="citizenId"
                 style={{ width: 300 }}
                 placeholder="Tìm theo CCCD"
                 allowClear
-                value={citizenId}
+                defaultValue={
+                    params.get("citizenId")
+                        ? params.get("citizenId")?.toString()
+                        : ""
+                }
                 onChange={(e) => setCitizenId(e.target.value.trim())}
                 onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -81,7 +125,12 @@ const FilterOption = () => {
             <Popover
                 placement="bottom"
                 title={<h1>Filter</h1>}
-                content={<FilterComponent onKeyPress={onEnterKeyPress} />}
+                content={
+                    <FilterComponent
+                        onKeyPress={onEnterKeyPress}
+                        onInit={initValue}
+                    />
+                }
                 trigger="click"
                 onOpenChange={async () => {
                     setOpenFilter(!openFilter)
@@ -141,24 +190,48 @@ const rangePresets: {
     { label: "Last 90 Days", value: [dayjs().add(-90, "d"), dayjs()] }
 ]
 
-const FilterComponent = ({ onKeyPress }: { onKeyPress: () => void }) => {
+const FilterComponent = ({
+    onKeyPress,
+    onInit
+}: {
+    onKeyPress: () => void
+    onInit: () => void
+}) => {
+    const params = useSearchParams()
+    const { setAppointmentCode, setName, setCreateDate } =
+        useContext(QueriesContext)
+
+    useEffect(() => {
+        onInit()
+    }, [params])
+
     const {
-        citizenId,
-        setCitizenId,
-        appointmentCode,
-        setAppointmentCode,
-        setName,
-        setCreateDate,
-        createDate,
-        setStatus,
-        setExecutor
-    } = useContext(QueriesContext)
-    const { NEXT_PUBLIC_CATEGORY, NEXT_PUBLIC_GET_EXECUTOR } = useEnvContext()
+        NEXT_PUBLIC_CATEGORY,
+        NEXT_PUBLIC_GET_EXECUTOR,
+        NEXT_PUBLIC_DEPARTMENT
+    } = useEnvContext()
     const { RangePicker } = DatePicker
     const cookies = useCookies()
     const axiosHeader: any = {
         Authorization: "Bearer " + cookies.get("token"),
         Session: cookies.get("session")
+    }
+
+    const Base64ToInputValue = (field: string): any => {
+        try {
+            const value = params.get(field)
+            if (value) {
+                //decode base64 string
+                const decodeValue = decodeURIComponent(atob(value))
+
+                //return the base64 with parse
+                return JSON.parse(decodeValue)
+            }
+            return []
+        } catch (error: any) {
+            console.log("Error in convert to base64", error)
+            return []
+        }
     }
 
     const onRangeDueDateChange = (
@@ -190,20 +263,36 @@ const FilterComponent = ({ onKeyPress }: { onKeyPress: () => void }) => {
                 condition={<p>Mã giao dịch</p>}
                 value={
                     <Input
+                        key="appointmentCode"
                         onBlur={(e) =>
                             setAppointmentCode(e.target.value.trim())
+                        }
+                        defaultValue={
+                            params.get("appointmentCode")
+                                ? params.get("appointmentCode")?.toString()
+                                : ""
                         }
                     />
                 }
             />
             <MiniComp
                 condition={<p>Tên khách hàng</p>}
-                value={<Input onBlur={(e) => setName(e.target.value.trim())} />}
+                value={
+                    <Input
+                        key="customerName"
+                        onBlur={(e) => setName(e.target.value.trim())}
+                        defaultValue={
+                            params.get("name")
+                                ? params.get("name")?.toString()
+                                : ""
+                        }
+                    />
+                }
             />
-            <MiniComp
+            {/*  <MiniComp
                 condition={<p>Sản phẩm</p>}
                 value={<Input onBlur={(e) => setName(e.target.value.trim())} />}
-            />
+            /> */}
             <MiniComp
                 condition={<p>Kênh</p>}
                 value={
@@ -211,6 +300,7 @@ const FilterComponent = ({ onKeyPress }: { onKeyPress: () => void }) => {
                         type={CategoryTypes.CHANNEL}
                         url={NEXT_PUBLIC_CATEGORY!}
                         header={axiosHeader}
+                        initValue={Base64ToInputValue("channel")}
                     />
                 }
             />
@@ -233,6 +323,7 @@ const FilterComponent = ({ onKeyPress }: { onKeyPress: () => void }) => {
                         type={CategoryTypes.STATUS_FORM}
                         url={NEXT_PUBLIC_CATEGORY!}
                         header={axiosHeader}
+                        initValue={Base64ToInputValue("status")}
                     />
                 }
             />
@@ -242,12 +333,19 @@ const FilterComponent = ({ onKeyPress }: { onKeyPress: () => void }) => {
                     <RemoteSelectorUser
                         url={NEXT_PUBLIC_GET_EXECUTOR!}
                         header={axiosHeader}
+                        initValue={Base64ToInputValue("executor")}
                     />
                 }
             />
             <MiniComp
                 condition={<p>Đơn vị</p>}
-                value={<Input onBlur={(e) => setName(e.target.value.trim())} />}
+                value={
+                    <RemoteSelectorDepartment
+                        url={NEXT_PUBLIC_DEPARTMENT!}
+                        header={axiosHeader}
+                        initValue={Base64ToInputValue("officeBranch")}
+                    />
+                }
             />
             <Button type="primary" onClick={onKeyPress}>
                 Xác nhận

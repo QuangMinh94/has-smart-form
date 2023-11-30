@@ -10,18 +10,18 @@ export type QueriesContextType = {
     appointmentCode: string
     setName: Dispatch<SetStateAction<string>>
     name: string
-    setChannel: Dispatch<SetStateAction<string[]>>
-    channel: string[]
+    setChannel: Dispatch<SetStateAction<string>>
+    channel: string
     setCreateDate: Dispatch<SetStateAction<createDate | undefined>>
     createDate: createDate | undefined
-    setStatus: Dispatch<SetStateAction<string[]>>
-    status: string[]
-    setExecutor: Dispatch<SetStateAction<string[]>>
-    executor: string[]
-    setEProduct: Dispatch<SetStateAction<string[]>>
-    eProduct: string[]
-    setOfficeBranch: Dispatch<SetStateAction<string[]>>
-    officeBranch: string[]
+    setStatus: Dispatch<SetStateAction<string>>
+    status: string
+    setExecutor: Dispatch<SetStateAction<string>>
+    executor: string
+    setEProduct: Dispatch<SetStateAction<string>>
+    eProduct: string
+    setOfficeBranch: Dispatch<SetStateAction<string>>
+    officeBranch: string
 }
 
 const DefaultData = {
@@ -32,17 +32,17 @@ const DefaultData = {
     setName: () => {},
     name: "",
     setChannel: () => {},
-    channel: [],
+    channel: "",
     setCreateDate: () => {},
     createDate: undefined,
     setStatus: () => {},
-    status: [],
+    status: "",
     setExecutor: () => {},
-    executor: [],
+    executor: "",
     setEProduct: () => {},
-    eProduct: [],
+    eProduct: "",
     setOfficeBranch: () => {},
-    officeBranch: []
+    officeBranch: ""
 }
 
 const QueriesContext = createContext<QueriesContextType>(DefaultData)

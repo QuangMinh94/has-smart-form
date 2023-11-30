@@ -13,7 +13,7 @@ export type ResultTableType = {
     name?: string
     eProduct?: string
     channel?: string
-    createdDate?: string
+    createdDate?: Date
     status?: string
     executor?: string
     officeBranch?: string

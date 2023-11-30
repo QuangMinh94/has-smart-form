@@ -5,7 +5,7 @@ import { Select, Spin } from "antd"
 import type { SelectProps } from "antd/es/select"
 import axios from "axios"
 import debounce from "lodash/debounce"
-import React, { useContext, useMemo, useRef, useState } from "react"
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react"
 import QueriesContext from "../context/queriesContext"
 
 export interface DebounceSelectProps<ValueType = any>
@@ -95,21 +95,28 @@ async function fetchCategories(
 const RemoteSelectorCategory = ({
     type,
     url,
-    header
+    header,
+    initValue
 }: {
     type: string
     url: string
     header: any
+    initValue: any[]
 }) => {
-    const [value, setValue] = useState<UserValue[]>([])
+    const [value, setValue] = useState<UserValue[]>(initValue)
+
+    useEffect(() => {
+        setValue(initValue)
+    }, [JSON.stringify(initValue)])
+
     const { setChannel, setStatus } = useContext(QueriesContext)
     const onChange = (element: UserValue[]) => {
-        const idList: string[] = []
-        element.forEach((e) => idList.push(e.value))
+        //const idList: string[] = []
+        //element.forEach((e) => idList.push(e.value))
         if (type === CategoryTypes.CHANNEL) {
-            setChannel(idList)
+            setChannel(btoa(encodeURIComponent(JSON.stringify(element))))
         } else {
-            setStatus(idList)
+            setStatus(btoa(encodeURIComponent(JSON.stringify(element))))
         }
     }
 

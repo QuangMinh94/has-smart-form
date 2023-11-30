@@ -26,6 +26,7 @@ export interface RequestAddApoinMent {
 }
 
 export interface Appointment {
+    _id: string
     name: string //
     citizenId: string //
     address: string

@@ -1,6 +1,6 @@
 "use client"
 
-import { Users } from "@/app/(types)/Users"
+import { Department } from "@/app/(types)/Department"
 import { ToLowerCaseNonAccentVietnamese } from "@/util/formatText"
 import { Select, Spin } from "antd"
 import type { SelectProps } from "antd/es/select"
@@ -70,29 +70,29 @@ interface UserValue {
     value: string
 }
 
-async function fetchUser(
+async function fetchDepartment(
     searchString: string,
     url: string,
     header: any
 ): Promise<UserValue[]> {
     return axios
         .get(url, { headers: header })
-        .then((response) => response.data as Users[])
+        .then((response) => response.data as Department[])
         .then((body) =>
             body
                 .filter((element) =>
-                    ToLowerCaseNonAccentVietnamese(
-                        element.lastName! + " " + element.firstName!
-                    ).includes(ToLowerCaseNonAccentVietnamese(searchString))
+                    ToLowerCaseNonAccentVietnamese(element.name).includes(
+                        ToLowerCaseNonAccentVietnamese(searchString)
+                    )
                 )
                 .map((element) => ({
-                    label: element.lastName! + " " + element.firstName!,
+                    label: element.name,
                     value: element._id!
                 }))
         )
 }
 
-const RemoteSelectorUser = ({
+const RemoteSelectorDepartment = ({
     url,
     header,
     initValue
@@ -102,14 +102,15 @@ const RemoteSelectorUser = ({
     initValue: any[]
 }) => {
     const [value, setValue] = useState<UserValue[]>(initValue)
-    const { setExecutor } = useContext(QueriesContext)
     useEffect(() => {
         setValue(initValue)
     }, [JSON.stringify(initValue)])
+
+    const { setOfficeBranch } = useContext(QueriesContext)
     const onChange = (element: UserValue[]) => {
         //const idList: string[] = []
         //element.forEach((e) => idList.push(e.value))
-        setExecutor(btoa(encodeURIComponent(JSON.stringify(element))))
+        setOfficeBranch(btoa(encodeURIComponent(JSON.stringify(element))))
     }
 
     return (
@@ -117,7 +118,7 @@ const RemoteSelectorUser = ({
             mode="multiple"
             value={value}
             placeholder="Chọn"
-            fetchOptions={(e) => fetchUser(e, url, header)}
+            fetchOptions={(e) => fetchDepartment(e, url, header)}
             onChange={(newValue) => {
                 setValue(newValue as UserValue[])
                 onChange(newValue as UserValue[])
@@ -127,4 +128,4 @@ const RemoteSelectorUser = ({
     )
 }
 
-export default RemoteSelectorUser
+export default RemoteSelectorDepartment

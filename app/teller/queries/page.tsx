@@ -1,8 +1,23 @@
+import { Appointment } from "@/app/(types)/Apointment"
 import FilterOption from "@/components/FilterOptions"
-import ResultTable from "@/components/ResultTable"
+import ResultTable, { ResultTableType } from "@/components/ResultTable"
 import QueriesTemplate from "@/components/context/queriesTemplate"
+import axios from "axios"
+import { cookies } from "next/headers"
+import { cache } from "react"
 
-const QueriesPage = ({
+axios.interceptors.request.use((request) => {
+    console.log("Starting Request", JSON.stringify(request, null, 2))
+    return request
+})
+
+type ParamObject = {
+    label: string
+    value: string
+    key: string
+}
+
+const QueriesPage = async ({
     searchParams
 }: {
     searchParams: {
@@ -12,7 +27,7 @@ const QueriesPage = ({
         channel: string[]
         fromDate: number | undefined
         toDate: number | undefined
-        status: string
+        status: string[]
         executor: string[]
         eProduct: string[]
     }
@@ -20,19 +35,84 @@ const QueriesPage = ({
     let searchInput = {}
     if (searchParams) {
         for (var key in searchParams) {
-            Object.assign(searchInput, {
+            try {
+                if (
+                    key === "channel" ||
+                    key === "status" ||
+                    key === "executor" ||
+                    key === "eProduct" ||
+                    key === "officeBranch"
+                ) {
+                    const decodeBase64 = decodeURIComponent(
+                        atob(searchParams[key as keyof typeof searchInput])
+                    )
+                    const paramObject: ParamObject[] = JSON.parse(decodeBase64)
+                    const idList: string[] = []
+                    paramObject.forEach((e) => {
+                        idList.push(e.key)
+                    })
+                    Object.assign(searchInput, {
+                        [key]: idList
+                    })
+                } else {
+                    Object.assign(searchInput, {
+                        [key]: searchParams[key as keyof typeof searchInput]
+                    })
+                }
+                /*  Object.assign(searchInput, {
                 [key]: searchParams[key as keyof typeof searchInput]
-            })
+            }) */
+            } catch (error: any) {
+                console.log("Error", error)
+            }
         }
     }
-    console.log("SearchInput", searchInput)
+
+    const _dataTable: ResultTableType[] = []
+
+    const filterData = await fetchFilterAppointment(
+        process.env.FILTER_APPOINTMENT!,
+        searchInput
+    )
+
+    filterData.forEach((element) => {
+        _dataTable.push({
+            key: element._id,
+            departmentCode: element.appointmentCode,
+            appointmentCode: element.appointmentCode,
+            citizenId: element.citizenId,
+            name: element.name,
+            eProduct: element.eProduct,
+            channel: element.channel,
+            createdDate: element.createDate,
+            status: element.status,
+            executor: element.executor,
+            officeBranch: element.officeBranch
+        })
+    })
+
+    /* console.log("SearchInput", searchInput) */
 
     return (
         <QueriesTemplate>
             <FilterOption />
-            <ResultTable data={[]} />
+            <ResultTable data={_dataTable} />
         </QueriesTemplate>
     )
 }
+
+const fetchFilterAppointment = cache(async (url: string, searchInput: any) => {
+    const cookie = cookies()
+    const res = await axios.post(url, searchInput, {
+        headers: {
+            Authorization: "Bearer " + cookie.get("token")?.value,
+            Session: cookie.get("session")?.value
+        }
+    })
+    const data = res.data as Appointment[]
+    return data
+})
+
+export const dynamic = "force-dynamic"
 
 export default QueriesPage
