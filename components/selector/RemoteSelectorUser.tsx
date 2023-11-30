@@ -109,11 +109,16 @@ const RemoteSelectorUser = ({
     const onChange = (element: UserValue[]) => {
         //const idList: string[] = []
         //element.forEach((e) => idList.push(e.value))
-        setExecutor(btoa(encodeURIComponent(JSON.stringify(element))))
+        if (element.length > 0) {
+            setExecutor(btoa(encodeURIComponent(JSON.stringify(element))))
+        } else {
+            setExecutor("")
+        }
     }
 
     return (
         <DebounceSelect
+            allowClear
             mode="multiple"
             value={value}
             placeholder="Chọn"

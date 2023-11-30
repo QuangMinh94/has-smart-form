@@ -1,3 +1,8 @@
+import { Users } from "./Users"
+import { channel } from "./channel"
+import { eProduct } from "./eProduct"
+import { status } from "./status"
+
 export interface RequestApoinMent {
     id: string
     userRole: string
@@ -38,8 +43,8 @@ export interface Appointment {
     appointmentCode: string
     appointmentTime: Date | undefined //
     officeBranch: string | any //
-    channel: string | any
-    eProduct: string | any //
-    executor: string | any
-    status: string | any
+    channel: string | channel
+    eProduct: string | eProduct //
+    executor: string | Users
+    status: string | status
 }

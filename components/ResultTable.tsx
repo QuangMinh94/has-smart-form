@@ -1,9 +1,14 @@
 "use client"
 
+import { Users } from "@/app/(types)/Users"
+import { channel } from "@/app/(types)/channel"
+import { eProduct } from "@/app/(types)/eProduct"
+import { status } from "@/app/(types)/status"
+import DateFormatter from "@/app/(utilities)/DateFormatter"
 import { Skeleton, Table } from "antd"
 import { ColumnsType } from "antd/es/table"
-import { useCookies } from "next-client-cookies"
-import { usePathname, useRouter } from "next/navigation"
+import dayjs from "dayjs"
+import { useRouter } from "next/navigation"
 
 export type ResultTableType = {
     key?: string
@@ -11,11 +16,11 @@ export type ResultTableType = {
     appointmentCode?: string
     citizenId?: string
     name?: string
-    eProduct?: string
-    channel?: string
+    eProduct?: eProduct
+    channel?: channel
     createdDate?: Date
-    status?: string
-    executor?: string
+    status?: status
+    executor?: Users
     officeBranch?: string
 }
 
@@ -26,9 +31,7 @@ const ResultTable = ({
     data: ResultTableType[]
     prerender?: boolean
 }) => {
-    const pathName = usePathname()
     const router = useRouter()
-    const cookies = useCookies()
     const skeletonColumns: ColumnsType<ResultTableType> = [
         {
             title: "Mã đơn vị",
@@ -62,7 +65,6 @@ const ResultTable = ({
             align: "center",
             ellipsis: true,
             responsive: ["md"],
-            sorter: (a, b) => a.status!.localeCompare(b.status!),
             render() {
                 return <Skeleton.Input active />
             }
@@ -72,39 +74,89 @@ const ResultTable = ({
     const columns: ColumnsType<ResultTableType> = [
         {
             title: "Mã đơn vị",
-            dataIndex: "departmentCode"
+            dataIndex: "departmentCode",
+            width: "8vw"
         },
         {
             title: "Mã giao dịch",
-            dataIndex: "appointmentCode"
+            dataIndex: "appointmentCode",
+            width: "8vw"
         },
         {
             title: "CCCD",
-            dataIndex: "citizenId"
+            dataIndex: "citizenId",
+            width: "8vw"
         },
         {
             title: "Người làm đơn",
-            dataIndex: "name"
+            dataIndex: "name",
+            width: "10vw"
         },
         {
             title: "Sản phẩm",
-            dataIndex: "eProduct"
+            dataIndex: "eProduct",
+            width: "12vw",
+            render(_value, record, _index) {
+                return <>{record.eProduct?.name}</>
+            }
         },
         {
             title: "Kênh",
-            dataIndex: "channel"
+            dataIndex: "channel",
+            width: "8vw",
+            render(_value, record, _index) {
+                return <>{record.channel?.description}</>
+            }
         },
         {
             title: "Ngày tạo",
-            dataIndex: "createdDate"
+            dataIndex: "createdDate",
+            width: "8vw",
+            sorter: (a, b) => {
+                if (a.createdDate && b.createdDate) {
+                    return (
+                        dayjs(a.createdDate).unix() -
+                        dayjs(b.createdDate).unix()
+                    )
+                }
+                return 0
+            },
+
+            render(_value, record, _index) {
+                return (
+                    <>
+                        {record.createdDate
+                            ? DateFormatter(record.createdDate.toString())
+                            : ""}
+                    </>
+                )
+            }
         },
         {
             title: "Trạng thái",
-            dataIndex: "status"
+            dataIndex: "status",
+            width: "8vw",
+            sorter: (a, b) =>
+                a.status!.description!.localeCompare(b.status!.description!),
+            render(_value, record, _index) {
+                return <>{record.status?.description}</>
+            }
         },
         {
             title: "Người thực hiện",
-            dataIndex: "executor"
+            dataIndex: "executor",
+            width: "8vw",
+            render(_value, record, _index) {
+                return (
+                    <>
+                        {record.executor
+                            ? record.executor.lastName +
+                              " " +
+                              record.executor.firstName
+                            : ""}
+                    </>
+                )
+            }
         },
         {
             title: "Đơn vị",
@@ -117,7 +169,13 @@ const ResultTable = ({
             className="mt-4"
             dataSource={data}
             columns={prerender ? skeletonColumns : columns}
-            size="middle"
+            onRow={(i) => ({
+                onClick: (e) => router.push("/teller/queries/" + i.key)
+            })}
+            scroll={{
+                y: "50vh",
+                scrollToFirstRowOnChange: true
+            }}
         />
     )
 }
