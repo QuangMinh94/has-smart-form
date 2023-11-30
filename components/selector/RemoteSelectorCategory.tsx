@@ -113,15 +113,24 @@ const RemoteSelectorCategory = ({
     const onChange = (element: UserValue[]) => {
         //const idList: string[] = []
         //element.forEach((e) => idList.push(e.value))
-        if (type === CategoryTypes.CHANNEL) {
-            setChannel(btoa(encodeURIComponent(JSON.stringify(element))))
+        if (element.length > 0) {
+            if (type === CategoryTypes.CHANNEL) {
+                setChannel(btoa(encodeURIComponent(JSON.stringify(element))))
+            } else {
+                setStatus(btoa(encodeURIComponent(JSON.stringify(element))))
+            }
         } else {
-            setStatus(btoa(encodeURIComponent(JSON.stringify(element))))
+            if (type === CategoryTypes.CHANNEL) {
+                setChannel("")
+            } else {
+                setStatus("")
+            }
         }
     }
 
     return (
         <DebounceSelect
+            allowClear
             mode="multiple"
             value={value}
             placeholder="Chọn"

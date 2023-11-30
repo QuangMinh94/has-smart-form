@@ -1,6 +1,6 @@
 "use client"
 import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
-import routers, { BLOCK, MYWORK, PRODUCT, QUERIES } from "@/router/cusTomRouter"
+import routers, { BLOCK, PRODUCT, QUERIES } from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
 
@@ -17,6 +17,7 @@ type KeyPath = {
     BA_BLOCK: string
     BA_PRODUCT: string
     KSV_MYWORK: string
+    KSV_QUERIES: string
     TELLER_MYWORK: string
     TELLER_QUERIES: string
 }
@@ -88,6 +89,15 @@ const CustomMenu = ({
                     </Link>
                 ),
                 label: "Công việc của tôi"
+            },
+            {
+                key: keyPath.KSV_QUERIES,
+                icon: (
+                    <Link href={`${routers("ksvteller").queries.path}`}>
+                        <FontAwesomeIcon icon={faSearch} />
+                    </Link>
+                ),
+                label: "Truy vấn giao dịch"
             }
         ]
     }
@@ -134,9 +144,10 @@ const SideMenu = ({ children }: Props) => {
     const keyPath: KeyPath = {
         BA_BLOCK: `/ba/${BLOCK}`,
         BA_PRODUCT: `/ba/${PRODUCT}`,
-        KSV_MYWORK: `/ksvteller/${MYWORK}`,
+        KSV_MYWORK: `/ksvteller/`,
         TELLER_MYWORK: `/teller/`,
-        TELLER_QUERIES: `/teller/${QUERIES}`
+        TELLER_QUERIES: `/teller/${QUERIES}`,
+        KSV_QUERIES: `/ksvteller/${QUERIES}`
     }
     const conditionPath: conditionPath = {
         isBaBlock: pathname.startsWith(keyPath.BA_BLOCK),

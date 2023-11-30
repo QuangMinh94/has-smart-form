@@ -1,6 +1,6 @@
 "use client"
 
-import { Department } from "@/app/(types)/Department"
+import { eProduct } from "@/app/(types)/eProduct"
 import { ToLowerCaseNonAccentVietnamese } from "@/util/formatText"
 import { Select, Spin } from "antd"
 import type { SelectProps } from "antd/es/select"
@@ -70,14 +70,14 @@ interface UserValue {
     value: string
 }
 
-async function fetchDepartment(
+async function fetchProduct(
     searchString: string,
     url: string,
     header: any
 ): Promise<UserValue[]> {
     return axios
-        .get(url, { headers: header })
-        .then((response) => response.data as Department[])
+        .post(url, {}, { headers: header })
+        .then((response) => response.data as eProduct[])
         .then((body) =>
             body
                 .filter((element) =>
@@ -92,7 +92,7 @@ async function fetchDepartment(
         )
 }
 
-const RemoteSelectorDepartment = ({
+const RemoteSelectorEProduct = ({
     url,
     header,
     initValue
@@ -106,14 +106,14 @@ const RemoteSelectorDepartment = ({
         setValue(initValue)
     }, [JSON.stringify(initValue)])
 
-    const { setOfficeBranch } = useContext(QueriesContext)
+    const { setEProduct } = useContext(QueriesContext)
     const onChange = (element: UserValue[]) => {
         //const idList: string[] = []
         //element.forEach((e) => idList.push(e.value))
         if (element.length > 0) {
-            setOfficeBranch(btoa(encodeURIComponent(JSON.stringify(element))))
+            setEProduct(btoa(encodeURIComponent(JSON.stringify(element))))
         } else {
-            setOfficeBranch("")
+            setEProduct("")
         }
     }
 
@@ -122,8 +122,8 @@ const RemoteSelectorDepartment = ({
             allowClear
             mode="multiple"
             value={value}
-            placeholder="Chọn"
-            fetchOptions={(e) => fetchDepartment(e, url, header)}
+            placeholder="Chọn sản phẩm"
+            fetchOptions={(e) => fetchProduct(e, url, header)}
             onChange={(newValue) => {
                 setValue(newValue as UserValue[])
                 onChange(newValue as UserValue[])
@@ -133,4 +133,4 @@ const RemoteSelectorDepartment = ({
     )
 }
 
-export default RemoteSelectorDepartment
+export default RemoteSelectorEProduct

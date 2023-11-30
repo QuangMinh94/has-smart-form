@@ -1,22 +1,27 @@
 "use client"
-import routers, { rootPath, DE_TAIL, APP_ROVE } from "@/router/cusTomRouter"
+import { CustomerLabel } from "@/components/CustomLabel"
+import routers, { APP_ROVE, DE_TAIL, rootPath } from "@/router/cusTomRouter"
 import {
-    faTrashAlt,
-    faLongArrowAltLeft
+    faLongArrowAltLeft,
+    faTrashAlt
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { RadioChangeEvent, Row, Col, theme } from "antd"
-import { Radio, Button, Input } from "antd"
-import ButtonModal from "../customButton/ButtonModal"
-import React, { useEffect, memo, useCallback, useMemo } from "react"
+import { Button, Col, Input, Radio, RadioChangeEvent, Row } from "antd"
 import { debounce } from "lodash"
 import {
-    usePathname,
     useParams,
+    usePathname,
     useRouter,
     useSearchParams
 } from "next/navigation"
-import { useTransition } from "react"
+import React, {
+    memo,
+    useCallback,
+    useEffect,
+    useMemo,
+    useTransition
+} from "react"
+import ButtonModal from "../customButton/ButtonModal"
 type condisions = {
     pagemywork: {
         isMyworkpath: boolean
@@ -58,25 +63,6 @@ const useHanderNavigation = (
         }
     }
     return { pathName, params, condition }
-}
-const CustomerLabel = ({
-    text,
-    children
-}: {
-    text: string
-    children: React.ReactNode
-}) => {
-    const {
-        token: { colorPrimary }
-    } = theme.useToken()
-    return (
-        <div>
-            <div style={{ color: colorPrimary }} className="mb-2 ">
-                {text}
-            </div>
-            {children}
-        </div>
-    )
 }
 
 const RadioComponent: React.FC<{

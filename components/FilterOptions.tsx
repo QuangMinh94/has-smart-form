@@ -7,7 +7,16 @@ import {
     faFilterCircleXmark
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Col, DatePicker, Flex, Input, Popover, Row } from "antd"
+import {
+    Button,
+    Col,
+    DatePicker,
+    Divider,
+    Flex,
+    Input,
+    Popover,
+    Row
+} from "antd"
 import { RangePickerProps } from "antd/es/date-picker"
 import dayjs, { Dayjs } from "dayjs"
 import { useCookies } from "next-client-cookies"
@@ -17,6 +26,7 @@ import { ReactNode, useContext, useEffect, useState } from "react"
 import QueriesContext, { createDate } from "./context/queriesContext"
 import RemoteSelectorCategory from "./selector/RemoteSelectorCategory"
 import RemoteSelectorDepartment from "./selector/RemoteSelectorDepartment"
+import RemoteSelectorEProduct from "./selector/RemoteSelectorEProduct"
 import RemoteSelectorUser from "./selector/RemoteSelectorUser"
 
 const { Search } = Input
@@ -29,10 +39,11 @@ const FilterOption = () => {
         citizenId,
         setCitizenId,
         setAppointmentCode,
-        setEProduct,
         setName,
         setChannel,
+        setExecutor,
         setStatus,
+        setEProduct,
         setOfficeBranch,
         appointmentCode,
         name,
@@ -53,22 +64,18 @@ const FilterOption = () => {
                 ? params.get("appointmentCode")!.toString()
                 : ""
         )
-        setAppointmentCode(
-            params.get("name") ? params.get("name")!.toString() : ""
-        )
-        setAppointmentCode(
+        setName(params.get("name") ? params.get("name")!.toString() : "")
+        setChannel(
             params.get("channel") ? params.get("channel")!.toString() : ""
         )
-        setAppointmentCode(
-            params.get("status") ? params.get("status")!.toString() : ""
-        )
-        setAppointmentCode(
+        setStatus(params.get("status") ? params.get("status")!.toString() : "")
+        setExecutor(
             params.get("executor") ? params.get("executor")!.toString() : ""
         )
-        setAppointmentCode(
+        setEProduct(
             params.get("eProduct") ? params.get("eProduct")!.toString() : ""
         )
-        setAppointmentCode(
+        setOfficeBranch(
             params.get("officeBranch")
                 ? params.get("officeBranch")!.toString()
                 : ""
@@ -76,6 +83,7 @@ const FilterOption = () => {
     }
 
     useEffect(() => {
+        console.log("Params", params)
         initValue()
     }, [params])
 
@@ -124,7 +132,12 @@ const FilterOption = () => {
             </Button>
             <Popover
                 placement="bottom"
-                title={<h1>Filter</h1>}
+                title={
+                    <Flex vertical>
+                        <h1>Filter</h1>
+                        <Divider />
+                    </Flex>
+                }
                 content={
                     <FilterComponent
                         onKeyPress={onEnterKeyPress}
@@ -171,7 +184,7 @@ const MiniComp = ({
     value: ReactNode
 }) => {
     return (
-        <Row gutter={10} style={{ marginBottom: "5px" }}>
+        <Row gutter={10} align="middle" style={{ marginBottom: "5px" }}>
             <Col span={8}>{condition}</Col>
             <Col span={16} style={{ width: "100%" }}>
                 {value}
@@ -208,7 +221,8 @@ const FilterComponent = ({
     const {
         NEXT_PUBLIC_CATEGORY,
         NEXT_PUBLIC_GET_EXECUTOR,
-        NEXT_PUBLIC_DEPARTMENT
+        NEXT_PUBLIC_DEPARTMENT,
+        NEXT_PUBLIC_GET_EPRODUCT
     } = useEnvContext()
     const { RangePicker } = DatePicker
     const cookies = useCookies()
@@ -250,8 +264,10 @@ const FilterComponent = ({
         }
     }
     return (
-        <Flex vertical>
-            {/* <MiniComp
+        <>
+            <Row>
+                <Flex vertical>
+                    {/* <MiniComp
                 condition={<p>CCCD</p>}
                 value={
                     <Input
@@ -259,98 +275,110 @@ const FilterComponent = ({
                     />
                 }
             />*/}
-            <MiniComp
-                condition={<p>Mã giao dịch</p>}
-                value={
-                    <Input
-                        key="appointmentCode"
-                        onBlur={(e) =>
-                            setAppointmentCode(e.target.value.trim())
-                        }
-                        defaultValue={
-                            params.get("appointmentCode")
-                                ? params.get("appointmentCode")?.toString()
-                                : ""
-                        }
-                    />
-                }
-            />
-            <MiniComp
-                condition={<p>Tên khách hàng</p>}
-                value={
-                    <Input
-                        key="customerName"
-                        onBlur={(e) => setName(e.target.value.trim())}
-                        defaultValue={
-                            params.get("name")
-                                ? params.get("name")?.toString()
-                                : ""
+                    <MiniComp
+                        condition={<p>Mã giao dịch</p>}
+                        value={
+                            <Input
+                                key="appointmentCode"
+                                onBlur={(e) =>
+                                    setAppointmentCode(e.target.value.trim())
+                                }
+                                defaultValue={
+                                    params.get("appointmentCode")
+                                        ? params
+                                              .get("appointmentCode")
+                                              ?.toString()
+                                        : ""
+                                }
+                            />
                         }
                     />
-                }
-            />
-            {/*  <MiniComp
-                condition={<p>Sản phẩm</p>}
-                value={<Input onBlur={(e) => setName(e.target.value.trim())} />}
-            /> */}
-            <MiniComp
-                condition={<p>Kênh</p>}
-                value={
-                    <RemoteSelectorCategory
-                        type={CategoryTypes.CHANNEL}
-                        url={NEXT_PUBLIC_CATEGORY!}
-                        header={axiosHeader}
-                        initValue={Base64ToInputValue("channel")}
+                    <MiniComp
+                        condition={<p>Tên khách hàng</p>}
+                        value={
+                            <Input
+                                key="customerName"
+                                onBlur={(e) => setName(e.target.value.trim())}
+                                defaultValue={
+                                    params.get("name")
+                                        ? params.get("name")?.toString()
+                                        : ""
+                                }
+                            />
+                        }
                     />
-                }
-            />
-            <MiniComp
-                condition={<p>Ngày tạo</p>}
-                value={
-                    <RangePicker
-                        allowClear
-                        presets={rangePresets}
-                        onChange={onRangeDueDateChange}
-                        style={{ width: "100%" }}
-                        placeholder={["From", "To"]}
+                    <MiniComp
+                        condition={<p>Sản phẩm</p>}
+                        value={
+                            <RemoteSelectorEProduct
+                                url={NEXT_PUBLIC_GET_EPRODUCT!}
+                                header={axiosHeader}
+                                initValue={Base64ToInputValue("eProduct")}
+                            />
+                        }
                     />
-                }
-            />
-            <MiniComp
-                condition={<p>Trạng thái</p>}
-                value={
-                    <RemoteSelectorCategory
-                        type={CategoryTypes.STATUS_FORM}
-                        url={NEXT_PUBLIC_CATEGORY!}
-                        header={axiosHeader}
-                        initValue={Base64ToInputValue("status")}
+                    <MiniComp
+                        condition={<p>Kênh</p>}
+                        value={
+                            <RemoteSelectorCategory
+                                type={CategoryTypes.CHANNEL}
+                                url={NEXT_PUBLIC_CATEGORY!}
+                                header={axiosHeader}
+                                initValue={Base64ToInputValue("channel")}
+                            />
+                        }
                     />
-                }
-            />
-            <MiniComp
-                condition={<p>Người thực hiện</p>}
-                value={
-                    <RemoteSelectorUser
-                        url={NEXT_PUBLIC_GET_EXECUTOR!}
-                        header={axiosHeader}
-                        initValue={Base64ToInputValue("executor")}
+                    <MiniComp
+                        condition={<p>Ngày tạo</p>}
+                        value={
+                            <RangePicker
+                                allowClear
+                                presets={rangePresets}
+                                onChange={onRangeDueDateChange}
+                                style={{ width: "100%" }}
+                                placeholder={["From", "To"]}
+                            />
+                        }
                     />
-                }
-            />
-            <MiniComp
-                condition={<p>Đơn vị</p>}
-                value={
-                    <RemoteSelectorDepartment
-                        url={NEXT_PUBLIC_DEPARTMENT!}
-                        header={axiosHeader}
-                        initValue={Base64ToInputValue("officeBranch")}
+                    <MiniComp
+                        condition={<p>Trạng thái</p>}
+                        value={
+                            <RemoteSelectorCategory
+                                type={CategoryTypes.STATUS_FORM}
+                                url={NEXT_PUBLIC_CATEGORY!}
+                                header={axiosHeader}
+                                initValue={Base64ToInputValue("status")}
+                            />
+                        }
                     />
-                }
-            />
-            <Button type="primary" onClick={onKeyPress}>
-                Xác nhận
-            </Button>
-        </Flex>
+                    <MiniComp
+                        condition={<p>Người thực hiện</p>}
+                        value={
+                            <RemoteSelectorUser
+                                url={NEXT_PUBLIC_GET_EXECUTOR!}
+                                header={axiosHeader}
+                                initValue={Base64ToInputValue("executor")}
+                            />
+                        }
+                    />
+                    <MiniComp
+                        condition={<p>Đơn vị</p>}
+                        value={
+                            <RemoteSelectorDepartment
+                                url={NEXT_PUBLIC_DEPARTMENT!}
+                                header={axiosHeader}
+                                initValue={Base64ToInputValue("officeBranch")}
+                            />
+                        }
+                    />
+                </Flex>
+            </Row>
+            <Row justify="end">
+                <Button className="mt-3" type="primary" onClick={onKeyPress}>
+                    Xác nhận
+                </Button>
+            </Row>
+        </>
     )
 }
 
