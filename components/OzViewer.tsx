@@ -17,6 +17,7 @@ const Viewer = () => {
     const reverseListRight: any[] = reverse(
         JSON.parse(JSON.stringify(listRight))
     )
+
     const cachedFn = useCallback(async () => {
         if (window.start_ozjs) {
             window.SetOZParamters_OZViewer = () => {
@@ -98,7 +99,8 @@ viewer.createreport_doc_index=${index}${delimiter}
     viewer.reportchangecommand=true${delimiter}
     viewer.progresscommand=true${delimiter}
     global.use_preview_progressbar=true${delimiter}
-    viewer.errorcommand=true${delimiter}`
+    viewer.errorcommand=true${delimiter}
+    viewer.progresscommand=true${delimiter}`
 }
 
 export const OzDelimiter = () => {
