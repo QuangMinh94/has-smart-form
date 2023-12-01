@@ -41,4 +41,5 @@ export interface myWork {
     appointmentTime?: string
     eformTask?: eFormTask[]
     channel?: channel
+    docusignDocumentId: string
 }
