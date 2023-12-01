@@ -20,7 +20,7 @@ const ProviderMyWorkDetail: React.FC<typeProvider> = ({ children }) => {
         idEProduct: "",
         nameEproduct: "",
         dataMywork: [],
-        myworkDetail: {},
+        myworkDetail: { docusignDocumentId: "" },
         inFoUser: {
             _id: "",
             createDate: "",

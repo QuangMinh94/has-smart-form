@@ -90,7 +90,7 @@ const QueriesPage = async ({
         searchInput
     )
 
-    filterData.forEach((element) => {
+    filterData?.forEach((element) => {
         _dataTable.push({
             key: element._id,
             departmentCode: element.appointmentCode,
@@ -116,15 +116,20 @@ const QueriesPage = async ({
 }
 
 const fetchFilterAppointment = cache(async (url: string, searchInput: any) => {
-    const cookie = cookies()
-    const res = await axios.post(url, searchInput, {
-        headers: {
-            Authorization: "Bearer " + cookie.get("token")?.value,
-            Session: cookie.get("session")?.value
-        }
-    })
-    const data = res.data as Appointment[]
-    return data
+    try {
+        const cookie = cookies()
+        const res = await axios.post(url, searchInput, {
+            headers: {
+                Authorization: "Bearer " + cookie.get("token")?.value,
+                Session: cookie.get("session")?.value
+            }
+        })
+        const data = res.data as Appointment[]
+        console.log("data", data)
+        return data
+    } catch (error: any) {
+        console.log("errorrrrrrrrrrrrrrrrrrrrrr", error)
+    }
 })
 
 export const dynamic = "force-dynamic"

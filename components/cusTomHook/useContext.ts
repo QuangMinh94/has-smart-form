@@ -7,6 +7,12 @@ import {
 
 import { typeContextTranfer, contextTranfer } from "../context/context"
 import { typeContextBa, contextBa } from "@/app/ba/(component)/content"
+import contentAdmin, {
+    typeContextAdmin
+} from "@/app/administrator/(component)/content/contentAdmin"
+import contentUser, {
+    typeContextUser
+} from "@/app/administrator/(component)/content/contentUser"
 function useContextMyWorkDetail(): typeContextMyworkDetail {
     const provider = useContext(contextMyworkDetail)
     return {
@@ -47,4 +53,23 @@ function useContextBa(): typeContextBa {
         treeFilter: provider.treeFilter
     }
 }
-export { useContextMyWorkDetail, useContextTranfer, useContextBa }
+function useContextAdmin(): typeContextAdmin {
+    const provider = useContext(contentAdmin)
+    return {
+        messageApi: provider.messageApi
+    }
+}
+function useContextAdminUser(): typeContextUser {
+    const provider = useContext(contentUser)
+    return {
+        setDataGlobal: provider.setDataGlobal,
+        dataGlobal: provider.dataGlobal
+    }
+}
+export {
+    useContextMyWorkDetail,
+    useContextTranfer,
+    useContextBa,
+    useContextAdmin,
+    useContextAdminUser
+}

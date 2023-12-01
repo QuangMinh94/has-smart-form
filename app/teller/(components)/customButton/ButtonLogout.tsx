@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation"
 import React from "react"
 import { Button, Image, Flex } from "antd"
 
-import { faSignOut } from "@fortawesome/free-solid-svg-icons"
+import { faSignOut, faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import type { MenuProps } from "antd"
 import { Dropdown, Space } from "antd"
@@ -16,11 +16,24 @@ const ButtonLogOut: React.FC = () => {
     const items: MenuProps["items"] = [
         {
             label: (
+                <Flex align="center">
+                    <FontAwesomeIcon className="mr-2" icon={faUser} />
+                    <div className="text-black mr-2">
+                        {`${InFoUser?.lastName ?? ""} ${
+                            InFoUser?.firstName ?? ""
+                        }`}
+                    </div>
+                </Flex>
+            ),
+            key: "NameUser"
+        },
+        {
+            label: (
                 <Flex
                     align="center"
                     onClick={() => router.push("/api/auth/signout")}
                 >
-                    <FontAwesomeIcon className="mr-2" icon={faSignOut} />{" "}
+                    <FontAwesomeIcon className="mr-2" icon={faSignOut} />
                     <div>Đăng xuất</div>
                 </Flex>
             ),
@@ -31,9 +44,6 @@ const ButtonLogOut: React.FC = () => {
     return (
         <Dropdown menu={{ items }} trigger={["click"]}>
             <Flex align="center">
-                <div className="text-black mr-2">
-                    {`${InFoUser?.lastName ?? ""} ${InFoUser?.firstName ?? ""}`}
-                </div>
                 <Image
                     className="rounded-full block cursor-pointer hover:opacity-75"
                     preview={false}

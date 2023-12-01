@@ -46,7 +46,7 @@ const contextMyworkDetail = createContext<typeContextMyworkDetail>({
         idEProduct: "",
         nameEproduct: "",
         dataMywork: [],
-        myworkDetail: {},
+        myworkDetail: { docusignDocumentId: "" },
         inFoUser: {
             _id: "",
             createDate: "",

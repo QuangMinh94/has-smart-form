@@ -44,7 +44,7 @@ export interface BodyUserRequest {
     lastName?: string
     role?: string
     group?: string[]
-    department: string
+    department?: string
     color?: string
     active?: boolean
     image?: {
@@ -57,7 +57,7 @@ export interface BodyUserRequest {
     phone?: string
     defaultGroup?: string
     password?: string
-    birthday?: Date
+    birthday?: Date | string
 }
 
 export interface IImage {
@@ -115,4 +115,9 @@ export interface ResponseAddUser {
 export interface bodyRequestAddUserToGroup {
     groupId?: string
     listUser: string[]
+}
+
+export interface bodyRequestSeacrhUser {
+    active: boolean
+    name: string
 }
