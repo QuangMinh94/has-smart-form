@@ -4,8 +4,9 @@ import { eProduct } from "./eProduct"
 import { status } from "./status"
 
 export interface RequestApoinMent {
-    id: string
-    userRole: string
+    id?: string
+    userRole?: string
+    queryCode?: string
 }
 export interface RequestSeacrhApoinMent {
     citizenId?: string
@@ -47,4 +48,5 @@ export interface Appointment {
     eProduct: string | eProduct //
     executor: string | Users
     status: string | status
+    queryCode: string
 }

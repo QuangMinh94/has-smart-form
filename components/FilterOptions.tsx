@@ -137,7 +137,7 @@ const FilterOption = ({ route }: { route: string }) => {
                 title={
                     <Flex vertical>
                         <h1>Filter</h1>
-                        <Divider />
+                        <Divider style={{ margin: "6px 0" }} />
                     </Flex>
                 }
                 content={

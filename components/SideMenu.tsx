@@ -230,7 +230,7 @@ const SideMenu = ({ children }: Props) => {
             <Sider
                 collapsible
                 collapsed={collapsed}
-                style={{ backgroundColor: colorPrimary }}
+                //style={{ backgroundColor: colorPrimary }}
                 onCollapse={(value) => setCollapsed(value)}
             >
                 <center>
