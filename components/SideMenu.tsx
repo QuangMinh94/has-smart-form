@@ -1,15 +1,17 @@
 "use client"
 import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
-import routers, { BLOCK, PRODUCT, QUERIES } from "@/router/cusTomRouter"
+import routers, { BLOCK, PRODUCT, QUERIES, MYWORK } from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
 
 import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
-<<<<<<< HEAD
-import { faArchive, faFile, faCog } from "@fortawesome/free-solid-svg-icons"
-=======
-import { faArchive, faFile, faSearch } from "@fortawesome/free-solid-svg-icons"
->>>>>>> 5acbecb3dabbb179c516b08281438ee8f2096174
+import {
+    faArchive,
+    faFile,
+    faCog,
+    faSearch
+} from "@fortawesome/free-solid-svg-icons"
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useSession } from "next-auth/react"
 import { useEnvContext } from "next-runtime-env"
@@ -23,11 +25,8 @@ type KeyPath = {
     KSV_MYWORK: string
     KSV_QUERIES: string
     TELLER_MYWORK: string
-<<<<<<< HEAD
     ADMINISTRATOR: string
-=======
     TELLER_QUERIES: string
->>>>>>> 5acbecb3dabbb179c516b08281438ee8f2096174
 }
 type conditionPath = {
     isBaBlock: boolean
@@ -35,6 +34,8 @@ type conditionPath = {
     isKsvMywork: boolean
     isTellerMywork: boolean
     isAdminTrator: boolean
+    isKsvQuery: boolean
+    isTellerQuery: boolean
 }
 const { Header, Sider, Content } = Layout
 
@@ -66,6 +67,13 @@ const CustomMenu = ({
     if (conditionPath.isAdminTrator) {
         selectedKeys.push(keyPath.ADMINISTRATOR)
     }
+    if (conditionPath.isTellerQuery) {
+        selectedKeys.push(keyPath.TELLER_QUERIES)
+    }
+    if (conditionPath.isKsvQuery) {
+        selectedKeys.push(keyPath.KSV_QUERIES)
+    }
+
     //set item
     if (conditionPath.isBaBlock || conditionPath.isBaProduct) {
         items = [
@@ -89,7 +97,7 @@ const CustomMenu = ({
             }
         ]
     }
-    if (conditionPath.isKsvMywork) {
+    if (conditionPath.isKsvMywork || conditionPath.isKsvQuery) {
         items = [
             {
                 key: keyPath.KSV_MYWORK,
@@ -112,7 +120,7 @@ const CustomMenu = ({
             }
         ]
     }
-    if (conditionPath.isTellerMywork) {
+    if (conditionPath.isTellerMywork || conditionPath.isTellerQuery) {
         items = [
             {
                 key: keyPath.TELLER_MYWORK,
@@ -147,6 +155,7 @@ const CustomMenu = ({
             }
         ]
     }
+
     return (
         <Menu
             style={{ backgroundColor }}
@@ -168,18 +177,20 @@ const SideMenu = ({ children }: Props) => {
     const keyPath: KeyPath = {
         BA_BLOCK: `/ba/${BLOCK}`,
         BA_PRODUCT: `/ba/${PRODUCT}`,
-        KSV_MYWORK: `/ksvteller/`,
-        TELLER_MYWORK: `/teller/`,
+        KSV_MYWORK: `/ksvteller/${MYWORK}`,
+        TELLER_MYWORK: `/teller/${MYWORK}`,
+        ADMINISTRATOR: `/administrator`,
         TELLER_QUERIES: `/teller/${QUERIES}`,
-        KSV_QUERIES: `/ksvteller/${QUERIES}`,
-        ADMINISTRATOR: `/administrator`
+        KSV_QUERIES: `/ksvteller/${QUERIES}`
     }
     const conditionPath: conditionPath = {
         isBaBlock: pathname.startsWith(keyPath.BA_BLOCK),
         isBaProduct: pathname.startsWith(keyPath.BA_PRODUCT),
         isKsvMywork: pathname.startsWith(keyPath.KSV_MYWORK),
         isTellerMywork: pathname.startsWith(keyPath.TELLER_MYWORK),
-        isAdminTrator: pathname.startsWith(keyPath.ADMINISTRATOR)
+        isAdminTrator: pathname.startsWith(keyPath.ADMINISTRATOR),
+        isKsvQuery: pathname.startsWith(keyPath.KSV_QUERIES),
+        isTellerQuery: pathname.startsWith(keyPath.TELLER_QUERIES)
     }
 
     const { status, data: session } = useSession()
@@ -259,28 +270,10 @@ const SideMenu = ({ children }: Props) => {
                             "Công việc của tôi"}
 
                         {conditionPath.isAdminTrator && "Quản trị"}
+                        {(conditionPath.isTellerQuery ||
+                            conditionPath.isKsvQuery) &&
+                            "Truy vẫn giao dịch"}
                     </h1>
-<<<<<<< HEAD
-                    <NovuComponent
-                        novuProps={{
-                            subscriberId: session?.user?.userInfo?._id,
-                            applicationIdentifier:
-                                NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER!,
-                            initialFetchingStrategy: {
-                                fetchNotifications: true,
-                                fetchUserPreferences: true
-                            },
-                            backendUrl: NEXT_PUBLIC_BACKEND_URL!,
-                            socketUrl: NEXT_PUBLIC_SOCKET_URL!
-                        }}
-                        popOverProps={{
-                            colorScheme: "light",
-                            //onNotificationClick: onNotificationClick,
-                            showUserPreferences: false,
-                            footer: () => <></>
-                        }}
-                    />
-=======
                     {status === "authenticated" && (
                         <NovuComponent
                             novuProps={{
@@ -302,7 +295,6 @@ const SideMenu = ({ children }: Props) => {
                             }}
                         />
                     )}
->>>>>>> 5acbecb3dabbb179c516b08281438ee8f2096174
                     <ButtonLogOut />
                 </Header>
                 {conditionPath.isAdminTrator ? (
