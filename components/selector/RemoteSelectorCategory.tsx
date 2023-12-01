@@ -1,6 +1,7 @@
 "use client"
 
 import { Category, CategoryTypes } from "@/app/(types)/Categories"
+import { ToLowerCaseNonAccentVietnamese } from "@/util/formatText"
 import { Select, Spin } from "antd"
 import type { SelectProps } from "antd/es/select"
 import axios from "axios"
@@ -76,19 +77,19 @@ async function fetchCategories(
     header: any
 ): Promise<UserValue[]> {
     return axios
-        .post(
-            url,
-            searchString !== ""
-                ? { type: type, name: searchString }
-                : { type: type },
-            { headers: header }
-        )
+        .post(url, { type: type }, { headers: header })
         .then((response) => response.data as Category[])
         .then((body) =>
-            body.map((element) => ({
-                label: element.description!,
-                value: element._id
-            }))
+            body
+                .filter((element) =>
+                    ToLowerCaseNonAccentVietnamese(
+                        element.description!
+                    ).includes(ToLowerCaseNonAccentVietnamese(searchString))
+                )
+                .map((element) => ({
+                    label: element.description!,
+                    value: element._id
+                }))
         )
 }
 
