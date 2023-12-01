@@ -5,7 +5,12 @@ import { Avatar, Badge } from "antd"
 
 const NotiBell = (props: INotificationBellProps) => {
     return (
-        <Badge className="cursor-pointer" count={props.unseenCount}>
+        <Badge
+            className="cursor-pointer"
+            count={props.unseenCount}
+            offset={[-9, 8]}
+            size="small"
+        >
             <Avatar
                 className="cursor-pointer"
                 style={{ backgroundColor: "white" }}
