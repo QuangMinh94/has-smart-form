@@ -1,5 +1,5 @@
+"use client"
 import { dataGlobal } from "./../../../teller/(components)/context"
-;("use client")
 
 import React, { createContext } from "react"
 import { Users } from "@/app/(types)/Users"
