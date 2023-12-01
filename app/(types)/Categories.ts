@@ -4,6 +4,7 @@ type Categories = {
     type: string
     level: number
     name: string
+    description?: string
 }
 
 export type CategoriesRequest = {

@@ -1,6 +1,6 @@
+import { channel } from "../channel"
 import { eProduct, formTemplate } from "../eProduct"
 import { status } from "../status"
-import { channel } from "../channel"
 interface eProductforMywork {
     image?: {
         data: string
@@ -39,4 +39,5 @@ export interface myWork {
     appointmentTime?: string
     eformTask?: eFormTask[]
     channel?: channel
+    docusignDocumentId: string
 }

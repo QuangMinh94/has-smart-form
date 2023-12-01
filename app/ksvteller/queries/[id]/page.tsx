@@ -1,9 +1,7 @@
 import { RequestApoinMent } from "@/app/(types)/Apointment"
 import { myWork } from "@/app/(types)/teller/mywork"
-import { authOptions } from "@/app/api/auth/authOptions"
 import TemlateWrapperQueries from "@/components/TemlateWrapperQueries"
 import axios from "axios"
-import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
 import { cache } from "react"
 // import { cache } from "react"
@@ -13,7 +11,7 @@ const viewAppointMent = async (pram: {
     session: string
 }) => {
     const { bodyRequest, token, session } = pram
-    const res = await axios.post(process.env.VIEW_APPOINT_MENTS!, bodyRequest, {
+    const res = await axios.post(process.env.QUERY_APPOINTMENT!, bodyRequest, {
         headers: {
             Authorization: "Bearer " + token,
             Session: session
@@ -21,14 +19,14 @@ const viewAppointMent = async (pram: {
     })
     return res
 }
-const fetchApi = cache(async (idAppointMent: string): Promise<myWork> => {
+const fetchApi = cache(async (queryCode: string): Promise<myWork> => {
     try {
         const cookie = cookies()
-        const session = await getServerSession(authOptions)
-        const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
+        //const session = await getServerSession(authOptions)
+        //const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
         const [resSeacrhAppointMent]: any = await Promise.all([
             viewAppointMent({
-                bodyRequest: { id: idAppointMent, userRole: idRole },
+                bodyRequest: { queryCode: queryCode },
                 session: cookie.get("session")?.value ?? "",
                 token: cookie.get("token")?.value ?? ""
             })
@@ -41,7 +39,7 @@ const fetchApi = cache(async (idAppointMent: string): Promise<myWork> => {
     }
 })
 
-const QueriesDetailPage = async ({ params }: { params: { id: string } }) => {
+const QueriesDetailPageKSV = async ({ params }: { params: { id: string } }) => {
     const data = await fetchApi(params.id)
 
     return (
@@ -52,4 +50,4 @@ const QueriesDetailPage = async ({ params }: { params: { id: string } }) => {
     )
 }
 export const dynamic = "force-dynamic"
-export default QueriesDetailPage
+export default QueriesDetailPageKSV

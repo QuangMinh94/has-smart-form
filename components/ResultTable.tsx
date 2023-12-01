@@ -8,7 +8,7 @@ import DateFormatter from "@/app/(utilities)/DateFormatter"
 import { Skeleton, Table } from "antd"
 import { ColumnsType } from "antd/es/table"
 import dayjs from "dayjs"
-import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 export type ResultTableType = {
     key?: string
@@ -22,16 +22,21 @@ export type ResultTableType = {
     status?: status
     executor?: Users
     officeBranch?: string
+    ecmDocId?: string
+    queryCode?: string
 }
 
 const ResultTable = ({
     data,
+    route,
     prerender
 }: {
     data: ResultTableType[]
+    route: any
     prerender?: boolean
 }) => {
-    const router = useRouter()
+    //const router = useRouter()
+
     const skeletonColumns: ColumnsType<ResultTableType> = [
         {
             title: "Mã đơn vị",
@@ -75,7 +80,14 @@ const ResultTable = ({
         {
             title: "Mã đơn vị",
             dataIndex: "departmentCode",
-            width: "8vw"
+            width: "8vw",
+            render(_value, record, _index) {
+                return (
+                    <Link href={`${route}/${record.queryCode}`}>
+                        {record.departmentCode}
+                    </Link>
+                )
+            }
         },
         {
             title: "Mã giao dịch",
@@ -115,8 +127,8 @@ const ResultTable = ({
             sorter: (a, b) => {
                 if (a.createdDate && b.createdDate) {
                     return (
-                        dayjs(a.createdDate).unix() -
-                        dayjs(b.createdDate).unix()
+                        dayjs(b.createdDate).unix() -
+                        dayjs(a.createdDate).unix()
                     )
                 }
                 return 0
@@ -160,7 +172,8 @@ const ResultTable = ({
         },
         {
             title: "Đơn vị",
-            dataIndex: "officeBranch"
+            dataIndex: "officeBranch",
+            ellipsis: true
         }
     ]
 
@@ -169,9 +182,9 @@ const ResultTable = ({
             className="mt-4"
             dataSource={data}
             columns={prerender ? skeletonColumns : columns}
-            onRow={(i) => ({
-                onClick: (e) => router.push("/teller/queries/" + i.key)
-            })}
+            /*  onRow={(i) => ({
+                onDoubleClick: (e) => router.push(route + i.key)
+            })} */
             scroll={{
                 y: "50vh",
                 scrollToFirstRowOnChange: true

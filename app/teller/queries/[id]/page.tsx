@@ -13,7 +13,7 @@ const viewAppointMent = async (pram: {
     session: string
 }) => {
     const { bodyRequest, token, session } = pram
-    const res = await axios.post(process.env.VIEW_APPOINT_MENTS!, bodyRequest, {
+    const res = await axios.post(process.env.QUERY_APPOINTMENT!, bodyRequest, {
         headers: {
             Authorization: "Bearer " + token,
             Session: session
@@ -21,14 +21,14 @@ const viewAppointMent = async (pram: {
     })
     return res
 }
-const fetchApi = cache(async (idAppointMent: string): Promise<myWork> => {
+const fetchApi = cache(async (queryCode: string): Promise<myWork> => {
     try {
         const cookie = cookies()
         const session = await getServerSession(authOptions)
-        const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
+        //const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
         const [resSeacrhAppointMent]: any = await Promise.all([
             viewAppointMent({
-                bodyRequest: { id: idAppointMent, userRole: idRole },
+                bodyRequest: { queryCode: queryCode },
                 session: cookie.get("session")?.value ?? "",
                 token: cookie.get("token")?.value ?? ""
             })

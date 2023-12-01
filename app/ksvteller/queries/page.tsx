@@ -1,4 +1,5 @@
 import { Appointment } from "@/app/(types)/Apointment"
+import { Department } from "@/app/(types)/Department"
 import { Users } from "@/app/(types)/Users"
 import { channel } from "@/app/(types)/channel"
 import { eProduct } from "@/app/(types)/eProduct"
@@ -93,7 +94,8 @@ const QueriesPage = async ({
             createdDate: element.createDate,
             status: element.status as status,
             executor: element.executor as Users,
-            officeBranch: element.officeBranch
+            officeBranch: (element.officeBranch as Department).name,
+            queryCode: element.queryCode
         })
     })
 
@@ -103,7 +105,7 @@ const QueriesPage = async ({
     return (
         <QueriesTemplate>
             <FilterOption route="/ksvteller/queries" />
-            <ResultTable data={_dataTable} />
+            <ResultTable data={_dataTable} route="/ksvteller/queries/" />
         </QueriesTemplate>
     )
 }

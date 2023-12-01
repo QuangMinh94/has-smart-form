@@ -22,6 +22,7 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
 
 type Props = { mywork: myWork }
 const TemlateWrapperQueries: React.FC<Props> = ({ mywork }) => {
+    console.log("INsied my work", mywork)
     const [DataMywork, setMyWork] = useState<myWork>(mywork)
     const router = useRouter()
     const [messageApi, contextHolder] = message.useMessage()
@@ -171,6 +172,19 @@ const TemlateWrapperQueries: React.FC<Props> = ({ mywork }) => {
                     </Col>
                 </Row>
             )}
+            {DataMywork.eformTask &&
+                (DataMywork.status!.code === "APPROVE" ||
+                    DataMywork.status!.code === "REJECT") &&
+                DataMywork.docusignDocumentId && (
+                    <a
+                        href={
+                            "/api/download?id=" + DataMywork.docusignDocumentId
+                        }
+                        target="_blank"
+                    >
+                        Xem file kết quả
+                    </a>
+                )}
             <OzViewer viewerKey={viewerKey} />
         </div>
     )
