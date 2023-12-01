@@ -11,7 +11,8 @@ const theme: ThemeConfig = {
             itemHoverBg: "white"
         },
         Layout: {
-            siderBg: "#0E7490"
+            siderBg: "#0E7490",
+            triggerBg: "#0E7490"
         },
         Table: {
             headerBg: "#0E7490",
