@@ -1,5 +1,6 @@
+import Loading from "../mywork/loading"
 const QueriesLoadingPage = () => {
-    return <div>QueriesLoadingPage...</div>
+    return <Loading />
 }
 
 export default QueriesLoadingPage

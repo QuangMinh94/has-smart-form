@@ -1,5 +1,6 @@
+import Loading from "@/app/teller/mywork/loading"
 const KSVQueriesLoadingPage = () => {
-    return <div>QueriesLoadingPage...</div>
+    return <Loading />
 }
 
 export default KSVQueriesLoadingPage

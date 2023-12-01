@@ -1,5 +1,5 @@
 "use client"
-import React, { memo, useCallback, useState } from "react"
+import React, { memo, useCallback, useState, useTransition } from "react"
 import { myWork } from "@/app/(types)/teller/mywork"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
@@ -8,14 +8,16 @@ import { Button, Form, Input, InputNumber, message } from "antd"
 import SelectEproduct from "@/app/teller/(components)/customSelect/SelectForm"
 import { addAppointMent, seacrhAppointMent } from "@/app/(service)/appointments"
 import { RequestAddApoinMent } from "@/app/(types)/Apointment"
-
+import routers from "@/router/cusTomRouter"
 import { useEnvContext } from "next-runtime-env"
+import { useRouter } from "next/navigation"
 import dayjs from "dayjs"
 const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo)
 }
 type Props = { handleCancelFormOder: () => void }
 const FormOder: React.FC<Props> = ({ handleCancelFormOder }) => {
+    const router = useRouter()
     const { NEXT_PUBLIC_ADD_APPOINT_MENTS, NEXT_PUBLIC_APPOINT_MENTS } =
         useEnvContext()
     const [form] = Form.useForm()
@@ -25,7 +27,7 @@ const FormOder: React.FC<Props> = ({ handleCancelFormOder }) => {
     const [messageApi, contextHolder] = message.useMessage()
     const [loadingBtn, setLoadingBtn] = useState<boolean>(false)
     const Info = dataGlobal.inFoUser
-
+    const [loadingTransition, Transition] = useTransition()
     const HandlerOnchangeEproduct = useCallback((value: string) => {
         form.setFieldsValue({ eProduct: value })
     }, [])
@@ -85,8 +87,22 @@ const FormOder: React.FC<Props> = ({ handleCancelFormOder }) => {
                         dataMywork: [...data.dataMywork, myWorks[0]]
                     }
                 })
-                message.success("thêm thành công")
-                handleCancelFormOder()
+                Transition(() => {
+                    setDataGlobal((data) => ({
+                        ...data,
+                        idEProduct: myWorks[0]?.eProduct?._id ?? "",
+                        nameEproduct: myWorks[0]?.eProduct?.name ?? ""
+                    }))
+                    router.push(
+                        `${routers("teller").detailMywork.path({
+                            id: myWorks[0]?._id ?? ""
+                        })}?CCCD=${myWorks[0]?.citizenId}&Name=${
+                            myWorks[0].name
+                        }&code=${myWorks[0].appointmentCode}`
+                    )
+                })
+                // message.success("thêm thành công")
+                // handleCancelFormOder()
             }
         } catch (e) {
             messageApi.error("có lỗi vui lòng thử lại sau")
@@ -213,7 +229,7 @@ const FormOder: React.FC<Props> = ({ handleCancelFormOder }) => {
                     style={{ marginBottom: "25px", marginTop: "25px" }}
                 >
                     <Button
-                        loading={loadingBtn}
+                        loading={loadingBtn || loadingTransition}
                         type="primary"
                         htmlType="submit"
                     >

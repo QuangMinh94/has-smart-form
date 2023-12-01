@@ -1,11 +1,17 @@
 "use client"
 import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
-import routers, { BLOCK, PRODUCT, QUERIES } from "@/router/cusTomRouter"
+import routers, { BLOCK, PRODUCT, QUERIES, MYWORK } from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
 
 import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
-import { faArchive, faFile, faSearch } from "@fortawesome/free-solid-svg-icons"
+import {
+    faArchive,
+    faFile,
+    faCog,
+    faSearch
+} from "@fortawesome/free-solid-svg-icons"
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useSession } from "next-auth/react"
 import { useEnvContext } from "next-runtime-env"
@@ -19,6 +25,7 @@ type KeyPath = {
     KSV_MYWORK: string
     KSV_QUERIES: string
     TELLER_MYWORK: string
+    ADMINISTRATOR: string
     TELLER_QUERIES: string
 }
 type conditionPath = {
@@ -26,6 +33,9 @@ type conditionPath = {
     isBaProduct: boolean
     isKsvMywork: boolean
     isTellerMywork: boolean
+    isAdminTrator: boolean
+    isKsvQuery: boolean
+    isTellerQuery: boolean
 }
 const { Header, Sider, Content } = Layout
 
@@ -54,6 +64,15 @@ const CustomMenu = ({
     if (conditionPath.isTellerMywork) {
         selectedKeys.push(keyPath.TELLER_MYWORK)
     }
+    if (conditionPath.isAdminTrator) {
+        selectedKeys.push(keyPath.ADMINISTRATOR)
+    }
+    if (conditionPath.isTellerQuery) {
+        selectedKeys.push(keyPath.TELLER_QUERIES)
+    }
+    if (conditionPath.isKsvQuery) {
+        selectedKeys.push(keyPath.KSV_QUERIES)
+    }
 
     //set item
     if (conditionPath.isBaBlock || conditionPath.isBaProduct) {
@@ -78,7 +97,7 @@ const CustomMenu = ({
             }
         ]
     }
-    if (conditionPath.isKsvMywork) {
+    if (conditionPath.isKsvMywork || conditionPath.isKsvQuery) {
         items = [
             {
                 key: keyPath.KSV_MYWORK,
@@ -101,7 +120,7 @@ const CustomMenu = ({
             }
         ]
     }
-    if (conditionPath.isTellerMywork) {
+    if (conditionPath.isTellerMywork || conditionPath.isTellerQuery) {
         items = [
             {
                 key: keyPath.TELLER_MYWORK,
@@ -123,10 +142,24 @@ const CustomMenu = ({
             }
         ]
     }
+    if (conditionPath.isAdminTrator) {
+        items = [
+            {
+                key: keyPath.ADMINISTRATOR,
+                icon: (
+                    <Link href={`${routers("administrator").user.path}`}>
+                        <FontAwesomeIcon icon={faCog} />
+                    </Link>
+                ),
+                label: "Quản trị"
+            }
+        ]
+    }
+
     return (
         <Menu
             style={{ backgroundColor }}
-            defaultSelectedKeys={[BLOCK]}
+            // defaultSelectedKeys={[BLOCK]}
             selectedKeys={selectedKeys}
             items={items}
         />
@@ -144,8 +177,9 @@ const SideMenu = ({ children }: Props) => {
     const keyPath: KeyPath = {
         BA_BLOCK: `/ba/${BLOCK}`,
         BA_PRODUCT: `/ba/${PRODUCT}`,
-        KSV_MYWORK: `/ksvteller/`,
-        TELLER_MYWORK: `/teller/`,
+        KSV_MYWORK: `/ksvteller/${MYWORK}`,
+        TELLER_MYWORK: `/teller/${MYWORK}`,
+        ADMINISTRATOR: `/administrator`,
         TELLER_QUERIES: `/teller/${QUERIES}`,
         KSV_QUERIES: `/ksvteller/${QUERIES}`
     }
@@ -153,7 +187,10 @@ const SideMenu = ({ children }: Props) => {
         isBaBlock: pathname.startsWith(keyPath.BA_BLOCK),
         isBaProduct: pathname.startsWith(keyPath.BA_PRODUCT),
         isKsvMywork: pathname.startsWith(keyPath.KSV_MYWORK),
-        isTellerMywork: pathname.startsWith(keyPath.TELLER_MYWORK)
+        isTellerMywork: pathname.startsWith(keyPath.TELLER_MYWORK),
+        isAdminTrator: pathname.startsWith(keyPath.ADMINISTRATOR),
+        isKsvQuery: pathname.startsWith(keyPath.KSV_QUERIES),
+        isTellerQuery: pathname.startsWith(keyPath.TELLER_QUERIES)
     }
 
     const { status, data: session } = useSession()
@@ -214,7 +251,7 @@ const SideMenu = ({ children }: Props) => {
             </Sider>
             <Layout>
                 <Header
-                    className="flex items-center"
+                    className="flex items-center border-b-[1px] border-color:rgba(5, 5, 5, 0.06) "
                     style={{
                         padding: "0 15px 0 15px",
                         background: colorBgContainer
@@ -231,6 +268,11 @@ const SideMenu = ({ children }: Props) => {
                         {(conditionPath.isKsvMywork ||
                             conditionPath.isTellerMywork) &&
                             "Công việc của tôi"}
+
+                        {conditionPath.isAdminTrator && "Quản trị"}
+                        {(conditionPath.isTellerQuery ||
+                            conditionPath.isKsvQuery) &&
+                            "Truy vẫn giao dịch"}
                     </h1>
                     {status === "authenticated" && (
                         <NovuComponent
@@ -255,26 +297,30 @@ const SideMenu = ({ children }: Props) => {
                     )}
                     <ButtonLogOut />
                 </Header>
-                <Content
-                    style={{
-                        borderRadius: "10px",
-                        margin: "24px 16px",
-                        padding: 20,
-                        minHeight: 280,
-                        background: colorBgContainer,
-                        overflowY: "scroll"
-                    }}
-                >
-                    <div className="my-6">
-                        {conditionPath.isTellerMywork && (
-                            <Filter rootPath="teller" />
-                        )}
-                        {conditionPath.isKsvMywork && (
-                            <Filter rootPath="ksvteller" />
-                        )}
-                    </div>
+                {conditionPath.isAdminTrator ? (
                     <div>{children}</div>
-                </Content>
+                ) : (
+                    <Content
+                        style={{
+                            borderRadius: "10px",
+                            margin: "24px 16px",
+                            padding: 20,
+                            minHeight: 280,
+                            background: colorBgContainer,
+                            overflowY: "scroll"
+                        }}
+                    >
+                        <div className="my-6">
+                            {conditionPath.isTellerMywork && (
+                                <Filter rootPath="teller" />
+                            )}
+                            {conditionPath.isKsvMywork && (
+                                <Filter rootPath="ksvteller" />
+                            )}
+                        </div>
+                        <div>{children}</div>
+                    </Content>
+                )}
             </Layout>
         </Layout>
     )

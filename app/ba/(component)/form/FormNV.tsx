@@ -46,7 +46,7 @@ const UseFecthApiFormAll = ({
 
     const Role: any = InFoUser?.defaultGroup.role?.[0]
     const idRole = Role?._id
-    const { isLoading, error, data, refetch } = useQuery<any>({
+    const { error, data, isRefetching, isLoading } = useQuery<any>({
         queryKey: ["formtemplatesAll"],
         queryFn: async () => {
             const resAll = await Promise.all([
@@ -67,16 +67,15 @@ const UseFecthApiFormAll = ({
             return resAll
         },
         retry: 3,
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false
+        refetchOnWindowFocus: false
     })
 
     return {
+        isRefetching,
         isLoading,
         error,
         FormAll: data?.[0].data,
-        FormNotUse: data?.[1].data,
-        refetch
+        FormNotUse: data?.[1].data
     }
 }
 
@@ -91,45 +90,22 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
     const { token, session } = useCustomCookies()
     const { messageApi, setDataGlobal, dataGlobal } = useContextBa()
     const [loadingBtn, setLoadingBtn] = useState<boolean>(false)
-    const {
-        listRight,
-        setListLeft,
-        setListRight,
-        setLoading,
-        setChangeListFilter
-    } = useContextTranfer()
-    const { FormNotUse, FormAll, isLoading } = UseFecthApiFormAll({
-        urlSeacrhEform: NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
-        urlGetEform: NEXT_PUBLIC_GET_EFORM_TEMPLATE!,
-        session,
-        token
-    })
-    // console.log("allform", FormAll)
-    // console.log("getForm", FormNotUse)
-    // const templateInNv = (eProduct: eProduct[]): any => {
-    //     const objID: any = {}
-    //     const ForIdTemplate = (eProduct: eProduct[]) => {
-    //         eProduct.forEach((item) => {
-    //             if (item.formTemplate && item.formTemplate.length > 0) {
-    //                 item.formTemplate.forEach((template) => {
-    //                     objID[`${template?._id}`] = template.name
-    //                 })
-    //             }
-    //             if (item?.children && item.children.length > 0) {
-    //                 ForIdTemplate(item?.children)
-    //             }
-    //         })
-    //     }
-    //     ForIdTemplate(eProduct)
-    //     return objID
-    // }
-
+    const { listRight, setListLeft, setListRight, setLoading, listLeft } =
+        useContextTranfer()
+    const { FormNotUse, FormAll, isLoading, isRefetching } = UseFecthApiFormAll(
+        {
+            urlSeacrhEform: NEXT_PUBLIC_EFORM_SEARCH_TEMPLATE!,
+            urlGetEform: NEXT_PUBLIC_GET_EFORM_TEMPLATE!,
+            session,
+            token
+        }
+    )
+    console.log(FormNotUse)
     useEffect(() => {
-        setLoading(isLoading)
-        if (FormAll) {
+        setLoading(isLoading || isRefetching)
+        if (FormNotUse && FormAll) {
             const dataListRight: DataTranfer[] = []
             const dataListLeft: DataTranfer[] = []
-            // const IdCheckTemplate = templateInNv(dataGlobal.eProducts)
             let objIDTemplate: any = {}
             if (type === "UPDATE_MODAL") {
                 //check duplicates
@@ -153,28 +129,26 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
             }
 
             FormNotUse.forEach((template: any) => {
-                if (!objIDTemplate[`${template?._id}`]) {
-                    dataListLeft.push({
-                        id: template?._id ?? "",
-                        name: template?.name ?? "",
-                        checkBox: false
-                    })
-                }
+                // if (!objIDTemplate[`${template?._id}`]) {
+                dataListLeft.push({
+                    id: template?._id ?? "",
+                    name: template?.name ?? "",
+                    checkBox: false
+                })
+                // }
             })
-
+            console.log("ao vay", dataListLeft)
             setListLeft(dataListLeft)
         }
         return () => {
             setDataGlobal((data) => ({ ...data, checkedForm: true }))
-            setListRight([])
         }
-    }, [isLoading])
+    }, [isLoading, isRefetching])
 
     //check form
     useEffect(() => {
         if (FormNotUse) {
             const dataListLeft: DataTranfer[] = []
-            // const IdCheckTemplate = templateInNv(dataGlobal.eProducts)
             let objIDTemplate: any = {}
 
             //check duplicates
@@ -184,7 +158,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
             }, {})
 
             const templates = dataGlobal.checkedForm ? FormNotUse : []
-
+            console.log(templates)
             templates.forEach((tempalate: any) => {
                 if (!objIDTemplate[`${tempalate?._id}`]) {
                     dataListLeft.push({
@@ -194,11 +168,11 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                     })
                 }
             })
-
+            console.log("what", dataListLeft)
             setListLeft(dataListLeft)
         }
     }, [dataGlobal.checkedForm])
-
+    console.log("list left", listLeft)
     const onFinish = ({
         idNV,
         name,
