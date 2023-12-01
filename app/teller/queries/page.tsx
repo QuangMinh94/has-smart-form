@@ -11,10 +11,10 @@ import axios from "axios"
 import { cookies } from "next/headers"
 import { cache } from "react"
 
-axios.interceptors.request.use((request) => {
+/* axios.interceptors.request.use((request) => {
     console.log("Starting Request", JSON.stringify(request, null, 2))
     return request
-})
+}) */
 
 type ParamObject = {
     label: string
@@ -81,7 +81,7 @@ const QueriesPage = async ({
         }
     }
 
-    console.log("Searhc Input", searchInput)
+    //console.log("Searhc Input", searchInput)
 
     const _dataTable: ResultTableType[] = []
 
@@ -125,7 +125,7 @@ const fetchFilterAppointment = cache(async (url: string, searchInput: any) => {
             }
         })
         const data = res.data as Appointment[]
-        console.log("data", data)
+        //console.log("data", data)
         return data
     } catch (error: any) {
         console.log("errorrrrrrrrrrrrrrrrrrrrrr", error)
