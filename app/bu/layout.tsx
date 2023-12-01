@@ -11,7 +11,7 @@ const BuLayout = ({ children }: Props) => {
     return (
         <PathParamsProvider>
             <ClientCookiesProvider value={cookies().getAll()}>
-                <SideMenu level={process.env.PUBLIC_TEST!}>{children}</SideMenu>
+                <SideMenu level="">{children}</SideMenu>
             </ClientCookiesProvider>
         </PathParamsProvider>
     )

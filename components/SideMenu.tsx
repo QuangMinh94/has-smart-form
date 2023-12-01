@@ -1,23 +1,33 @@
 "use client"
 import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
-import routers, { BLOCK, MYWORK, PRODUCT } from "@/router/cusTomRouter"
+import routers, { BLOCK, PRODUCT, QUERIES } from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
 
 import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
+<<<<<<< HEAD
 import { faArchive, faFile, faCog } from "@fortawesome/free-solid-svg-icons"
+=======
+import { faArchive, faFile, faSearch } from "@fortawesome/free-solid-svg-icons"
+>>>>>>> 5acbecb3dabbb179c516b08281438ee8f2096174
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useSession } from "next-auth/react"
 import { useEnvContext } from "next-runtime-env"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import CustomSpin from "./CustomSpin"
 import NovuComponent from "./NovuComponent"
 type KeyPath = {
     BA_BLOCK: string
     BA_PRODUCT: string
     KSV_MYWORK: string
+    KSV_QUERIES: string
     TELLER_MYWORK: string
+<<<<<<< HEAD
     ADMINISTRATOR: string
+=======
+    TELLER_QUERIES: string
+>>>>>>> 5acbecb3dabbb179c516b08281438ee8f2096174
 }
 type conditionPath = {
     isBaBlock: boolean
@@ -90,6 +100,15 @@ const CustomMenu = ({
                     </Link>
                 ),
                 label: "Công việc của tôi"
+            },
+            {
+                key: keyPath.KSV_QUERIES,
+                icon: (
+                    <Link href={`${routers("ksvteller").queries.path}`}>
+                        <FontAwesomeIcon icon={faSearch} />
+                    </Link>
+                ),
+                label: "Truy vấn giao dịch"
             }
         ]
     }
@@ -99,11 +118,19 @@ const CustomMenu = ({
                 key: keyPath.TELLER_MYWORK,
                 icon: (
                     <Link href={`${routers("teller").mywork.path}`}>
-                        ,
                         <FontAwesomeIcon icon={faArchive} />
                     </Link>
                 ),
                 label: "Công việc của tôi"
+            },
+            {
+                key: keyPath.TELLER_QUERIES,
+                icon: (
+                    <Link href={`${routers("teller").queries.path}`}>
+                        <FontAwesomeIcon icon={faSearch} />
+                    </Link>
+                ),
+                label: "Truy vấn giao dịch"
             }
         ]
     }
@@ -141,8 +168,10 @@ const SideMenu = ({ children }: Props) => {
     const keyPath: KeyPath = {
         BA_BLOCK: `/ba/${BLOCK}`,
         BA_PRODUCT: `/ba/${PRODUCT}`,
-        KSV_MYWORK: `/ksvteller/${MYWORK}`,
-        TELLER_MYWORK: `/teller/${MYWORK}`,
+        KSV_MYWORK: `/ksvteller/`,
+        TELLER_MYWORK: `/teller/`,
+        TELLER_QUERIES: `/teller/${QUERIES}`,
+        KSV_QUERIES: `/ksvteller/${QUERIES}`,
         ADMINISTRATOR: `/administrator`
     }
     const conditionPath: conditionPath = {
@@ -153,12 +182,37 @@ const SideMenu = ({ children }: Props) => {
         isAdminTrator: pathname.startsWith(keyPath.ADMINISTRATOR)
     }
 
-    const { data: session } = useSession()
+    const { status, data: session } = useSession()
     const {
         NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER,
         NEXT_PUBLIC_BACKEND_URL,
         NEXT_PUBLIC_SOCKET_URL
     } = useEnvContext()
+
+    if (status === "loading")
+        return (
+            <CustomSpin
+                noImage={true}
+                theme={{
+                    components: {
+                        Spin: {
+                            colorPrimary: "black"
+                        }
+                    }
+                }}
+            />
+        )
+
+    if (status === "unauthenticated")
+        return (
+            <p>
+                Session expired.Please{" "}
+                <Link className="nav-link" href="/api/auth/signin">
+                    login
+                </Link>{" "}
+                again
+            </p>
+        )
 
     return (
         <Layout hasSider={true} className="h-screen flex">
@@ -206,6 +260,7 @@ const SideMenu = ({ children }: Props) => {
 
                         {conditionPath.isAdminTrator && "Quản trị"}
                     </h1>
+<<<<<<< HEAD
                     <NovuComponent
                         novuProps={{
                             subscriberId: session?.user?.userInfo?._id,
@@ -225,6 +280,29 @@ const SideMenu = ({ children }: Props) => {
                             footer: () => <></>
                         }}
                     />
+=======
+                    {status === "authenticated" && (
+                        <NovuComponent
+                            novuProps={{
+                                subscriberId: session.user.userInfo._id,
+                                applicationIdentifier:
+                                    NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER!,
+                                initialFetchingStrategy: {
+                                    fetchNotifications: true,
+                                    fetchUserPreferences: true
+                                },
+                                backendUrl: NEXT_PUBLIC_BACKEND_URL!,
+                                socketUrl: NEXT_PUBLIC_SOCKET_URL!
+                            }}
+                            popOverProps={{
+                                colorScheme: "light",
+                                //onNotificationClick: onNotificationClick,
+                                showUserPreferences: false,
+                                footer: () => <></>
+                            }}
+                        />
+                    )}
+>>>>>>> 5acbecb3dabbb179c516b08281438ee8f2096174
                     <ButtonLogOut />
                 </Header>
                 {conditionPath.isAdminTrator ? (

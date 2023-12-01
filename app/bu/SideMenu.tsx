@@ -19,7 +19,7 @@ import {
 import { signOut, useSession } from "next-auth/react"
 import { useEnvContext } from "next-runtime-env"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { ReactNode, useEffect, useState } from "react"
 import { DocumentName } from "./_types/DocumentName"
 
@@ -27,13 +27,7 @@ const { Header, Sider, Content } = Layout
 
 const CustomMenu = () => {
     const [selectedKey, setSelectedKey] = useState<string>("/bu/template")
-    const router = useRouter()
     const pathName = usePathname()
-
-    const switchRoute = (e: string) => {
-        const location = window.location.origin
-        router.push(`${location}/bu/${e}`)
-    }
     useEffect(() => {
         setSelectedKey(pathName)
     }, [pathName])

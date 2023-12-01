@@ -5,10 +5,10 @@ import {
 import { myWork } from "@/app/(types)/teller/mywork"
 import { authOptions } from "@/app/api/auth/authOptions"
 import TemlateWrapper from "@/app/teller/(components)/mywork/Detail/TeamplateWrapper"
+import axios from "axios"
 import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
 import { cache } from "react"
-import axios from "axios"
 // import { cache } from "react"
 const viewAppointMent = async (pram: {
     bodyRequest: RequestApoinMent
@@ -93,6 +93,8 @@ const DetailMyWork = async ({
     const findMyMork = data.find(
         (item) => item.appointmentCode === searchParams.code
     )
+
+    console.log("HSIDANEUJDS", findMyMork)
 
     return (
         <>

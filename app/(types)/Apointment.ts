@@ -1,3 +1,8 @@
+import { Users } from "./Users"
+import { channel } from "./channel"
+import { eProduct } from "./eProduct"
+import { status } from "./status"
+
 export interface RequestApoinMent {
     id: string
     userRole: string
@@ -23,4 +28,23 @@ export interface RequestAddApoinMent {
     citizenId: string
     phoneNumber: string
     checkOtp: boolean
+}
+
+export interface Appointment {
+    _id: string
+    name: string //
+    citizenId: string //
+    address: string
+    createDate: Date | undefined
+    email: string //
+    phoneNumber: string //
+    cif: string
+    active: boolean
+    appointmentCode: string
+    appointmentTime: Date | undefined //
+    officeBranch: string | any //
+    channel: string | channel
+    eProduct: string | eProduct //
+    executor: string | Users
+    status: string | status
 }

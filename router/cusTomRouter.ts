@@ -4,12 +4,17 @@ export const DE_TAIL = "detail"
 export const BLOCK = "block"
 export const PRODUCT = "product"
 export const MYWORK = "mywork"
+<<<<<<< HEAD
 export const USER = "user"
+=======
+export const QUERIES = "queries"
+>>>>>>> 5acbecb3dabbb179c516b08281438ee8f2096174
 
 const routers = (root: rootPath) => {
     const router = {
         // teller
         mywork: { path: `/${root}/${MYWORK}` },
+        queries: { path: `/${root}/${QUERIES}` },
         detailMywork: {
             path(params: { id: string }): string {
                 return `${router.mywork.path}/${DE_TAIL}/${params.id}`

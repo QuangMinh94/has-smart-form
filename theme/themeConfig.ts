@@ -30,8 +30,7 @@ const theme: ThemeConfig = {
         }
     },
     token: {
-        colorPrimary: "#0E7490",
-        colorTextPlaceholder: "white"
+        colorPrimary: "#0E7490"
     }
 }
 
