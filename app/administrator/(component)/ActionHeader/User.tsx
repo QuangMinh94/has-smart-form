@@ -1,7 +1,7 @@
 "use client"
 import React, { useTransition } from "react"
 import { Input, Checkbox } from "antd"
-import UploadFile from "./DropDowLoadFile"
+import Uploadfile from "@/app/administrator/(component)/ActionHeader/DropDowLoadFile"
 import { useSearchParams, useRouter } from "next/navigation"
 import { debounce } from "lodash"
 
@@ -42,7 +42,7 @@ const ActionHeaderUser = () => {
                 />
             </div>
             <div className="mr-[10px]">
-                <UploadFile />
+                <Uploadfile />
             </div>
             <div>
                 <Checkbox checked={checked === "true"} onChange={HanderChecked}>

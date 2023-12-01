@@ -10,6 +10,9 @@ import { typeContextBa, contextBa } from "@/app/ba/(component)/content"
 import contentAdmin, {
     typeContextAdmin
 } from "@/app/administrator/(component)/content/contentAdmin"
+import contentUser, {
+    typeContextUser
+} from "@/app/administrator/(component)/content/contentUser"
 function useContextMyWorkDetail(): typeContextMyworkDetail {
     const provider = useContext(contextMyworkDetail)
     return {
@@ -56,9 +59,17 @@ function useContextAdmin(): typeContextAdmin {
         messageApi: provider.messageApi
     }
 }
+function useContextAdminUser(): typeContextUser {
+    const provider = useContext(contentUser)
+    return {
+        setDataGlobal: provider.setDataGlobal,
+        dataGlobal: provider.dataGlobal
+    }
+}
 export {
     useContextMyWorkDetail,
     useContextTranfer,
     useContextBa,
-    useContextAdmin
+    useContextAdmin,
+    useContextAdminUser
 }

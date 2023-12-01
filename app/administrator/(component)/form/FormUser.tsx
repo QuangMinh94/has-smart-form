@@ -4,6 +4,7 @@ import { BodyUserRequest, Users } from "@/app/(types)/Users"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { addUser, updateUser } from "@/app/(service)/User"
 import useGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
+import type { RangePickerProps } from "antd/es/date-picker"
 import {
     Button,
     Form,
@@ -19,17 +20,26 @@ import { typeForm } from "@/app/administrator/(component)/BtnModal"
 import dayjs from "dayjs"
 import SelectForm from "@/app/administrator/(component)/SelectForm"
 import { RevalidateListUser } from "@/app/(actions)/action"
-import { useContextAdmin } from "@/components/cusTomHook/useContext"
+import {
+    useContextAdmin,
+    useContextAdminUser
+} from "@/components/cusTomHook/useContext"
+
 const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo)
 }
 type Props = { CancelModal: () => void; typeForm: typeForm; rowData: Users }
+const disabledDate: RangePickerProps["disabledDate"] = (current) => {
+    // Can not select days before today and today
+    return current && current > dayjs()
+}
 const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
     const { NEXT_PUBLIC_ADD_USER, NEXT_PUBLIC_UPDATE_USER } = useEnvContext()
     const [form] = Form.useForm()
     const { token, session } = useCustomCookies()
     // const { InFoUser } = useGetInfoUser()
     const { messageApi } = useContextAdmin()
+    const { dataGlobal } = useContextAdminUser()
     const [loadingBtn, setLoadingBtn] = useState<boolean>(false)
     const [idDepartment, setIdDepartment] = useState<string>(
         `${typeForm === "UPDATE_MODAL" ? rowData?.department?._id : ""}`
@@ -38,6 +48,7 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
         typeForm === "UPDATE_MODAL" ? !!rowData?.active : true
     )
     console.log("data", rowData)
+    console.log("Users", dataGlobal.Users)
     const onFinish = (data: any) => {
         // auth
         // birthDay
@@ -67,6 +78,7 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
         }
         if (typeForm === "UPDATE_MODAL") {
             bodyUserRequest.id = rowData?._id
+            delete bodyUserRequest.userName
             updateUserFC(bodyUserRequest)
         }
     }
@@ -122,7 +134,7 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
     const HandlerOnchangeGroups = useCallback((value: string[]) => {
         form.setFieldsValue({ groups: value })
     }, [])
-    console.log(rowData?.authenProvider?.name)
+
     return (
         <>
             <Form
@@ -179,10 +191,27 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
                             required: true,
                             whitespace: true,
                             message: "Vui lòng nhập tên đăng nhập"
+                        },
+                        {
+                            validator(rule, value) {
+                                const checkUsername = dataGlobal.Users.some(
+                                    (user) =>
+                                        user.userName
+                                            ?.toLowerCase()
+                                            .replace(/\s/g, "") ===
+                                        value?.toLowerCase().replace(/\s/g, "")
+                                )
+                                if (checkUsername && typeForm === "ADD_MODAL") {
+                                    return Promise.reject(
+                                        "Tên đăng nhập đã có người sử dụng!"
+                                    )
+                                }
+                                return Promise.resolve()
+                            }
                         }
                     ]}
                 >
-                    <Input />
+                    <Input disabled={typeForm === "UPDATE_MODAL"} />
                 </Form.Item>
                 <Form.Item
                     style={{ marginBottom: "25px" }}
@@ -244,6 +273,7 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
                     <DatePicker
                         style={{ width: "100%" }}
                         format={["DD/MM/YYYY"]}
+                        disabledDate={disabledDate}
                     />
                 </Form.Item>
                 <Form.Item

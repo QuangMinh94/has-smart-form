@@ -5,26 +5,37 @@ import type { ColumnsType } from "antd/es/table"
 import { Users } from "@/app/(types)/Users"
 import BtnModal from "../BtnModal"
 import { useRouter } from "next/navigation"
-
+import { useContextAdminUser } from "@/components/cusTomHook/useContext"
 const columns: ColumnsType<Users> = [
     {
         title: "STT",
         dataIndex: "key",
         width: "5vw",
-        align: "center"
+        align: "center",
+        key: "stt"
     },
     {
         title: "Họ tên",
+        key: "fullname",
         render: (user: Users) => {
             return `${user?.firstName} ${user?.lastName}`
         }
     },
     {
         title: "Tên đăng nhập",
-        dataIndex: "userName"
+        dataIndex: "userName",
+        key: "userName"
+    },
+    {
+        title: "Chức vụ",
+        key: "department",
+        render: (user: Users) => {
+            return `${user?.defaultGroup?.name}`
+        }
     },
     {
         title: "Chi nhánh",
+        key: "department",
         render: (user: Users) => {
             return `${user?.department?.name}`
         }
@@ -33,6 +44,7 @@ const columns: ColumnsType<Users> = [
         title: "Chỉnh sửa",
         width: "8vw",
         align: "center",
+        key: "edit",
         render: (record: Users) => (
             <BtnModal
                 titleModel="Sửa tài khoản"
@@ -46,6 +58,7 @@ const columns: ColumnsType<Users> = [
         title: "Kích hoạt",
         width: "8vw",
         align: "center",
+        key: "active",
         render: (record: Users) => (
             <BtnModal
                 titleModel={`${
@@ -65,9 +78,9 @@ const columns: ColumnsType<Users> = [
 type Props = { Users: Users[] }
 const App: React.FC<Props> = ({ Users }) => {
     const Router = useRouter()
-
+    const { setDataGlobal } = useContextAdminUser()
     const newUser = useMemo(() => {
-        Users.sort((a: Users, b: Users) => {
+        Users?.sort((a: Users, b: Users) => {
             const nameA = `${a?.firstName}`.toUpperCase().replace(/\s/g, "")
             const nameB = `${b?.firstName}`.toUpperCase().replace(/\s/g, "")
             return nameA?.localeCompare(nameB)
@@ -78,7 +91,9 @@ const App: React.FC<Props> = ({ Users }) => {
         }))
         return newUser
     }, [JSON.stringify(Users)])
-    console.log("User", Users)
+    useEffect(() => {
+        setDataGlobal((data) => ({ ...data, Users: Users }))
+    }, [JSON.stringify(Users)])
     useEffect(() => {
         Router.push("?active=true")
     }, [])

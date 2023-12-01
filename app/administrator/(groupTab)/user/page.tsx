@@ -1,5 +1,6 @@
 import React from "react"
 import LayoutAdmin from "@/app/administrator/(component)/LayoutAdmin"
+
 import Loading from "@/app/teller/mywork/loading"
 import BtnModal from "@/app/administrator/(component)/BtnModal"
 import ActionHeaderUser from "@/app/administrator/(component)/ActionHeader/User"
@@ -7,6 +8,7 @@ import dynamic2 from "next/dynamic"
 import { SeacrhUser } from "@/app/(service)/User"
 import { cookies } from "next/headers"
 import { Users } from "@/app/(types)/Users"
+import ProviderUser from "../../(component)/provider/providerUser"
 const TableUser = dynamic2(
     () => import("@/app/administrator/(component)/table/tableUser"),
     {
@@ -61,24 +63,26 @@ const User = async ({
 }) => {
     console.log("params", searchParams)
     const Users = await fectheUser({
-        Active: searchParams.active,
+        Active: searchParams.active ?? true,
         SearchName: searchParams.searchname ? searchParams.searchname : ""
     })
-    console.log("sadDATA", Users)
+
     return (
-        <LayoutAdmin
-            BtnAdd={
-                <BtnModal
-                    titleModel="Thêm tài khoản"
-                    type="ADD_MODAL"
-                    pathModel="ADMIN_USER"
-                    rowData={{}}
-                />
-            }
-            title="Quản trị người dùng"
-            HeaderAction={<ActionHeaderUser />}
-            Table={<TableUser Users={Users ?? []} />}
-        />
+        <ProviderUser>
+            <LayoutAdmin
+                BtnAdd={
+                    <BtnModal
+                        titleModel="Thêm tài khoản"
+                        type="ADD_MODAL"
+                        pathModel="ADMIN_USER"
+                        rowData={{}}
+                    />
+                }
+                title="Quản trị người dùng"
+                HeaderAction={<ActionHeaderUser />}
+                Table={<TableUser Users={Users ?? []} />}
+            />
+        </ProviderUser>
     )
 }
 export const dynamic = "force-dynamic"

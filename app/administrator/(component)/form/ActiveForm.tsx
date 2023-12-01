@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React, { memo, useState } from "react"
 import { pathModel } from "@/app/administrator/(component)/BtnModal"
 import { Button } from "antd"
 import { updateUser } from "@/app/(service)/User"
@@ -13,6 +13,7 @@ type Props = {
 }
 const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
     const { NEXT_PUBLIC_UPDATE_USER } = useEnvContext()
+    const [loading, setLoading] = useState<boolean>(false)
     const { messageApi } = useContextAdmin()
     const { token, session } = useCustomCookies()
     const updateActive: any = {
@@ -37,6 +38,7 @@ const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
                                 : "kích hoạt tài khoản thành công"
                         }`
                     )
+                    CancelModal()
                 }
             } catch (e) {
                 messageApi("error", "xảy ra lỗi vui lòng thử lại sau")
@@ -53,7 +55,15 @@ const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
             >
                 Hủy
             </Button>
-            <Button onClick={updateActive[pathModel]} type="primary">
+            <Button
+                onClick={async () => {
+                    setLoading(true)
+                    await updateActive[pathModel]()
+                    setLoading(false)
+                }}
+                type="primary"
+                loading={loading}
+            >
                 Xác nhận
             </Button>
         </div>
