@@ -37,7 +37,7 @@ const fetchApi = cache(async (queryCode: string): Promise<myWork> => {
         return resSeacrhAppointMent.data
     } catch (e: any) {
         console.log("err", e)
-        throw new Error("error")
+        throw new Error(e)
     }
 })
 

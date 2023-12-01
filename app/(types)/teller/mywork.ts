@@ -24,6 +24,8 @@ export interface eFormTask {
     data: { Input: any }
     formTemplate: formTemplate[]
     documentId: string
+    docusignDocumentId: string
+    ecmDocumentId: string
     __v?: number
 }
 export interface myWork {
@@ -39,5 +41,4 @@ export interface myWork {
     appointmentTime?: string
     eformTask?: eFormTask[]
     channel?: channel
-    docusignDocumentId: string
 }
