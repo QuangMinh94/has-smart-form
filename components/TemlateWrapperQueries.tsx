@@ -22,7 +22,6 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
 
 type Props = { mywork: myWork }
 const TemlateWrapperQueries: React.FC<Props> = ({ mywork }) => {
-    console.log("INsied my work", mywork)
     const [DataMywork, setMyWork] = useState<myWork>(mywork)
     const router = useRouter()
     const [messageApi, contextHolder] = message.useMessage()
@@ -174,11 +173,11 @@ const TemlateWrapperQueries: React.FC<Props> = ({ mywork }) => {
             )}
             {DataMywork.eformTask &&
                 (DataMywork.status!.code === "APPROVE" ||
-                    DataMywork.status!.code === "REJECT") &&
-                DataMywork.docusignDocumentId && (
+                    DataMywork.status!.code === "REJECT") && (
                     <a
                         href={
-                            "/api/download?id=" + DataMywork.docusignDocumentId
+                            "/api/download?id=" +
+                            DataMywork.eformTask[0].ecmDocumentId
                         }
                         target="_blank"
                     >

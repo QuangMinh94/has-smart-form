@@ -16,6 +16,7 @@ export interface EformTemplate {
     validTo?: string | Date
     status?: Status
     description?: string
+    queryCode?: string
 }
 
 export interface Status {

@@ -68,10 +68,10 @@ const fetchApi = cache(
                     })
                 ])
 
-            console.log(
+            /* console.log(
                 "WHERE THE FUCK IS APPOINTMENT",
                 resSeacrhAppointMent.data
-            )
+            ) */
 
             return resSeacrhAppointMent.data
         } catch (e: any) {
@@ -94,7 +94,7 @@ const DetailMyWork = async ({
         (item) => item.appointmentCode === searchParams.code
     )
 
-    console.log("HSIDANEUJDS", findMyMork)
+    //console.log("HSIDANEUJDS", findMyMork)
 
     return (
         <>

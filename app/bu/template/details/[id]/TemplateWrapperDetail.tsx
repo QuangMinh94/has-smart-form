@@ -11,7 +11,7 @@ import tz from "dayjs/plugin/timezone"
 import utc from "dayjs/plugin/utc"
 import dynamic from "next/dynamic"
 import { useContext, useEffect, useState } from "react"
-import { OptionProps } from "../[id]/page"
+import { OptionProps } from "../../[id]/page"
 //import TemplateForm from "../new/TemplateForm"
 
 dayjs.extend(utc)
@@ -22,7 +22,7 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     ssr: false
 })
 
-const TemplateForm = dynamic(() => import("../new/TemplateForm"), {
+const TemplateForm = dynamic(() => import("../../new/TemplateForm"), {
     loading: () => <Skeleton active />,
     ssr: false
 })

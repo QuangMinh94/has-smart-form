@@ -88,7 +88,7 @@ const QueriesPage = async ({
             departmentCode: element.appointmentCode,
             appointmentCode: element.appointmentCode,
             citizenId: element.citizenId,
-            name: element.name,
+            name: element.name ? element.name : "Burger",
             eProduct: element.eProduct as eProduct,
             channel: element.channel as channel,
             createdDate: element.createDate,
@@ -98,8 +98,6 @@ const QueriesPage = async ({
             queryCode: element.queryCode
         })
     })
-
-    /* console.log("SearchInput", searchInput) */
 
     /* console.log("Filter Data", filterData) */
     return (

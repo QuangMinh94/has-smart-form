@@ -13,7 +13,8 @@ export async function GET(request: Request) {
             headers: {
                 Authorization: "Bearer " + cookie.get("token")?.value,
                 Session: cookie.get("session")?.value
-            }
+            },
+            responseType: "stream"
         }
     )
 

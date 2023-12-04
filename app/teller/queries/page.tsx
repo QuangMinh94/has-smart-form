@@ -81,7 +81,7 @@ const QueriesPage = async ({
         }
     }
 
-    console.log("Searhc Input", searchInput)
+    //console.log("Searhc Input", searchInput)
 
     const _dataTable: ResultTableType[] = []
 
@@ -102,7 +102,9 @@ const QueriesPage = async ({
             createdDate: element.createDate,
             status: element.status as status,
             executor: element.executor as Users,
-            officeBranch: (element.officeBranch as Department).name,
+            officeBranch: (element.officeBranch as Department)
+                ? (element.officeBranch as Department).name
+                : "",
             queryCode: element.queryCode
         })
     })
@@ -125,7 +127,7 @@ const fetchFilterAppointment = cache(async (url: string, searchInput: any) => {
             }
         })
         const data = res.data as Appointment[]
-        console.log("data", data)
+        //console.log("data", data)
         return data
     } catch (error: any) {
         console.log("errorrrrrrrrrrrrrrrrrrrrrr", error)

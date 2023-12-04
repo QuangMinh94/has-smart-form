@@ -1,7 +1,6 @@
 import { EformTemplate } from "@/app/(types)/EformTemplate"
 import { Role } from "@/app/(types)/Group"
 import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
-import { DecryptedString } from "@/app/(utilities)/Crypto"
 import { authOptions } from "@/app/api/auth/authOptions"
 import ProviderTemplate from "@/components/context/providerTemplate"
 import axios from "axios"
@@ -10,35 +9,31 @@ import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import { cache } from "react"
 import TemplateWrapperDetail from "./TemplateWrapperDetail"
-/* 
+
 axios.interceptors.request.use((request) => {
     console.log("Starting Request", JSON.stringify(request, null, 2))
     return request
-}) */
+})
 
-const TemplateDetailPage = async () => {
+const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
     const session = await getServerSession(authOptions)
-    const id = cookies().get("encryptedId")
     if (!session) notFound()
-    if (!id) notFound()
-
-    const decryptedId = DecryptedString(id.value)
     const permission = session.user.userInfo.permission
     const userRole = session.user.userInfo.defaultGroup?.role as Role[]
 
     if (!FindPermission(permission, "children", "VisibleTemplateBU")) notFound()
 
     const data: EformTemplate[] = await fetchTemplate(
-        process.env.EFORM_GET_UPDATE_TEMPLATE!,
+        process.env.EFORM_QUERY!,
         {
-            id: decryptedId,
-            userRole: userRole[0]._id
+            queryCode: params.id
         }
     )
 
     return (
         <ProviderTemplate>
-            <TemplateWrapperDetail listLeft={[]} id={decryptedId} data={data} />
+            <p id="disableInput" />
+            <TemplateWrapperDetail listLeft={[]} id="" data={data} />
         </ProviderTemplate>
     )
 }
