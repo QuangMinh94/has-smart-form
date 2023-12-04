@@ -67,7 +67,7 @@ const fetchApi = async ({
 
         return res.data
     } catch (e: any) {
-        console.log("loi", e)
+        console.log("loiiiiiiiiiiiiiiiiiiiiiiiiiiii", JSON.stringify(e))
         throw new Error("error fetching", e)
     }
 }

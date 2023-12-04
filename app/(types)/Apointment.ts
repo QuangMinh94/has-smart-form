@@ -13,6 +13,11 @@ export interface RequestSeacrhApoinMent {
     userRole: string
     appointmentCode?: string
 }
+export interface RequestFilterApoinMent {
+    citizenId?: string
+
+    appointmentCode?: string
+}
 export interface RequestSeacrhCustomInfo {
     citizenId: string
     emailAddress?: string

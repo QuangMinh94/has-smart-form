@@ -89,15 +89,15 @@ export interface TemlateExcel {
     __rowNum__?: string
 }
 export interface BodyUserRequestFileExcel {
-    FirstName: string
-    LastName: string
-    Group: string
-    Department: string
-    UserName: string
-    Email: string
-    PhoneNumber: string
-    AuthenProvider: string
-    Active: boolean
+    firstName: string
+    lastName: string
+    group: string
+    department: string
+    userName: string
+    email: string
+    phoneNumber: string
+    authenProvider: string
+    active: boolean
 }
 export interface ResponseAddUser {
     FirstName: string
@@ -120,4 +120,15 @@ export interface bodyRequestAddUserToGroup {
 export interface bodyRequestSeacrhUser {
     active: boolean
     name: string
+}
+export interface InforUser {
+    _id?: string
+    fullName: string
+    gender?: boolean
+    dateOfBirth?: string
+    createDate?: string
+    citizenId: string
+    mobilePhoneNumber: string
+    emailAddress: string
+    __v?: number
 }

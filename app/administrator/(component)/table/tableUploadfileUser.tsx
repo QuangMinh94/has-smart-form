@@ -10,11 +10,18 @@ import { Users } from "@/app/(types)/Users"
 import ButtonModel from "@/app/administrator/(component)/BtnModal"
 const App: React.FC = () => {
     const {
-        dataGlobal: { DataUploadUsers }
+        dataGlobal: { DataUploadUsers },
+        setDataGlobal
     } = useContextAdminUser()
 
     const HandlerDelete = (key: string) => {
         // dispatch(deleteRowUploadUser(key))
+        setDataGlobal((data) => {
+            const DataUploadUsersRemove = data.DataUploadUsers.filter(
+                (user) => user._id !== key
+            )
+            return { ...data, DataUploadUsers: DataUploadUsersRemove }
+        })
     }
     const HandlerUpdateActive = (id: string, active: boolean) => {
         // dispatch(updateUploadUser({ key: id, row: { Active: !active } }))
@@ -30,28 +37,31 @@ const App: React.FC = () => {
         },
         {
             title: "Họ tên",
+            width: "12vw",
+            ellipsis: true,
             key: "fullName",
             render: (data: Users) => `${data.lastName} ${data.firstName}`
         },
         {
             title: "Tên đăng nhập",
             key: "userName",
+            width: "12vw",
+            ellipsis: true,
             dataIndex: "userName"
         },
         {
             title: "Chi nhánh",
             key: "department",
-            width: "12vw",
+
             align: "left",
             render: (data: Users) => data.department?.name ?? ""
         },
         {
             title: "Chức vụ",
             key: "group",
-            dataIndex: "group",
-            width: "12vw",
+            ellipsis: true,
             align: "left",
-            render: (Group) => Group?.[0].Name ?? ""
+            render: (data: Users) => data.defaultGroup.name
         },
         {
             title: "Active",
@@ -59,18 +69,7 @@ const App: React.FC = () => {
             width: "8vw",
             align: "center",
 
-            render: (user: Users) => (
-                <Popconfirm
-                    title={` Sure to ${
-                        user?.active ? "deActive" : "Active"
-                    } user?`}
-                    onConfirm={() => {
-                        HandlerUpdateActive(user?._id ?? "", !!user.active)
-                    }}
-                >
-                    <Checkbox checked={user.active} />
-                </Popconfirm>
-            )
+            render: (user: Users) => <Checkbox checked={user.active} />
         },
         {
             title: "Action",
@@ -85,6 +84,7 @@ const App: React.FC = () => {
                         type="UPDATE_MODAL"
                         pathModel="ADMIN_USER"
                         rowData={user}
+                        isUploadNotApi={true}
                     />
                     <Popconfirm
                         title="Sure to delete user?"
@@ -104,6 +104,7 @@ const App: React.FC = () => {
 
     return (
         <Table
+            style={{ marginTop: "2.5vh" }}
             scroll={{
                 y: 270,
                 x: 1300,

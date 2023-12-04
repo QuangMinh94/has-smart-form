@@ -15,6 +15,7 @@ type Props = {
     titleModel: string
     rowData: any
     activeChecked?: boolean
+    isUploadNotApi?: boolean
 }
 const titleBtnAdd = {
     ADMIN_USER: "Thêm tài khoản"
@@ -25,7 +26,8 @@ const BtnModal: React.FC<Props> = ({
     pathModel,
     titleModel,
     activeChecked,
-    rowData
+    rowData,
+    isUploadNotApi
 }) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     let Element
@@ -39,6 +41,7 @@ const BtnModal: React.FC<Props> = ({
     const FormPath = {
         ADMIN_USER: (
             <FormUser
+                isUploadNotApi={isUploadNotApi}
                 typeForm={type}
                 CancelModal={handleCancel}
                 rowData={type === "UPDATE_MODAL" ? rowData : {}}
