@@ -9,7 +9,7 @@ import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import { cache } from "react"
-import TemplateWrapperDetail from "@/app/bu/template/details/TemplateWrapperDetail"
+import TemplateWrapperDetail from "@/app/bu/template/details/[id]/TemplateWrapperDetail"
 /* 
 axios.interceptors.request.use((request) => {
     console.log("Starting Request", JSON.stringify(request, null, 2))
