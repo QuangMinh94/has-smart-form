@@ -82,19 +82,21 @@ const QueriesPage = async ({
         searchInput
     )
 
-    filterData.forEach((element) => {
+    filterData?.forEach((element) => {
         _dataTable.push({
             key: element._id,
             departmentCode: element.appointmentCode,
             appointmentCode: element.appointmentCode,
             citizenId: element.citizenId,
-            name: element.name ? element.name : "Burger",
+            name: element.name,
             eProduct: element.eProduct as eProduct,
             channel: element.channel as channel,
             createdDate: element.createDate,
             status: element.status as status,
             executor: element.executor as Users,
-            officeBranch: (element.officeBranch as Department).name,
+            officeBranch: (element.officeBranch as Department)
+                ? (element.officeBranch as Department).name
+                : "",
             queryCode: element.queryCode
         })
     })
