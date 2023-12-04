@@ -6,8 +6,8 @@ name: Docker
 # documentation.
 
 on:
-    schedule:
-        - cron: "23 4 * * *"
+    #schedule:
+        #- cron: "23 4 * * *"
     push:
         branches: ["dev"]
         paths:
@@ -97,3 +97,9 @@ jobs:
               # This step uses the identity token to provision an ephemeral certificate
               # against the sigstore community Fulcio instance.
               run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+            - name: HTTP Request Action
+              uses: fjogeleit/http-request-action@v1.14.2
+              with:
+                    url: 'https://prod-12.southeastasia.logic.azure.com:443/workflows/d521bd271c194190b3dc3eababa17fe1/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vtF8imJlD-tv7jq9eX8WHw8XaU2FrVpQIBSkY8o3Bqk'
+                    method: 'GET'
+            
