@@ -33,7 +33,7 @@ export interface RequestAddApoinMent {
 
 export interface Appointment {
     _id: string
-    name: string //
+    name?: string //
     citizenId: string //
     address: string
     createDate: Date | undefined
