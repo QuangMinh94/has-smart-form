@@ -81,7 +81,7 @@ async function fetchDepartment(
         .then((body) =>
             body
                 .filter((element) =>
-                    ToLowerCaseNonAccentVietnamese(element?.name).includes(
+                    ToLowerCaseNonAccentVietnamese(element.name!).includes(
                         ToLowerCaseNonAccentVietnamese(searchString)
                     )
                 )
