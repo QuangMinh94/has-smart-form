@@ -11,10 +11,11 @@ import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { ToFilterName } from "@/util/formatText"
 import { useEnvContext } from "next-runtime-env"
 type Type = "getAuth" | "getDepartment" | "getGroup"
+export type typeSelect = "authen" | "department" | "defaultGroup"
 type Props = {
     type: Type
     placeholder?: string
-    onSelect?: (selectedKeys: string, dataRow: any) => void
+    onSelect?: (selectedKeys: string, dataRow: any, type?: typeSelect) => void
     onChange: (value: any) => void
     defalutValue?: string
     disabled?: boolean

@@ -26,7 +26,7 @@ const fectheUser = async ({
 }): Promise<any> => {
     try {
         const body = { active: Active, name: SearchName }
-        console.log("body", body)
+
         const cookie = cookies()
         console.log("Session", cookie.get("session")?.value ?? "")
         console.log("Authorization", cookie.get("token")?.value ?? "")
@@ -41,13 +41,6 @@ const fectheUser = async ({
             }
         })
         const data = await res.json()
-        // const res = await SeacrhUser({
-        //     url: process.env.SEARCH_USER!,
-        //     bodyRequest: body,
-        //     session: cookie.get("session")?.value ?? "",
-        //     token: cookie.get("token")?.value ?? ""
-        // })
-
         return data
     } catch (error) {
         console.log("error", error)

@@ -275,25 +275,27 @@ const SideMenu = ({ children }: Props) => {
                             "Truy vẫn giao dịch"}
                     </h1>
                     {status === "authenticated" && (
-                        <NovuComponent
-                            novuProps={{
-                                subscriberId: session.user.userInfo._id,
-                                applicationIdentifier:
-                                    NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER!,
-                                initialFetchingStrategy: {
-                                    fetchNotifications: true,
-                                    fetchUserPreferences: true
-                                },
-                                backendUrl: NEXT_PUBLIC_BACKEND_URL!,
-                                socketUrl: NEXT_PUBLIC_SOCKET_URL!
-                            }}
-                            popOverProps={{
-                                colorScheme: "light",
-                                //onNotificationClick: onNotificationClick,
-                                showUserPreferences: false,
-                                footer: () => <></>
-                            }}
-                        />
+                        <div className="mr-[1vw]">
+                            <NovuComponent
+                                novuProps={{
+                                    subscriberId: session.user.userInfo._id,
+                                    applicationIdentifier:
+                                        NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER!,
+                                    initialFetchingStrategy: {
+                                        fetchNotifications: true,
+                                        fetchUserPreferences: true
+                                    },
+                                    backendUrl: NEXT_PUBLIC_BACKEND_URL!,
+                                    socketUrl: NEXT_PUBLIC_SOCKET_URL!
+                                }}
+                                popOverProps={{
+                                    colorScheme: "light",
+                                    //onNotificationClick: onNotificationClick,
+                                    showUserPreferences: false,
+                                    footer: () => <></>
+                                }}
+                            />
+                        </div>
                     )}
                     <ButtonLogOut />
                 </Header>

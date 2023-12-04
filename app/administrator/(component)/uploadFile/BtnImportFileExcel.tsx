@@ -119,7 +119,10 @@ const BtnImportFileExcel: React.FC<Typeprops> = ({
                         _id: item?.__rowNum__,
                         active: true,
                         phone: item?.PhoneNumber?.toString() ?? "",
-                        defaultGroup: {}
+                        defaultGroup: {
+                            _id: _Group?._id ?? "",
+                            name: item?.Group ?? ""
+                        }
                     })
                 })
                 const checkCusTomExcelData = cusTomExcelData.find((item) => {

@@ -1,5 +1,8 @@
-import React, { useState, memo } from "react"
-import { useContextAdmin } from "@/components/cusTomHook/useContext"
+import React, { useState, memo, useMemo } from "react"
+import {
+    useContextAdmin,
+    useContextAdminUser
+} from "@/components/cusTomHook/useContext"
 import {
     Users,
     BodyUserRequestFileExcel,
@@ -11,21 +14,28 @@ import { Divider, Space, Modal, Popover } from "antd"
 import TableUploadUser from "@/app/administrator/(component)/table/tableUploadfileUser"
 import ExportFileExcel from "@/app/administrator/(component)/uploadFile/BtnExportFileExcel"
 import ImportFileExcel from "@/app/administrator/(component)/uploadFile/BtnImportFileExcel"
+import { addMultipleUser } from "@/app/(service)/User"
+import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+import { RevalidateListUser } from "@/app/(actions)/action"
+import { PlusOutlined } from "@ant-design/icons"
+import { useEnvContext } from "next-runtime-env"
 const UploadFilest: React.FC = () => {
-    const ListUploadUser: any = []
-    const ListUser: any = []
-
+    const {
+        dataGlobal: { DataUploadUsers, Users }
+    } = useContextAdminUser()
+    const { session, token } = useCustomCookies()
+    const { NEXT_PUBLIC_ADD_MULTIP_USER } = useEnvContext()
     const [openModalPreviewAddUsers, setOpenModalPreviewAddUsers] =
         useState<boolean>(false)
     const [openPopoverOption, setOpenPopoverOption] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const { messageApi } = useContextAdmin()
     const [openErr, setIsModalOpenErr] = useState<boolean>(false)
-    const ListUserName = new Set(
-        ListUser.map((item: any) =>
-            item.UserName?.toLowerCase().replace(/\s/g, "")
+    const ListUserName = useMemo(() => {
+        return new Set(
+            Users.map((item) => item.userName?.toLowerCase().replace(/\s/g, ""))
         )
-    )
+    }, [Users.length])
 
     const handleOpenPopoverOption = (newOpen: boolean) => {
         setOpenPopoverOption(newOpen)
@@ -52,11 +62,11 @@ const UploadFilest: React.FC = () => {
                     return true
                 }
                 // check  userName Excel trong có bị trùng nhau ko
-                const isAlreadyExitsUserName = ListUploadUser.filter(
-                    (item: any) => item._id !== user._id
+                const isAlreadyExitsUserName = DataUploadUsers.filter(
+                    (item) => item._id !== user._id
                 ).some(
-                    (item: any) =>
-                        item.UserName?.toLowerCase().replace(/\s/g, "") ===
+                    (item) =>
+                        item.userName?.toLowerCase().replace(/\s/g, "") ===
                         user.userName?.toLowerCase().replace(/\s/g, "")
                 )
                 return isAlreadyExitsUserName
@@ -84,37 +94,42 @@ const UploadFilest: React.FC = () => {
             // thỏa mãn dk
             else {
                 setLoading(true)
-                const body: BodyUserRequestFileExcel[] = ListUploadUser.map(
-                    (user: any) => {
+                const Users: BodyUserRequestFileExcel[] = DataUploadUsers.map(
+                    (user) => {
                         return {
-                            FirstName: user?.FirstName ?? "",
-                            LastName: user?.LastName ?? "",
-                            Group: user?.Group?.[0].Name ?? "",
-                            Department: user.Department?.Name ?? "",
-                            UserName: user?.UserName ?? "",
-                            Email: user?.Mail ?? "",
-                            PhoneNumber: user?.Phone ?? "",
-                            AuthenProvider: user.AuthenProvider?.Name ?? "",
-                            Active: !!user.Active
+                            firstName: user?.firstName ?? "",
+                            lastName: user?.lastName ?? "",
+                            group: user?.group?.[0].name ?? "",
+                            department: user.department?.name ?? "",
+                            userName: user?.userName ?? "",
+                            email: user?.mail ?? "",
+                            phoneNumber: user?.phone ?? "",
+                            authenProvider: user.authenProvider?.Name ?? "",
+                            active: !!user.active
                         }
                     }
                 )
-                // const req: ResponseAddUser[] = await addMultipleUser(body)
+                const res = await addMultipleUser({
+                    url: NEXT_PUBLIC_ADD_MULTIP_USER!,
+                    bodyRequest: { users: Users },
+                    session,
+                    token
+                })
+                const reqAddUser: ResponseAddUser[] = res.data
                 setLoading(false)
 
                 // kiểm tra xem có user nào add thất bại
-                // const ListCheck = req
-                //     .filter((item) => item?.Uploaded !== "Success")
-                //     .map((item) => item.Uploaded)
+                const ListCheck = reqAddUser
+                    .filter((item) => item?.Uploaded !== "Success")
+                    .map((item) => item.Uploaded)
 
-                // const msgErr = ListCheck.join(", ")
-                // if (ListCheck.length <= 0) {
-                //     messageApi("success", "Add file user succeeded ")
-                //     // dispatch(addUsers())
-                // } else {
-                //     messageApi("error", `User : ${msgErr} add Error`)
-                //     // dispatch(addUsers())
-                // }
+                const msgErr = ListCheck.join(", ")
+                if (ListCheck.length <= 0) {
+                    messageApi("success", "Add file user succeeded ")
+                    RevalidateListUser()
+                } else {
+                    messageApi("error", `User : ${msgErr} add Error`)
+                }
                 handleCloseModalListUsers()
             }
         } catch (err: any) {
@@ -125,6 +140,8 @@ const UploadFilest: React.FC = () => {
                 } else {
                     messageApi("error", "Add file user failed")
                 }
+            } else {
+                messageApi("error", "có lỗi vui lòng thử lại sau")
             }
 
             setLoading(false)
@@ -166,15 +183,15 @@ const UploadFilest: React.FC = () => {
                 onCancel={handleCloseModalListUsers}
                 width={1000}
                 onOk={() => {
-                    if (ListUploadUser.length > 0) {
-                        addUserUpload(ListUploadUser)
+                    if (DataUploadUsers.length > 0) {
+                        addUserUpload(DataUploadUsers)
                     } else {
                         messageApi("error", "No data user!")
                     }
                 }}
                 confirmLoading={loading}
                 okText="Save"
-                bodyStyle={{ height: "400px" }}
+                style={{ height: "400px" }}
                 // footer={null}
             >
                 <Divider

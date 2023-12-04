@@ -16,51 +16,51 @@ const TemlateExcel: TemlateExcel[] = [
         Email: "AnNV@hpt.vn",
         PhoneNumber: "987123456",
         AuthenProvider: "local"
+    },
+    {
+        FirstName: "name",
+        LastName: "test2",
+        Group: "Teller Chi nhánh Hai Bà Trưng",
+        Department: "Chi nhánh Hai Bà Trưng",
+        UserName: "41AnNV1@hpt.vn",
+        Email: "AnNV@hpt.vn",
+        PhoneNumber: "",
+        AuthenProvider: "local"
+    },
+    {
+        FirstName: "name",
+        LastName: "test3",
+        Group: "Teller Phòng Khách Hàng Cá Nhân 2 - CN HBT",
+        Department: "Phòng Khách Hàng Cá Nhân 2 - CN HBT",
+        UserName: "42AnhHCT1@bpm.lab",
+        Email: "AnhHCT@gmail.com",
+        PhoneNumber: "789123542",
+        AuthenProvider: "local"
+    },
+    {
+        FirstName: "name",
+        LastName: "test4",
+        Group: "Chuyên viên Nghiệp vụ Trung tâm dịch vụ Khách hàng",
+        Department: "Trung tâm Công nghệ thông tin",
+        UserName: "43PVAnh1@bpm.lab",
+        Email: "PVAnh@gmail.com",
+        PhoneNumber: "789123542",
+        AuthenProvider: "local"
+    },
+    {
+        FirstName: "name",
+        LastName: "test5",
+        Group: "Teller Phòng Khách Hàng Cá Nhân 2 - CN HBT",
+        Department: "Phòng Khách Hàng Cá Nhân 2 - CN HBT",
+        UserName: "44LongNT1@bpm.lab",
+        Email: "LongNT@bpm.lab",
+        PhoneNumber: "789123542",
+        AuthenProvider: "local"
     }
-    // {
-    //     FirstName: "name",
-    //     LastName: "test2",
-    //     Group: "PD Employee",
-    //     Department: "Pd - Phát triển sản phẩm",
-    //     UserName: "41AnNV1@hpt.vn",
-    //     Email: "AnNV@hpt.vn",
-    //     PhoneNumber: "",
-    //     AuthenProvider: "LDAP"
-    // },
-    // {
-    //     FirstName: "name",
-    //     LastName: "test3",
-    //     Group: "PD Employee",
-    //     Department: "PD - Phát triển sản phẩm",
-    //     UserName: "42AnhHCT1@bpm.lab",
-    //     Email: "AnhHCT@gmail.com",
-    //     PhoneNumber: "789123542",
-    //     AuthenProvider: "LDAP"
-    // },
-    // {
-    //     FirstName: "name",
-    //     LastName: "test4",
-    //     Group: "PD Employee",
-    //     Department: "PD - Phát triển sản phẩm",
-    //     UserName: "43PVAnh1@bpm.lab",
-    //     Email: "PVAnh@gmail.com",
-    //     PhoneNumber: "789123542",
-    //     AuthenProvider: "LDAP"
-    // },
-    // {
-    //     FirstName: "name",
-    //     LastName: "test5",
-    //     Group: "SALES_HN Employee",
-    //     Department: "SALES_HN",
-    //     UserName: "44LongNT1@bpm.lab",
-    //     Email: "LongNT@bpm.lab",
-    //     PhoneNumber: "789123542",
-    //     AuthenProvider: "LDAP"
-    // }
 ]
+
 const ExportFile: React.FC = () => {
     const { messageApi } = useContextAdmin()
-
     const exportfile = () => {
         const worksheet = utils.json_to_sheet(TemlateExcel)
         const wscols = [
@@ -75,10 +75,6 @@ const ExportFile: React.FC = () => {
             { wch: 20 }
         ]
         worksheet["!cols"] = wscols // set with
-        const headerCellStyle = {
-            font: { bold: true, color: { rgb: "FFFFFF" } }, // Màu chữ trắng đậm
-            fill: { patternType: "solid", fgColor: { rgb: "2F75B5" } } // Màu nền xanh
-        }
         const workbook = utils.book_new()
         utils.book_append_sheet(workbook, worksheet, "Sheet1")
 

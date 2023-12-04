@@ -10,16 +10,16 @@ export interface Parent {
 }
 
 export interface Department {
-    _id: string
-    active: boolean
-    name: string
-    organization: string
-    parent: string
-    type: string
-    code: string
-    address: string
-    stage: string
-    distric: string
+    _id?: string
+    active?: boolean
+    name?: string
+    organization?: string
+    parent?: string
+    type?: string
+    code?: string
+    address?: string
+    stage?: string
+    distric?: string
 }
 export interface bodyDepartmentRequest {
     Id: string
