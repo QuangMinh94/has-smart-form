@@ -74,14 +74,14 @@ async function fetchDepartment(
     searchString: string,
     url: string,
     header: any
-): Promise<UserValue[]> {
+): Promise<UserValue[] | any> {
     return axios
         .get(url, { headers: header })
         .then((response) => response.data as Department[])
         .then((body) =>
             body
                 .filter((element) =>
-                    ToLowerCaseNonAccentVietnamese(element.name).includes(
+                    ToLowerCaseNonAccentVietnamese(element?.name).includes(
                         ToLowerCaseNonAccentVietnamese(searchString)
                     )
                 )
