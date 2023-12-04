@@ -1,7 +1,10 @@
 "use client"
 import { useEnvContext } from "next-runtime-env"
 import { addEformTask } from "@/app/(service)/EformTemplate"
-import { SeacrhCustomInFo } from "@/app/(service)/appointments"
+import {
+    SeacrhCustomInFo,
+    filterAppointMent
+} from "@/app/(service)/appointments"
 import { RequestEformTaks } from "@/app/(types)/eFormTask"
 import { block, formTemplate } from "@/app/(types)/eProduct"
 import { eFormTask, myWork } from "@/app/(types)/teller/mywork"
@@ -9,6 +12,7 @@ import { choosenBlock } from "@/app/teller/(components)/context"
 import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
 import { DefaultParams, OzDelimiter } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+import { InforUser, Users } from "@/app/(types)/Users"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import routers from "@/router/cusTomRouter"
 import { message } from "antd"
@@ -34,8 +38,12 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
 
 type Props = { mywork: myWork }
 const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
-    const { NEXT_PUBLIC_SEARCH_CUSTOMER_INFO, NEXT_PUBLIC_EFORM_TASK } =
-        useEnvContext()
+    const {
+        NEXT_PUBLIC_SEARCH_CUSTOMER_INFO,
+        NEXT_PUBLIC_EFORM_TASK,
+        NEXT_PUBLIC_FILTER_APPOINT_MENTS,
+        NEXT_PUBLIC_EFORM_SERVER_APP
+    } = useEnvContext()
     const [DataMywork, setMyWork] = useState<myWork>(mywork)
     const { token, session } = useCustomCookies()
     const params = useParams()
@@ -51,7 +59,6 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
-    const { NEXT_PUBLIC_EFORM_SERVER_APP } = useEnvContext()
 
     const Blocks = (listRightBlock: any[]): choosenBlock[] => {
         const choosenBlock: choosenBlock[] = []
@@ -151,13 +158,32 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const onPreview = async () => {
         try {
             if (listRight.length > 0) {
-                const res = await SeacrhCustomInFo({
+                const resSeacrhCustomInFo = await SeacrhCustomInFo({
                     url: NEXT_PUBLIC_SEARCH_CUSTOMER_INFO!,
                     bodyRequest: { citizenId: searchParams.get("CCCD") ?? "" },
                     session,
                     token
                 })
-                const info = res.data[0]
+                let info: InforUser = resSeacrhCustomInFo.data[0]
+                if (resSeacrhCustomInFo.data?.length <= 0) {
+                    const resFilterAppointMent = await filterAppointMent({
+                        url: NEXT_PUBLIC_FILTER_APPOINT_MENTS!,
+                        bodyRequest: {
+                            appointmentCode: searchParams.get("code") ?? ""
+                        },
+                        session,
+                        token
+                    })
+                    const User = resFilterAppointMent.data[0]
+
+                    info = {
+                        fullName: User?.name,
+                        citizenId: User?.citizenId,
+                        emailAddress: User?.email,
+                        mobilePhoneNumber: User?.phoneNumber
+                    }
+                }
+                console.log("foIn", info)
                 resetEForm()
                 await delay(3000)
                 const choosenBlock = Blocks(listRight)
@@ -225,7 +251,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 const inputdata = JSON.parse(
                     oz.GetInformation("INPUT_JSON_ALL")
                 )
-
+                console.log("no0", inputdata)
                 const body: RequestEformTaks = {
                     data: { Input: inputdata },
                     formTemplate: idFormTempLate,

@@ -18,7 +18,9 @@ import { PlusOutlined } from "@ant-design/icons"
 import { useEnvContext } from "next-runtime-env"
 import { typeForm } from "@/app/administrator/(component)/BtnModal"
 import dayjs from "dayjs"
-import SelectForm from "@/app/administrator/(component)/SelectForm"
+import SelectForm, {
+    typeSelect
+} from "@/app/administrator/(component)/SelectForm"
 import { RevalidateListUser } from "@/app/(actions)/action"
 import {
     useContextAdmin,
@@ -28,18 +30,28 @@ import {
 const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo)
 }
-type Props = { CancelModal: () => void; typeForm: typeForm; rowData: Users }
+type Props = {
+    CancelModal: () => void
+    typeForm: typeForm
+    rowData: Users
+    isUploadNotApi?: boolean
+}
 const disabledDate: RangePickerProps["disabledDate"] = (current) => {
     // Can not select days before today and today
     return current && current > dayjs()
 }
-const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
+const FormOder: React.FC<Props> = ({
+    CancelModal,
+    typeForm,
+    rowData,
+    isUploadNotApi
+}) => {
     const { NEXT_PUBLIC_ADD_USER, NEXT_PUBLIC_UPDATE_USER } = useEnvContext()
     const [form] = Form.useForm()
     const { token, session } = useCustomCookies()
     // const { InFoUser } = useGetInfoUser()
     const { messageApi } = useContextAdmin()
-    const { dataGlobal } = useContextAdminUser()
+    const { dataGlobal, setDataGlobal } = useContextAdminUser()
     const [loadingBtn, setLoadingBtn] = useState<boolean>(false)
     const [idDepartment, setIdDepartment] = useState<string>(
         `${typeForm === "UPDATE_MODAL" ? rowData?.department?._id : ""}`
@@ -47,18 +59,18 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
     const [active, setActive] = useState<boolean>(
         typeForm === "UPDATE_MODAL" ? !!rowData?.active : true
     )
-    console.log("data", rowData)
-    console.log("Users", dataGlobal.Users)
-    const onFinish = (data: any) => {
-        // auth
-        // birthDay
-        // department
-        // email
-        // firstName
-        // lastName
-        // phoneNumber
-        // username
+    const [labels, setLabels] = useState<{
+        authen: string
+        department: string
 
+        defaultGroup: string
+    }>({
+        authen: rowData?.authenProvider?.Name,
+        department: rowData?.department?.name ?? "",
+        defaultGroup: rowData?.defaultGroup?.name ?? ""
+    })
+
+    const onFinish = (data: any) => {
         const bodyUserRequest: BodyUserRequest = {
             userName: data.username,
             firstName: data.firstName,
@@ -70,16 +82,71 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
             group: data.groups,
             defaultGroup: data.group,
             active: active,
-            birthday: dayjs(data.birthDay).toISOString(),
             color: "#fff"
         }
-        if (typeForm === "ADD_MODAL") {
-            addUserFC(bodyUserRequest)
+
+        if (data.birthDay) {
+            bodyUserRequest.birthday = dayjs(data.birthDay).toISOString()
         }
-        if (typeForm === "UPDATE_MODAL") {
-            bodyUserRequest.id = rowData?._id
-            delete bodyUserRequest.userName
-            updateUserFC(bodyUserRequest)
+
+        if (isUploadNotApi) {
+            if (typeForm === "UPDATE_MODAL") {
+                bodyUserRequest.id = rowData?._id
+
+                setDataGlobal((data) => {
+                    const DataUploadUsers = data.DataUploadUsers
+
+                    const index = DataUploadUsers.findIndex(
+                        (data) => data._id === bodyUserRequest.id
+                    )
+
+                    const dataUpload: Users = {
+                        userName: bodyUserRequest.userName,
+                        group: bodyUserRequest?.group?.map((item) => ({
+                            _id: item
+                        })),
+                        defaultGroup: {
+                            _id: `${bodyUserRequest?.defaultGroup}`,
+                            name: labels.defaultGroup
+                        },
+                        department: {
+                            _id: `${bodyUserRequest?.department}`,
+                            name: labels.department
+                        },
+                        authenProvider: {
+                            _id: `${bodyUserRequest?.authenProvider}`,
+                            Name: labels.authen
+                        },
+
+                        firstName: bodyUserRequest.firstName,
+                        lastName: bodyUserRequest.lastName,
+                        mail: bodyUserRequest.mail,
+                        phone: bodyUserRequest.phone
+                    }
+
+                    if (bodyUserRequest?.birthday) {
+                        dataUpload.birthday = dayjs(
+                            bodyUserRequest?.birthday
+                        ).toISOString()
+                    }
+                    DataUploadUsers[index] = {
+                        ...DataUploadUsers[index],
+                        ...dataUpload
+                    }
+                    CancelModal()
+                    messageApi("success", "Cập nhật thành công")
+                    return { ...data, DataUploadUsers }
+                })
+            }
+        } else {
+            if (typeForm === "ADD_MODAL") {
+                addUserFC(bodyUserRequest)
+            }
+            if (typeForm === "UPDATE_MODAL") {
+                bodyUserRequest.id = rowData?._id
+                delete bodyUserRequest.userName
+                updateUserFC(bodyUserRequest)
+            }
         }
     }
     const addUserFC = async (body: BodyUserRequest) => {
@@ -134,6 +201,39 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
     const HandlerOnchangeGroups = useCallback((value: string[]) => {
         form.setFieldsValue({ groups: value })
     }, [])
+    const CbOnSelect = (dataRow: any, type?: typeSelect) => {
+        const name: string = `${dataRow?.label}`
+        setLabels((lables) => {
+            const obj: any = {
+                authen: { authen: name },
+                department: { department: name },
+                groups: { groups: name },
+                defaultGroup: { defaultGroup: name }
+            }
+            const update = obj[`${type}`]
+            return { ...lables, ...update }
+        })
+    }
+    const HandlerOnSelectAuthen = useCallback(
+        (selectedKeys: string, dataRow: any) => {
+            CbOnSelect(dataRow, "authen")
+        },
+        []
+    )
+    const HandlerOnSelectGroup = useCallback(
+        (selectedKeys: string, dataRow: any) => {
+            console.log("ok", dataRow)
+            CbOnSelect(dataRow, "defaultGroup")
+        },
+        []
+    )
+    const HandlerOnSelectDepartment = useCallback(
+        (selectedKeys: string, dataRow: any) => {
+            console.log("ok", dataRow)
+            CbOnSelect(dataRow, "department")
+        },
+        []
+    )
 
     return (
         <>
@@ -179,6 +279,9 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
                     <SelectForm
                         enabledFecthData={typeForm === "UPDATE_MODAL"}
                         type="getAuth"
+                        onSelect={
+                            isUploadNotApi ? HandlerOnSelectAuthen : undefined
+                        }
                         onChange={HandlerOnchangeAuth}
                     />
                 </Form.Item>
@@ -211,7 +314,11 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
                         }
                     ]}
                 >
-                    <Input disabled={typeForm === "UPDATE_MODAL"} />
+                    <Input
+                        disabled={
+                            typeForm === "UPDATE_MODAL" && !isUploadNotApi
+                        }
+                    />
                 </Form.Item>
                 <Form.Item
                     style={{ marginBottom: "25px" }}
@@ -262,13 +369,13 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
                     style={{ marginBottom: "25px" }}
                     label="Ngày sinh"
                     name="birthDay"
-                    rules={[
-                        {
-                            type: "object" as const,
-                            required: true,
-                            message: "vui lòng nhập ngày sinh!"
-                        }
-                    ]}
+                    // rules={[
+                    //     {
+                    //         type: "object" as const,
+                    //         required: true,
+                    //         message: "vui lòng nhập ngày sinh!"
+                    //     }
+                    // ]}
                 >
                     <DatePicker
                         style={{ width: "100%" }}
@@ -313,6 +420,11 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
                         enabledFecthData={typeForm === "UPDATE_MODAL"}
                         type="getDepartment"
                         onChange={HandlerOnchangeDepartment}
+                        onSelect={
+                            isUploadNotApi
+                                ? HandlerOnSelectDepartment
+                                : undefined
+                        }
                     />
                 </Form.Item>
                 {idDepartment && (
@@ -333,6 +445,11 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
                             idDepartment={idDepartment}
                             type="getGroup"
                             onChange={HandlerOnchangeGroup}
+                            onSelect={
+                                isUploadNotApi
+                                    ? HandlerOnSelectGroup
+                                    : undefined
+                            }
                         />
                     </Form.Item>
                 )}
@@ -370,6 +487,7 @@ const FormOder: React.FC<Props> = ({ CancelModal, typeForm, rowData }) => {
                     ]}
                 >
                     <Checkbox
+                        disabled={isUploadNotApi}
                         checked={active}
                         onChange={(e) => {
                             setActive(e.target.checked)
