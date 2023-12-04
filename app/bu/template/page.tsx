@@ -44,7 +44,8 @@ const TemplatePage = async ({
                 ? element.approver.lastName + " " + element.approver!.firstName
                 : "",
             validFrom: element.validFrom,
-            status: element.status?.description
+            status: element.status?.description,
+            queryCode: element.queryCode
         })
     })
 

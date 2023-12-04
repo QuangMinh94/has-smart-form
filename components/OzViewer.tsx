@@ -94,7 +94,6 @@ viewer.createreport_doc_index=${index}${delimiter}
     connection.inputjson=${inputJson}${delimiter}
     viewer.thumbnailsection_showclosebutton=true${delimiter}
     information.debug=true${delimiter}
-    eform.signpad_zoom=50${delimiter}
     eform.signpad_type=dialog${delimiter}
     viewer.reportchangecommand=true${delimiter}
     viewer.progresscommand=true${delimiter}
@@ -102,6 +101,8 @@ viewer.createreport_doc_index=${index}${delimiter}
     viewer.errorcommand=true${delimiter}
     viewer.progresscommand=true${delimiter}`
 }
+
+//eform.signpad_zoom=50${delimiter}
 
 export const OzDelimiter = () => {
     return "==OZDelimiter=="

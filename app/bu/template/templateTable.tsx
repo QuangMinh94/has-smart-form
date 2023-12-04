@@ -1,6 +1,5 @@
 "use client"
 
-import { EncryptedString } from "@/app/(utilities)/Crypto"
 import DateFormatter from "@/app/(utilities)/DateFormatter"
 import CustomLink from "@/components/CustomLink"
 import { Skeleton, Table, Tooltip } from "antd"
@@ -14,6 +13,7 @@ export type DataTableType = {
     approval?: string
     validFrom?: any
     status?: string
+    queryCode?: string
 }
 
 const TemplateTable = ({
@@ -113,9 +113,9 @@ const TemplateTable = ({
                     <p
                         className="text-blue-600 cursor-pointer truncate ..."
                         onClick={() => {
-                            const encryptedString = EncryptedString(record.key!)
-                            cookies.set("encryptedId", encryptedString)
-                            router.push("/bu/template/details")
+                            router.push(
+                                `/bu/template/details/${record.queryCode}`
+                            )
                         }}
                     >
                         <Tooltip title={record.formName!}>

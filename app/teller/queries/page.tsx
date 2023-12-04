@@ -11,10 +11,10 @@ import axios from "axios"
 import { cookies } from "next/headers"
 import { cache } from "react"
 
-/* axios.interceptors.request.use((request) => {
+axios.interceptors.request.use((request) => {
     console.log("Starting Request", JSON.stringify(request, null, 2))
     return request
-}) */
+})
 
 type ParamObject = {
     label: string
@@ -102,7 +102,9 @@ const QueriesPage = async ({
             createdDate: element.createDate,
             status: element.status as status,
             executor: element.executor as Users,
-            officeBranch: (element.officeBranch as Department).name,
+            officeBranch: (element.officeBranch as Department)
+                ? (element.officeBranch as Department).name
+                : "",
             queryCode: element.queryCode
         })
     })
