@@ -17,6 +17,16 @@ export interface EformTemplate {
     status?: Status
     description?: string
     queryCode?: string
+    displayRule: {
+        status: string
+        creator: boolean
+        approver: boolean
+        visibleView: boolean
+        visibleGroupButton: boolean
+        visibleTemplate: boolean
+        visibleOzr: boolean
+        visibleInfo: boolean
+    }
 }
 
 export interface Status {

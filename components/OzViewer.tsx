@@ -47,6 +47,7 @@ const Viewer = () => {
                         ),
                         OzDelimiter()
                     )
+
                     count++
                 })
             } else {
@@ -95,6 +96,7 @@ viewer.createreport_doc_index=${index}${delimiter}
     viewer.thumbnailsection_showclosebutton=true${delimiter}
     information.debug=true${delimiter}
     eform.signpad_type=dialog${delimiter}
+    eform.inputeventcommand=true${delimiter}
     viewer.reportchangecommand=true${delimiter}
     viewer.progresscommand=true${delimiter}
     global.use_preview_progressbar=true${delimiter}
