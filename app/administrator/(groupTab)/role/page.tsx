@@ -66,7 +66,7 @@ const User = async ({
                 <BtnModal
                     titleModel="Thêm nhóm quyền"
                     type="ADD_MODAL"
-                    pathModel="ADMIN_PERMISSIONS"
+                    pathModel="ADMIN_ROLE"
                     rowData={{}}
                 />
             }
