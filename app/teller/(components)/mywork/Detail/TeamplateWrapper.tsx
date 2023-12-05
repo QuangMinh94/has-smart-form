@@ -48,7 +48,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const { token, session } = useCustomCookies()
     const params = useParams()
     const router = useRouter()
-
+    console.log("dataMywork: ", DataMywork)
     const searchParams = useSearchParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [messageApi, contextHolder] = message.useMessage()
@@ -251,7 +251,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 const inputdata = JSON.parse(
                     oz.GetInformation("INPUT_JSON_ALL")
                 )
-                console.log("no0", inputdata)
+
                 const body: RequestEformTaks = {
                     data: { Input: inputdata },
                     formTemplate: idFormTempLate,
@@ -340,20 +340,29 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     return (
         <div>
             {contextHolder}
-            <DndProvider backend={HTML5Backend}>
-                <TranferMyWork />
-                <div className="mt-10">
-                    <ButtonHandleEform
-                        loading={loading}
-                        onCancel={onCancel}
-                        onPreview={onPreview}
-                        onSave={onSave}
-                        onSubmit={onSubmit}
-                        onSync={onSync}
+            {DataMywork?.displayRule?.visibleView && (
+                <DndProvider backend={HTML5Backend}>
+                    <TranferMyWork
+                        Disabled={DataMywork.displayRule.visibleTemplate}
                     />
-                </div>
-                <OzViewer viewerKey={viewerKey} />
-            </DndProvider>
+                    {DataMywork?.displayRule?.visibleGroupButton && (
+                        <div className="mt-10">
+                            <ButtonHandleEform
+                                loading={loading}
+                                onCancel={onCancel}
+                                onPreview={onPreview}
+                                onSave={onSave}
+                                onSubmit={onSubmit}
+                                onSync={onSync}
+                            />
+                        </div>
+                    )}
+                    {DataMywork?.displayRule?.visibleOzr || (
+                        <p id="disableInput" />
+                    )}
+                    <OzViewer viewerKey={viewerKey} />
+                </DndProvider>
+            )}
         </div>
     )
 }

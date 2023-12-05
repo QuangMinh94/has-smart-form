@@ -28,6 +28,15 @@ export interface eFormTask {
     ecmDocumentId: string
     __v?: number
 }
+export interface displayRule {
+    status: string
+    executor: boolean
+    visibleView: boolean
+    visibleGroupButton: boolean
+    visibleTemplate: boolean
+    visibleOzr: boolean
+    VisibleInfo: boolean
+}
 export interface myWork {
     key?: string
     _id?: string
@@ -42,4 +51,5 @@ export interface myWork {
     eformTask?: eFormTask[]
     channel?: channel
     docusignDocumentId: string
+    displayRule?: displayRule
 }

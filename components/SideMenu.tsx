@@ -52,29 +52,40 @@ const CustomMenu = ({
     let items: any = []
 
     // set slectkey
+
+    //ba
     if (conditionPath.isBaBlock) {
         selectedKeys.push(keyPath.BA_BLOCK)
     }
     if (conditionPath.isBaProduct) {
         selectedKeys.push(keyPath.BA_PRODUCT)
     }
+
+    // ksv
     if (conditionPath.isKsvMywork) {
         selectedKeys.push(keyPath.KSV_MYWORK)
-    }
-    if (conditionPath.isTellerMywork) {
-        selectedKeys.push(keyPath.TELLER_MYWORK)
-    }
-    if (conditionPath.isAdminTrator) {
-        selectedKeys.push(keyPath.ADMINISTRATOR)
-    }
-    if (conditionPath.isTellerQuery) {
-        selectedKeys.push(keyPath.TELLER_QUERIES)
     }
     if (conditionPath.isKsvQuery) {
         selectedKeys.push(keyPath.KSV_QUERIES)
     }
 
+    // teller
+    if (conditionPath.isTellerMywork) {
+        selectedKeys.push(keyPath.TELLER_MYWORK)
+    }
+
+    if (conditionPath.isTellerQuery) {
+        selectedKeys.push(keyPath.TELLER_QUERIES)
+    }
+
+    //admin
+    if (conditionPath.isAdminTrator) {
+        selectedKeys.push(keyPath.ADMINISTRATOR)
+    }
+
     //set item
+
+    //ba
     if (conditionPath.isBaBlock || conditionPath.isBaProduct) {
         items = [
             {
@@ -97,6 +108,8 @@ const CustomMenu = ({
             }
         ]
     }
+
+    // ksv
     if (conditionPath.isKsvMywork || conditionPath.isKsvQuery) {
         items = [
             {
@@ -120,6 +133,8 @@ const CustomMenu = ({
             }
         ]
     }
+
+    // teller
     if (conditionPath.isTellerMywork || conditionPath.isTellerQuery) {
         items = [
             {
@@ -142,6 +157,8 @@ const CustomMenu = ({
             }
         ]
     }
+
+    // admin
     if (conditionPath.isAdminTrator) {
         items = [
             {
@@ -268,11 +285,10 @@ const SideMenu = ({ children }: Props) => {
                         {(conditionPath.isKsvMywork ||
                             conditionPath.isTellerMywork) &&
                             "Công việc của tôi"}
-
-                        {conditionPath.isAdminTrator && "Quản trị"}
                         {(conditionPath.isTellerQuery ||
                             conditionPath.isKsvQuery) &&
                             "Truy vẫn giao dịch"}
+                        {conditionPath.isAdminTrator && "Quản trị"}
                     </h1>
                     {status === "authenticated" && (
                         <div className="mr-[1vw]">

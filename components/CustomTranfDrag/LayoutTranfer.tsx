@@ -9,16 +9,27 @@ type Props = {
     ColRight: React.ReactNode
     isCollapse?: boolean
     HiddenColLeft?: boolean
+    isDisabled?: boolean
 }
 const LayoutTranfer: React.FC<Props> = ({
     ColLeft,
     Button,
     ColRight,
     isCollapse = true,
-    HiddenColLeft
+    HiddenColLeft,
+    isDisabled
 }) => {
     const Layout = (
-        <Flex gap={10}>
+        <Flex gap={10} style={{ position: "relative" }}>
+            {isDisabled || (
+                <div
+                    className="absolute inset-0 rounded-lg  "
+                    style={{
+                        backgroundColor: " rgba(247, 246, 246, 0.5)",
+                        zIndex: "99999"
+                    }}
+                ></div>
+            )}
             {HiddenColLeft || (
                 <>
                     <div className="w-full min-h-[300px]">{ColLeft}</div>

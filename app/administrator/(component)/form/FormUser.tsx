@@ -85,10 +85,6 @@ const FormOder: React.FC<Props> = ({
             color: "#fff"
         }
 
-        if (data.birthDay) {
-            bodyUserRequest.birthday = dayjs(data.birthDay).toISOString()
-        }
-
         if (isUploadNotApi) {
             if (typeForm === "UPDATE_MODAL") {
                 bodyUserRequest.id = rowData?._id
@@ -124,11 +120,6 @@ const FormOder: React.FC<Props> = ({
                         phone: bodyUserRequest.phone
                     }
 
-                    if (bodyUserRequest?.birthday) {
-                        dataUpload.birthday = dayjs(
-                            bodyUserRequest?.birthday
-                        ).toISOString()
-                    }
                     DataUploadUsers[index] = {
                         ...DataUploadUsers[index],
                         ...dataUpload
@@ -235,6 +226,7 @@ const FormOder: React.FC<Props> = ({
         []
     )
 
+    console.log("rowData", rowData)
     return (
         <>
             <Form
@@ -365,7 +357,7 @@ const FormOder: React.FC<Props> = ({
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item
+                {/* <Form.Item
                     style={{ marginBottom: "25px" }}
                     label="Ngày sinh"
                     name="birthDay"
@@ -382,7 +374,7 @@ const FormOder: React.FC<Props> = ({
                         format={["DD/MM/YYYY"]}
                         disabledDate={disabledDate}
                     />
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item
                     style={{ marginBottom: "25px" }}
                     label="Số điện thoại"

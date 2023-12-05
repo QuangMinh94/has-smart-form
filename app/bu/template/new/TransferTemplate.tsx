@@ -1,8 +1,8 @@
 "use client"
 import { uniqueValue } from "@/app/(utilities)/ArrayUtilities"
-import ButtonLeftandRight from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/ButtonCusTom"
-import Container from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/Container"
-import LayoutTranfer from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/LayoutTranfer"
+import ButtonLeftandRight from "@/components/CustomTranfDrag/ButtonCusTom"
+import Container from "@/components/CustomTranfDrag/Container"
+import LayoutTranfer from "@/components/CustomTranfDrag/LayoutTranfer"
 import { useContextTemplate } from "@/components/cusTomHook/useContextTemplate"
 import "@/public/css/myWork/detailMyWork.css"
 import { TreeSelect } from "antd"
@@ -63,7 +63,13 @@ const TreeSelectComp = ({ treeData }: { treeData: TreeDataType[] }) => {
     )
 }
 
-const TransferTemplate = ({ treeData }: { treeData: TreeDataType[] }) => {
+const TransferTemplate = ({
+    treeData,
+    disabled
+}: {
+    treeData: TreeDataType[]
+    disabled: boolean
+}) => {
     const {
         listLeft,
         listRight,
@@ -76,6 +82,8 @@ const TransferTemplate = ({ treeData }: { treeData: TreeDataType[] }) => {
     return (
         <DndProvider backend={HTML5Backend}>
             <LayoutTranfer
+                HiddenColLeft={disabled}
+                isDisabled={!disabled}
                 ColLeft={
                     <Container
                         HidenUI={<TreeSelectComp treeData={treeData} />}

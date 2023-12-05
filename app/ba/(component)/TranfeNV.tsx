@@ -6,9 +6,9 @@ import {
 } from "@/components/cusTomHook/useContext"
 
 import "@/public/css/myWork/detailMyWork.css"
-import Container from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/Container"
-import ButtonLeftandRight from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/ButtonCusTom"
-import LayoutTranfer from "@/app/teller/(components)/mywork/Detail/CustomTranfDrag/LayoutTranfer"
+import Container from "@/components/CustomTranfDrag/Container"
+import ButtonLeftandRight from "@/components/CustomTranfDrag/ButtonCusTom"
+import LayoutTranfer from "@/components/CustomTranfDrag/LayoutTranfer"
 
 import CheckboxForm from "./CheckboxFormLeft"
 import TreeSelectEproduct from "./TreeSelectEproduct"

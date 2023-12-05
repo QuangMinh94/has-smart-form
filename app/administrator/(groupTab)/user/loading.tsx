@@ -1,2 +1,2 @@
-import Loading from "@/app/teller/mywork/loading"
+import Loading from "@/components/LoadingPage"
 export default Loading

@@ -109,7 +109,7 @@ export interface ResponseAddUser {
     PhoneNumber: string
     AuthenProvider: string
     Active: boolean
-    Uploaded: string
+    uploaded: string
 }
 
 export interface bodyRequestAddUserToGroup {

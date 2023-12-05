@@ -2,13 +2,13 @@
 import React, { useEffect, memo } from "react"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import "@/public/css/myWork/detailMyWork.css"
-import Container from "./CustomTranfDrag/Container"
-import ButtonLeftandRight from "./CustomTranfDrag/ButtonCusTom"
-import LayoutTranfer from "./CustomTranfDrag/LayoutTranfer"
+import Container from "../../../../../components/CustomTranfDrag/Container"
+import ButtonLeftandRight from "../../../../../components/CustomTranfDrag/ButtonCusTom"
+import LayoutTranfer from "../../../../../components/CustomTranfDrag/LayoutTranfer"
 import { usePathname } from "next/navigation"
 import HeaderUi from "../Detail/HeaderUiContent"
 
-const DetailFormUser = () => {
+const DetailFormUser = ({ Disabled }: { Disabled: boolean }) => {
     const {
         listLeft,
         listRight,
@@ -31,6 +31,7 @@ const DetailFormUser = () => {
 
     return (
         <LayoutTranfer
+            isDisabled={Disabled}
             HiddenColLeft={pathName.startsWith("/ksvteller")}
             ColLeft={
                 <Container
