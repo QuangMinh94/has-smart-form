@@ -1,6 +1,3 @@
-import Loading from "@/app/teller/mywork/loading"
-const KSVQueriesLoadingPage = () => {
-    return <Loading />
-}
+import Loading from "@/components/LoadingPage"
 
-export default KSVQueriesLoadingPage
+export default Loading

@@ -13,6 +13,10 @@ import contentAdmin, {
 import contentUser, {
     typeContextUser
 } from "@/app/administrator/(component)/content/contentUser"
+import {
+    typeContextTree,
+    contextTreeView
+} from "@/app/administrator/(component)/content/contentTreeView"
 function useContextMyWorkDetail(): typeContextMyworkDetail {
     const provider = useContext(contextMyworkDetail)
     return {
@@ -66,10 +70,20 @@ function useContextAdminUser(): typeContextUser {
         dataGlobal: provider.dataGlobal
     }
 }
+function useContextTree(): typeContextTree {
+    const provider = useContext(contextTreeView)
+    return {
+        setDataGlobal: provider.setDataGlobal,
+        dataGlobal: provider.dataGlobal,
+        treeFilter: provider.treeFilter,
+        setTreeFilter: provider.setTreeFilter
+    }
+}
 export {
     useContextMyWorkDetail,
     useContextTranfer,
     useContextBa,
     useContextAdmin,
-    useContextAdminUser
+    useContextAdminUser,
+    useContextTree
 }

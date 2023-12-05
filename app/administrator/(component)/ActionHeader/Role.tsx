@@ -1,11 +1,11 @@
 "use client"
 import React, { useTransition } from "react"
 import { Input, Checkbox } from "antd"
-import Uploadfile from "@/app/administrator/(component)/ActionHeader/DropDowLoadFile"
+
 import { useSearchParams, useRouter } from "next/navigation"
 import { debounce } from "lodash"
 
-const ActionHeaderUser = () => {
+const ActionHeaderRole = () => {
     const SearchParams = useSearchParams()
     const Router = useRouter()
     const checked = SearchParams.get("active")
@@ -30,21 +30,19 @@ const ActionHeaderUser = () => {
             }
         })
     }, 400)
-    console.log("d", checked)
+
     return (
         <>
             <div className="flex-1">
                 <Input.Search
                     className="InputCss"
-                    placeholder="Tìm kiếm người dùng"
+                    placeholder="Tìm kiếm nhóm"
                     style={{ width: "30%", color: "red" }}
                     onChange={HanderSearch}
                     loading={loading}
                 />
             </div>
-            <div className="mr-[10px]">
-                <Uploadfile />
-            </div>
+
             <div>
                 <Checkbox
                     checked={checked === "true" || checked === null}
@@ -56,4 +54,4 @@ const ActionHeaderUser = () => {
         </>
     )
 }
-export default ActionHeaderUser
+export default ActionHeaderRole
