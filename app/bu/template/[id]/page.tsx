@@ -45,6 +45,8 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
     )
     const treeDataView: TreeDataType[] = MappingChildren(treeData)
 
+    console.log("DATASDADAS", data)
+
     return (
         <>
             {data.length > 0 && data[0].displayRule!.visibleView ? (
