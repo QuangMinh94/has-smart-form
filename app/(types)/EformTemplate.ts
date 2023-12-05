@@ -17,16 +17,34 @@ export interface EformTemplate {
     status?: Status
     description?: string
     queryCode?: string
-    displayRule: {
-        status: string
-        creator: boolean
-        approver: boolean
-        visibleView: boolean
-        visibleGroupButton: boolean
-        visibleTemplate: boolean
-        visibleOzr: boolean
-        visibleInfo: boolean
-    }
+    displayRule?: DisplayRule
+}
+
+export interface DisplayRule {
+    status?: string
+    creator?: boolean
+    approver?: boolean
+    visibleView: boolean
+    visibleGroupButton: boolean
+    visibleTemplate: boolean
+    visibleOzr: boolean
+    visibleInfo: boolean
+}
+
+export const DefaultActiveRule: DisplayRule = {
+    visibleView: true,
+    visibleGroupButton: true,
+    visibleTemplate: true,
+    visibleOzr: true,
+    visibleInfo: true
+}
+
+export const DefaultDeactiveRule: DisplayRule = {
+    visibleView: false,
+    visibleGroupButton: false,
+    visibleTemplate: false,
+    visibleOzr: false,
+    visibleInfo: false
 }
 
 export interface Status {

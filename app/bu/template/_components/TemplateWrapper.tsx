@@ -1,7 +1,7 @@
 "use client"
 
 //import OzViewer from "@/components/OzViewer"
-import { EformTemplate } from "@/app/(types)/EformTemplate"
+import { DisplayRule, EformTemplate } from "@/app/(types)/EformTemplate"
 import { Permission } from "@/app/(types)/Permission"
 import { FindPermission, uniqueValue } from "@/app/(utilities)/ArrayUtilities"
 import { timeStampToDayjs } from "@/app/(utilities)/TimeStampToDayjs"
@@ -34,16 +34,20 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
 })
 
 const TemplateWrapper = ({
+    displayRules,
     id,
     data,
     listLeft,
     treeData
 }: {
+    displayRules: DisplayRule
     id?: string
     data: EformTemplate[]
     listLeft: OptionProps[]
     treeData: TreeDataType[]
 }) => {
+    const { visibleOzr, visibleGroupButton, visibleInfo, visibleTemplate } =
+        displayRules
     const { data: session } = useSession()
     const permission = session!.user.userInfo.permission as Permission[]
     const router = useRouter()
@@ -228,31 +232,40 @@ const TemplateWrapper = ({
     return (
         <div>
             {contextHolder}
-            <TemplateForm
-                disabled={
-                    !FindPermission(permission, "children", "VisibleFormInput")
-                }
-                id={id}
-                form={form}
-            />
-            {FindPermission(permission, "children", "VisibleFormInput") ? (
+            {visibleInfo && (
+                <TemplateForm
+                    disabled={
+                        !FindPermission(
+                            permission,
+                            "children",
+                            "VisibleFormInput"
+                        )
+                    }
+                    id={id}
+                    form={form}
+                />
+            )}
+            {visibleTemplate &&
+            FindPermission(permission, "children", "VisibleFormInput") ? (
                 <TransferTemplate treeData={treeData} />
             ) : (
                 <></>
             )}
-            <CustomButtonGroup
-                //status={data[0].status!.code}
-                permission={permission}
-                onPreview={onPreview}
-                onSubmit={onSubmit}
-                onSave={onSave}
-                onCancel={onCancel}
-                onVerify={onVerify}
-                onBack={onBack}
-                onReject={onReject}
-                onNeedCorrection={onNeedCorrecion}
-            />
-            <OzViewer viewerKey={viewerKey} />
+            {visibleGroupButton && (
+                <CustomButtonGroup
+                    //status={data[0].status!.code}
+                    permission={permission}
+                    onPreview={onPreview}
+                    onSubmit={onSubmit}
+                    onSave={onSave}
+                    onCancel={onCancel}
+                    onVerify={onVerify}
+                    onBack={onBack}
+                    onReject={onReject}
+                    onNeedCorrection={onNeedCorrecion}
+                />
+            )}
+            {visibleOzr && <OzViewer viewerKey={viewerKey} />}
         </div>
     )
 }
