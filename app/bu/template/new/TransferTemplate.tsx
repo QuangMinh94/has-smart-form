@@ -83,6 +83,7 @@ const TransferTemplate = ({
         <DndProvider backend={HTML5Backend}>
             <LayoutTranfer
                 HiddenColLeft={disabled}
+                isDisabled={!disabled}
                 ColLeft={
                     <Container
                         HidenUI={<TreeSelectComp treeData={treeData} />}
