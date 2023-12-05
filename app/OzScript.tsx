@@ -45,13 +45,19 @@ const OzScript = () => {
                         console.log('Yes');
                     if(step === "4" && state === "2"){
                         const oz = document.getElementById("OZViewer");
-                        oz.Script("disable_input_all")
+                        oz.Script("disable_input_all");
+                        //oz.Document_TriggerExternalEvent("ksv","signPadKSV","0");
                     }
                     }
                     else{
                         console.log('Got it');
                     }
                 }
+                 function OZEFormInputEventCommand_OZViewer(docindex, formid, eventname) {
+                    console.log("DocINdex",docIndex);
+                    console.log("FormId",formid);
+                    console.log("eventname",eventname);
+   }
                  function OZErrorCommand_OZViewer(code, message, detailmessage, reportname) {
                      console.log("ErrorCode",code);
                      console.log("ErrorMessage",message);

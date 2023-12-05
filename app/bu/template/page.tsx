@@ -51,14 +51,7 @@ const TemplatePage = async ({
 
     return (
         <SearchParamProvider>
-            <PageHeader
-                path="/bu/template"
-                addNewPermission={FindPermission(
-                    permission,
-                    "children",
-                    "VisibleAddNew"
-                )}
-            >
+            <PageHeader path="/bu/template" addNewPermission={false}>
                 <TemplateTable
                     readOnly={true}
                     data={_data}
