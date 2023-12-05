@@ -77,7 +77,6 @@ const columns: ColumnsType<Users> = [
 
 type Props = { Users: Users[] }
 const App: React.FC<Props> = ({ Users }) => {
-    const Router = useRouter()
     const { setDataGlobal } = useContextAdminUser()
     const newUser = useMemo(() => {
         Users?.sort((a: Users, b: Users) => {
@@ -94,9 +93,6 @@ const App: React.FC<Props> = ({ Users }) => {
     useEffect(() => {
         setDataGlobal((data) => ({ ...data, Users: Users }))
     }, [JSON.stringify(Users)])
-    useEffect(() => {
-        Router.push("?active=true")
-    }, [])
 
     return (
         <Table

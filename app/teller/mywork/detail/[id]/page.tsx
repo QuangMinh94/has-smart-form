@@ -43,10 +43,7 @@ const seacrhAppointMent = async (pram: {
     return res
 }
 const fetchApi = cache(
-    async (
-        idAppointMent: string,
-        codeAppointMent: string
-    ): Promise<myWork[]> => {
+    async (idAppointMent: string, codeAppointMent: string): Promise<myWork> => {
         try {
             const cookie = cookies()
             const session = await getServerSession(authOptions)
@@ -57,15 +54,15 @@ const fetchApi = cache(
                         bodyRequest: { id: idAppointMent, userRole: idRole },
                         session: cookie.get("session")?.value ?? "",
                         token: cookie.get("token")?.value ?? ""
-                    }),
-                    seacrhAppointMent({
-                        bodyRequest: {
-                            appointmentCode: codeAppointMent,
-                            userRole: idRole
-                        },
-                        session: cookie.get("session")?.value ?? "",
-                        token: cookie.get("token")?.value ?? ""
                     })
+                    // seacrhAppointMent({
+                    //     bodyRequest: {
+                    //         appointmentCode: codeAppointMent,
+                    //         userRole: idRole
+                    //     },
+                    //     session: cookie.get("session")?.value ?? "",
+                    //     token: cookie.get("token")?.value ?? ""
+                    // })
                 ])
 
             /* console.log(
@@ -73,7 +70,7 @@ const fetchApi = cache(
                 resSeacrhAppointMent.data
             ) */
 
-            return resSeacrhAppointMent.data
+            return resViewAppointMent.data
         } catch (e: any) {
             console.log("err", e)
             throw new Error("error")
@@ -89,17 +86,16 @@ const DetailMyWork = async ({
     searchParams: { code: string; CCCD: string; Name: string }
 }) => {
     const data = await fetchApi(params.id, searchParams.code)
-
-    const findMyMork = data.find(
-        (item) => item.appointmentCode === searchParams.code
-    )
+    // const findMyMork = data.find(
+    //     (item) => item.appointmentCode === searchParams.code
+    // )
 
     //console.log("HSIDANEUJDS", findMyMork)
 
     return (
         <>
             {/* <p id="disableInput" /> */}
-            <TemlateWrapper mywork={findMyMork!} />
+            <TemlateWrapper mywork={data!} />
         </>
     )
 }

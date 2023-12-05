@@ -5,7 +5,7 @@ import { Image, Layout, Menu, theme, Tooltip } from "antd"
 import React, { useState } from "react"
 
 import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
-import { faUsers } from "@fortawesome/free-solid-svg-icons"
+import { faUsers, faUmbrella } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useSession } from "next-auth/react"
 import { useEnvContext } from "next-runtime-env"
@@ -14,9 +14,13 @@ import { usePathname } from "next/navigation"
 
 type KeyPath = {
     ADMIN_USER: string
+    ADMIN_ROLE: string
+    ADMIN_DEPARTMENT: string
 }
 type conditionPath = {
     isAdminUser: boolean
+    isAdminRole: boolean
+    isDepartment: boolean
 }
 const { Header, Sider, Content } = Layout
 
@@ -36,16 +40,51 @@ const CustomMenu = ({
             icon: (
                 <Tooltip placement="rightTop" title={"Quản trị người dùng"}>
                     <Link href={keyPath.ADMIN_USER}>
-                        <FontAwesomeIcon icon={faUsers} />
+                        <FontAwesomeIcon
+                            icon={faUsers}
+                            style={{ color: "black" }}
+                        />
+                    </Link>
+                </Tooltip>
+            )
+        },
+        {
+            key: keyPath.ADMIN_DEPARTMENT,
+            icon: (
+                <Tooltip placement="rightTop" title={"Quản trị đơn vị"}>
+                    <Link href={keyPath.ADMIN_DEPARTMENT}>
+                        <FontAwesomeIcon
+                            icon={faUmbrella}
+                            style={{ color: "black" }}
+                        />
                     </Link>
                 </Tooltip>
             )
         }
+        // {
+        //     key: keyPath.ADMIN_ROLE,
+        //     icon: (
+        //         <Tooltip placement="rightTop" title={"Quản trị nhóm quyền"}>
+        //             <Link href={keyPath.ADMIN_ROLE}>
+        //                 <FontAwesomeIcon
+        //                     icon={faUmbrella}
+        //                     style={{ color: "black" }}
+        //                 />
+        //             </Link>
+        //         </Tooltip>
+        //     )
+        // }
     ]
 
     // set slectkey
     if (conditionPath.isAdminUser) {
         selectedKeys.push(keyPath.ADMIN_USER)
+    }
+    if (conditionPath.isAdminRole) {
+        selectedKeys.push(keyPath.ADMIN_ROLE)
+    }
+    if (conditionPath.isDepartment) {
+        selectedKeys.push(keyPath.ADMIN_DEPARTMENT)
     }
 
     return (
@@ -67,10 +106,14 @@ const SideMenu = ({ children }: Props) => {
         token: { colorBgContainer, colorPrimary }
     } = theme.useToken()
     const keyPath: KeyPath = {
-        ADMIN_USER: routers("administrator").user.path
+        ADMIN_USER: routers("administrator").user.path,
+        ADMIN_ROLE: routers("administrator").role.path,
+        ADMIN_DEPARTMENT: routers("administrator").department.path
     }
     const conditionPath: conditionPath = {
-        isAdminUser: pathname.startsWith(keyPath.ADMIN_USER)
+        isAdminUser: pathname.startsWith(keyPath.ADMIN_USER),
+        isAdminRole: pathname.startsWith(keyPath.ADMIN_ROLE),
+        isDepartment: pathname.startsWith(keyPath.ADMIN_DEPARTMENT)
     }
 
     return (

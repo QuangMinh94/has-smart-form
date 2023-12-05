@@ -6,7 +6,7 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import ActiveForm from "@/app/administrator/(component)/form/ActiveForm"
 import FormUser from "@/app/administrator/(component)/form/FormUser"
-export type pathModel = "ADMIN_USER"
+export type pathModel = "ADMIN_USER" | "ADMIN_ROLE" | "ADMIN_DEPARTMENT"
 export type typeForm = "ADD_MODAL" | "UPDATE_MODAL" | "ACTIVE_MODAL"
 
 type Props = {
@@ -18,7 +18,9 @@ type Props = {
     isUploadNotApi?: boolean
 }
 const titleBtnAdd = {
-    ADMIN_USER: "Thêm tài khoản"
+    ADMIN_USER: "Thêm tài khoản",
+    ADMIN_ROLE: "Thêm nhóm quyền",
+    ADMIN_DEPARTMENT: "Thêm đơn vị"
 }
 
 const BtnModal: React.FC<Props> = ({
@@ -46,7 +48,9 @@ const BtnModal: React.FC<Props> = ({
                 CancelModal={handleCancel}
                 rowData={type === "UPDATE_MODAL" ? rowData : {}}
             />
-        )
+        ),
+        ADMIN_ROLE: <></>,
+        ADMIN_DEPARTMENT: <></>
     }
     const styleModal = pathModel === "ADMIN_USER" ? { top: "10px" } : undefined
     switch (type) {

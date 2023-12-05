@@ -19,6 +19,7 @@ import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { RevalidateListUser } from "@/app/(actions)/action"
 import { PlusOutlined } from "@ant-design/icons"
 import { useEnvContext } from "next-runtime-env"
+import User from "../../(groupTab)/user/page"
 const UploadFilest: React.FC = () => {
     const {
         dataGlobal: { DataUploadUsers, Users }
@@ -94,12 +95,13 @@ const UploadFilest: React.FC = () => {
             // thỏa mãn dk
             else {
                 setLoading(true)
+                console.log("oke", DataUploadUsers)
                 const Users: BodyUserRequestFileExcel[] = DataUploadUsers.map(
                     (user) => {
                         return {
                             firstName: user?.firstName ?? "",
                             lastName: user?.lastName ?? "",
-                            group: user?.group?.[0].name ?? "",
+                            group: user?.defaultGroup?.name ?? "",
                             department: user.department?.name ?? "",
                             userName: user?.userName ?? "",
                             email: user?.mail ?? "",
@@ -109,6 +111,7 @@ const UploadFilest: React.FC = () => {
                         }
                     }
                 )
+                console.log("Uploaduser", Users)
                 const res = await addMultipleUser({
                     url: NEXT_PUBLIC_ADD_MULTIP_USER!,
                     bodyRequest: { users: Users },
@@ -120,17 +123,17 @@ const UploadFilest: React.FC = () => {
 
                 // kiểm tra xem có user nào add thất bại
                 const ListCheck = reqAddUser
-                    .filter((item) => item?.Uploaded !== "Success")
-                    .map((item) => item.Uploaded)
+                    .filter((item) => item?.uploaded !== "Success")
+                    .map((item) => item.uploaded)
 
                 const msgErr = ListCheck.join(", ")
                 if (ListCheck.length <= 0) {
                     messageApi("success", "Add file user succeeded ")
                     RevalidateListUser()
+                    handleCloseModalListUsers()
                 } else {
                     messageApi("error", `User : ${msgErr} add Error`)
                 }
-                handleCloseModalListUsers()
             }
         } catch (err: any) {
             const { code, data, type } = err?.response?.data
