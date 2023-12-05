@@ -125,6 +125,7 @@ const SigninForm = () => {
                                     style={{ marginBottom: 0 }}
                                 >
                                     <Input
+                                        data-testid="usernameId"
                                         prefix={
                                             <FontAwesomeIcon
                                                 icon={faUser}
@@ -148,6 +149,7 @@ const SigninForm = () => {
                                     style={{ marginBottom: 0 }}
                                 >
                                     <Input.Password
+                                        data-testid="passwordId"
                                         prefix={
                                             <FontAwesomeIcon
                                                 icon={faLock}
@@ -182,6 +184,8 @@ const SigninForm = () => {
                             ) : (
                                 <Form.Item>
                                     <Button
+                                        id="submitSignin"
+                                        role="submitSignin"
                                         type="primary"
                                         className="bg-blue-500"
                                         htmlType="submit"
@@ -194,7 +198,9 @@ const SigninForm = () => {
                                 </Form.Item>
                             )}
                             <center>
-                                <div className="text-red-800">{error}</div>
+                                <div role="errorText" className="text-red-800">
+                                    {error}
+                                </div>
                             </center>
                         </Form>
                         {/* <center>

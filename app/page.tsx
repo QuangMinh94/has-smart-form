@@ -1,4 +1,4 @@
-export default async function Home() {
+export default function Home() {
     return (
         <div className="font-bold ml-5">
             {/* <NavBar /> */}

@@ -13,5 +13,6 @@ declare global {
         GetInformation: any
         Script: any
         ReBind: any
+        Document_TriggerExternalEvent: any
     }
 }

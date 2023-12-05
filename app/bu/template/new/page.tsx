@@ -1,3 +1,4 @@
+import { DefaultActiveRule } from "@/app/(types)/EformTemplate"
 import { Permission } from "@/app/(types)/Permission"
 import { TreeProduct } from "@/app/(types)/TreeProduct"
 import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
@@ -29,7 +30,12 @@ const NewTemplate = async () => {
 
     return (
         <ProviderTemplate>
-            <TemplateWrapper treeData={treeDataView} listLeft={[]} data={[]} />
+            <TemplateWrapper
+                displayRules={DefaultActiveRule}
+                treeData={treeDataView}
+                listLeft={[]}
+                data={[]}
+            />
         </ProviderTemplate>
     )
 }
