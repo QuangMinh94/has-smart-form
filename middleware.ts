@@ -35,7 +35,13 @@ export default withAuth(function middleware(request: NextRequestWithAuth) {
 })
 
 export const config = {
-    matcher: ["/bu/:path*", "/teller/:path*", "/ksvteller/:path*", "/ba/:path*"]
+    matcher: [
+        "/bu/:path*",
+        "/teller/:path*",
+        "/ksvteller/:path*",
+        "/ba/:path*",
+        "/administrator/:path*"
+    ]
 }
 
 /* const protectedPaths = ["/dashboard", "/bu"]
