@@ -296,7 +296,10 @@ const FormOder: React.FC<Props> = ({
                                             .replace(/\s/g, "") ===
                                         value?.toLowerCase().replace(/\s/g, "")
                                 )
-                                if (checkUsername && typeForm === "ADD_MODAL") {
+                                if (
+                                    checkUsername &&
+                                    (isUploadNotApi || typeForm === "ADD_MODAL")
+                                ) {
                                     return Promise.reject(
                                         "Tên đăng nhập đã có người sử dụng!"
                                     )

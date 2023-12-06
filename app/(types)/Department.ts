@@ -20,6 +20,7 @@ export interface Department {
     address?: string
     stage?: string
     distric?: string
+    Children?: Department[]
 }
 export interface bodyDepartmentRequest {
     Id: string
