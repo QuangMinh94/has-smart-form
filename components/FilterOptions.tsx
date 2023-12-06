@@ -3,7 +3,8 @@
 import { CategoryTypes } from "@/app/(types)/Categories"
 import {
     faFilter,
-    faFilterCircleXmark
+    faFilterCircleXmark,
+    faSearch
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -111,7 +112,8 @@ const FilterOption = ({ route }: { route: string }) => {
     }
     return (
         <Flex align="center" gap={10}>
-            <Search
+            <Input
+                prefix={<FontAwesomeIcon icon={faSearch} />}
                 key="citizenId"
                 style={{ width: 300 }}
                 placeholder="Tìm theo CCCD"
