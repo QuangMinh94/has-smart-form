@@ -1,0 +1,6 @@
+.boxAction:hover > .actionHover {
+    display: flex !important;
+}
+.boxAction .active_hover {
+    display: flex !important;
+}
