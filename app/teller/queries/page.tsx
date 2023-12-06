@@ -93,7 +93,9 @@ const QueriesPage = async ({
     filterData?.forEach((element) => {
         _dataTable.push({
             key: element._id,
-            departmentCode: element.appointmentCode,
+            departmentCode: (element.officeBranch as Department)
+                ? (element.officeBranch as Department).code
+                : "",
             appointmentCode: element.appointmentCode,
             citizenId: element.citizenId,
             name: element.name,

@@ -20,6 +20,7 @@ type FieldType = {
 
 const SigninForm = () => {
     //const router = useRouter()
+    const [form] = Form.useForm()
     const [userNameTitle, setUserNameTitle] = useState<boolean>(false)
     const [passwordTitle, setPasswordTitle] = useState<boolean>(false)
     const [error, setError] = useState("")
@@ -62,7 +63,7 @@ const SigninForm = () => {
 
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo)
-        setError(errorInfo)
+        //setError(errorInfo)
     }
 
     return (
@@ -107,6 +108,7 @@ const SigninForm = () => {
                             </center>
                         </div>
                         <Form
+                            form={form}
                             name="basic"
                             // labelCol={{ span: 8 }}
                             // wrapperCol={{ span: 16 }}
@@ -188,10 +190,11 @@ const SigninForm = () => {
                                         role="submitSignin"
                                         type="primary"
                                         className="bg-blue-500"
-                                        htmlType="submit"
+                                        //htmlType="submit"
                                         style={{
                                             width: "100%"
                                         }}
+                                        onClick={() => form.submit()}
                                     >
                                         Đăng nhập
                                     </Button>
