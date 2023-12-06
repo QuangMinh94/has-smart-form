@@ -1,14 +1,14 @@
 "use client"
 import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
-import routers, { BLOCK, PRODUCT, QUERIES, MYWORK } from "@/router/cusTomRouter"
+import routers, { BLOCK, MYWORK, PRODUCT, QUERIES } from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
 
 import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
 import {
     faArchive,
-    faFile,
     faCog,
+    faFile,
     faSearch
 } from "@fortawesome/free-solid-svg-icons"
 
@@ -287,7 +287,7 @@ const SideMenu = ({ children }: Props) => {
                             "Công việc của tôi"}
                         {(conditionPath.isTellerQuery ||
                             conditionPath.isKsvQuery) &&
-                            "Truy vẫn giao dịch"}
+                            "Truy vấn giao dịch"}
                         {conditionPath.isAdminTrator && "Quản trị"}
                     </h1>
                     {status === "authenticated" && (
