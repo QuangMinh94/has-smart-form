@@ -63,7 +63,13 @@ const TreeSelectComp = ({ treeData }: { treeData: TreeDataType[] }) => {
     )
 }
 
-const TransferTemplate = ({ treeData }: { treeData: TreeDataType[] }) => {
+const TransferTemplate = ({
+    treeData,
+    disabled
+}: {
+    treeData: TreeDataType[]
+    disabled: boolean
+}) => {
     const {
         listLeft,
         listRight,
@@ -76,6 +82,8 @@ const TransferTemplate = ({ treeData }: { treeData: TreeDataType[] }) => {
     return (
         <DndProvider backend={HTML5Backend}>
             <LayoutTranfer
+                HiddenColLeft={disabled}
+                isDisabled={!disabled}
                 ColLeft={
                     <Container
                         HidenUI={<TreeSelectComp treeData={treeData} />}

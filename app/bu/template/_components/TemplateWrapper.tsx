@@ -232,22 +232,21 @@ const TemplateWrapper = ({
     return (
         <div>
             {contextHolder}
-            {visibleInfo && (
-                <TemplateForm
-                    disabled={
-                        !FindPermission(
-                            permission,
-                            "children",
-                            "VisibleFormInput"
-                        )
-                    }
-                    id={id}
-                    form={form}
+
+            <TemplateForm
+                disabled={
+                    !visibleInfo ||
+                    !FindPermission(permission, "children", "VisibleFormInput")
+                }
+                id={id}
+                form={form}
+            />
+
+            {FindPermission(permission, "children", "VisibleFormInput") ? (
+                <TransferTemplate
+                    disabled={!visibleTemplate}
+                    treeData={treeData}
                 />
-            )}
-            {visibleTemplate &&
-            FindPermission(permission, "children", "VisibleFormInput") ? (
-                <TransferTemplate treeData={treeData} />
             ) : (
                 <></>
             )}
@@ -265,7 +264,16 @@ const TemplateWrapper = ({
                     onNeedCorrection={onNeedCorrecion}
                 />
             )}
-            {visibleOzr && <OzViewer viewerKey={viewerKey} />}
+            {visibleOzr ? (
+                <>
+                    <OzViewer viewerKey={viewerKey} />
+                </>
+            ) : (
+                <>
+                    <p id="disableInput" />
+                    <OzViewer viewerKey={viewerKey} />
+                </>
+            )}
         </div>
     )
 }
