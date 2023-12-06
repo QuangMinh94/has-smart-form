@@ -10,9 +10,9 @@ const TemlateExcel: TemlateExcel[] = [
     {
         FirstName: "name",
         LastName: "test1",
-        Group: "Chuyên viên Nghiệp vụ Trung tâm dịch vụ Khách hàng",
+        Group: "Kiểm soát viên Nghiệp vụ Trung tâm dịch vụ Khách hàng",
         Department: "Trung tâm Công nghệ thông tin",
-        UserName: "40AnNV1@hpt.vn",
+        UserName: "username10test@hpt.vn",
         Email: "AnNV@hpt.vn",
         PhoneNumber: "987123456",
         AuthenProvider: "local"
@@ -22,7 +22,7 @@ const TemlateExcel: TemlateExcel[] = [
         LastName: "test2",
         Group: "Teller Chi nhánh Hai Bà Trưng",
         Department: "Chi nhánh Hai Bà Trưng",
-        UserName: "41AnNV1@hpt.vn",
+        UserName: "username11test@hpt.vn",
         Email: "AnNV@hpt.vn",
         PhoneNumber: "",
         AuthenProvider: "local"
@@ -32,7 +32,7 @@ const TemlateExcel: TemlateExcel[] = [
         LastName: "test3",
         Group: "Teller Phòng Khách Hàng Cá Nhân 2 - CN HBT",
         Department: "Phòng Khách Hàng Cá Nhân 2 - CN HBT",
-        UserName: "42AnhHCT1@bpm.lab",
+        UserName: "username12test@bpm.lab",
         Email: "AnhHCT@gmail.com",
         PhoneNumber: "789123542",
         AuthenProvider: "local"
@@ -40,9 +40,9 @@ const TemlateExcel: TemlateExcel[] = [
     {
         FirstName: "name",
         LastName: "test4",
-        Group: "Chuyên viên Nghiệp vụ Trung tâm dịch vụ Khách hàng",
+        Group: "Kiểm soát viên Nghiệp vụ Trung tâm dịch vụ Khách hàng",
         Department: "Trung tâm Công nghệ thông tin",
-        UserName: "43PVAnh1@bpm.lab",
+        UserName: "username13test@bpm.lab",
         Email: "PVAnh@gmail.com",
         PhoneNumber: "789123542",
         AuthenProvider: "local"
@@ -52,7 +52,7 @@ const TemlateExcel: TemlateExcel[] = [
         LastName: "test5",
         Group: "Teller Phòng Khách Hàng Cá Nhân 2 - CN HBT",
         Department: "Phòng Khách Hàng Cá Nhân 2 - CN HBT",
-        UserName: "44LongNT1@bpm.lab",
+        UserName: "username14test@bpm.lab",
         Email: "LongNT@bpm.lab",
         PhoneNumber: "789123542",
         AuthenProvider: "local"

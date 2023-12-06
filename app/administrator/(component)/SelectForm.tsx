@@ -1,17 +1,25 @@
 "use client"
 
-import React, { useCallback, useState, memo, useMemo } from "react"
+import React, { useCallback, useState, memo, useMemo, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { Select, Empty, Spin } from "antd"
 
 import { getDepartment } from "@/app/(service)/department"
 import { getGroup } from "@/app/(service)/group"
 import { GetAuthen } from "@/app/(service)/authen"
+import { getCadasTrals } from "@/app/(service)/cadastrals"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { ToFilterName } from "@/util/formatText"
 import { useEnvContext } from "next-runtime-env"
 type Type = "getAuth" | "getDepartment" | "getGroup"
-export type typeSelect = "authen" | "department" | "defaultGroup"
+export type typeSelect =
+    | "authen"
+    | "department"
+    | "defaultGroup"
+    | "getProvince"
+    | "getDistrict"
+    | "getWards"
+
 type Props = {
     type: Type
     placeholder?: string
@@ -23,6 +31,7 @@ type Props = {
     value?: string
     mode?: "multiple"
     enabledFecthData?: boolean
+    idParent?: string
 }
 type Option = { label: string; value: string; dataRow: any }
 
@@ -31,20 +40,21 @@ const UseFecthApi = ({
     session,
     type,
     enabled,
-    idDepartment
+    idParent
 }: {
     token: string
     session: string
     type: Type
     enabled: boolean
-    idDepartment: string
+    idParent?: string
 }) => {
     const {
         NEXT_PUBLIC_GET_AUTH,
         NEXT_PUBLIC_GET_DEPARTMENT,
-        NEXT_PUBLIC_GET_GROUP
+        NEXT_PUBLIC_GET_GROUP,
+        NEXT_PUBLIC_GET_CADASTRALS
     } = useEnvContext()
-    const Service: any = {
+    const Service = {
         getAuth: async (): Promise<Option[]> => {
             const res = await GetAuthen({
                 url: NEXT_PUBLIC_GET_AUTH!,
@@ -90,6 +100,54 @@ const UseFecthApi = ({
                 dataRow: item
             }))
             return option
+        },
+        getProvince: async (): Promise<Option[]> => {
+            const res = await getCadasTrals({
+                url: NEXT_PUBLIC_GET_CADASTRALS!,
+                bodyRequest: { parent: idParent ?? "", type: "TTP" },
+                token,
+                session
+            })
+            const group: any[] = res.data
+
+            const option: Option[] = group.map((item) => ({
+                value: item?._id ?? "",
+                label: item?.name ?? "",
+                dataRow: item
+            }))
+            return option
+        },
+        getDistrict: async (): Promise<Option[]> => {
+            const res = await getCadasTrals({
+                url: NEXT_PUBLIC_GET_CADASTRALS!,
+                bodyRequest: { parent: idParent ?? "", type: "QH" },
+                token,
+                session
+            })
+            const group: any[] = res.data
+
+            const option: Option[] = group.map((item) => ({
+                value: item?._id ?? "",
+                label: item?.name ?? "",
+                dataRow: item
+            }))
+            return option
+        },
+        getWards: async (): Promise<Option[]> => {
+            const res = await getCadasTrals({
+                url: NEXT_PUBLIC_GET_CADASTRALS!,
+                bodyRequest: { parent: idParent ?? "", type: "PX" },
+                token,
+                session
+            })
+            const group: any[] = res.data
+
+            const option: Option[] = group.map((item) => ({
+                value: item?._id ?? "",
+                label: item?.name ?? "",
+                dataRow: item
+            }))
+            return option
         }
     }
     const { isLoading, error, data, refetch, isRefetching } = useQuery<
@@ -119,7 +177,8 @@ const CustomerSelect: React.FC<Props> = ({
     idDepartment,
     value,
     mode,
-    enabledFecthData
+    enabledFecthData,
+    idParent
 }) => {
     const [enabledFecth, setenabledFecth] = useState<boolean>(
         !!enabledFecthData
@@ -129,8 +188,7 @@ const CustomerSelect: React.FC<Props> = ({
         token,
         session,
         type: type,
-        enabled: enabledFecth,
-        idDepartment: idDepartment ?? ""
+        enabled: enabledFecth
     })
 
     const HandlerfilterOption = useCallback(
@@ -149,6 +207,11 @@ const CustomerSelect: React.FC<Props> = ({
         return dataNew
     }, [data?.length, idDepartment])
 
+    useEffect(() => {
+        if (idDepartment) {
+            refetch()
+        }
+    }, [idParent])
     return (
         <Select
             loading={isLoading}

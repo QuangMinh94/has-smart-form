@@ -1,14 +1,12 @@
 "use client"
 import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
-import routers, { BLOCK, MYWORK, PRODUCT } from "@/router/cusTomRouter"
-import { Image, Layout, Menu, theme, Tooltip } from "antd"
-import React, { useState } from "react"
+import routers from "@/router/cusTomRouter"
+import { Layout, Menu, theme, Tooltip } from "antd"
+import React from "react"
 
-import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
-import { faUsers, faUmbrella } from "@fortawesome/free-solid-svg-icons"
+import { faUsers, faBuilding } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useSession } from "next-auth/react"
-import { useEnvContext } from "next-runtime-env"
+
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -47,20 +45,20 @@ const CustomMenu = ({
                     </Link>
                 </Tooltip>
             )
-        },
-        {
-            key: keyPath.ADMIN_DEPARTMENT,
-            icon: (
-                <Tooltip placement="rightTop" title={"Quản trị đơn vị"}>
-                    <Link href={keyPath.ADMIN_DEPARTMENT}>
-                        <FontAwesomeIcon
-                            icon={faUmbrella}
-                            style={{ color: "black" }}
-                        />
-                    </Link>
-                </Tooltip>
-            )
         }
+        // {
+        //     key: keyPath.ADMIN_DEPARTMENT,
+        //     icon: (
+        //         <Tooltip placement="rightTop" title={"Quản trị đơn vị"}>
+        //             <Link href={keyPath.ADMIN_DEPARTMENT}>
+        //                 <FontAwesomeIcon
+        //                     icon={faBuilding}
+        //                     style={{ color: "black" }}
+        //                 />
+        //             </Link>
+        //         </Tooltip>
+        //     )
+        // }
         // {
         //     key: keyPath.ADMIN_ROLE,
         //     icon: (

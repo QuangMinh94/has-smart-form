@@ -26,7 +26,7 @@ const LayoutTranfer: React.FC<Props> = ({
                     className="absolute inset-0 rounded-lg  "
                     style={{
                         backgroundColor: " rgba(247, 246, 246, 0.5)",
-                        zIndex: "99999"
+                        zIndex: "10"
                     }}
                 ></div>
             )}

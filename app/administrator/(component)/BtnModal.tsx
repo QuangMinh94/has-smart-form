@@ -16,6 +16,7 @@ type Props = {
     rowData: any
     activeChecked?: boolean
     isUploadNotApi?: boolean
+    iconBtn?: boolean
 }
 const titleBtnAdd = {
     ADMIN_USER: "Thêm tài khoản",
@@ -29,13 +30,14 @@ const BtnModal: React.FC<Props> = ({
     titleModel,
     activeChecked,
     rowData,
-    isUploadNotApi
+    isUploadNotApi,
+    iconBtn
 }) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     let Element
-    const showModal = () => {
+    const showModal = useCallback(() => {
         setIsModalOpen(true)
-    }
+    }, [])
     const handleCancel = useCallback(() => {
         setIsModalOpen(false)
     }, [])
@@ -57,13 +59,17 @@ const BtnModal: React.FC<Props> = ({
         case "ADD_MODAL":
             Element = (
                 <>
-                    <Button
-                        icon={<PlusOutlined />}
-                        type="primary"
-                        onClick={showModal}
-                    >
-                        {titleBtnAdd[pathModel]}
-                    </Button>
+                    {iconBtn ? (
+                        <PlusOutlined onClick={showModal} />
+                    ) : (
+                        <Button
+                            icon={<PlusOutlined />}
+                            type="primary"
+                            onClick={showModal}
+                        >
+                            {titleBtnAdd[pathModel]}
+                        </Button>
+                    )}
                     <Modal
                         style={styleModal}
                         title={titleModel}

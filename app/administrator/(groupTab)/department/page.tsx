@@ -3,34 +3,32 @@ import LayoutAdmin from "@/app/administrator/(component)/LayoutAdmin"
 
 import Loading from "@/app/teller/mywork/loading"
 import BtnModal from "@/app/administrator/(component)/BtnModal"
-import ActionHeaderRole from "@/app/administrator/(component)/ActionHeader/Role"
+import ActionHeaderDepartment from "@/app/administrator/(component)/ActionHeader/department"
+import ProviderTree from "@/app/administrator/(component)/provider/ProviderTree"
 import dynamic2 from "next/dynamic"
-import { SeacrhUser } from "@/app/(service)/User"
+
 import { cookies } from "next/headers"
-import { Users } from "@/app/(types)/Users"
-import ProviderUser from "../../(component)/provider/providerUser"
-const TableUser = dynamic2(
-    () => import("@/app/administrator/(component)/table/tableUser"),
+
+const TreeDepartMent = dynamic2(
+    () => import("@/app/administrator/(component)/table/treeDepartMent"),
     {
         loading: () => <Loading />,
         ssr: false
     }
 )
 
-const fectheGroup = async ({
-    Active,
-    SearchName
+const fectheDepartmentTree = async ({
+    Active
 }: {
     Active: boolean
-    SearchName: string
 }): Promise<any> => {
     try {
-        const body = { active: Active, name: SearchName }
+        const body = { active: Active }
 
         const cookie = cookies()
         console.log("Session", cookie.get("session")?.value ?? "")
         console.log("Authorization", cookie.get("token")?.value ?? "")
-        const res = await fetch(process.env.SEARCH_USER!, {
+        const res = await fetch(process.env.GET_DEPARTMENT_TREE!, {
             next: { tags: ["ListDepartment"] },
             method: "POST",
             body: JSON.stringify(body),
@@ -54,26 +52,26 @@ const User = async ({
     params: {}
     searchParams: { active: boolean; searchname: "" }
 }) => {
-    console.log("params", searchParams)
-    const Users = await fectheGroup({
-        Active: searchParams.active ?? true,
-        SearchName: searchParams.searchname ? searchParams.searchname : ""
+    const DepartmentTree = await fectheDepartmentTree({
+        Active: searchParams.active ?? true
     })
 
     return (
-        <LayoutAdmin
-            BtnAdd={
-                <BtnModal
-                    titleModel="Thêm đơn vị"
-                    type="ADD_MODAL"
-                    pathModel="ADMIN_DEPARTMENT"
-                    rowData={{}}
-                />
-            }
-            title="Quản trị đơn vị"
-            HeaderAction={<ActionHeaderRole />}
-            Table={<TableUser Users={Users ?? []} />}
-        />
+        <ProviderTree>
+            <LayoutAdmin
+                BtnAdd={
+                    <BtnModal
+                        titleModel="Thêm đơn vị"
+                        type="ADD_MODAL"
+                        pathModel="ADMIN_DEPARTMENT"
+                        rowData={{}}
+                    />
+                }
+                title="Quản trị đơn vị"
+                HeaderAction={<ActionHeaderDepartment />}
+                Table={<TreeDepartMent Department={DepartmentTree ?? []} />}
+            />
+        </ProviderTree>
     )
 }
 export const dynamic = "force-dynamic"
