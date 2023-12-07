@@ -6,11 +6,17 @@ import { useEnvContext } from "next-runtime-env"
 import { useCallback, useContext, useEffect } from "react"
 import { ContextTemplate } from "./context/context"
 
-const OzViewer = ({ viewerKey }: { viewerKey: number }) => {
-    return <Viewer key={viewerKey} />
+const OzViewer = ({
+    viewerKey,
+    ozParams
+}: {
+    viewerKey: number
+    ozParams?: string
+}) => {
+    return <Viewer key={viewerKey} ozParams={ozParams} />
 }
 
-const Viewer = () => {
+const Viewer = ({ ozParams }: { ozParams?: string }) => {
     const { NEXT_PUBLIC_EFORM_SERVER, NEXT_PUBLIC_EFORM_SERVER_APP } =
         useEnvContext()
     const { listRight } = useContext(ContextTemplate)
@@ -44,7 +50,7 @@ const Viewer = () => {
                             "/" + element.type + "/" + element.name,
                             element.name!,
                             OzDelimiter()
-                        ),
+                        ) + ozParams,
                         OzDelimiter()
                     )
 
@@ -102,6 +108,11 @@ viewer.createreport_doc_index=${index}${delimiter}
     global.use_preview_progressbar=true${delimiter}
     viewer.errorcommand=true${delimiter}
     viewer.progresscommand=true${delimiter}`
+}
+
+export const KSVParams = (isKSV: boolean, delimiter: string) => {
+    return `connection.pcount=1${delimiter}
+            connection.args1=isKSV=${isKSV}${delimiter}`
 }
 
 //eform.signpad_zoom=50${delimiter}

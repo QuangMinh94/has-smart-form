@@ -61,14 +61,20 @@ const QueriesPage = async ({
                             [key]: idList
                         })
                     }
+                } else if (key === "from" || key === "to") {
+                    const dateValue = new Date(
+                        parseInt(
+                            searchParams[key as keyof typeof searchInput]
+                        ) * 1000
+                    )
+                    Object.assign(searchInput, {
+                        [key]: dateValue
+                    })
                 } else {
                     Object.assign(searchInput, {
                         [key]: searchParams[key as keyof typeof searchInput]
                     })
                 }
-                /*  Object.assign(searchInput, {
-                [key]: searchParams[key as keyof typeof searchInput]
-            }) */
             } catch (error: any) {
                 console.log("Error", error)
             }
@@ -85,7 +91,9 @@ const QueriesPage = async ({
     filterData?.forEach((element) => {
         _dataTable.push({
             key: element._id,
-            departmentCode: element.appointmentCode,
+            departmentCode: (element.officeBranch as Department)
+                ? (element.officeBranch as Department).code
+                : "",
             appointmentCode: element.appointmentCode,
             citizenId: element.citizenId,
             name: element.name,

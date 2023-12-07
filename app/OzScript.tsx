@@ -46,7 +46,7 @@ const OzScript = () => {
                     if(step === "4" && state === "2"){
                         const oz = document.getElementById("OZViewer");
                         oz.Script("disable_input_all");
-                        //oz.Document_TriggerExternalEvent("ksv","signPadKSV","0");
+                        //oz.Document_TriggerExternalEvent("ksv","true","0");
                     }
                     }
                     else{
