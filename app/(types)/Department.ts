@@ -14,21 +14,26 @@ export interface Department {
     active?: boolean
     name?: string
     organization?: string
-    parent?: string
+    parent?: { _id: string; name: string }
     type?: string
     code?: string
     address?: string
     stage?: string
     distric?: string
-    Children?: Department[]
+    children?: Department[]
+    village?: string
 }
 export interface bodyDepartmentRequest {
-    Id: string
-    Name?: string
-    Active?: boolean
-    Description?: string
-    Parent?: Parent
-    Organization?: string
+    id?: string
+    name: string
+    parent?: string
+    active: boolean
+    type: string
+    code: string
+    address: string
+    stage: string
+    distric: string
+    village: string
 }
 export interface DepartmentTreeView {
     Active?: boolean

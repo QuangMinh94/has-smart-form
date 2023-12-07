@@ -21,12 +21,12 @@ const LayoutTranfer: React.FC<Props> = ({
 }) => {
     const Layout = (
         <Flex gap={10} style={{ position: "relative" }}>
-            {isDisabled || (
+            {isDisabled && (
                 <div
                     className="absolute inset-0 rounded-lg  "
                     style={{
                         backgroundColor: " rgba(247, 246, 246, 0.5)",
-                        zIndex: "10"
+                        zIndex: "1"
                     }}
                 ></div>
             )}

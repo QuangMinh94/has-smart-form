@@ -115,7 +115,11 @@ const App: React.FC<Props> = ({ data }) => {
         {
             key: "implementer",
             title: "Người thực hiện",
-            dataIndex: "implementer"
+
+            render: (record: myWork) =>
+                `${record?.executor?.firstName ?? ""} ${
+                    record?.executor?.lastName ?? ""
+                }`
         }
     ]
     console.log("table", data)

@@ -1,6 +1,7 @@
 import { channel } from "../channel"
 import { eProduct, formTemplate } from "../eProduct"
 import { status } from "../status"
+import { Users } from "../Users"
 interface eProductforMywork {
     image?: {
         data: string
@@ -52,4 +53,5 @@ export interface myWork {
     channel?: channel
     docusignDocumentId: string
     displayRule?: displayRule
+    executor?: Users
 }

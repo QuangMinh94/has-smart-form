@@ -6,7 +6,7 @@ import BtnModal from "@/app/administrator/(component)/BtnModal"
 import ActionHeaderDepartment from "@/app/administrator/(component)/ActionHeader/department"
 import ProviderTree from "@/app/administrator/(component)/provider/ProviderTree"
 import dynamic2 from "next/dynamic"
-
+import ProviderTranfer from "@/app/administrator/(component)/provider/ProviderTransfer"
 import { cookies } from "next/headers"
 
 const TreeDepartMent = dynamic2(
@@ -58,19 +58,21 @@ const User = async ({
 
     return (
         <ProviderTree>
-            <LayoutAdmin
-                BtnAdd={
-                    <BtnModal
-                        titleModel="Thêm đơn vị"
-                        type="ADD_MODAL"
-                        pathModel="ADMIN_DEPARTMENT"
-                        rowData={{}}
-                    />
-                }
-                title="Quản trị đơn vị"
-                HeaderAction={<ActionHeaderDepartment />}
-                Table={<TreeDepartMent Department={DepartmentTree ?? []} />}
-            />
+            <ProviderTranfer>
+                <LayoutAdmin
+                    BtnAdd={
+                        <BtnModal
+                            titleModel="Thêm đơn vị"
+                            type="ADD_MODAL"
+                            pathModel="ADMIN_DEPARTMENT"
+                            rowData={{}}
+                        />
+                    }
+                    title="Quản trị đơn vị"
+                    HeaderAction={<ActionHeaderDepartment />}
+                    Table={<TreeDepartMent Department={DepartmentTree ?? []} />}
+                />
+            </ProviderTranfer>
         </ProviderTree>
     )
 }

@@ -3,7 +3,7 @@ import React, { memo, useCallback, useState, useEffect } from "react"
 import { BodyUserRequest, Users } from "@/app/(types)/Users"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { addUser, updateUser } from "@/app/(service)/User"
-import useGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
+
 import type { RangePickerProps } from "antd/es/date-picker"
 import {
     Button,
