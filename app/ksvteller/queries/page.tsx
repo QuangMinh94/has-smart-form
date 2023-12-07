@@ -61,14 +61,20 @@ const QueriesPage = async ({
                             [key]: idList
                         })
                     }
+                } else if (key === "from" || key === "to") {
+                    const dateValue = new Date(
+                        parseInt(
+                            searchParams[key as keyof typeof searchInput]
+                        ) * 1000
+                    )
+                    Object.assign(searchInput, {
+                        [key]: dateValue
+                    })
                 } else {
                     Object.assign(searchInput, {
                         [key]: searchParams[key as keyof typeof searchInput]
                     })
                 }
-                /*  Object.assign(searchInput, {
-                [key]: searchParams[key as keyof typeof searchInput]
-            }) */
             } catch (error: any) {
                 console.log("Error", error)
             }

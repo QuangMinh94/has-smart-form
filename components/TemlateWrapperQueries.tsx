@@ -3,7 +3,7 @@ import { block, formTemplate } from "@/app/(types)/eProduct"
 import { eFormTask, myWork } from "@/app/(types)/teller/mywork"
 import { choosenBlock } from "@/app/teller/(components)/context"
 import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
-import { DefaultParams, OzDelimiter } from "@/components/OzViewer"
+import { DefaultParams, KSVParams, OzDelimiter } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import { faLongArrowAltLeft } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -20,8 +20,8 @@ const OzViewer = dynamic(() => import("@/components/OzViewer"), {
     ssr: false
 })
 
-type Props = { mywork: myWork }
-const TemlateWrapperQueries: React.FC<Props> = ({ mywork }) => {
+type Props = { mywork: myWork; isKSV?: boolean }
+const TemlateWrapperQueries: React.FC<Props> = ({ mywork, isKSV }) => {
     const [DataMywork, setMyWork] = useState<myWork>(mywork)
     const router = useRouter()
     const [messageApi, contextHolder] = message.useMessage()
@@ -184,7 +184,10 @@ const TemlateWrapperQueries: React.FC<Props> = ({ mywork }) => {
                         Xem file kết quả
                     </a>
                 )}
-            <OzViewer viewerKey={viewerKey} />
+            <OzViewer
+                viewerKey={viewerKey}
+                ozParams={isKSV ? KSVParams(isKSV, OzDelimiter()) : ""}
+            />
         </div>
     )
 }
