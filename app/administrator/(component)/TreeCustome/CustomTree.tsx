@@ -13,17 +13,21 @@ type Cusomter = {
     UpdateModel: React.FC<{
         datarow: any
     }>
+    ActiveModal: React.FC<{
+        datarow: any
+    }>
 }
 function TreeCustom({
     Tree,
     searchValue,
     colorSeacrh,
     AddModel,
-    UpdateModel
+    UpdateModel,
+    ActiveModal
 }: Cusomter): DataNode[] {
     const TreeCustomer: DataNode[] = []
 
-    Tree.forEach((item) => {
+    Tree?.forEach((item) => {
         const strTitle = item?.name ?? ""
         const index = ToFilterName(strTitle).indexOf(ToFilterName(searchValue))
         const name =
@@ -46,8 +50,11 @@ function TreeCustom({
                         <div className="mr-[8px]">
                             <AddModel datarow={item} />
                         </div>
-                        <div>
+                        <div className="mr-[8px]">
                             <UpdateModel datarow={item} />
+                        </div>
+                        <div>
+                            <ActiveModal datarow={item} />
                         </div>
                     </div>
                 </Flex>
@@ -60,7 +67,8 @@ function TreeCustom({
                           searchValue,
                           colorSeacrh,
                           AddModel,
-                          UpdateModel
+                          UpdateModel,
+                          ActiveModal
                       })
                     : [],
             icon: item?.name

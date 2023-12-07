@@ -1,7 +1,6 @@
 "use client"
-import { Tree, Flex, theme } from "antd"
-import type { DataNode } from "antd/es/tree"
-import React, { useEffect, useState } from "react"
+import { Tree, theme } from "antd"
+import React, { useEffect } from "react"
 import { Department } from "@/app/(types)/Department"
 import ButtonModal from "@/app/administrator/(component)/BtnModal"
 import { useContextTree } from "@/components/cusTomHook/useContext"
@@ -36,6 +35,23 @@ const UpdateModalComponent: React.FC<{
         />
     )
 }
+const ActiveModalComponent: React.FC<{
+    datarow: any
+}> = ({ datarow }) => {
+    return (
+        <ButtonModal
+            titleModel={`${
+                datarow.active
+                    ? `hủy đơn vị "${datarow.name}"`
+                    : `kích hoạt đơn vị "${datarow.name}"`
+            }`}
+            type="ACTIVE_MODAL"
+            pathModel="ADMIN_DEPARTMENT"
+            rowData={datarow}
+            activeChecked={datarow.active}
+        />
+    )
+}
 const LayoutTreeView: React.FC<TypeProps> = ({ Department }) => {
     const { dataGlobal, setDataGlobal, treeFilter, setTreeFilter } =
         useContextTree()
@@ -45,11 +61,12 @@ const LayoutTreeView: React.FC<TypeProps> = ({ Department }) => {
     } = theme.useToken()
     useEffect(() => {
         const dataTree = TreeCustom({
-            Tree: Department,
+            Tree: Department ?? [],
             searchValue,
             colorSeacrh: colorPrimary,
             AddModel: AddModalComponent,
-            UpdateModel: UpdateModalComponent
+            UpdateModel: UpdateModalComponent,
+            ActiveModal: ActiveModalComponent
         })
 
         setDataGlobal((data) => ({ ...data, DataNode: dataTree }))
@@ -62,6 +79,7 @@ const LayoutTreeView: React.FC<TypeProps> = ({ Department }) => {
             autoExpandParent: false
         }))
     }
+    console.log(Department)
     return (
         <Tree
             style={{ maxHeight: "70vh", overflowY: "auto" }}

@@ -17,6 +17,10 @@ import {
     typeContextTree,
     contextTreeView
 } from "@/app/administrator/(component)/content/contentTreeView"
+import {
+    typeContextTransfer,
+    contextTransfer
+} from "@/app/administrator/(component)/content/contentTransfer"
 function useContextMyWorkDetail(): typeContextMyworkDetail {
     const provider = useContext(contextMyworkDetail)
     return {
@@ -79,11 +83,21 @@ function useContextTree(): typeContextTree {
         setTreeFilter: provider.setTreeFilter
     }
 }
+function useContextTransferANTD(): typeContextTransfer {
+    const provider = useContext(contextTransfer)
+    return {
+        setData: provider.setData,
+        setTargetKeys: provider.setTargetKeys,
+        Data: provider.Data,
+        targetKeys: provider.targetKeys
+    }
+}
 export {
     useContextMyWorkDetail,
     useContextTranfer,
     useContextBa,
     useContextAdmin,
     useContextAdminUser,
-    useContextTree
+    useContextTree,
+    useContextTransferANTD
 }

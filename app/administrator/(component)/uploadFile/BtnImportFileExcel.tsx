@@ -102,7 +102,7 @@ const BtnImportFileExcel: React.FC<Typeprops> = ({
                             name: item?.Department ?? "",
                             active: true,
                             organization: "",
-                            parent: "",
+                            parent: { _id: "", name: "" },
                             type: "",
                             code: "",
                             address: "",

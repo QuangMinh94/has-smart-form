@@ -343,7 +343,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             {DataMywork?.displayRule?.visibleView && (
                 <DndProvider backend={HTML5Backend}>
                     <TranferMyWork
-                        Disabled={DataMywork.displayRule.visibleTemplate}
+                        Disabled={!DataMywork.displayRule.visibleTemplate}
                     />
                     {DataMywork?.displayRule?.visibleGroupButton && (
                         <div className="mt-10">
