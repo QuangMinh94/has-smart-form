@@ -45,20 +45,20 @@ const CustomMenu = ({
                     </Link>
                 </Tooltip>
             )
+        },
+        {
+            key: keyPath.ADMIN_DEPARTMENT,
+            icon: (
+                <Tooltip placement="rightTop" title={"Quản trị đơn vị"}>
+                    <Link href={keyPath.ADMIN_DEPARTMENT}>
+                        <FontAwesomeIcon
+                            icon={faBuilding}
+                            style={{ color: "black" }}
+                        />
+                    </Link>
+                </Tooltip>
+            )
         }
-        // {
-        //     key: keyPath.ADMIN_DEPARTMENT,
-        //     icon: (
-        //         <Tooltip placement="rightTop" title={"Quản trị đơn vị"}>
-        //             <Link href={keyPath.ADMIN_DEPARTMENT}>
-        //                 <FontAwesomeIcon
-        //                     icon={faBuilding}
-        //                     style={{ color: "black" }}
-        //                 />
-        //             </Link>
-        //         </Tooltip>
-        //     )
-        // }
         // {
         //     key: keyPath.ADMIN_ROLE,
         //     icon: (

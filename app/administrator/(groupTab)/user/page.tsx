@@ -5,9 +5,9 @@ import Loading from "@/app/teller/mywork/loading"
 import BtnModal from "@/app/administrator/(component)/BtnModal"
 import ActionHeaderUser from "@/app/administrator/(component)/ActionHeader/User"
 import dynamic2 from "next/dynamic"
-import { SeacrhUser } from "@/app/(service)/User"
+
 import { cookies } from "next/headers"
-import { Users } from "@/app/(types)/Users"
+
 import ProviderUser from "../../(component)/provider/providerUser"
 const TableUser = dynamic2(
     () => import("@/app/administrator/(component)/table/tableUser"),

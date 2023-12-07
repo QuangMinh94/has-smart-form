@@ -5,6 +5,7 @@ import { DisplayRule, EformTemplate } from "@/app/(types)/EformTemplate"
 import { Permission } from "@/app/(types)/Permission"
 import { FindPermission, uniqueValue } from "@/app/(utilities)/ArrayUtilities"
 import { timeStampToDayjs } from "@/app/(utilities)/TimeStampToDayjs"
+import { KSVParams, OzDelimiter } from "@/components/OzViewer"
 import { ContextTemplate } from "@/components/context/context"
 import { Form, message } from "antd"
 import axios from "axios"
@@ -38,13 +39,15 @@ const TemplateWrapper = ({
     id,
     data,
     listLeft,
-    treeData
+    treeData,
+    isKSV
 }: {
     displayRules: DisplayRule
     id?: string
     data: EformTemplate[]
     listLeft: OptionProps[]
     treeData: TreeDataType[]
+    isKSV?: boolean
 }) => {
     const { visibleOzr, visibleGroupButton, visibleInfo, visibleTemplate } =
         displayRules
@@ -266,7 +269,10 @@ const TemplateWrapper = ({
             )}
             {visibleOzr ? (
                 <>
-                    <OzViewer viewerKey={viewerKey} />
+                    <OzViewer
+                        viewerKey={viewerKey}
+                        ozParams={isKSV ? KSVParams(isKSV, OzDelimiter()) : ""}
+                    />
                 </>
             ) : (
                 <>

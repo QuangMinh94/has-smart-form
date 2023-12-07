@@ -8,17 +8,19 @@ import { getDepartment } from "@/app/(service)/department"
 import { getGroup } from "@/app/(service)/group"
 import { GetAuthen } from "@/app/(service)/authen"
 import { getCadasTrals } from "@/app/(service)/cadastrals"
+import { cateGoriFilter } from "@/app/(service)/category"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { ToFilterName } from "@/util/formatText"
 import { useEnvContext } from "next-runtime-env"
-type Type = "getAuth" | "getDepartment" | "getGroup"
-export type typeSelect =
-    | "authen"
-    | "department"
-    | "defaultGroup"
+type Type =
+    | "getAuth"
+    | "getDepartment"
+    | "getGroup"
     | "getProvince"
     | "getDistrict"
     | "getWards"
+    | "cateGoriFilter"
+export type typeSelect = "authen" | "department" | "defaultGroup"
 
 type Props = {
     type: Type
@@ -32,6 +34,7 @@ type Props = {
     mode?: "multiple"
     enabledFecthData?: boolean
     idParent?: string
+    objcheck?: any
 }
 type Option = { label: string; value: string; dataRow: any }
 
@@ -52,7 +55,8 @@ const UseFecthApi = ({
         NEXT_PUBLIC_GET_AUTH,
         NEXT_PUBLIC_GET_DEPARTMENT,
         NEXT_PUBLIC_GET_GROUP,
-        NEXT_PUBLIC_GET_CADASTRALS
+        NEXT_PUBLIC_GET_CADASTRALS,
+        NEXT_PUBLIC_CATEGORIES_FILTER
     } = useEnvContext()
     const Service = {
         getAuth: async (): Promise<Option[]> => {
@@ -104,7 +108,7 @@ const UseFecthApi = ({
         getProvince: async (): Promise<Option[]> => {
             const res = await getCadasTrals({
                 url: NEXT_PUBLIC_GET_CADASTRALS!,
-                bodyRequest: { parent: idParent ?? "", type: "TTP" },
+                bodyRequest: { type: "TTP" },
                 token,
                 session
             })
@@ -148,6 +152,22 @@ const UseFecthApi = ({
                 dataRow: item
             }))
             return option
+        },
+        cateGoriFilter: async (): Promise<Option[]> => {
+            const res = await cateGoriFilter({
+                url: NEXT_PUBLIC_CATEGORIES_FILTER!,
+                bodyRequest: { type: "DepartmentType" },
+                token,
+                session
+            })
+            const group: any[] = res.data
+
+            const option: Option[] = group.map((item) => ({
+                value: item?._id ?? "",
+                label: item?.name ?? "",
+                dataRow: item
+            }))
+            return option
         }
     }
     const { isLoading, error, data, refetch, isRefetching } = useQuery<
@@ -178,17 +198,20 @@ const CustomerSelect: React.FC<Props> = ({
     value,
     mode,
     enabledFecthData,
-    idParent
+    idParent,
+    objcheck
 }) => {
     const [enabledFecth, setenabledFecth] = useState<boolean>(
         !!enabledFecthData
     )
+
     const { token, session } = useCustomCookies()
     const { isRefetching, error, data, refetch, isLoading } = UseFecthApi({
         token,
         session,
         type: type,
-        enabled: enabledFecth
+        enabled: enabledFecth,
+        idParent
     })
 
     const HandlerfilterOption = useCallback(
@@ -196,31 +219,40 @@ const CustomerSelect: React.FC<Props> = ({
             ToFilterName(option?.label ?? "").includes(ToFilterName(input)),
         []
     )
+
     const CustomData = useMemo(() => {
         let dataNew: Option[] = data ?? []
-        if (idDepartment || type === "getGroup") {
+        if (idDepartment && type === "getGroup") {
             dataNew =
                 dataNew?.filter(
                     (item) => item?.dataRow?.department?._id === idDepartment
                 ) ?? []
         }
+        if (objcheck) {
+            dataNew =
+                dataNew?.filter((item) => !objcheck[item?.dataRow?._id]) ?? []
+        }
         return dataNew
-    }, [data?.length, idDepartment])
+    }, [JSON.stringify(data), idDepartment])
 
     useEffect(() => {
-        if (idDepartment) {
+        if (idParent) {
             refetch()
         }
     }, [idParent])
+    const HanderenabledFecth = useCallback(() => {
+        if (!idParent) {
+            setenabledFecth(true)
+        }
+    }, [])
     return (
         <Select
-            loading={isLoading}
+            loading={isRefetching}
             mode={mode}
             defaultValue={defalutValue ?? undefined}
             style={{ width: "100%" }}
-            onClick={() => {
-                setenabledFecth(true)
-            }}
+            onClick={HanderenabledFecth}
+            onFocus={HanderenabledFecth}
             disabled={disabled}
             filterOption={HandlerfilterOption}
             allowClear
@@ -230,7 +262,7 @@ const CustomerSelect: React.FC<Props> = ({
             options={CustomData}
             value={value}
             notFoundContent={
-                isRefetching ? (
+                isRefetching || isLoading ? (
                     <Spin size="small" />
                 ) : (
                     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />

@@ -4,13 +4,13 @@ import {
     BodyUserRequest,
     BodyUserRequestFileExcel
 } from "../(types)/Users"
-export const SeacrhUser = async (pram: {
+export const SearchUser = async (pram: {
     url: string
     bodyRequest: bodyRequestSeacrhUser
     token: string
     session: string
 }) => {
-    // NEXT_PUBLIC_GET_USER
+    //NEXT_PUBLIC_SEARCH_USER
     const { bodyRequest, token, session, url } = pram
     const res = await axios.post(url, bodyRequest, {
         headers: {

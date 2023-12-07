@@ -34,6 +34,7 @@ const TableMyWork: React.FC<Props> = ({ data }) => {
             alert("error")
         }
     }
+    console.log("123123", data)
     const columns: ColumnsType<myWork> = [
         {
             key: "_id",
@@ -106,7 +107,10 @@ const TableMyWork: React.FC<Props> = ({ data }) => {
         {
             key: "implementer",
             title: "Người thực hiện",
-            dataIndex: "implementer"
+            render: (record: myWork) =>
+                `${record?.executor?.firstName ?? ""} ${
+                    record?.executor?.lastName ?? ""
+                }`
         },
         {
             width: "10%",

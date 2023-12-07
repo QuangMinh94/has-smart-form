@@ -1,13 +1,19 @@
 "use client"
 import React, { useState, memo, useCallback } from "react"
 import { PlusOutlined } from "@ant-design/icons"
-import { Button, Modal, Checkbox } from "antd"
+import { Button, Modal, Checkbox, Popover } from "antd"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import ActiveForm from "@/app/administrator/(component)/form/ActiveForm"
 import FormUser from "@/app/administrator/(component)/form/FormUser"
+import Formdepartment from "@/app/administrator/(component)/form/Formdepartment"
+import FormTransfer from "./form/FormTransfer"
 export type pathModel = "ADMIN_USER" | "ADMIN_ROLE" | "ADMIN_DEPARTMENT"
-export type typeForm = "ADD_MODAL" | "UPDATE_MODAL" | "ACTIVE_MODAL"
+export type typeForm =
+    | "ADD_MODAL"
+    | "UPDATE_MODAL"
+    | "ACTIVE_MODAL"
+    | "TRANSFERFORM"
 
 type Props = {
     type: typeForm
@@ -52,9 +58,19 @@ const BtnModal: React.FC<Props> = ({
             />
         ),
         ADMIN_ROLE: <></>,
-        ADMIN_DEPARTMENT: <></>
+        ADMIN_DEPARTMENT: (
+            <Formdepartment
+                typeForm={type}
+                CancelModal={handleCancel}
+                rowData={rowData}
+            />
+        )
     }
-    const styleModal = pathModel === "ADMIN_USER" ? { top: "10px" } : undefined
+
+    const styleModal =
+        pathModel === "ADMIN_USER" || pathModel === "ADMIN_DEPARTMENT"
+            ? { top: "10px" }
+            : undefined
     switch (type) {
         case "ADD_MODAL":
             Element = (
@@ -83,7 +99,6 @@ const BtnModal: React.FC<Props> = ({
                 </>
             )
             break
-
         case "UPDATE_MODAL":
             Element = (
                 <>
@@ -126,6 +141,26 @@ const BtnModal: React.FC<Props> = ({
                         />
                     </Modal>
                 </>
+            )
+            break
+        case "TRANSFERFORM":
+            const title =
+                pathModel === "ADMIN_DEPARTMENT" ? "Thêm tài khoản vào" : ""
+            Element = (
+                <Popover
+                    destroyTooltipOnHide={true}
+                    placement="top"
+                    title={title}
+                    content={
+                        <FormTransfer
+                            CancelModal={handleCancel}
+                            pathModel={pathModel}
+                        />
+                    }
+                    trigger="click"
+                >
+                    <Button>{title}</Button>
+                </Popover>
             )
             break
         default:
