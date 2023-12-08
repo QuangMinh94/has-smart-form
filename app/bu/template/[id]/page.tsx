@@ -1,6 +1,8 @@
 import { DefaultDeactiveRule, EformTemplate } from "@/app/(types)/EformTemplate"
 import { Role } from "@/app/(types)/Group"
+import { Permission } from "@/app/(types)/Permission"
 import { TreeProduct } from "@/app/(types)/TreeProduct"
+import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import { authOptions } from "@/app/api/auth/authOptions"
 import NotAuthenPage from "@/app/notAuthorized/page"
 import ProviderTemplate from "@/components/context/providerTemplate"
@@ -29,6 +31,7 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
     if (!session) redirect("/auth/signin", RedirectType.replace)
 
     const userRole = session.user.userInfo.defaultGroup?.role as Role[]
+    const permission = session.user.userInfo.permission as Permission[]
 
     const data: EformTemplate[] = await fetchTemplate(
         process.env.EFORM_GET_UPDATE_TEMPLATE!,
@@ -45,8 +48,6 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
     )
     const treeDataView: TreeDataType[] = MappingChildren(treeData)
 
-    console.log("DATASDADAS", data)
-
     return (
         <>
             {data.length > 0 && data[0].displayRule!.visibleView ? (
@@ -61,6 +62,11 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
                         listLeft={[]}
                         id={params.id}
                         data={data}
+                        isKSV={FindPermission(
+                            permission,
+                            "children",
+                            "VisibleCVCTReviewer"
+                        )}
                     />
                 </ProviderTemplate>
             ) : (

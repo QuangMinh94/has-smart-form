@@ -19,11 +19,9 @@ type FieldType = {
 }
 
 const SigninForm = () => {
-    //const router = useRouter()
     const [userNameTitle, setUserNameTitle] = useState<boolean>(false)
     const [passwordTitle, setPasswordTitle] = useState<boolean>(false)
     const [error, setError] = useState("")
-    //const { data: session } = useSession()
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const params = useSearchParams()
@@ -53,16 +51,9 @@ const SigninForm = () => {
         }
     }
 
-    /*  useEffect(() => {
-        if (session) {
-            const role = session.user.role
-            router.replace(`/${role.toString().toLowerCase()}`)
-        }
-    }, [session]) */
-
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo)
-        setError(errorInfo)
+        //setError(errorInfo)
     }
 
     return (
@@ -72,7 +63,6 @@ const SigninForm = () => {
                     backgroundImage: `url(/img/background.png)`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
-                    //backgroundColor: "rgba(228, 240, 244, 1)",
                     height: "100vh",
                     width: "100vw",
                     justifyContent: "center",
@@ -85,12 +75,9 @@ const SigninForm = () => {
                         vertical
                         justify="space-between"
                         style={{
-                            //border: "70px solid thin rgba(190, 220, 247, 0.65)",
                             borderStyle: "solid",
                             borderWidth: "40px",
                             borderColor: "transparent",
-                            //color: "rgba(190, 220, 247, 0.65)",
-                            //color: "#BEDCF7A6",
                             backgroundColor: "#BEDCF7A6",
                             borderRadius: 20
                         }}
@@ -117,7 +104,6 @@ const SigninForm = () => {
                             autoComplete="off"
                         >
                             <div className="border-b-2 border-white mb-10">
-                                {/*  {userNameTitle && <b>Tên đăng nhập</b>} */}
                                 <Form.Item<FieldType>
                                     // label="Username"
                                     name="username"
@@ -141,7 +127,6 @@ const SigninForm = () => {
                                 </Form.Item>
                             </div>
                             <div className="border-b-2 border-white mb-10">
-                                {/* {passwordTitle && <b>Mật khẩu</b>} */}
                                 <Form.Item<FieldType>
                                     // label="Password"
                                     name="password"
@@ -192,6 +177,7 @@ const SigninForm = () => {
                                         style={{
                                             width: "100%"
                                         }}
+                                        //onClick={() => form.submit()}
                                     >
                                         Đăng nhập
                                     </Button>

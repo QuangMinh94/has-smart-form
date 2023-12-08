@@ -125,7 +125,7 @@ const TemplateForm = ({
         try {
             const response = await axios.post(
                 NEXT_PUBLIC_CHECK_DUPLICATE!,
-                { code: value },
+                { id: id ? id : undefined, code: value },
                 {
                     headers: {
                         "Content-Type": "application/json",
