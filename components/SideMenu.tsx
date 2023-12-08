@@ -249,6 +249,7 @@ const SideMenu = ({ children }: Props) => {
                 collapsed={collapsed}
                 //style={{ backgroundColor: colorPrimary }}
                 onCollapse={(value) => setCollapsed(value)}
+                breakpoint="xl"
             >
                 <center>
                     <Image

@@ -78,21 +78,16 @@ const ResultTable = ({
 
     const columns: ColumnsType<ResultTableType> = [
         {
-            title: "Mã đơn vị",
-            dataIndex: "departmentCode",
+            title: "Mã giao dịch",
+            dataIndex: "appointmentCode",
             width: "8vw",
             render(_value, record, _index) {
                 return (
                     <Link href={`${route}/${record.queryCode}`}>
-                        {record.departmentCode}
+                        {record.appointmentCode}
                     </Link>
                 )
             }
-        },
-        {
-            title: "Mã giao dịch",
-            dataIndex: "appointmentCode",
-            width: "8vw"
         },
         {
             title: "CCCD",
@@ -173,7 +168,14 @@ const ResultTable = ({
         {
             title: "Đơn vị",
             dataIndex: "officeBranch",
+            responsive: ["xl"],
             ellipsis: true
+        },
+        {
+            title: "Mã đơn vị",
+            dataIndex: "departmentCode",
+            responsive: ["xl"]
+            //width: "8vw"
         }
     ]
 
