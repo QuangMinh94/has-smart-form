@@ -56,7 +56,7 @@ const UseFecthApi = ({
         NEXT_PUBLIC_GET_DEPARTMENT,
         NEXT_PUBLIC_GET_GROUP,
         NEXT_PUBLIC_GET_CADASTRALS,
-        NEXT_PUBLIC_CATEGORIES_FILTER
+        NEXT_PUBLIC_CATEGORY
     } = useEnvContext()
     const Service = {
         getAuth: async (): Promise<Option[]> => {
@@ -155,7 +155,7 @@ const UseFecthApi = ({
         },
         cateGoriFilter: async (): Promise<Option[]> => {
             const res = await cateGoriFilter({
-                url: NEXT_PUBLIC_CATEGORIES_FILTER!,
+                url: NEXT_PUBLIC_CATEGORY!,
                 bodyRequest: { type: "DepartmentType" },
                 token,
                 session
