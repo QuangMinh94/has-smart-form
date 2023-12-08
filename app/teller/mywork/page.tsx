@@ -53,6 +53,8 @@ const fetchApi = async ({
     if (!idSearch) {
         delete bodyRequest[KeySearch]
     }
+    console.log("token", cookie.get("token")?.value)
+    console.log("session", cookie.get("session")?.value)
     try {
         const res = await axios.post(
             process.env.SEARCH_APPOINT_MENTS!,

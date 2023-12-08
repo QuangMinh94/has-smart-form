@@ -222,6 +222,8 @@ const CustomerSelect: React.FC<Props> = ({
 
     const CustomData = useMemo(() => {
         let dataNew: Option[] = data ?? []
+        console.log("dataNew: ", dataNew)
+        console.log("department: ", idDepartment)
         if (idDepartment && type === "getGroup") {
             dataNew =
                 dataNew?.filter(

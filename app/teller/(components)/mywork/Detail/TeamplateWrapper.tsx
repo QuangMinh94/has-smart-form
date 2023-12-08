@@ -85,7 +85,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     useEffect(() => {
         //console.log("Here")
         setDataGlobal((data) => ({ ...data, myworkDetail: DataMywork }))
-        router.refresh()
+        // router.refresh()
     }, [])
 
     useEffect(() => {

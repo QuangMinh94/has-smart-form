@@ -11,9 +11,10 @@ import { Transfer, Button, Spin } from "antd"
 import type { TransferDirection } from "antd/es/transfer"
 import { RecordType } from "@/app/administrator/(component)/content/contentTransfer"
 import { SearchUser, getUserByDepartment } from "@/app/(service)/User"
+import { addUserToDepartment } from "@/app/(service)/department"
 import { Users } from "@/app/(types)/Users"
 import { ToFilterName } from "@/util/formatText"
-
+import { RevalidateListDepartment } from "@/app/(actions)/action"
 import {
     typeForm,
     typeFormTransfer
@@ -32,63 +33,90 @@ const TransferForm: React.FC<Props> = ({
     typeForm,
     rowData
 }) => {
-    const { NEXT_PUBLIC_SEARCH_USER, NEXT_PUBLIC_GET_BY_DEPARTMENT } =
-        useEnvContext()
+    const {
+        NEXT_PUBLIC_SEARCH_USER,
+        NEXT_PUBLIC_GET_BY_DEPARTMENT,
+        NEXT_PUBLIC_ADD_USER_TO_DEPARTMENT
+    } = useEnvContext()
     const { session, token } = useCustomCookies()
     const { messageApi } = useContextAdmin()
     const { setTargetKeys, setData, Data, targetKeys } =
         useContextTransferANTD()
     const [loadingList, setloadingList] = useState<boolean>(false)
+    const [loadingSave, setloadingSave] = useState<boolean>(false)
     const [objGetByID, setGetByID] = useState<any>({})
     const [targetKeySave, setTargetKeySave] = useState<string[]>([])
-    const fecthData = async () => {
-        setloadingList(true)
-        try {
-            const tempTargetKeys: string[] = []
-            const tempData: RecordType[] = []
-            const objGETid: any = {}
-            if (pathModel === "ADMIN_DEPARTMENT") {
-                if (typeForm == "UPDATE_TRANSFER") {
-                    const resUserByDepartment = await getUserByDepartment({
-                        url: NEXT_PUBLIC_GET_BY_DEPARTMENT!,
-                        bodyRequest: { department: rowData?._id },
-                        session,
-                        token
-                    })
-                    const UsersByDepartment: Users[] = resUserByDepartment.data
-                    UsersByDepartment.forEach((user) => {
-                        tempTargetKeys.push(`${user?._id}`)
-                        objGETid[
-                            `${user?._id}`
-                        ] = `${user?.firstName} ${user?.lastName}`
-                    })
-                    setTargetKeys(tempTargetKeys)
-                }
-                const resSearchUser = await SearchUser({
-                    url: NEXT_PUBLIC_SEARCH_USER!,
-                    bodyRequest: { name: "", active: true },
+
+    const ServiceSave: any = {
+        ADMIN_DEPARTMENT: async () => {
+            try {
+                const res = await addUserToDepartment({
+                    url: NEXT_PUBLIC_ADD_USER_TO_DEPARTMENT!,
+                    bodyRequest: {
+                        department: rowData?._id ?? "",
+                        userList: targetKeySave
+                    },
                     session,
                     token
                 })
-                const Users: Users[] = resSearchUser.data
-                Users.forEach((user) => {
-                    tempData.push({
-                        key: user?._id ?? "",
-                        title: `${user.firstName} ${user.lastName}`,
-                        chosen: false,
-                        disabled: tempTargetKeys.includes(user?._id ?? "")
-                    })
-                })
+
+                await RevalidateListDepartment()
+                messageApi("success", "cập nhật thành công")
+                CancelModal()
+            } catch (e) {
+                messageApi("error", "có lỗi vui lòng thử lại sau !")
             }
-            setGetByID(objGETid)
-            setData(tempData)
-        } catch (e) {
-            messageApi("error", "có lỗi vui lòng thử lại sau")
         }
-        setloadingList(false)
     }
 
     useEffect(() => {
+        const fecthData = async () => {
+            setloadingList(true)
+            try {
+                const tempTargetKeys: string[] = []
+                const tempData: RecordType[] = []
+                const objGETid: any = {}
+                if (pathModel === "ADMIN_DEPARTMENT") {
+                    if (typeForm == "UPDATE_TRANSFER") {
+                        const resUserByDepartment = await getUserByDepartment({
+                            url: NEXT_PUBLIC_GET_BY_DEPARTMENT!,
+                            bodyRequest: { department: rowData?._id },
+                            session,
+                            token
+                        })
+                        const UsersByDepartment: Users[] =
+                            resUserByDepartment.data
+                        UsersByDepartment.forEach((user) => {
+                            tempTargetKeys.push(`${user?._id}`)
+                            objGETid[
+                                `${user?._id}`
+                            ] = `${user?.firstName} ${user?.lastName}`
+                        })
+                        setTargetKeys(tempTargetKeys)
+                    }
+                    const resSearchUser = await SearchUser({
+                        url: NEXT_PUBLIC_SEARCH_USER!,
+                        bodyRequest: { name: "", active: true },
+                        session,
+                        token
+                    })
+                    const Users: Users[] = resSearchUser.data
+                    Users.forEach((user) => {
+                        tempData.push({
+                            key: user?._id ?? "",
+                            title: `${user.firstName} ${user.lastName}`,
+                            chosen: false,
+                            disabled: tempTargetKeys.includes(user?._id ?? "")
+                        })
+                    })
+                }
+                setGetByID(objGETid)
+                setData(tempData)
+            } catch (e) {
+                messageApi("error", "có lỗi vui lòng thử lại sau")
+            }
+            setloadingList(false)
+        }
         fecthData()
     }, [])
     const filterOption = (inputValue: string, option: RecordType) =>
@@ -141,7 +169,17 @@ const TransferForm: React.FC<Props> = ({
                             >
                                 Hủy
                             </Button>
-                            <Button type="primary">Lưu</Button>
+                            <Button
+                                onClick={async () => {
+                                    setloadingSave(true)
+                                    await ServiceSave[pathModel]()
+                                    setloadingSave(false)
+                                }}
+                                loading={loadingSave}
+                                type="primary"
+                            >
+                                Lưu
+                            </Button>
                         </div>
                     )}
                     {typeForm === "ADD_TRANSFER" && (
