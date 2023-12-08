@@ -371,7 +371,7 @@ const Formdepartment: React.FC<Props> = ({
                         }}
                     />
                 </Form.Item>
-                <div className="mx-[auto] my-[0]">
+                <div className="flex justify-center">
                     <BtnModel
                         type="TRANSFERFORM"
                         pathModel="ADMIN_DEPARTMENT"

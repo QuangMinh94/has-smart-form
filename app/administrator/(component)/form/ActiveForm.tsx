@@ -66,14 +66,20 @@ const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
                         "success",
                         ` ${
                             data.active
-                                ? "hủy đơn vị thành công"
-                                : "kích hoạt đơn thành công"
+                                ? "vô hiệu hóa chi nhánh thành công"
+                                : "kích hoạt chi nhánh thành công"
                         }`
                     )
                     CancelModal()
                 }
-            } catch (e) {
-                messageApi("error", "xảy ra lỗi vui lòng thử lại sau")
+            } catch (e: any) {
+                const err: any = e.response.data
+                console.log("sao vy", err)
+                if (err?.code === 500) {
+                    messageApi("error", `${err.message}`)
+                } else {
+                    messageApi("error", "xảy ra lỗi vui lòng thử lại sau")
+                }
             }
         }
     }

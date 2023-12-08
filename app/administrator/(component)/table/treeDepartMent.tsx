@@ -42,8 +42,8 @@ const ActiveModalComponent: React.FC<{
         <ButtonModal
             titleModel={`${
                 datarow.active
-                    ? `hủy đơn vị "${datarow.name}"`
-                    : `kích hoạt đơn vị "${datarow.name}"`
+                    ? `vô hiệu hóa chi nhánh "${datarow.name}"`
+                    : `kích hoạt chi nhánh "${datarow.name}"`
             }`}
             type="ACTIVE_MODAL"
             pathModel="ADMIN_DEPARTMENT"
