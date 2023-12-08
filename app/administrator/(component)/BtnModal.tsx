@@ -168,7 +168,9 @@ const BtnModal: React.FC<Props> = ({
                     }
                     trigger="click"
                 >
-                    <Button onClick={showModal}>{title}</Button>
+                    <Button icon={<PlusOutlined />} onClick={showModal}>
+                        {title}
+                    </Button>
                 </Popover>
             )
             break

@@ -18,7 +18,8 @@ const fetchApi = async (
         const session = await getServerSession(authOptions)
         const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
         console.log("body", { id: idAppointMent, userRole: idRole })
-
+        console.log("token", cookie.get("token")?.value)
+        console.log("session", cookie.get("session")?.value)
         const res = await fetch(process.env.VIEW_APPOINT_MENTS!, {
             cache: "no-store",
             method: "POST",
@@ -56,5 +57,5 @@ const DetailMyWork = async ({
         </>
     )
 }
-// export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic"
 export default DetailMyWork
