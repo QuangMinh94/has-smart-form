@@ -220,8 +220,9 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         }
     }
 
-    const onCancel = () => {
-        resetEForm()
+    const onCancel = async () => {
+        // resetEForm()
+        HandlerActionEform("CANCEL")
     }
 
     const onSubmit = async () => {
@@ -241,7 +242,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
         }
     }
 
-    const HandlerActionEform = async (type: "SAVE" | "SUBMIT") => {
+    const HandlerActionEform = async (type: "SAVE" | "SUBMIT" | "CANCEL") => {
         try {
             setLoading(true)
             const oz = document.getElementById("OZViewer")
@@ -249,7 +250,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 // if (oz.GetInformation("INPUT_CHECK_VALIDITY") == "valid") {
 
                 const inputdata = JSON.parse(
-                    oz.GetInformation("INPUT_JSON_ALL")
+                    oz?.GetInformation("INPUT_JSON_ALL") || "{}"
                 )
 
                 const body: RequestEformTaks = {
@@ -283,7 +284,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                             ]
                         }
                     })
-                    if (type === "SUBMIT") {
+                    if (type === "SUBMIT" || type === "CANCEL") {
                         router.replace(routers("teller").mywork.path, {
                             scroll: true
                         })
@@ -299,6 +300,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             }
         } catch (e: any) {
             setLoading(false)
+            console.log("sao vay", e)
             messageApi.error("có lỗi")
         }
     }

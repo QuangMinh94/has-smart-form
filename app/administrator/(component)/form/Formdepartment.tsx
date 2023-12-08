@@ -1,5 +1,5 @@
 "use client"
-import React, { memo, useCallback, useState, useMemo } from "react"
+import React, { memo, useCallback, useState, useMemo, useEffect } from "react"
 import { Department } from "@/app/(types)/Department"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { Button, Form, Input, Checkbox } from "antd"
@@ -8,8 +8,15 @@ import { useEnvContext } from "next-runtime-env"
 import BtnModel, { typeForm } from "@/app/administrator/(component)/BtnModal"
 import SelectForm from "@/app/administrator/(component)/SelectForm"
 import { RevalidateListDepartment } from "@/app/(actions)/action"
-import { useContextAdmin } from "@/components/cusTomHook/useContext"
-import { addDepartment, updateDepartment } from "@/app/(service)/department"
+import {
+    useContextAdmin,
+    useContextTransferANTD
+} from "@/components/cusTomHook/useContext"
+import {
+    addDepartment,
+    updateDepartment,
+    addUserToDepartment
+} from "@/app/(service)/department"
 import { bodyDepartmentRequest } from "@/app/(types)/Department"
 const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo)
@@ -18,6 +25,7 @@ type Props = {
     CancelModal: () => void
     typeForm: typeForm
     rowData: Department
+    addTreeChidlren: boolean
 }
 
 const ObjIdChidrenParentPlat = (rowData: any) => {
@@ -38,14 +46,19 @@ const ObjIdChidrenParentPlat = (rowData: any) => {
 const Formdepartment: React.FC<Props> = ({
     CancelModal,
     typeForm,
-    rowData
+    rowData,
+    addTreeChidlren
 }) => {
-    const { NEXT_PUBLIC_ADD_DEPARTMENT, NEXT_PUBLIC_UPDATE_DEPARTMENT } =
-        useEnvContext()
+    const {
+        NEXT_PUBLIC_ADD_DEPARTMENT,
+        NEXT_PUBLIC_ADD_USER_TO_DEPARTMENT,
+        NEXT_PUBLIC_UPDATE_DEPARTMENT
+    } = useEnvContext()
     const [form] = Form.useForm()
     const { token, session } = useCustomCookies()
     const { messageApi } = useContextAdmin()
     const [loadingBtn, setLoadingBtn] = useState<boolean>(false)
+    const { setTargetKeys, targetKeys } = useContextTransferANTD()
     const [active, setActive] = useState<boolean>(
         typeForm === "UPDATE_MODAL" ? !!rowData?.active : true
     )
@@ -57,6 +70,9 @@ const Formdepartment: React.FC<Props> = ({
         idDistrict: typeForm === "UPDATE_MODAL" ? `${rowData?.distric}` : ""
     })
 
+    useEffect(() => {
+        setTargetKeys([])
+    }, [])
     const onFinish = (data: {
         address: string
         category: string
@@ -93,13 +109,23 @@ const Formdepartment: React.FC<Props> = ({
     const addDepartmentFC = async (body: bodyDepartmentRequest) => {
         setLoadingBtn(true)
         try {
-            const res = await addDepartment({
+            const resDepartment = await addDepartment({
                 url: NEXT_PUBLIC_ADD_DEPARTMENT!,
                 bodyRequest: body,
                 token,
                 session
             })
-            if (res.status === 200) {
+            if (resDepartment.status === 200) {
+                const resUserToDepartment = await addUserToDepartment({
+                    url: NEXT_PUBLIC_ADD_USER_TO_DEPARTMENT!,
+                    bodyRequest: {
+                        department: resDepartment?.data._id,
+                        userList: targetKeys
+                    },
+                    token,
+                    session
+                })
+
                 await RevalidateListDepartment()
                 CancelModal()
                 messageApi("success", "Thêm mới đơn vị thành công")
@@ -134,9 +160,6 @@ const Formdepartment: React.FC<Props> = ({
         form.setFieldsValue({ departmentParent: value, group: "", groups: [] })
     }, [])
 
-    const HandlerOnchangeGroups = useCallback((value: string[]) => {
-        form.setFieldsValue({ groups: value })
-    }, [])
     const HandlerOnchangeCategory = useCallback((value: string) => {
         form.setFieldsValue({ category: value })
     }, [])
@@ -158,8 +181,12 @@ const Formdepartment: React.FC<Props> = ({
 
     console.log("rowData", rowData)
     const objChidrenParentPlat = useMemo(() => {
-        return ObjIdChidrenParentPlat(rowData)
+        if (typeForm === "UPDATE_MODAL") {
+            return ObjIdChidrenParentPlat(rowData)
+        }
+        return undefined
     }, [])
+
     return (
         <>
             <Form
@@ -310,24 +337,20 @@ const Formdepartment: React.FC<Props> = ({
                     style={{ marginBottom: "25px" }}
                     label="Chi nhánh cha"
                     name="departmentParent"
-                    rules={[
-                        {
-                            required: true,
-                            whitespace: true,
-                            message: "Vui lòng chọn chi nhánh cha"
-                        }
-                    ]}
+                    // rules={[
+                    //     {
+                    //         required: true,
+                    //         whitespace: true,
+                    //         message: "Vui lòng chọn chi nhánh cha"
+                    //     }
+                    // ]}
                 >
                     <SelectForm
-                        disabled={typeForm === "ADD_MODAL"}
+                        disabled={typeForm === "ADD_MODAL" && addTreeChidlren}
                         enabledFecthData={true}
                         type="getDepartment"
                         onChange={HandlerOnchangeDepartment}
-                        objcheck={
-                            typeForm === "UPDATE_MODAL"
-                                ? objChidrenParentPlat
-                                : undefined
-                        }
+                        objcheck={objChidrenParentPlat}
                     />
                 </Form.Item>
 
@@ -352,8 +375,13 @@ const Formdepartment: React.FC<Props> = ({
                     <BtnModel
                         type="TRANSFERFORM"
                         pathModel="ADMIN_DEPARTMENT"
+                        typeFormTransfer={
+                            typeForm === "UPDATE_MODAL"
+                                ? "UPDATE_TRANSFER"
+                                : "ADD_TRANSFER"
+                        }
                         titleModel=""
-                        rowData={{}}
+                        rowData={rowData}
                     />
                 </div>
                 <div className="my-[25px] flex justify-end ">

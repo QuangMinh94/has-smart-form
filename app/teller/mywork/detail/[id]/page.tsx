@@ -5,78 +5,38 @@ import {
 import { myWork } from "@/app/(types)/teller/mywork"
 import { authOptions } from "@/app/api/auth/authOptions"
 import TemlateWrapper from "@/app/teller/(components)/mywork/Detail/TeamplateWrapper"
-import axios from "axios"
+
 import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
-import { cache } from "react"
-// import { cache } from "react"
-const viewAppointMent = async (pram: {
-    bodyRequest: RequestApoinMent
-    token: string
-    session: string
-}) => {
-    const { bodyRequest, token, session } = pram
-    const res = await axios.post(process.env.VIEW_APPOINT_MENTS!, bodyRequest, {
-        headers: {
-            Authorization: "Bearer " + token,
-            Session: session
-        }
-    })
-    return res
-}
-const seacrhAppointMent = async (pram: {
-    bodyRequest: RequestSeacrhApoinMent
-    token: string
-    session: string
-}) => {
-    const { bodyRequest, token, session } = pram
-    const res = await axios.post(
-        process.env.SEARCH_APPOINT_MENTS!,
-        bodyRequest,
-        {
+
+const fetchApi = async (
+    idAppointMent: string,
+    codeAppointMent: string
+): Promise<myWork> => {
+    try {
+        const cookie = cookies()
+        const session = await getServerSession(authOptions)
+        const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
+        console.log("body", { id: idAppointMent, userRole: idRole })
+
+        const res = await fetch(process.env.VIEW_APPOINT_MENTS!, {
+            cache: "no-store",
+            method: "POST",
+            body: JSON.stringify({ id: idAppointMent, userRole: idRole }),
             headers: {
-                Authorization: "Bearer " + token,
-                Session: session
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + cookie.get("token")?.value ?? "",
+                Session: cookie.get("session")?.value ?? ""
             }
-        }
-    )
-    return res
-}
-const fetchApi = cache(
-    async (idAppointMent: string, codeAppointMent: string): Promise<myWork> => {
-        try {
-            const cookie = cookies()
-            const session = await getServerSession(authOptions)
-            const idRole = session?.user?.userInfo?.defaultGroup.role?.[0]?._id
-            const [resViewAppointMent, resSeacrhAppointMent]: any =
-                await Promise.all([
-                    viewAppointMent({
-                        bodyRequest: { id: idAppointMent, userRole: idRole },
-                        session: cookie.get("session")?.value ?? "",
-                        token: cookie.get("token")?.value ?? ""
-                    })
-                    // seacrhAppointMent({
-                    //     bodyRequest: {
-                    //         appointmentCode: codeAppointMent,
-                    //         userRole: idRole
-                    //     },
-                    //     session: cookie.get("session")?.value ?? "",
-                    //     token: cookie.get("token")?.value ?? ""
-                    // })
-                ])
-
-            /* console.log(
-                "WHERE THE FUCK IS APPOINTMENT",
-                resSeacrhAppointMent.data
-            ) */
-
-            return resViewAppointMent.data
-        } catch (e: any) {
-            console.log("err", e)
-            throw new Error("error")
-        }
+        })
+        const data = await res.json()
+        console.log("data: ", data)
+        return data
+    } catch (e: any) {
+        console.log("err", e)
+        throw new Error("error")
     }
-)
+}
 
 const DetailMyWork = async ({
     params,
@@ -85,12 +45,9 @@ const DetailMyWork = async ({
     params: { id: string }
     searchParams: { code: string; CCCD: string; Name: string }
 }) => {
+    console.log("params: ", params)
+    console.log("searchParams: ", searchParams)
     const data = await fetchApi(params.id, searchParams.code)
-    // const findMyMork = data.find(
-    //     (item) => item.appointmentCode === searchParams.code
-    // )
-
-    //console.log("HSIDANEUJDS", findMyMork)
 
     return (
         <>
@@ -99,5 +56,5 @@ const DetailMyWork = async ({
         </>
     )
 }
-export const dynamic = "force-dynamic"
+// export const dynamic = "force-dynamic"
 export default DetailMyWork

@@ -8,3 +8,6 @@ export const RevalidateListUser = async () => {
 export const RevalidateListDepartment = async () => {
     revalidateTag("ListDepartmentr")
 }
+export const RevalidateMyworkTeller = async () => {
+    revalidateTag("MyworkTeller")
+}

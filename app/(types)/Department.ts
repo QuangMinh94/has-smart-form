@@ -25,15 +25,15 @@ export interface Department {
 }
 export interface bodyDepartmentRequest {
     id?: string
-    name: string
+    name?: string
     parent?: string
-    active: boolean
-    type: string
-    code: string
-    address: string
-    stage: string
-    distric: string
-    village: string
+    active?: boolean
+    type?: string
+    code?: string
+    address?: string
+    stage?: string
+    distric?: string
+    village?: string
 }
 export interface DepartmentTreeView {
     Active?: boolean
@@ -43,4 +43,8 @@ export interface DepartmentTreeView {
     Organization?: string
     __v?: number
     _id?: string
+}
+export interface bodyAddUserToDepartment {
+    department: string
+    userList: string[]
 }

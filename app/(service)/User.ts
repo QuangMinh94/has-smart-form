@@ -68,3 +68,19 @@ export const addMultipleUser = async (pram: {
     })
     return res
 }
+export const getUserByDepartment = async (pram: {
+    url: string
+    bodyRequest: { department: string }
+    token: string
+    session: string
+}) => {
+    //NEXT_PUBLIC_GET_BY_DEPARTMENT
+    const { bodyRequest, token, session, url } = pram
+    const res = await axios.post(url, bodyRequest, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Session: session
+        }
+    })
+    return res
+}

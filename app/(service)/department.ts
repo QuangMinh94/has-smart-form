@@ -1,4 +1,7 @@
-import { bodyDepartmentRequest } from "@/app/(types)/Department"
+import {
+    bodyDepartmentRequest,
+    bodyAddUserToDepartment
+} from "@/app/(types)/Department"
 import axios from "axios"
 export const getDepartment = async (pram: {
     url: string
@@ -40,6 +43,22 @@ export const updateDepartment = async (pram: {
     session: string
 }) => {
     //NEXT_PUBLIC_UPDATE_DEPARTMENT
+    const { bodyRequest, token, session, url } = pram
+    const res = await axios.post(url, bodyRequest, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Session: session
+        }
+    })
+    return res
+}
+export const addUserToDepartment = async (pram: {
+    url: string
+    bodyRequest: bodyAddUserToDepartment
+    token: string
+    session: string
+}) => {
+    //NEXT_PUBLIC_ADD_USER_TO_DEPARTMENT
     const { bodyRequest, token, session, url } = pram
     const res = await axios.post(url, bodyRequest, {
         headers: {

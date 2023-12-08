@@ -40,7 +40,13 @@ function TreeCustom({
         TreeCustomer.push({
             title: (
                 <Flex className="boxAction">
-                    <div className="mr-[8px]">{name}</div>
+                    <div
+                        className={`mr-[8px] ${
+                            item.active ? "" : "text-slate-300"
+                        }`}
+                    >
+                        {name}
+                    </div>
                     <div
                         className={`hidden actionHover `}
                         onClick={(e) => {
