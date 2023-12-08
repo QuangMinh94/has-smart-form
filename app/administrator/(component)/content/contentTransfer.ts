@@ -11,6 +11,7 @@ export interface RecordType {
     title: string
     description?: string
     chosen: boolean
+    disabled?: boolean
 }
 export interface typeContextTransfer {
     setTargetKeys: React.Dispatch<React.SetStateAction<string[]>>

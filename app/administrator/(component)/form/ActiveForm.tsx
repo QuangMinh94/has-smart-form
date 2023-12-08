@@ -2,9 +2,13 @@ import React, { memo, useState } from "react"
 import { pathModel } from "@/app/administrator/(component)/BtnModal"
 import { Button } from "antd"
 import { updateUser } from "@/app/(service)/User"
+import { updateDepartment } from "@/app/(service)/department"
 import { useContextAdmin } from "@/components/cusTomHook/useContext"
 import { useEnvContext } from "next-runtime-env"
-import { RevalidateListUser } from "@/app/(actions)/action"
+import {
+    RevalidateListUser,
+    RevalidateListDepartment
+} from "@/app/(actions)/action"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 type Props = {
     pathModel: pathModel
@@ -12,7 +16,8 @@ type Props = {
     CancelModal: () => void
 }
 const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
-    const { NEXT_PUBLIC_UPDATE_USER } = useEnvContext()
+    const { NEXT_PUBLIC_UPDATE_USER, NEXT_PUBLIC_UPDATE_DEPARTMENT } =
+        useEnvContext()
     const [loading, setLoading] = useState<boolean>(false)
     const { messageApi } = useContextAdmin()
     const { token, session } = useCustomCookies()
@@ -36,6 +41,33 @@ const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
                             data.active
                                 ? "hủy tài khoản thành công"
                                 : "kích hoạt tài khoản thành công"
+                        }`
+                    )
+                    CancelModal()
+                }
+            } catch (e) {
+                messageApi("error", "xảy ra lỗi vui lòng thử lại sau")
+            }
+        },
+        ADMIN_DEPARTMENT: async () => {
+            try {
+                const res = await updateDepartment({
+                    url: NEXT_PUBLIC_UPDATE_DEPARTMENT!,
+                    bodyRequest: {
+                        id: data.idUpdate ?? "",
+                        active: !data.active
+                    },
+                    token,
+                    session
+                })
+                if (res.status === 200) {
+                    await RevalidateListDepartment()
+                    messageApi(
+                        "success",
+                        ` ${
+                            data.active
+                                ? "hủy đơn vị thành công"
+                                : "kích hoạt đơn thành công"
                         }`
                     )
                     CancelModal()
