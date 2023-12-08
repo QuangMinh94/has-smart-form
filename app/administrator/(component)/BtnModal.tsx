@@ -23,7 +23,10 @@ type Props = {
     activeChecked?: boolean
     isUploadNotApi?: boolean
     iconBtn?: boolean
+    typeFormTransfer?: typeFormTransfer
 }
+export type typeFormTransfer = "ADD_TRANSFER" | "UPDATE_TRANSFER" | undefined
+
 const titleBtnAdd = {
     ADMIN_USER: "Thêm tài khoản",
     ADMIN_ROLE: "Thêm nhóm quyền",
@@ -37,7 +40,8 @@ const BtnModal: React.FC<Props> = ({
     activeChecked,
     rowData,
     isUploadNotApi,
-    iconBtn
+    iconBtn,
+    typeFormTransfer
 }) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     let Element
@@ -60,6 +64,7 @@ const BtnModal: React.FC<Props> = ({
         ADMIN_ROLE: <></>,
         ADMIN_DEPARTMENT: (
             <Formdepartment
+                addTreeChidlren={!!iconBtn}
                 typeForm={type}
                 CancelModal={handleCancel}
                 rowData={rowData}
@@ -149,17 +154,21 @@ const BtnModal: React.FC<Props> = ({
             Element = (
                 <Popover
                     destroyTooltipOnHide={true}
+                    open={isModalOpen}
                     placement="top"
                     title={title}
+                    onOpenChange={(open: boolean) => setIsModalOpen(open)}
                     content={
                         <FormTransfer
+                            typeForm={typeFormTransfer}
                             CancelModal={handleCancel}
                             pathModel={pathModel}
+                            rowData={rowData}
                         />
                     }
                     trigger="click"
                 >
-                    <Button>{title}</Button>
+                    <Button onClick={showModal}>{title}</Button>
                 </Popover>
             )
             break

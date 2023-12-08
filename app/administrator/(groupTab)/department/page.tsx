@@ -23,8 +23,8 @@ const fectheDepartmentTree = async ({
     Active: boolean
 }): Promise<any> => {
     try {
-        const body = { active: Active }
-
+        const body = {}
+        console.log(body)
         const cookie = cookies()
         console.log("Session", cookie.get("session")?.value ?? "")
         console.log("Authorization", cookie.get("token")?.value ?? "")
@@ -50,7 +50,7 @@ const User = async ({
     searchParams
 }: {
     params: {}
-    searchParams: { active: boolean; searchname: "" }
+    searchParams: { active: boolean }
 }) => {
     const DepartmentTree = await fectheDepartmentTree({
         Active: searchParams.active ?? true

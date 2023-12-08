@@ -11,10 +11,7 @@ const ActionHeaderRole = () => {
     const checked = SearchParams.get("active")
 
     const HanderChecked = (e: any) => {
-        Router.push(
-            `?active=${e.target.checked}
-            } `
-        )
+        Router.push(`?active=${e.target.checked}`)
     }
 
     return (
