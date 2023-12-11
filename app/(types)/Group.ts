@@ -2,12 +2,7 @@ import type { CheckboxValueType } from "antd/es/checkbox/Group"
 import { Department } from "./Department"
 import { Organization } from "./Organization"
 export interface Parent {
-    Active?: boolean
-    CreatedDate?: string
-    Creator?: string
-    Name?: string
-    Organization?: string
-    Role?: string[]
+    name?: string
     _id?: string
 }
 export interface Group {
@@ -39,12 +34,12 @@ export interface Role {
 }
 
 export interface bodyGroupRequest {
-    Id?: string
-    Name?: string
-    Role?: CheckboxValueType[]
-    Active?: boolean
-    Parent?: string
-    Organization?: string
-    Department?: string
-    Position?: string
+    id?: string
+    name?: string
+    role?: CheckboxValueType[]
+    active?: boolean
+    parent?: string
+    organization?: string
+    department?: string
+    position?: string
 }

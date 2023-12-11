@@ -1,10 +1,10 @@
 "use client"
-import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
+
 import routers from "@/router/cusTomRouter"
 import { Layout, Menu, theme, Tooltip } from "antd"
 import React from "react"
 
-import { faUsers, faBuilding } from "@fortawesome/free-solid-svg-icons"
+import { faUsers, faBuilding, faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import Link from "next/link"
@@ -14,13 +14,14 @@ type KeyPath = {
     ADMIN_USER: string
     ADMIN_ROLE: string
     ADMIN_DEPARTMENT: string
+    ADMIN_GROUP: string
 }
 type conditionPath = {
     isAdminUser: boolean
     isAdminRole: boolean
     isDepartment: boolean
+    isGroup: boolean
 }
-const { Header, Sider, Content } = Layout
 
 const CustomMenu = ({
     keyPath,
@@ -39,7 +40,7 @@ const CustomMenu = ({
                 <Tooltip placement="rightTop" title={"Quản trị người dùng"}>
                     <Link href={keyPath.ADMIN_USER}>
                         <FontAwesomeIcon
-                            icon={faUsers}
+                            icon={faUser}
                             style={{ color: "black" }}
                         />
                     </Link>
@@ -53,6 +54,19 @@ const CustomMenu = ({
                     <Link href={keyPath.ADMIN_DEPARTMENT}>
                         <FontAwesomeIcon
                             icon={faBuilding}
+                            style={{ color: "black" }}
+                        />
+                    </Link>
+                </Tooltip>
+            )
+        },
+        {
+            key: keyPath.ADMIN_GROUP,
+            icon: (
+                <Tooltip placement="rightTop" title={"Quản trị nhóm"}>
+                    <Link href={keyPath.ADMIN_GROUP}>
+                        <FontAwesomeIcon
+                            icon={faUsers}
                             style={{ color: "black" }}
                         />
                     </Link>
@@ -84,6 +98,9 @@ const CustomMenu = ({
     if (conditionPath.isDepartment) {
         selectedKeys.push(keyPath.ADMIN_DEPARTMENT)
     }
+    if (conditionPath.isGroup) {
+        selectedKeys.push(keyPath.ADMIN_GROUP)
+    }
 
     return (
         <Menu
@@ -106,12 +123,14 @@ const SideMenu = ({ children }: Props) => {
     const keyPath: KeyPath = {
         ADMIN_USER: routers("administrator").user.path,
         ADMIN_ROLE: routers("administrator").role.path,
-        ADMIN_DEPARTMENT: routers("administrator").department.path
+        ADMIN_DEPARTMENT: routers("administrator").department.path,
+        ADMIN_GROUP: routers("administrator").group.path
     }
     const conditionPath: conditionPath = {
         isAdminUser: pathname.startsWith(keyPath.ADMIN_USER),
         isAdminRole: pathname.startsWith(keyPath.ADMIN_ROLE),
-        isDepartment: pathname.startsWith(keyPath.ADMIN_DEPARTMENT)
+        isDepartment: pathname.startsWith(keyPath.ADMIN_DEPARTMENT),
+        isGroup: pathname.startsWith(keyPath.ADMIN_GROUP)
     }
 
     return (

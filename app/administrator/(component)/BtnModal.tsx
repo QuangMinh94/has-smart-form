@@ -7,8 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import ActiveForm from "@/app/administrator/(component)/form/ActiveForm"
 import FormUser from "@/app/administrator/(component)/form/FormUser"
 import Formdepartment from "@/app/administrator/(component)/form/Formdepartment"
+import FormGroup from "@/app/administrator/(component)/form/FormGroup"
 import FormTransfer from "./form/FormTransfer"
-export type pathModel = "ADMIN_USER" | "ADMIN_ROLE" | "ADMIN_DEPARTMENT"
+export type pathModel =
+    | "ADMIN_USER"
+    | "ADMIN_ROLE"
+    | "ADMIN_DEPARTMENT"
+    | "ADMIN_GROUP"
 export type typeForm =
     | "ADD_MODAL"
     | "UPDATE_MODAL"
@@ -30,7 +35,8 @@ export type typeFormTransfer = "ADD_TRANSFER" | "UPDATE_TRANSFER" | undefined
 const titleBtnAdd = {
     ADMIN_USER: "Thêm tài khoản",
     ADMIN_ROLE: "Thêm nhóm quyền",
-    ADMIN_DEPARTMENT: "Thêm đơn vị"
+    ADMIN_DEPARTMENT: "Thêm đơn vị",
+    ADMIN_GROUP: "Thêm nhóm "
 }
 
 const BtnModal: React.FC<Props> = ({
@@ -64,6 +70,14 @@ const BtnModal: React.FC<Props> = ({
         ADMIN_ROLE: <></>,
         ADMIN_DEPARTMENT: (
             <Formdepartment
+                addTreeChidlren={!!iconBtn}
+                typeForm={type}
+                CancelModal={handleCancel}
+                rowData={rowData}
+            />
+        ),
+        ADMIN_GROUP: (
+            <FormGroup
                 addTreeChidlren={!!iconBtn}
                 typeForm={type}
                 CancelModal={handleCancel}
@@ -150,7 +164,9 @@ const BtnModal: React.FC<Props> = ({
             break
         case "TRANSFERFORM":
             const title =
-                pathModel === "ADMIN_DEPARTMENT" ? "Thêm tài khoản vào" : ""
+                pathModel === "ADMIN_DEPARTMENT" || pathModel === "ADMIN_GROUP"
+                    ? "Thêm tài khoản vào"
+                    : ""
             Element = (
                 <Popover
                     destroyTooltipOnHide={true}

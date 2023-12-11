@@ -8,6 +8,7 @@ import { useEnvContext } from "next-runtime-env"
 import BtnModel, { typeForm } from "@/app/administrator/(component)/BtnModal"
 import SelectForm from "@/app/administrator/(component)/SelectForm"
 import { RevalidateListDepartment } from "@/app/(actions)/action"
+import { ObjIdChidrenParentPlat } from "./ObjIdParentPlats"
 import {
     useContextAdmin,
     useContextTransferANTD
@@ -28,21 +29,6 @@ type Props = {
     addTreeChidlren: boolean
 }
 
-const ObjIdChidrenParentPlat = (rowData: any) => {
-    const obj: any = { [`${rowData._id}`]: rowData.name }
-
-    const start = (rowData: any[]) => {
-        console.log("Start:", rowData)
-        rowData.forEach((item) => {
-            obj[`${item?._id}`] = item.name
-            if (item?.children && item?.children?.length > 0) {
-                start(item.children)
-            }
-        })
-    }
-    start(rowData?.children ?? [])
-    return obj
-}
 const Formdepartment: React.FC<Props> = ({
     CancelModal,
     typeForm,
@@ -84,7 +70,9 @@ const Formdepartment: React.FC<Props> = ({
         wards: string
     }) => {
         const bodyRequest: bodyDepartmentRequest = {
-            name: data.nameCategory,
+            name:
+                data.nameCategory.charAt(0).toUpperCase() +
+                data.nameCategory.slice(1),
             parent: data.departmentParent,
             active: active,
             type: data.category,
@@ -116,16 +104,17 @@ const Formdepartment: React.FC<Props> = ({
                 session
             })
             if (resDepartment.status === 200) {
-                const resUserToDepartment = await addUserToDepartment({
-                    url: NEXT_PUBLIC_ADD_USER_TO_DEPARTMENT!,
-                    bodyRequest: {
-                        department: resDepartment?.data._id,
-                        userList: targetKeys
-                    },
-                    token,
-                    session
-                })
-
+                if (targetKeys.length > 0) {
+                    const resUserToDepartment = await addUserToDepartment({
+                        url: NEXT_PUBLIC_ADD_USER_TO_DEPARTMENT!,
+                        bodyRequest: {
+                            department: resDepartment?.data._id,
+                            userList: targetKeys
+                        },
+                        token,
+                        session
+                    })
+                }
                 await RevalidateListDepartment()
                 CancelModal()
                 messageApi("success", "Thêm mới đơn vị thành công")

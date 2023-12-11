@@ -50,7 +50,7 @@ const BtnImportFileExcel: React.FC<Typeprops> = ({
                 const [reqGroup, reqDepartment, reqAuthen] = await axios.all([
                     getGroup({
                         url: NEXT_PUBLIC_GET_GROUP!,
-                        bodyRequest: { Active: true },
+                        bodyRequest: { active: true },
                         session,
                         token
                     }),
