@@ -11,3 +11,7 @@ export const RevalidateListDepartment = async () => {
 export const RevalidateMyworkTeller = async () => {
     revalidateTag("MyworkTeller")
 }
+
+export const RevalidateListGroup = async () => {
+    revalidateTag("ListGroup")
+}
