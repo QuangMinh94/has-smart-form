@@ -8,6 +8,7 @@ export const MYWORK = "mywork"
 export const USER = "user"
 export const ROLE = "role"
 export const DEPARTMENT = "department"
+export const GROUP = "group"
 export const QUERIES = "queries"
 
 const routers = (root: rootPath) => {
@@ -35,7 +36,8 @@ const routers = (root: rootPath) => {
         // admninistrator
         user: { path: `/${root}/${USER}` },
         role: { path: `/${root}/${ROLE}` },
-        department: { path: `/${root}/${DEPARTMENT}` }
+        department: { path: `/${root}/${DEPARTMENT}` },
+        group: { path: `/${root}/${GROUP}` }
     }
     return router
 }

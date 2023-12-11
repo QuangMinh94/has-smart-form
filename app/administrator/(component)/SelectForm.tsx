@@ -12,6 +12,7 @@ import { cateGoriFilter } from "@/app/(service)/category"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { ToFilterName } from "@/util/formatText"
 import { useEnvContext } from "next-runtime-env"
+import { getRoles } from "@/app/(service)/role"
 type Type =
     | "getAuth"
     | "getDepartment"
@@ -20,7 +21,8 @@ type Type =
     | "getDistrict"
     | "getWards"
     | "cateGoriFilter"
-export type typeSelect = "authen" | "department" | "defaultGroup"
+    | "getRoles"
+export type typeSelect = "authen" | "department" | "defaultGroup" // DANG DUNG O FORM USER
 
 type Props = {
     type: Type
@@ -56,7 +58,8 @@ const UseFecthApi = ({
         NEXT_PUBLIC_GET_DEPARTMENT,
         NEXT_PUBLIC_GET_GROUP,
         NEXT_PUBLIC_GET_CADASTRALS,
-        NEXT_PUBLIC_CATEGORIES_FILTER
+        NEXT_PUBLIC_CATEGORY,
+        NEXT_PUBLIC_GET_ROLE
     } = useEnvContext()
     const Service = {
         getAuth: async (): Promise<Option[]> => {
@@ -92,7 +95,7 @@ const UseFecthApi = ({
         getGroup: async (): Promise<Option[]> => {
             const res = await getGroup({
                 url: NEXT_PUBLIC_GET_GROUP!,
-                bodyRequest: { Active: true },
+                bodyRequest: { active: true },
                 token,
                 session
             })
@@ -155,8 +158,24 @@ const UseFecthApi = ({
         },
         cateGoriFilter: async (): Promise<Option[]> => {
             const res = await cateGoriFilter({
-                url: NEXT_PUBLIC_CATEGORIES_FILTER!,
+                url: NEXT_PUBLIC_CATEGORY!,
                 bodyRequest: { type: "DepartmentType" },
+                token,
+                session
+            })
+            const group: any[] = res.data
+
+            const option: Option[] = group.map((item) => ({
+                value: item?._id ?? "",
+                label: item?.name ?? "",
+                dataRow: item
+            }))
+            return option
+        },
+        getRoles: async (): Promise<Option[]> => {
+            const res = await getRoles({
+                url: NEXT_PUBLIC_GET_ROLE!,
+                bodyRequest: { Active: true },
                 token,
                 session
             })

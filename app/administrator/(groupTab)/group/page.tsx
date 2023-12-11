@@ -3,35 +3,28 @@ import LayoutAdmin from "@/app/administrator/(component)/LayoutAdmin"
 
 import Loading from "@/app/teller/mywork/loading"
 import BtnModal from "@/app/administrator/(component)/BtnModal"
-import ActionHeaderDepartment from "@/app/administrator/(component)/ActionHeader/HeaderTree"
+import ActionHeaderGroups from "@/app/administrator/(component)/ActionHeader/HeaderTree"
 import ProviderTree from "@/app/administrator/(component)/provider/ProviderTree"
 import dynamic2 from "next/dynamic"
 import ProviderTranfer from "@/app/administrator/(component)/provider/ProviderTransfer"
 import { cookies } from "next/headers"
 
-const TreeDepartMent = dynamic2(
-    () => import("@/app/administrator/(component)/table/treeDepartMent"),
+const TreeGroups = dynamic2(
+    () => import("@/app/administrator/(component)/table/TreeGroups"),
     {
         loading: () => <Loading />,
         ssr: false
     }
 )
 
-const fectheDepartmentTree = async ({
-    Active
-}: {
-    Active: boolean
-}): Promise<any> => {
+const fectheGroupTree = async (): Promise<any> => {
     try {
-        const body = {}
-        console.log(body)
         const cookie = cookies()
-        console.log("Session", cookie.get("session")?.value ?? "")
-        console.log("Authorization", cookie.get("token")?.value ?? "")
-        const res = await fetch(process.env.GET_DEPARTMENT_TREE!, {
-            next: { tags: ["ListDepartment"] },
+
+        const res = await fetch(process.env.GET_GROUP_TREE!, {
+            next: { tags: ["ListGroup"] },
             method: "POST",
-            body: JSON.stringify(body),
+            body: JSON.stringify({}),
             headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + cookie.get("token")?.value ?? "",
@@ -45,36 +38,27 @@ const fectheDepartmentTree = async ({
     }
 }
 
-const User = async ({
-    params,
-    searchParams
-}: {
-    params: {}
-    searchParams: { active: boolean }
-}) => {
-    const DepartmentTree = await fectheDepartmentTree({
-        Active: searchParams.active ?? true
-    })
-
+const Group = async () => {
+    const Group = await fectheGroupTree()
     return (
         <ProviderTree>
             <ProviderTranfer>
                 <LayoutAdmin
                     BtnAdd={
                         <BtnModal
-                            titleModel="Thêm đơn vị"
+                            titleModel="Thêm nhóm"
                             type="ADD_MODAL"
-                            pathModel="ADMIN_DEPARTMENT"
+                            pathModel="ADMIN_GROUP"
                             rowData={{}}
                         />
                     }
-                    title="Quản trị đơn vị"
-                    HeaderAction={<ActionHeaderDepartment />}
-                    Table={<TreeDepartMent Department={DepartmentTree ?? []} />}
+                    title="Quản trị nhóm"
+                    HeaderAction={<ActionHeaderGroups />}
+                    Table={<TreeGroups Group={Group ?? []} />}
                 />
             </ProviderTranfer>
         </ProviderTree>
     )
 }
 export const dynamic = "force-dynamic"
-export default User
+export default Group

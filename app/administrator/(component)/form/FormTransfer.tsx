@@ -12,6 +12,7 @@ import type { TransferDirection } from "antd/es/transfer"
 import { RecordType } from "@/app/administrator/(component)/content/contentTransfer"
 import { SearchUser, getUserByDepartment } from "@/app/(service)/User"
 import { addUserToDepartment } from "@/app/(service)/department"
+import { addUserToGroup } from "@/app/(service)/group"
 import { Users } from "@/app/(types)/Users"
 import { ToFilterName } from "@/util/formatText"
 import { RevalidateListDepartment } from "@/app/(actions)/action"
@@ -36,7 +37,8 @@ const TransferForm: React.FC<Props> = ({
     const {
         NEXT_PUBLIC_SEARCH_USER,
         NEXT_PUBLIC_GET_BY_DEPARTMENT,
-        NEXT_PUBLIC_ADD_USER_TO_DEPARTMENT
+        NEXT_PUBLIC_ADD_USER_TO_DEPARTMENT,
+        NEXT_PUBLIC_ADD_USER_TO_GROUP
     } = useEnvContext()
     const { session, token } = useCustomCookies()
     const { messageApi } = useContextAdmin()
@@ -66,6 +68,25 @@ const TransferForm: React.FC<Props> = ({
             } catch (e) {
                 messageApi("error", "có lỗi vui lòng thử lại sau !")
             }
+        },
+        ADMIN_GROUP: async () => {
+            try {
+                const res = await addUserToGroup({
+                    url: NEXT_PUBLIC_ADD_USER_TO_GROUP!,
+                    bodyRequest: {
+                        groupId: rowData?._id ?? "",
+                        listUser: targetKeySave
+                    },
+                    session,
+                    token
+                })
+
+                await RevalidateListDepartment()
+                messageApi("success", "cập nhật thành công")
+                CancelModal()
+            } catch (e) {
+                messageApi("error", "có lỗi vui lòng thử lại sau !")
+            }
         }
     }
 
@@ -76,24 +97,37 @@ const TransferForm: React.FC<Props> = ({
                 const tempTargetKeys: string[] = []
                 const tempData: RecordType[] = []
                 const objGETid: any = {}
-                if (pathModel === "ADMIN_DEPARTMENT") {
-                    if (typeForm == "UPDATE_TRANSFER") {
-                        const resUserByDepartment = await getUserByDepartment({
-                            url: NEXT_PUBLIC_GET_BY_DEPARTMENT!,
-                            bodyRequest: { department: rowData?._id },
-                            session,
-                            token
-                        })
-                        const UsersByDepartment: Users[] =
-                            resUserByDepartment.data
-                        UsersByDepartment.forEach((user) => {
-                            tempTargetKeys.push(`${user?._id}`)
-                            objGETid[
-                                `${user?._id}`
-                            ] = `${user?.firstName} ${user?.lastName}`
-                        })
+                if (
+                    pathModel === "ADMIN_DEPARTMENT" ||
+                    pathModel === "ADMIN_GROUP"
+                ) {
+                    if (typeForm === "UPDATE_TRANSFER") {
+                        if (pathModel === "ADMIN_DEPARTMENT") {
+                            const resUserByDepartment =
+                                await getUserByDepartment({
+                                    url: NEXT_PUBLIC_GET_BY_DEPARTMENT!,
+                                    bodyRequest: { department: rowData?._id },
+                                    session,
+                                    token
+                                })
+                            const UsersByDepartment: Users[] =
+                                resUserByDepartment.data
+                            UsersByDepartment.forEach((user) => {
+                                tempTargetKeys.push(`${user?._id}`)
+                                objGETid[
+                                    `${user?._id}`
+                                ] = `${user?.firstName} ${user?.lastName}`
+                            })
+                        }
+                        if (pathModel === "ADMIN_GROUP") {
+                            tempTargetKeys.push(...targetKeys)
+                            targetKeys.forEach((key) => {
+                                objGETid[`${key}`] = true
+                            })
+                        }
                         setTargetKeys(tempTargetKeys)
                     }
+                    // gọi server lấy rea list user
                     const resSearchUser = await SearchUser({
                         url: NEXT_PUBLIC_SEARCH_USER!,
                         bodyRequest: { name: "", active: true },
@@ -101,6 +135,7 @@ const TransferForm: React.FC<Props> = ({
                         token
                     })
                     const Users: Users[] = resSearchUser.data
+                    console.log("user", Users)
                     Users.forEach((user) => {
                         tempData.push({
                             key: user?._id ?? "",
@@ -110,6 +145,7 @@ const TransferForm: React.FC<Props> = ({
                         })
                     })
                 }
+
                 setGetByID(objGETid)
                 setData(tempData)
             } catch (e) {

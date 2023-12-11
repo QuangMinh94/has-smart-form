@@ -4,6 +4,7 @@ import { Button } from "antd"
 import { updateUser } from "@/app/(service)/User"
 import { updateDepartment } from "@/app/(service)/department"
 import { useContextAdmin } from "@/components/cusTomHook/useContext"
+import { addAndUpdateGroup } from "@/app/(service)/group"
 import { useEnvContext } from "next-runtime-env"
 import {
     RevalidateListUser,
@@ -16,8 +17,11 @@ type Props = {
     CancelModal: () => void
 }
 const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
-    const { NEXT_PUBLIC_UPDATE_USER, NEXT_PUBLIC_UPDATE_DEPARTMENT } =
-        useEnvContext()
+    const {
+        NEXT_PUBLIC_UPDATE_USER,
+        NEXT_PUBLIC_UPDATE_DEPARTMENT,
+        NEXT_PUBLIC_UPDATE_GROUP
+    } = useEnvContext()
     const [loading, setLoading] = useState<boolean>(false)
     const { messageApi } = useContextAdmin()
     const { token, session } = useCustomCookies()
@@ -75,6 +79,39 @@ const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
             } catch (e: any) {
                 const err: any = e.response.data
                 console.log("sao vy", err)
+                if (err?.code === 500) {
+                    messageApi("error", `${err.message}`)
+                } else {
+                    messageApi("error", "xảy ra lỗi vui lòng thử lại sau")
+                }
+            }
+        },
+        ADMIN_GROUP: async () => {
+            try {
+                const res = await addAndUpdateGroup({
+                    url: NEXT_PUBLIC_UPDATE_GROUP!,
+                    bodyRequest: {
+                        id: data.idUpdate ?? "",
+                        active: !data.active
+                    },
+                    token,
+                    session
+                })
+                if (res.status === 200) {
+                    await RevalidateListDepartment()
+                    messageApi(
+                        "success",
+                        ` ${
+                            data.active
+                                ? "vô hiệu hóa nhóm thành công"
+                                : "kích hoạt nhóm thành công"
+                        }`
+                    )
+                    CancelModal()
+                }
+            } catch (e: any) {
+                const err: any = e.response.data
+
                 if (err?.code === 500) {
                     messageApi("error", `${err.message}`)
                 } else {
