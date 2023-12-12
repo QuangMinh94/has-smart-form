@@ -179,7 +179,7 @@ const ReasonModal = ({
             //onOk={() => onOK(type, value)}
             onCancel={onClose}
             maskClosable={false}
-            footer={[
+            footer={
                 <Flex justify="end" gap={5}>
                     <Button type="default" onClick={onClose}>
                         Cancel
@@ -188,7 +188,7 @@ const ReasonModal = ({
                         Ok
                     </Button>
                 </Flex>
-            ]}
+            }
         >
             <TextArea
                 onChange={(e) => {
