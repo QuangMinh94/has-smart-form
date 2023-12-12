@@ -225,7 +225,7 @@ const FilterComponent = ({
     const {
         NEXT_PUBLIC_CATEGORY,
         NEXT_PUBLIC_GET_EXECUTOR,
-        NEXT_PUBLIC_DEPARTMENT,
+        NEXT_PUBLIC_DEPARTMENT_BRANCH,
         NEXT_PUBLIC_GET_EPRODUCT
     } = useEnvContext()
     const { RangePicker } = DatePicker
@@ -381,7 +381,7 @@ const FilterComponent = ({
                         condition={<p>Đơn vị</p>}
                         value={
                             <RemoteSelectorDepartment
-                                url={NEXT_PUBLIC_DEPARTMENT!}
+                                url={NEXT_PUBLIC_DEPARTMENT_BRANCH!}
                                 header={axiosHeader}
                                 initValue={Base64ToInputValue("officeBranch")}
                             />
