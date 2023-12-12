@@ -5,8 +5,10 @@ import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import { ContextTemplate } from "@/components/context/context"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Flex } from "antd"
-import { useContext } from "react"
+import { Button, Flex, Input, Modal } from "antd"
+import { ReactNode, useContext, useState } from "react"
+
+const { TextArea } = Input
 
 const CustomButtonGroup = ({
     onPreview,
@@ -25,16 +27,20 @@ const CustomButtonGroup = ({
     onSave: () => void
     onCancel: () => void
     onVerify?: () => void
-    onNeedCorrection?: () => void
-    onReject?: () => void
+    onNeedCorrection?: (type: string, reason: string) => void
+    onReject?: (type: string, reason: string) => void
     onBack?: () => void
     permission: Permission[] | []
     status?: string
 }) => {
     const { isDisabled } = useContext(ContextTemplate)
+    const [type, setType] = useState<string>("")
+    const [title, setTitle] = useState<any>("")
+    const [open, setOpen] = useState<boolean>(false)
+
     return (
         <>
-            {FindPermission(
+            {!FindPermission(
                 permission,
                 "children",
                 "VisibleSubmitButtonGroup"
@@ -105,7 +111,11 @@ const CustomButtonGroup = ({
                             type="primary"
                             danger
                             onClick={() => {
-                                if (onReject) onReject()
+                                /* if (onReject) onReject() */
+                                setOpen(true)
+                                setType("REJECTED")
+                                setTitle("Nhập lý do từ chối")
+                                /* if (onReject) setCloseFunc(onReject) */
                             }}
                             loading={isDisabled}
                         >
@@ -115,7 +125,12 @@ const CustomButtonGroup = ({
                             type="primary"
                             style={{ backgroundColor: "#e79f38" }}
                             onClick={() => {
-                                if (onNeedCorrection) onNeedCorrection()
+                                /* if (onNeedCorrection) onNeedCorrection() */
+                                setOpen(true)
+                                setType("NEED_CORRECTION")
+                                setTitle("Nhập lý do cần bổ sung")
+                                /* if (onNeedCorrection)
+                                    setCloseFunc(onNeedCorrection) */
                             }}
                             loading={isDisabled}
                         >
@@ -124,7 +139,71 @@ const CustomButtonGroup = ({
                     </Flex>
                 </Flex>
             )}
+            <ReasonModal
+                key={type}
+                type={type}
+                title={title}
+                open={open}
+                onClose={() => setOpen(false)}
+                onOK={(type: string, reason: string) => {
+                    if (type === "NEED_CORRECTION" && onNeedCorrection)
+                        return onNeedCorrection(type, reason)
+                    if (type === "REJECTED" && onReject)
+                        return onReject(type, reason)
+                }}
+            />
         </>
+    )
+}
+
+const ReasonModal = ({
+    type,
+    title,
+    open,
+    onOK,
+    onClose
+}: {
+    type: string
+    title: ReactNode
+    open: boolean
+    onOK: (type: string, reason: string) => void
+    onClose: () => void
+}) => {
+    const [value, setValue] = useState<string>("")
+    const [disabledOk, setDisabledOk] = useState<boolean>(true)
+
+    return (
+        <Modal
+            title={title}
+            open={open}
+            //onOk={() => onOK(type, value)}
+            onCancel={onClose}
+            maskClosable={false}
+            footer={[
+                <Flex justify="end" gap={5}>
+                    <Button type="default" onClick={onClose}>
+                        Cancel
+                    </Button>
+                    <Button type="primary" disabled={disabledOk}>
+                        Ok
+                    </Button>
+                </Flex>
+            ]}
+        >
+            <TextArea
+                onChange={(e) => {
+                    if (e.target.value.trim()) {
+                        setDisabledOk(false)
+                    } else {
+                        setDisabledOk(true)
+                    }
+                }}
+                defaultValue={value}
+                onBlur={(e: any) => setValue(e.target.value)}
+                placeholder="Nhập lý do"
+                autoSize={{ minRows: 3, maxRows: 5 }}
+            />
+        </Modal>
     )
 }
 

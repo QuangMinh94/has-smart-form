@@ -48,7 +48,7 @@ export const authOptions: NextAuthOptions = {
                     )
                     const userInfo = userResponse.data
 
-                    //console.log("User data", user.data)
+                    //console.log("User data", userInfo)
 
                     return userInfo
                 } catch (error: any) {
