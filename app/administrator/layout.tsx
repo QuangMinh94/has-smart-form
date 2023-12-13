@@ -1,6 +1,7 @@
 import SideMenu from "@/components/SideMenu"
 import React from "react"
 import "@/app/administrator/(component)/CustomCss.css"
+
 type Props = {
     children: React.ReactNode
 }

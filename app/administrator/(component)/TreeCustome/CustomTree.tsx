@@ -1,19 +1,19 @@
 import type { DataNode } from "antd/es/tree"
 import { ToFilterName } from "@/util/formatText"
 import { Flex } from "antd"
-import { useState } from "react"
+
 import "./TreeViewProduct.css"
 type Cusomter = {
     Tree: any[]
     searchValue: string
     colorSeacrh: string
-    AddModel: React.FC<{
+    AddModel?: React.FC<{
         datarow: any
     }>
-    UpdateModel: React.FC<{
+    UpdateModel?: React.FC<{
         datarow: any
     }>
-    ActiveModal: React.FC<{
+    ActiveModal?: React.FC<{
         datarow: any
     }>
 }
@@ -53,15 +53,21 @@ function TreeCustom({
                             e.stopPropagation()
                         }}
                     >
-                        <div className="mr-[8px]">
-                            <AddModel datarow={item} />
-                        </div>
-                        <div className="mr-[8px]">
-                            <UpdateModel datarow={item} />
-                        </div>
-                        <div>
-                            <ActiveModal datarow={item} />
-                        </div>
+                        {AddModel && (
+                            <div className="mr-[8px]">
+                                <AddModel datarow={item} />
+                            </div>
+                        )}
+                        {UpdateModel && (
+                            <div className="mr-[8px]">
+                                <UpdateModel datarow={item} />
+                            </div>
+                        )}
+                        {ActiveModal && (
+                            <div>
+                                <ActiveModal datarow={item} />
+                            </div>
+                        )}
                     </div>
                 </Flex>
             ),

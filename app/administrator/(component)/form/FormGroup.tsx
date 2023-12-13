@@ -187,12 +187,15 @@ const FormGroup: React.FC<Props> = ({
 
                 <Form.Item
                     style={{ marginBottom: "25px" }}
-                    label="nhóm cha"
+                    label="thuộc nhóm"
                     name="groupParent"
                 >
                     <SelectForm
                         disabled={typeForm === "ADD_MODAL" && addTreeChidlren}
-                        enabledFecthData={true}
+                        enabledFecthData={
+                            typeForm === "UPDATE_MODAL" ||
+                            (typeForm === "ADD_MODAL" && addTreeChidlren)
+                        }
                         type="getGroup"
                         onChange={HandlerOnchangeGroupParent}
                         objcheck={objChidrenParentPlat}

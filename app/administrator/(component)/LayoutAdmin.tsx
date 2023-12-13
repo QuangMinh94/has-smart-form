@@ -3,8 +3,8 @@ import React from "react"
 type typeProps = {
     title: string
     Table: React.ReactElement
-    HeaderAction: React.ReactElement
-    BtnAdd: React.ReactElement
+    HeaderAction?: React.ReactElement
+    BtnAdd?: React.ReactElement
 }
 
 const LayoutAdministrator: React.FC<typeProps> = ({

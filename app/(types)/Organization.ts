@@ -1,10 +1,37 @@
 export interface Organization {
-    Active?: boolean
-    Address?: string
+    active?: boolean
+    address?: string
     CreatedDate?: Date
-    Email?: string
-    Name?: string
-    Phone?: string
-    UpdatedDate?: Date
+    email?: string
+    name?: string
+    phone?: string
+    updatedDate?: Date
     _id?: string
+    themeGlobal?: {
+        theme: {
+            components: {
+                Layout: {
+                    colorBgBod: string
+                }
+            }
+            token: {
+                colorPrimary: string
+                fontFamily: string
+            }
+        }
+        logo: string
+    }
+}
+export interface themeGlobal {
+    theme: {
+        token: {
+            colorPrimary: string
+        }
+    }
+    logo: string
+}
+export interface bodyRequestOrganization {
+    id: string
+    active: boolean
+    themeGlobal: themeGlobal
 }
