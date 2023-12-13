@@ -133,14 +133,19 @@ const TemplateWrapper = ({
         setViewerKey(Math.random())
     }
 
-    const HandlerVerify = async (buttonType: string) => {
+    const HandlerVerify = async (
+        buttonType: string,
+        reason: string,
+        type: string
+    ) => {
         setIsDisabled(true)
         try {
             await axios.post(
                 NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE!,
                 {
                     id: id,
-                    button: buttonType
+                    button: buttonType,
+                    rejectReason: type ? reason : undefined
                 },
                 {
                     headers: {
@@ -204,8 +209,8 @@ const TemplateWrapper = ({
         form.submit()
     }
 
-    const onNeedCorrecion = async () => {
-        HandlerVerify(BUTTON_TYPE.NEED_CORRECTION)
+    const onNeedCorrecion = async (type: string, reason: string) => {
+        HandlerVerify(BUTTON_TYPE.NEED_CORRECTION, reason, type)
     }
 
     const onCancel = () => {
@@ -220,7 +225,7 @@ const TemplateWrapper = ({
     }
 
     const onVerify = async () => {
-        HandlerVerify(BUTTON_TYPE.SUBMIT)
+        HandlerVerify(BUTTON_TYPE.SUBMIT, "", "")
     }
 
     const onBack = () => {
@@ -228,8 +233,8 @@ const TemplateWrapper = ({
         router.refresh()
     }
 
-    const onReject = async () => {
-        HandlerVerify(BUTTON_TYPE.REJECT)
+    const onReject = async (type: string, reason: string) => {
+        HandlerVerify(BUTTON_TYPE.REJECT, reason, type)
     }
 
     return (
