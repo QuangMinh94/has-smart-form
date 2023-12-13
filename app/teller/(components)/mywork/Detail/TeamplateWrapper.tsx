@@ -1,10 +1,10 @@
 "use client"
-import { useEnvContext } from "next-runtime-env"
 import { addEformTask } from "@/app/(service)/EformTemplate"
 import {
     SeacrhCustomInFo,
     filterAppointMent
 } from "@/app/(service)/appointments"
+import { InforUser } from "@/app/(types)/Users"
 import { RequestEformTaks } from "@/app/(types)/eFormTask"
 import { block, formTemplate } from "@/app/(types)/eProduct"
 import { eFormTask, myWork } from "@/app/(types)/teller/mywork"
@@ -12,18 +12,13 @@ import { choosenBlock } from "@/app/teller/(components)/context"
 import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
 import { DefaultParams, OzDelimiter } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
-import { InforUser, Users } from "@/app/(types)/Users"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import routers from "@/router/cusTomRouter"
 import { message } from "antd"
 import delay from "delay"
+import { useEnvContext } from "next-runtime-env"
 import dynamic from "next/dynamic"
-import {
-    useParams,
-    usePathname,
-    useRouter,
-    useSearchParams
-} from "next/navigation"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import React, { useEffect, useState } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
@@ -336,6 +331,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             numberArray.forEach((element) => {
                 oz.ReBind(element, "report", params, OzDelimiter())
             })
+            oz.ReBind(currentReportIndex, "report", params, OzDelimiter())
         }
     }
 
