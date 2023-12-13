@@ -21,6 +21,10 @@ import {
     typeContextTransfer,
     contextTransfer
 } from "@/app/administrator/(component)/content/contentTransfer"
+import {
+    typeContextCustomeTheme,
+    contextCustomeTheme
+} from "@/components/context/context"
 function useContextMyWorkDetail(): typeContextMyworkDetail {
     const provider = useContext(contextMyworkDetail)
     return {
@@ -92,6 +96,16 @@ function useContextTransferANTD(): typeContextTransfer {
         targetKeys: provider.targetKeys
     }
 }
+function useContextThemeConfig(): typeContextCustomeTheme {
+    const provider = useContext(contextCustomeTheme)
+    return {
+        setPrimaryColor: provider.setPrimaryColor,
+        primaryColor: provider.primaryColor,
+        setLogo: provider.setLogo,
+        logo: provider.logo
+    }
+}
+
 export {
     useContextMyWorkDetail,
     useContextTranfer,
@@ -99,5 +113,6 @@ export {
     useContextAdmin,
     useContextAdminUser,
     useContextTree,
-    useContextTransferANTD
+    useContextTransferANTD,
+    useContextThemeConfig
 }

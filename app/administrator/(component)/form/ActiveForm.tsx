@@ -25,7 +25,7 @@ const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
     const [loading, setLoading] = useState<boolean>(false)
     const { messageApi } = useContextAdmin()
     const { token, session } = useCustomCookies()
-    const updateActive: any = {
+    const updateActive = {
         ADMIN_USER: async () => {
             try {
                 const res = await updateUser({
@@ -118,7 +118,8 @@ const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
                     messageApi("error", "xảy ra lỗi vui lòng thử lại sau")
                 }
             }
-        }
+        },
+        ADMIN_ROLE: () => {}
     }
     return (
         <div className="flex py-[10px] justify-end ">
