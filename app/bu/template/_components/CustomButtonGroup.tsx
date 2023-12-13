@@ -40,7 +40,7 @@ const CustomButtonGroup = ({
 
     return (
         <>
-            {!FindPermission(
+            {FindPermission(
                 permission,
                 "children",
                 "VisibleSubmitButtonGroup"
