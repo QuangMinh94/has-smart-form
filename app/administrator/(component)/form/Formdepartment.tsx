@@ -295,7 +295,6 @@ const Formdepartment: React.FC<Props> = ({
                 >
                     <SelectForm
                         disabled={!!!idParent.idProvice}
-                        enabledFecthData={typeForm === "UPDATE_MODAL"}
                         type="getDistrict"
                         onChange={HandlerOnchangeDistrict}
                         idParent={idParent.idProvice}
@@ -316,7 +315,6 @@ const Formdepartment: React.FC<Props> = ({
                 >
                     <SelectForm
                         disabled={!!!idParent.idDistrict}
-                        enabledFecthData={typeForm === "UPDATE_MODAL"}
                         type="getWards"
                         onChange={HandlerOnchangeWards}
                         idParent={idParent.idDistrict}
@@ -336,7 +334,10 @@ const Formdepartment: React.FC<Props> = ({
                 >
                     <SelectForm
                         disabled={typeForm === "ADD_MODAL" && addTreeChidlren}
-                        enabledFecthData={true}
+                        enabledFecthData={
+                            typeForm === "UPDATE_MODAL" ||
+                            (typeForm === "ADD_MODAL" && addTreeChidlren)
+                        }
                         type="getDepartment"
                         onChange={HandlerOnchangeDepartment}
                         objcheck={objChidrenParentPlat}

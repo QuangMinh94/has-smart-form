@@ -179,11 +179,11 @@ const UseFecthApi = ({
                 token,
                 session
             })
-            const group: any[] = res.data
+            const roles: any[] = res.data
 
-            const option: Option[] = group.map((item) => ({
+            const option: Option[] = roles.map((item) => ({
                 value: item?._id ?? "",
-                label: item?.name ?? "",
+                label: item?.description ?? "",
                 dataRow: item
             }))
             return option
@@ -265,7 +265,7 @@ const CustomerSelect: React.FC<Props> = ({
         if (!idParent) {
             setenabledFecth(true)
         }
-    }, [])
+    }, [idParent])
     return (
         <Select
             loading={isRefetching}

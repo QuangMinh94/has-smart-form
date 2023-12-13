@@ -1,3 +1,4 @@
+import { setting } from "./../app/ba/(component)/ButtonOpenModal"
 import { Role } from "./../app/(types)/Role"
 export type rootPath = "teller" | "ksvteller" | "ba" | "administrator"
 export const APP_ROVE = "appRove"
@@ -10,6 +11,7 @@ export const ROLE = "role"
 export const DEPARTMENT = "department"
 export const GROUP = "group"
 export const QUERIES = "queries"
+export const SETTING = "setting"
 
 const routers = (root: rootPath) => {
     const router = {
@@ -37,7 +39,8 @@ const routers = (root: rootPath) => {
         user: { path: `/${root}/${USER}` },
         role: { path: `/${root}/${ROLE}` },
         department: { path: `/${root}/${DEPARTMENT}` },
-        group: { path: `/${root}/${GROUP}` }
+        group: { path: `/${root}/${GROUP}` },
+        setting: { path: `/${root}/${SETTING}` }
     }
     return router
 }

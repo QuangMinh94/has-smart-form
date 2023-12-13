@@ -451,7 +451,7 @@ const FormOder: React.FC<Props> = ({
                 {idDepartment && (
                     <Form.Item
                         style={{ marginBottom: "25px" }}
-                        label="Nhóm chức vụ"
+                        label="Thuộc nhóm"
                         name="groups"
                         rules={[
                             {

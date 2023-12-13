@@ -30,7 +30,7 @@ export interface Users extends Token {
     image?: IImage
     mail?: string
     permission?: any[]
-    organization?: string | Organization
+    organization?: Organization
     authenProvider?: any
     phone?: string
     birthday?: string

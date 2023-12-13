@@ -69,4 +69,17 @@ const contextTranfer = createContext<typeContextTranfer>({
     loading: false
 })
 
-export { ContextTemplate, contextTranfer }
+export interface typeContextCustomeTheme {
+    setPrimaryColor: React.Dispatch<string>
+    primaryColor: string
+    setLogo: React.Dispatch<string>
+    logo: string
+}
+const contextCustomeTheme = createContext<typeContextCustomeTheme>({
+    setPrimaryColor: () => {},
+    primaryColor: "",
+    setLogo: () => {},
+    logo: ""
+})
+
+export { ContextTemplate, contextTranfer, contextCustomeTheme }
