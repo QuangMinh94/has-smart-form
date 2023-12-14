@@ -90,6 +90,7 @@ export const authOptions: NextAuthOptions = {
                 if (FindPermission(permission, "children", "VisibleAdmin")) {
                     role = Role.ADMIN
                 }
+
                 token.uid = user.token
                 token.name = JSON.stringify(user)
                 token.role = role

@@ -1,53 +1,51 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: process.env.BUILD_STANDALONE === "true" ? "standalone" : undefined,
-  reactStrictMode: false,
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/bu',
-        permanent: true,
-      },
-      {
-        source: '/bu',
-        destination: '/bu/mywork',
-        permanent: true,
-      },
+    output: process.env.BUILD_STANDALONE === "true" ? "standalone" : undefined,
+    reactStrictMode: false,
+    async redirects() {
+        return [
+            {
+                source: "/",
+                destination: "/bu",
+                permanent: true
+            },
+            {
+                source: "/bu",
+                destination: "/bu/mywork",
+                permanent: true
+            },
 
-      {
-        source: '/teller',
-        destination: '/teller/mywork',
-        permanent: true,
-      },
-      {
+            {
+                source: "/teller",
+                destination: "/teller/mywork",
+                permanent: true
+            },
+            /*  {
         source: '/mywork',
         destination: '/teller/mywork',
         permanent: true,
-      },
+      }, */
 
-      {
-        source: '/ksvteller',
-        destination: '/ksvteller/mywork',
-        permanent: true,
-      },
-      {
-        source: '/ba',
-        destination: '/ba/block',
-        permanent: true,
-      },
-      {
-        source: '/administrator',
-        destination: '/administrator/user',
-        permanent: true,
-      },
-
-    ]
-  },
+            {
+                source: "/ksvteller",
+                destination: "/ksvteller/mywork",
+                permanent: true
+            },
+            {
+                source: "/ba",
+                destination: "/ba/block",
+                permanent: true
+            },
+            {
+                source: "/administrator",
+                destination: "/administrator/user",
+                permanent: true
+            }
+        ]
+    }
 }
 
 module.exports = nextConfig
-
 
 // Injected content via Sentry wizard below
 

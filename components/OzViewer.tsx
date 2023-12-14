@@ -74,8 +74,11 @@ const Viewer = ({ ozParams }: { ozParams?: string }) => {
                 id="OZViewer"
                 style={{
                     width: "100%",
-                    height: "80vh"
+                    height: "80vh",
                     //marginTop: 60
+                    display: "flex",
+                    flexDirection: "column",
+                    position: "relative"
                 }}
             />
         </div>
