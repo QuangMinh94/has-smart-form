@@ -2,6 +2,7 @@
 
 import CustomSpin from "@/components/CustomSpin"
 import NovuComponent from "@/components/NovuComponent"
+import { useContextThemeConfig } from "@/components/cusTomHook/useContext"
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
 import { faArchive, faFile, faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -22,7 +23,6 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ReactNode, useEffect, useState } from "react"
 import { DocumentName } from "./_types/DocumentName"
-import { useContextThemeConfig } from "@/components/cusTomHook/useContext"
 const { Header, Sider, Content } = Layout
 
 const CustomMenu = () => {
@@ -31,6 +31,10 @@ const CustomMenu = () => {
     useEffect(() => {
         setSelectedKey(pathName)
     }, [pathName])
+
+    const {
+        token: { colorPrimary }
+    } = theme.useToken()
 
     return (
         <Menu
@@ -137,7 +141,12 @@ const SideMenu = ({
 
     return (
         <Layout className="h-screen flex">
-            <Sider trigger={null} collapsible collapsed={collapsed}>
+            <Sider
+                trigger={null}
+                collapsible
+                collapsed={collapsed}
+                style={{ backgroundColor: colorPrimary }}
+            >
                 <center>
                     <Image
                         className="mt-2 mb-2"
