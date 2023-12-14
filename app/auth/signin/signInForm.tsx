@@ -7,9 +7,8 @@ import {
     faUser
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Col, Flex, Form, Input, Row, Spin } from "antd"
+import { Button, Col, Flex, Form, Input, Row, Spin, theme } from "antd"
 import { signIn } from "next-auth/react"
-import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 
@@ -25,6 +24,9 @@ const SigninForm = () => {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const params = useSearchParams()
+    const {
+        token: { colorPrimary }
+    } = theme.useToken()
     const onFinish = async (values: any) => {
         setError("")
         setLoading(true)
@@ -85,12 +87,18 @@ const SigninForm = () => {
                     >
                         <div>
                             <center>
-                                <Image
+                                {/* <Image
                                     width={80}
                                     height={80}
                                     src={"/img/hptIconKnowingIT.png"}
                                     alt={"hpticon"}
-                                />
+                                /> */}
+                                <p
+                                    className="text-3xl font-bold"
+                                    style={{ color: colorPrimary }}
+                                >
+                                    Đăng nhập
+                                </p>
                             </center>
                         </div>
                         <Form
