@@ -342,7 +342,7 @@ const FilterComponent = ({
                                 style={{ width: "100%" }}
                                 placeholder={["From", "To"]}
                                 defaultValue={
-                                    params.get("from")
+                                    params.get("from") && params.get("to")
                                         ? [
                                               dayjs.unix(
                                                   parseInt(params.get("from")!)

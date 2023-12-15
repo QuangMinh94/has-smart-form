@@ -22,7 +22,7 @@ type ParamObject = {
     key: string
 }
 
-const QueriesPage = async ({
+const KSVQueriesPage = async ({
     searchParams
 }: {
     searchParams: {
@@ -81,6 +81,41 @@ const QueriesPage = async ({
         }
     }
 
+    let createDate = {}
+    let isFromExist: boolean = false
+    let isToExist: boolean = false
+    //add from and to key to createDate
+    for (const key in searchInput) {
+        if (key === "from" || key === "to") {
+            if (key === "from") {
+                isFromExist = true
+            }
+            if (key === "to") {
+                isToExist = true
+            }
+            Object.assign(createDate, {
+                [key]: searchInput[key as keyof typeof searchInput]
+            })
+        }
+    }
+
+    if (isFromExist && isToExist) {
+        //check if createDate is empty or not
+        if (Object.keys(createDate).length !== 0) {
+            //not empty, assign to searchInput
+            Object.assign(searchInput, { createDate: createDate })
+        }
+    }
+
+    //delete from and to from searchInput
+    for (const key in searchInput) {
+        if (key === "from" || key === "to") {
+            delete searchInput[key as keyof typeof searchInput]
+        }
+    }
+
+    //console.log("SEARCH INPUT", searchInput)
+
     const _dataTable: ResultTableType[] = []
 
     const filterData = await fetchFilterAppointment(
@@ -109,7 +144,6 @@ const QueriesPage = async ({
         })
     })
 
-    /* console.log("Filter Data", filterData) */
     return (
         <QueriesTemplate>
             <FilterOption route="/ksvteller/queries" />
@@ -132,4 +166,4 @@ const fetchFilterAppointment = cache(async (url: string, searchInput: any) => {
 
 export const dynamic = "force-dynamic"
 
-export default QueriesPage
+export default KSVQueriesPage
