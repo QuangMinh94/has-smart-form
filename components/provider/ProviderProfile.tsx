@@ -81,9 +81,10 @@ const CusomerConfigProvider: React.FC<Props> = ({ children }) => {
         setUser,
         User
     }
+
     return (
         <contextProfile.Provider value={value}>
-            {isLoading && !pathname.startsWith("/auth") ? (
+            {isLoading && token && !pathname.startsWith("/auth") ? (
                 <Loading />
             ) : (
                 children

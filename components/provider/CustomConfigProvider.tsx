@@ -59,6 +59,7 @@ const CusomerConfigProvider: React.FC<Props> = ({ children }) => {
             setLogo(IconInfo)
         }
     }, [primaryInfo, IconInfo])
+
     useEffect(() => {
         if (token) {
             refetch()
@@ -110,7 +111,7 @@ const CusomerConfigProvider: React.FC<Props> = ({ children }) => {
                     }
                 }}
             >
-                {isLoading && !pathname.startsWith("/auth") ? (
+                {isLoading && token && !pathname.startsWith("/auth") ? (
                     <Loading />
                 ) : (
                     children

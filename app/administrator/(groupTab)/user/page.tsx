@@ -1,9 +1,8 @@
-import React from "react"
 import LayoutAdmin from "@/app/administrator/(component)/LayoutAdmin"
 
-import Loading from "@/app/teller/mywork/loading"
-import BtnModal from "@/app/administrator/(component)/BtnModal"
 import ActionHeaderUser from "@/app/administrator/(component)/ActionHeader/User"
+import BtnModal from "@/app/administrator/(component)/BtnModal"
+import Loading from "@/app/teller/mywork/loading"
 import dynamic2 from "next/dynamic"
 
 import { cookies } from "next/headers"
@@ -78,5 +77,5 @@ const User = async ({
         </ProviderUser>
     )
 }
-export const dynamic = "force-dynamic"
+export const revalidate = 5000
 export default User

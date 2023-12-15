@@ -7,25 +7,30 @@ import {
     faUser
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Col, Flex, Form, Input, Row, Spin } from "antd"
+import { Button, Col, Flex, Form, Input, Row, Spin, theme } from "antd"
 import { signIn } from "next-auth/react"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { useContextThemeConfig } from "@/components/cusTomHook/useContext"
+import "./styles.css"
+
 type FieldType = {
     username: string
     password: string
 }
 
 const SigninForm = () => {
-    const { logo } = useContextThemeConfig()
-    const [userNameTitle, setUserNameTitle] = useState<boolean>(false)
-    const [passwordTitle, setPasswordTitle] = useState<boolean>(false)
+    // const { logo } = useContextThemeConfig()
+    // const [userNameTitle, setUserNameTitle] = useState<boolean>(false)
+    // const [passwordTitle, setPasswordTitle] = useState<boolean>(false)
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const params = useSearchParams()
+    const {
+        token: { colorPrimary }
+    } = theme.useToken()
     const onFinish = async (values: any) => {
         setError("")
         setLoading(true)
@@ -79,7 +84,7 @@ const SigninForm = () => {
                             borderStyle: "solid",
                             borderWidth: "40px",
                             borderColor: "transparent",
-                            backgroundColor: "#BEDCF7A6",
+                            backgroundColor: "rgb(160 210 255 / 73%)",
                             borderRadius: 20
                         }}
                         gap={10}
@@ -87,11 +92,17 @@ const SigninForm = () => {
                         <div>
                             <center>
                                 <Image
-                                    width={80}
-                                    height={80}
-                                    src={`${logo}`}
-                                    alt={"hpticon"}
+                                    width={150}
+                                    height={150}
+                                    src={"/img/login.png"}
+                                    alt={"icon"}
                                 />
+                                {/*  <p
+                                    className="text-3xl font-bold"
+                                    style={{ color: colorPrimary }}
+                                >
+                                    Đăng nhập
+                                </p> */}
                             </center>
                         </div>
                         <Form
@@ -112,6 +123,7 @@ const SigninForm = () => {
                                     style={{ marginBottom: 0 }}
                                 >
                                     <Input
+                                        className="placeholder-red-300"
                                         data-testid="usernameId"
                                         prefix={
                                             <FontAwesomeIcon
@@ -121,8 +133,6 @@ const SigninForm = () => {
                                         }
                                         style={{ width: "100%" }}
                                         bordered={false}
-                                        onFocus={() => setUserNameTitle(true)}
-                                        onBlur={() => setUserNameTitle(false)}
                                         placeholder="Tên đăng nhập"
                                     />
                                 </Form.Item>
@@ -144,8 +154,6 @@ const SigninForm = () => {
                                         }
                                         style={{ width: "100%" }}
                                         bordered={false}
-                                        onFocus={() => setPasswordTitle(true)}
-                                        onBlur={() => setPasswordTitle(false)}
                                         iconRender={(visible) =>
                                             visible ? (
                                                 <FontAwesomeIcon
@@ -176,7 +184,8 @@ const SigninForm = () => {
                                         className="bg-blue-500"
                                         htmlType="submit"
                                         style={{
-                                            width: "100%"
+                                            width: "100%",
+                                            backgroundColor: "#141ED2"
                                         }}
                                         //onClick={() => form.submit()}
                                     >

@@ -6,13 +6,13 @@ const theme: ThemeConfig = {
             colorPrimary: "#0E7490"
         },
         Menu: {
-            colorBgContainer: "#0E7490",
-            itemColor: "white",
-            itemHoverBg: "white"
-        },
-        Layout: {
-            siderBg: "#0E7490",
-            triggerBg: "#0E7490"
+            /* itemBg: "black" */
+            /* itemColor: "white",
+            itemHoverBg: "white", 
+            itemSelectedColor: "black",
+            itemSelectedBg: "black"*/
+            /* horizontalItemSelectedBg: "black",
+            horizontalItemSelectedColor: "black" */
         },
         Table: {
             headerBg: "#0E7490",
