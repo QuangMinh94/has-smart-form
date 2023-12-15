@@ -23,7 +23,9 @@ import {
 } from "@/app/administrator/(component)/content/contentTransfer"
 import {
     typeContextCustomeTheme,
-    contextCustomeTheme
+    contextCustomeTheme,
+    typeContextProfile,
+    contextProfile
 } from "@/components/context/context"
 function useContextMyWorkDetail(): typeContextMyworkDetail {
     const provider = useContext(contextMyworkDetail)
@@ -105,7 +107,13 @@ function useContextThemeConfig(): typeContextCustomeTheme {
         logo: provider.logo
     }
 }
-
+function useContextProfile(): typeContextProfile {
+    const provider = useContext(contextProfile)
+    return {
+        User: provider.User,
+        setUser: provider.setUser
+    }
+}
 export {
     useContextMyWorkDetail,
     useContextTranfer,
@@ -114,5 +122,6 @@ export {
     useContextAdminUser,
     useContextTree,
     useContextTransferANTD,
-    useContextThemeConfig
+    useContextThemeConfig,
+    useContextProfile
 }

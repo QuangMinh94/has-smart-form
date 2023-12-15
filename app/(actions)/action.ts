@@ -15,7 +15,3 @@ export const RevalidateMyworkTeller = async () => {
 export const RevalidateListGroup = async () => {
     revalidateTag("ListGroup")
 }
-
-export const RevalidateListOriganiazatio = async () => {
-    revalidateTag("ListOriganiazatio")
-}

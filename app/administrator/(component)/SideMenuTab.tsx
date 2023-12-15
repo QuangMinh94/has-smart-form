@@ -148,7 +148,7 @@ type Props = {
 }
 const SideMenu = ({ children }: Props) => {
     const {
-        token: { colorBgContainer, colorPrimary }
+        token: { colorBgContainer }
     } = theme.useToken()
 
     return (

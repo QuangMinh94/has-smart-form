@@ -18,7 +18,7 @@ export const updateOrganization = async (pram: {
 }
 export const getOrganization = async (pram: {
     url: string
-    bodyRequest: { _id: string }
+    bodyRequest: { _id?: string }
     token: string
     session: string
 }) => {
