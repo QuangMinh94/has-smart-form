@@ -146,8 +146,8 @@ const KSVQueriesPage = async ({
 
     return (
         <QueriesTemplate>
-            <FilterOption route="/teller/queries" />
-            <ResultTable data={_dataTable} route="/teller/queries/" />
+            <FilterOption route="/ksvteller/queries" />
+            <ResultTable data={_dataTable} route="/ksvteller/queries/" />
         </QueriesTemplate>
     )
 }

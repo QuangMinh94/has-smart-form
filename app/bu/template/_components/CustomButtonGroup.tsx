@@ -184,7 +184,11 @@ const ReasonModal = ({
                     <Button type="default" onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button type="primary" disabled={disabledOk}>
+                    <Button
+                        type="primary"
+                        disabled={disabledOk}
+                        onClick={() => onOK(type, value)}
+                    >
                         Ok
                     </Button>
                 </Flex>
@@ -192,7 +196,7 @@ const ReasonModal = ({
         >
             <TextArea
                 onChange={(e) => {
-                    if (e.target.value.trim()) {
+                    if (e.target.value.trim() !== "") {
                         setDisabledOk(false)
                     } else {
                         setDisabledOk(true)
