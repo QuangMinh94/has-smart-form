@@ -24,14 +24,15 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
 
 const beforeUpload = (file: RcFile) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png"
-    const isBigger70mb = file.size > 70000
+    console.log("file size", file.size)
+    const isBigger70kb = file.size > 70000
     if (!isJpgOrPng) {
         message.error("vui lòng chọn định dạng JPG/PNG !")
         return false
     }
 
-    if (isBigger70mb) {
-        message.error("vui lòng chọn ảnh dưới 70MB")
+    if (isBigger70kb) {
+        message.error("vui lòng chọn ảnh dưới 70KB")
         return false
     }
     return true
@@ -186,6 +187,7 @@ const ContentUpload: React.FC<{ HidePopover: () => void }> = memo(
         )
     }
 )
+
 AvtarCustome.displayName = "AvtarCustome"
 ContentUpload.displayName = "ContentUpload"
 
