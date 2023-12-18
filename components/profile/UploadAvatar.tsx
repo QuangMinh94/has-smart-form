@@ -186,6 +186,8 @@ const ContentUpload: React.FC<{ HidePopover: () => void }> = memo(
         )
     }
 )
+AvtarCustome.displayName = "AvtarCustome"
+ContentUpload.displayName = "ContentUpload"
 
 const UploadImg: React.FC = () => {
     const { User } = useContextProfile()
