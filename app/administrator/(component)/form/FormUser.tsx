@@ -109,10 +109,6 @@ const FormOder: React.FC<Props> = ({
                             _id: `${bodyUserRequest?.department}`,
                             name: labels.department
                         },
-                        authenProvider: {
-                            _id: `${bodyUserRequest?.authenProvider}`,
-                            Name: labels.authen
-                        },
 
                         firstName: bodyUserRequest.firstName,
                         lastName: bodyUserRequest.lastName,
@@ -135,6 +131,8 @@ const FormOder: React.FC<Props> = ({
             }
             if (typeForm === "UPDATE_MODAL") {
                 bodyUserRequest.id = rowData?._id
+                delete bodyUserRequest.authenProvider
+                delete bodyUserRequest.color
                 delete bodyUserRequest.userName
                 updateUserFC(bodyUserRequest)
             }
