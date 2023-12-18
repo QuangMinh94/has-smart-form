@@ -49,9 +49,9 @@ const ProductPage = async () => {
                         <FillterProduct />
                     </div>
                 </div>
-                {/* <div className="mr-[20px]">
+                <div className="mr-[20px]">
                     <ActiveTree />
-                </div> */}
+                </div>
                 <div>
                     <ButtonOpenModal
                         type="ADD_MODAL"
