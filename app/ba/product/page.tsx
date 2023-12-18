@@ -6,6 +6,7 @@ import FillterProduct from "../(component)/fillter/FillterProduct"
 import LayoutTreeView from "../(component)/table/TreeViewProduct"
 import { requestBodyEproductTree } from "@/app/(types)/eProduct"
 import ButtonOpenModal from "@/app/ba/(component)/ButtonOpenModal"
+import ActiveTree from "../(component)/ActiveTree"
 import axios from "axios"
 
 const GetProductTree = async (pram: {
@@ -48,6 +49,9 @@ const ProductPage = async () => {
                         <FillterProduct />
                     </div>
                 </div>
+                {/* <div className="mr-[20px]">
+                    <ActiveTree />
+                </div> */}
                 <div>
                     <ButtonOpenModal
                         type="ADD_MODAL"

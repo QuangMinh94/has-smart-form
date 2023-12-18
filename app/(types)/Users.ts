@@ -17,7 +17,7 @@ export interface Users extends Token {
     role?: Role
     department?: Department
     color?: string
-    defaultGroup: Group
+    defaultGroup?: Group
     firstName?: string
     lastName?: string
     group?: Group[]

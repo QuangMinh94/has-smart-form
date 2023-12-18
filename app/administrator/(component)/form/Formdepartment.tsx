@@ -149,9 +149,12 @@ const Formdepartment: React.FC<Props> = ({
         form.setFieldsValue({ departmentParent: value, group: "", groups: [] })
     }, [])
 
-    const HandlerOnchangeCategory = useCallback((value: string) => {
-        form.setFieldsValue({ category: value })
-    }, [])
+    const HandlerOnchangeCategory = useCallback(
+        (value: string, option: any) => {
+            form.setFieldsValue({ category: option.label })
+        },
+        []
+    )
 
     const HandlerOnchangeProvince = useCallback((value: string) => {
         form.setFieldsValue({ province: value, district: "", wards: "" })
@@ -230,7 +233,6 @@ const Formdepartment: React.FC<Props> = ({
                     ]}
                 >
                     <SelectForm
-                        enabledFecthData={typeForm === "UPDATE_MODAL"}
                         type="cateGoriFilter"
                         onChange={HandlerOnchangeCategory}
                     />

@@ -68,7 +68,7 @@ const FormOder: React.FC<Props> = ({ handleCancelFormOder }) => {
                 token
             })
             if (res.status === 200) {
-                const UserCustom: any = InFoUser?.defaultGroup.role
+                const UserCustom: any = InFoUser?.defaultGroup?.role
                 const idRole = UserCustom?.[0]?._id
                 const resSeacrh = await seacrhAppointMent({
                     url: NEXT_PUBLIC_APPOINT_MENTS!,

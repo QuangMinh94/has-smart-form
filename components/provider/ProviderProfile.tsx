@@ -22,7 +22,7 @@ const fecthProfile = ({
     const { NEXT_PUBLIC_GET_USER_ID, NEXT_PUBLIC_GET_USER_IMAGE } =
         useEnvContext()
 
-    const { isLoading, error, data, refetch } = useQuery<any>({
+    const { isLoading, error, data, refetch } = useQuery<Users>({
         queryKey: ["getInforUser"],
         queryFn: async () => {
             const [resUser, resImg] = await Promise.all([
@@ -41,7 +41,17 @@ const fecthProfile = ({
             ])
             const User = await resUser.json()
             const Image = await resImg.json()
-            return { User, Image }
+
+            const user = User ?? {}
+            const image =
+                Image === "User dont have image"
+                    ? { data: "", contentType: "" }
+                    : Image
+            const CustomeUser: Users = {
+                ...user,
+                image
+            }
+            return CustomeUser
         },
         retry: 3,
         refetchOnWindowFocus: false,
@@ -55,23 +65,12 @@ const CusomerConfigProvider: React.FC<Props> = ({ children }) => {
     const { token, session } = useCustomCookies()
     const pathname = usePathname()
     const { data, refetch, isLoading } = fecthProfile({ token, session })
-    const [User, setUser] = useState<Users>({ defaultGroup: {} })
-
+    const [User, setUser] = useState<Users>({})
     useEffect(() => {
-        if (data?.User) {
-            const user = data?.User ?? {}
-            const image =
-                data?.Image === "User dont have image"
-                    ? { data: "", contentType: "" }
-                    : data?.Image
-            const CustomeUser: Users = {
-                ...user,
-                image
-            }
-
-            setUser(CustomeUser)
+        if (data) {
+            setUser(data)
         }
-    }, [JSON.stringify(data?.Image), JSON.stringify(data?.User)])
+    }, [isLoading])
     useEffect(() => {
         if (token) {
             refetch()

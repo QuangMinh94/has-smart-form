@@ -23,12 +23,12 @@ type Type =
     | "cateGoriFilter"
     | "getRoles"
 export type typeSelect = "authen" | "department" | "defaultGroup" // DANG DUNG O FORM USER
-
+type Option = { label: string; value: string; dataRow: any }
 type Props = {
     type: Type
     placeholder?: string
     onSelect?: (selectedKeys: string, dataRow: any, type?: typeSelect) => void
-    onChange: (value: any) => void
+    onChange: (value: any, option?: any) => void
     defalutValue?: string
     disabled?: boolean
     idDepartment?: string
@@ -38,7 +38,6 @@ type Props = {
     idParent?: string
     objcheck?: any
 }
-type Option = { label: string; value: string; dataRow: any }
 
 const UseFecthApi = ({
     token,
@@ -241,8 +240,6 @@ const CustomerSelect: React.FC<Props> = ({
 
     const CustomData = useMemo(() => {
         let dataNew: Option[] = data ?? []
-        console.log("dataNew: ", dataNew)
-        console.log("department: ", idDepartment)
         if (idDepartment && type === "getGroup") {
             dataNew =
                 dataNew?.filter(

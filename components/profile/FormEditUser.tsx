@@ -124,8 +124,10 @@ const FormEditUser: React.FC<Props> = ({ cancel, typeUpdate }) => {
             >
                 <div
                     className={`${
-                        typeUpdate === "password" ? "" : "flex items-center"
-                    } h-[5vh]`}
+                        typeUpdate === "password"
+                            ? ""
+                            : "flex items-center h-[5vh]"
+                    } `}
                 >
                     {typeUpdate === "email" && (
                         <Form.Item
@@ -218,9 +220,13 @@ const FormEditUser: React.FC<Props> = ({ cancel, typeUpdate }) => {
                                                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(
                                                     value
                                                 )
+
                                             const isValidchekLength =
-                                                /^\S{8,}$/.test(value)
-                                            console.log(isValidChecktype)
+                                                `${value ?? ""}`.replace(
+                                                    /\s/g,
+                                                    ""
+                                                ).length >= 8
+
                                             if (
                                                 isValidChecktype &&
                                                 isValidchekLength
