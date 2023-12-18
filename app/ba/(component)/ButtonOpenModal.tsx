@@ -3,15 +3,16 @@ import React, { useState, memo, useCallback } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit, faPlus } from "@fortawesome/free-solid-svg-icons"
 
-import { Modal, Button } from "antd"
+import { Modal, Button, Checkbox } from "antd"
 import FormProduct from "./form/FormProduct"
 import FormNV from "./form/FormNV"
-export type setting = "ADD_MODAL" | "UPDATE_MODAL"
+import FormActive from "./form/Active"
+export type setting = "ADD_MODAL" | "UPDATE_MODAL" | "ACTIVE_MODAL"
 type Props = {
     type: setting
     titleModal: string
     rowData?: any
-    typeRow: "P" | "B"
+    typeRow: "P" | "B" | "ACTIVE"
     clickBtn?: boolean
 }
 const App: React.FC<Props> = ({
@@ -29,7 +30,7 @@ const App: React.FC<Props> = ({
         setIsModalOpen(false)
     }, [])
 
-    const FormTypeRow: any = {
+    const FormTypeRow = {
         P: (
             <FormProduct
                 cancelModel={handleCancel}
@@ -37,7 +38,16 @@ const App: React.FC<Props> = ({
                 rowData={rowData}
             />
         ),
-        B: <FormNV cancelModel={handleCancel} type={type} rowData={rowData} />
+        B: <FormNV cancelModel={handleCancel} type={type} rowData={rowData} />,
+        ACTIVE: (
+            <FormActive
+                CancelModal={handleCancel}
+                data={{
+                    idUpdate: rowData?._id ?? "",
+                    active: !!rowData?.active
+                }}
+            />
+        )
     }
 
     return (
@@ -46,6 +56,8 @@ const App: React.FC<Props> = ({
                 <Button type="primary" onClick={showModal}>
                     Tạo sản phẩm
                 </Button>
+            ) : type === "ACTIVE_MODAL" ? (
+                <Checkbox onClick={showModal} checked={rowData.active} />
             ) : (
                 <FontAwesomeIcon
                     onClick={showModal}

@@ -11,6 +11,7 @@ import { NextResponse } from "next/server"
 export default withAuth(function middleware(request: NextRequestWithAuth) {
     const token = request.nextauth.token
     const pathName = request?.nextUrl?.pathname
+
     //if (!pathName.includes("signin")) {
     if (token) {
         const role = token.role

@@ -1,7 +1,7 @@
 "use client"
 
 import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
-import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
+import ButtonLogOut from "@/components/HeaderAvatar"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
 

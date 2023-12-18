@@ -61,7 +61,7 @@ const App: React.FC = () => {
             key: "group",
             ellipsis: true,
             align: "left",
-            render: (data: Users) => data.defaultGroup.name
+            render: (data: Users) => data?.defaultGroup?.name
         },
         {
             title: "Active",

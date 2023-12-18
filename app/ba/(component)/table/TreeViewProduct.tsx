@@ -29,7 +29,10 @@ function TreeCustom(
 
         TreeCustomer.push({
             title: (
-                <Flex className="boxAction">
+                <Flex
+                    className="boxAction"
+                    style={item.active ? undefined : { opacity: "0.5" }}
+                >
                     <div className="mr-[8px]">{name}</div>
                     <div
                         className="hidden actionHover"
@@ -45,7 +48,7 @@ function TreeCustom(
                                 typeRow="B"
                             />
                         </div>
-                        <div>
+                        <div className="mr-[8px]">
                             <ButtonOpenModal
                                 rowData={item}
                                 type="UPDATE_MODAL"
@@ -55,6 +58,26 @@ function TreeCustom(
                                         : "Cập nhật nghiệp vụ"
                                 }
                                 typeRow={item?.type === "P" ? "P" : "B"}
+                            />
+                        </div>
+                        <div>
+                            <ButtonOpenModal
+                                rowData={item}
+                                type="ACTIVE_MODAL"
+                                titleModal={
+                                    item.active
+                                        ? `Vô hiệu hóa ${` ${
+                                              item.type === "P"
+                                                  ? "sản phẩm"
+                                                  : "nghiệp vụ"
+                                          } "${item.name}"`}`
+                                        : `Khôi phục ${` ${
+                                              item.type === "P"
+                                                  ? "sản phẩm"
+                                                  : "nghiệp vụ"
+                                          } "${item.name}"`}`
+                                }
+                                typeRow="ACTIVE"
                             />
                         </div>
                     </div>

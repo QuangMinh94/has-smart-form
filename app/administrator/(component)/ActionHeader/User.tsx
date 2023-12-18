@@ -24,7 +24,11 @@ const ActionHeaderUser = () => {
         const value = e.target.value
         Transition(() => {
             if (value) {
-                Router.push(`?active=${checked}&searchname=${e.target.value}`)
+                Router.push(
+                    `?active=${checked === null ? true : checked}&searchname=${
+                        e.target.value
+                    }`
+                )
             } else {
                 Router.push(`?active=${checked}`)
             }

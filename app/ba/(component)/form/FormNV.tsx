@@ -44,7 +44,7 @@ const UseFecthApiFormAll = ({
 }) => {
     const { InFoUser } = useGetInfoUser()
 
-    const Role: any = InFoUser?.defaultGroup.role?.[0]
+    const Role: any = InFoUser?.defaultGroup?.role?.[0]
     const idRole = Role?._id
     const { error, data, isRefetching, isLoading } = useQuery<any>({
         queryKey: ["formtemplatesAll"],

@@ -17,7 +17,7 @@ export interface Users extends Token {
     role?: Role
     department?: Department
     color?: string
-    defaultGroup: Group
+    defaultGroup?: Group
     firstName?: string
     lastName?: string
     group?: Group[]
@@ -61,8 +61,8 @@ export interface BodyUserRequest {
 }
 
 export interface IImage {
-    Data?: string
-    ContentType?: string
+    data?: string
+    contentType?: string
 }
 export interface UsersUploadFile {
     FirstName: string
@@ -131,4 +131,8 @@ export interface InforUser {
     mobilePhoneNumber: string
     emailAddress: string
     __v?: number
+}
+export interface BodyRequestChangePass {
+    oldPassword: string
+    newPassword: string
 }
