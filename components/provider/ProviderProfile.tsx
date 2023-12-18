@@ -12,7 +12,7 @@ import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { usePathname } from "next/navigation"
 type Props = { children: React.ReactNode }
 
-const fecthProfile = ({
+const FecthProfile = ({
     token,
     session
 }: {
@@ -64,7 +64,7 @@ const fecthProfile = ({
 const CusomerConfigProvider: React.FC<Props> = ({ children }) => {
     const { token, session } = useCustomCookies()
     const pathname = usePathname()
-    const { data, refetch, isLoading } = fecthProfile({ token, session })
+    const { data, refetch, isLoading } = FecthProfile({ token, session })
     const [User, setUser] = useState<Users>({})
     useEffect(() => {
         if (data) {
@@ -76,6 +76,7 @@ const CusomerConfigProvider: React.FC<Props> = ({ children }) => {
             refetch()
         }
     }, [token])
+
     const value: typeContextProfile = {
         setUser,
         User
