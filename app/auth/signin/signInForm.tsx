@@ -12,6 +12,7 @@ import { signIn } from "next-auth/react"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
+import { useContextThemeConfig } from "@/components/cusTomHook/useContext"
 import "./styles.css"
 
 type FieldType = {
@@ -20,6 +21,9 @@ type FieldType = {
 }
 
 const SigninForm = () => {
+    // const { logo } = useContextThemeConfig()
+    // const [userNameTitle, setUserNameTitle] = useState<boolean>(false)
+    // const [passwordTitle, setPasswordTitle] = useState<boolean>(false)
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const router = useRouter()

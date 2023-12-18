@@ -1,7 +1,7 @@
 "use client"
 import { EformTemplate } from "@/app/(types)/EformTemplate"
 import { Dispatch, SetStateAction, createContext } from "react"
-
+import { Users } from "@/app/(types)/Users"
 export type changeBlock = {
     choosenBlock: { name?: string; location?: string; ozrRepository?: string }[]
     changeBlock: number
@@ -82,4 +82,13 @@ const contextCustomeTheme = createContext<typeContextCustomeTheme>({
     logo: ""
 })
 
-export { ContextTemplate, contextTranfer, contextCustomeTheme }
+export interface typeContextProfile {
+    User: Users
+    setUser: React.Dispatch<React.SetStateAction<Users>>
+}
+const contextProfile = createContext<typeContextProfile>({
+    User: { defaultGroup: {} },
+    setUser: () => {}
+})
+
+export { ContextTemplate, contextTranfer, contextCustomeTheme, contextProfile }

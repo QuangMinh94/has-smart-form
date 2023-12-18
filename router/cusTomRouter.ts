@@ -1,6 +1,9 @@
-import { setting } from "./../app/ba/(component)/ButtonOpenModal"
-import { Role } from "./../app/(types)/Role"
-export type rootPath = "teller" | "ksvteller" | "ba" | "administrator"
+export type rootPath =
+    | "teller"
+    | "ksvteller"
+    | "ba"
+    | "administrator"
+    | "profile"
 export const APP_ROVE = "appRove"
 export const DE_TAIL = "detail"
 export const BLOCK = "block"
@@ -35,12 +38,16 @@ const routers = (root: rootPath) => {
         blockDetail() {
             return `${this.block.path}/${DE_TAIL}`
         },
+
         // admninistrator
         user: { path: `/${root}/${USER}` },
         role: { path: `/${root}/${ROLE}` },
         department: { path: `/${root}/${DEPARTMENT}` },
         group: { path: `/${root}/${GROUP}` },
-        setting: { path: `/${root}/${SETTING}` }
+        setting: { path: `/${root}/${SETTING}` },
+
+        // profile
+        profile: { path: `/${root}` }
     }
     return router
 }
