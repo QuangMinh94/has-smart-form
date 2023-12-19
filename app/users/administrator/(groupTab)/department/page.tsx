@@ -1,12 +1,11 @@
-import React from "react"
 import LayoutAdmin from "@/app/users/administrator/(component)/LayoutAdmin"
 
-import Loading from "@/app/users/teller/mywork/loading"
-import BtnModal from "@/app/users/administrator/(component)/BtnModal"
 import ActionHeaderDepartment from "@/app/users/administrator/(component)/ActionHeader/HeaderTree"
-import ProviderTree from "@/app/users/administrator/(component)/provider/ProviderTree"
-import dynamic2 from "next/dynamic"
+import BtnModal from "@/app/users/administrator/(component)/BtnModal"
 import ProviderTranfer from "@/app/users/administrator/(component)/provider/ProviderTransfer"
+import ProviderTree from "@/app/users/administrator/(component)/provider/ProviderTree"
+import Loading from "@/app/users/teller/mywork/loading"
+import dynamic2 from "next/dynamic"
 import { cookies } from "next/headers"
 
 const TreeDepartMent = dynamic2(

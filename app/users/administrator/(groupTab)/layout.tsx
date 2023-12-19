@@ -1,5 +1,5 @@
-import SideMenuTab from "../(component)/SideMenuTab"
 import ProviderAdmin from "@/app/users/administrator/(component)/provider/ProviderAdmin"
+import SideMenuTab from "../(component)/SideMenuTab"
 
 import React from "react"
 type Props = {

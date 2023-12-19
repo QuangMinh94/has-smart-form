@@ -1,9 +1,8 @@
-import React from "react"
 import LayoutAdmin from "@/app/users/administrator/(component)/LayoutAdmin"
 
-import Loading from "@/app/users/teller/mywork/loading"
-import BtnModal from "@/app/users/administrator/(component)/BtnModal"
 import ActionHeaderRole from "@/app/users/administrator/(component)/ActionHeader/Role"
+import BtnModal from "@/app/users/administrator/(component)/BtnModal"
+import Loading from "@/app/users/teller/mywork/loading"
 import dynamic2 from "next/dynamic"
 
 import { cookies } from "next/headers"

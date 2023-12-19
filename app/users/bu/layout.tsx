@@ -1,5 +1,5 @@
-import { cookies } from "next/headers"
 import { ClientCookiesProvider } from "@/app/ClientCookiesProvider"
+import { cookies } from "next/headers"
 import SideMenu from "./SideMenu"
 import { PathParamsProvider } from "./_context/provider"
 

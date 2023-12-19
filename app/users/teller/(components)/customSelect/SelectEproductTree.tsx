@@ -1,16 +1,16 @@
 "use client"
-import React, { useState, useMemo } from "react"
-import { useQuery } from "@tanstack/react-query"
-import { TreeSelect, Empty, Spin } from "antd"
-import {
-    eProduct,
-    requestBodyEproduct,
-    OptionTree
-} from "@/app/(types)/eProduct"
 import { GetProductTree } from "@/app/(service)/eProduct"
+import {
+    OptionTree,
+    eProduct,
+    requestBodyEproduct
+} from "@/app/(types)/eProduct"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
-
+import { ToFilterName } from "@/util/formatText"
+import { useQuery } from "@tanstack/react-query"
+import { Empty, Spin, TreeSelect } from "antd"
 import { useEnvContext } from "next-runtime-env"
+import React, { useCallback, useMemo, useState } from "react"
 type Props = {
     typeQuery: string
     placeholder: string

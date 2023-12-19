@@ -2,10 +2,10 @@
 import React, { useState } from "react"
 
 import {
-    typeContextTree,
     TreeFilter,
+    contextTreeView,
     dataGlobal,
-    contextTreeView
+    typeContextTree
 } from "@/app/users/administrator/(component)/content/contentTreeView"
 
 type typeProvider = {

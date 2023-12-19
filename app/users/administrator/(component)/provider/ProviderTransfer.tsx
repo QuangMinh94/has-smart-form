@@ -2,9 +2,9 @@
 import React, { useState } from "react"
 
 import {
-    typeContextTransfer,
     RecordType,
-    contextTransfer
+    contextTransfer,
+    typeContextTransfer
 } from "@/app/users/administrator/(component)/content/contentTransfer"
 
 type typeProvider = {

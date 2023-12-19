@@ -1,16 +1,16 @@
-import React, { memo, useState } from "react"
-import { pathModel } from "@/app/users/administrator/(component)/BtnModal"
-import { Button } from "antd"
+import {
+    RevalidateListDepartment,
+    RevalidateListUser
+} from "@/app/(actions)/action"
 import { updateUser } from "@/app/(service)/User"
 import { updateDepartment } from "@/app/(service)/department"
-import { useContextAdmin } from "@/components/cusTomHook/useContext"
 import { addAndUpdateGroup } from "@/app/(service)/group"
-import { useEnvContext } from "next-runtime-env"
-import {
-    RevalidateListUser,
-    RevalidateListDepartment
-} from "@/app/(actions)/action"
+import { pathModel } from "@/app/users/administrator/(component)/BtnModal"
+import { useContextAdmin } from "@/components/cusTomHook/useContext"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+import { Button } from "antd"
+import { useEnvContext } from "next-runtime-env"
+import React, { memo, useState } from "react"
 type Props = {
     pathModel: pathModel
     data: { idUpdate: string; active: boolean }

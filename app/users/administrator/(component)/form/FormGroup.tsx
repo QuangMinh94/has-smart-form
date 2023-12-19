@@ -1,25 +1,24 @@
 "use client"
-import React, { memo, useCallback, useState, useMemo, useEffect } from "react"
-import { Group } from "@/app/(types)/Group"
-import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
-import { Button, Form, Input, Checkbox } from "antd"
-import { PlusOutlined } from "@ant-design/icons"
-import { useEnvContext } from "next-runtime-env"
+import { RevalidateListGroup } from "@/app/(actions)/action"
+import { addAndUpdateGroup, addUserToGroup } from "@/app/(service)/group"
+import { Group, bodyGroupRequest } from "@/app/(types)/Group"
 import BtnModel, {
     typeForm
 } from "@/app/users/administrator/(component)/BtnModal"
 import SelectForm from "@/components/SelectForm"
-import { RevalidateListGroup } from "@/app/(actions)/action"
 import {
     useContextAdmin,
     useContextTransferANTD
 } from "@/components/cusTomHook/useContext"
-import { addAndUpdateGroup, addUserToGroup } from "@/app/(service)/group"
-import { bodyGroupRequest } from "@/app/(types)/Group"
+import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+import { PlusOutlined } from "@ant-design/icons"
+import { Button, Checkbox, Form, Input } from "antd"
+import { useEnvContext } from "next-runtime-env"
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
+import { ObjIdChidrenParentPlat } from "./ObjIdParentPlats"
 const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo)
 }
-import { ObjIdChidrenParentPlat } from "./ObjIdParentPlats"
 type Props = {
     CancelModal: () => void
     typeForm: typeForm
