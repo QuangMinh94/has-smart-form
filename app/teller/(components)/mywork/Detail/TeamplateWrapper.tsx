@@ -129,7 +129,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                             DefaultParams(
                                 NEXT_PUBLIC_EFORM_SERVER_APP!,
                                 "/" + block.ozrRepository + "/" + block.name,
-                                block.name,
+                                block.name.replace(".ozr", ""),
                                 OzDelimiter(),
                                 JSON.stringify(dataInput)
                             ),
@@ -191,7 +191,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                         DefaultParams(
                             NEXT_PUBLIC_EFORM_SERVER_APP!,
                             "/" + block.ozrRepository + "/" + block.name,
-                            block.name,
+                            block.name.replace(".ozr", ""),
                             OzDelimiter(),
                             JSON.stringify({
                                 ...info,
