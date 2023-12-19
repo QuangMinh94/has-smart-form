@@ -13,6 +13,7 @@ export type choosenBlock = {
 export type dataGlobal = {
     choosenBlock: choosenBlock[]
     eProducts: eProduct[]
+
     DataNode: DataNode[]
     checkedForm: boolean
 }
@@ -33,6 +34,7 @@ const contextBa = createContext<typeContextBa>({
         choosenBlock: [],
         eProducts: [],
         DataNode: [],
+
         checkedForm: true
     },
     setDataGlobal: () => {},

@@ -18,9 +18,7 @@ import { PlusOutlined } from "@ant-design/icons"
 import { useEnvContext } from "next-runtime-env"
 import { typeForm } from "@/app/administrator/(component)/BtnModal"
 import dayjs from "dayjs"
-import SelectForm, {
-    typeSelect
-} from "@/app/administrator/(component)/SelectForm"
+import SelectForm, { typeSelect } from "@/components/SelectForm"
 import { RevalidateListUser } from "@/app/(actions)/action"
 import {
     useContextAdmin,
@@ -399,13 +397,13 @@ const FormOder: React.FC<Props> = ({
                 </Form.Item>
                 <Form.Item
                     style={{ marginBottom: "25px" }}
-                    label="Chi nhánh"
+                    label="Đơn vị"
                     name="department"
                     rules={[
                         {
                             required: true,
                             whitespace: true,
-                            message: "Vui lòng chọn chi nhánh"
+                            message: "Vui lòng chọn đơn vị"
                         }
                     ]}
                 >
@@ -420,6 +418,30 @@ const FormOder: React.FC<Props> = ({
                         }
                     />
                 </Form.Item>
+
+                {idDepartment && (
+                    <Form.Item
+                        style={{ marginBottom: "25px" }}
+                        label="Thuộc nhóm"
+                        name="groups"
+                        rules={[
+                            {
+                                required: true,
+                                whitespace: true,
+                                message: "Vui lòng chọn nhóm chức vụ",
+                                type: "array"
+                            }
+                        ]}
+                    >
+                        <SelectForm
+                            enabledFecthData={typeForm === "UPDATE_MODAL"}
+                            mode="multiple"
+                            idDepartment={idDepartment}
+                            type="getGroup"
+                            onChange={HandlerOnchangeGroups}
+                        />
+                    </Form.Item>
+                )}
                 {idDepartment && (
                     <Form.Item
                         style={{ marginBottom: "25px" }}
@@ -443,29 +465,6 @@ const FormOder: React.FC<Props> = ({
                                     ? HandlerOnSelectGroup
                                     : undefined
                             }
-                        />
-                    </Form.Item>
-                )}
-                {idDepartment && (
-                    <Form.Item
-                        style={{ marginBottom: "25px" }}
-                        label="Thuộc nhóm"
-                        name="groups"
-                        rules={[
-                            {
-                                required: true,
-                                whitespace: true,
-                                message: "Vui lòng chọn nhóm chức vụ",
-                                type: "array"
-                            }
-                        ]}
-                    >
-                        <SelectForm
-                            enabledFecthData={typeForm === "UPDATE_MODAL"}
-                            mode="multiple"
-                            idDepartment={idDepartment}
-                            type="getGroup"
-                            onChange={HandlerOnchangeGroups}
                         />
                     </Form.Item>
                 )}

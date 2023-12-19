@@ -42,7 +42,7 @@ function TreeCustom({
                 <Flex className="boxAction">
                     <div
                         className={`mr-[8px] ${
-                            item.active ? "" : "text-slate-300"
+                            item.active ? "" : "opacity-40"
                         }`}
                     >
                         {name}

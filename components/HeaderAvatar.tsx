@@ -58,7 +58,7 @@ const HeaderAvatar: React.FC = () => {
 
     return (
         <Dropdown menu={{ items }} trigger={["click"]}>
-            <Flex align="center">
+            <Flex align="center" className="cursor-pointer hover:opacity-50">
                 {avatar ? (
                     <Image
                         className="rounded-full block cursor-pointer hover:opacity-75"

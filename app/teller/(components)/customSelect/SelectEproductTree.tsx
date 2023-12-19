@@ -16,6 +16,7 @@ type Props = {
     placeholder: string
     onSelect: (selectedKeys: string, info: OptionTree) => void
     defalutValue?: string
+    onClear?: () => void
 }
 
 const UseFecthApi = (
@@ -50,7 +51,8 @@ const CustomerSelect: React.FC<Props> = ({
     onSelect,
     typeQuery,
     placeholder,
-    defalutValue
+    defalutValue,
+    onClear
 }) => {
     const [enabledFecth, setenabledFecth] = useState<boolean>(false)
     const { token, session } = useCustomCookies()
@@ -65,11 +67,6 @@ const CustomerSelect: React.FC<Props> = ({
         return MappingChildren(data ?? [])
     }, [data?.length])
 
-    const HandlerfilterOption = useCallback(
-        (input: string, option: any) =>
-            ToFilterName(option?.label ?? "").includes(ToFilterName(input)),
-        []
-    )
     function MappingChildren(product: eProduct[]): OptionTree[] {
         if (product.length === 0) return []
 
@@ -99,6 +96,7 @@ const CustomerSelect: React.FC<Props> = ({
             allowClear
             treeDefaultExpandAll
             onSelect={onSelect}
+            onClear={onClear}
             treeData={TreeDataOption}
             notFoundContent={
                 isLoading ? (

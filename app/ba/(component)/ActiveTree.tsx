@@ -1,44 +1,29 @@
 "use client"
-import { useContextBa } from "@/components/cusTomHook/useContext"
-import React, { memo } from "react"
+import { Spin } from "antd"
+import React, { memo, useTransition } from "react"
 import { Checkbox } from "antd"
-import { eProduct } from "@/app/(types)/eProduct"
+import { useSearchParams, useRouter } from "next/navigation"
 
 const ActiveTree: React.FC = () => {
-    const { setDataGlobal } = useContextBa()
-
+    const [loading, startTransition] = useTransition()
+    const searchParams = useSearchParams()
+    const router = useRouter()
+    const checked = searchParams.get("active") === "false" ? false : true
     const HandelerOnChange = (e: any) => {
-        const checked = e.target.checked
-        // setDataGlobal((data) => {
-        //     const eProducts = [...data.eProducts]
-        //     const eProductsCustome: eProduct[] = []
-        //     const check: { active: boolean } = { active: true }
-        //     function eProductDeactive(
-        //         eProduct: eProduct[],
-        //         check: { active: boolean }
-        //     ) {
-        //         eProduct.forEach((item, index) => {
-        //             check.active === !!item.active
-
-        //             // if (!check) {
-        //             //     item.children = []
-        //             // }
-        //             if (item?.children && item?.children?.length > 0) {
-        //                 eProductDeactive(item?.children ?? [], check)
-        //             }
-
-        //             if (check.active) {
-        //                 eProductsCustome.push(item)
-        //             }
-        //         })
-        //     }
-        //     eProductDeactive(eProducts, check)
-        //     return {
-        //         ...data,
-        //         eProducts: checked ? eProducts : eProductsCustome
-        //     }
-        // })
+        startTransition(() => {
+            const checked = e.target.checked
+            router.push(`?active=${checked}`)
+        })
     }
-    return <Checkbox onChange={HandelerOnChange} />
+    return (
+        <div className="flex items-center">
+            {loading && (
+                <Spin style={{ marginRight: "5px" }} size="small"></Spin>
+            )}
+            <Checkbox onChange={HandelerOnChange} checked={checked}>
+                Hoạt động
+            </Checkbox>
+        </div>
+    )
 }
 export default memo(ActiveTree)

@@ -72,3 +72,20 @@ export interface requestBodyAddEproduct {
 export interface requestBodyUpdateEproduct extends requestBodyAddEproduct {
     id: string
 }
+
+export interface PermissionViewEproduct {
+    value: {
+        productIDvsDepartmentIDCheck: boolean
+        isBA: boolean
+        isAdmin: boolean
+        visibleAddProduct: boolean
+        visibleEditProduct: boolean
+        visibleDeactiveProduct: boolean
+        visibleAddBusiness: boolean
+        visibleEditBusiness: boolean
+        visibleDeactiveBusiness: boolean
+        visibleView: boolean
+        visibleTreeview: boolean
+    }
+    productId: string
+}

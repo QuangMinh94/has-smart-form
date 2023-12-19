@@ -6,7 +6,7 @@ import { Button, Form, Input, Checkbox } from "antd"
 import { PlusOutlined } from "@ant-design/icons"
 import { useEnvContext } from "next-runtime-env"
 import BtnModel, { typeForm } from "@/app/administrator/(component)/BtnModal"
-import SelectForm from "@/app/administrator/(component)/SelectForm"
+import SelectForm from "@/components/SelectForm"
 import { RevalidateListDepartment } from "@/app/(actions)/action"
 import { ObjIdChidrenParentPlat } from "./ObjIdParentPlats"
 import {

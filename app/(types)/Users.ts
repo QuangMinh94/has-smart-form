@@ -1,7 +1,7 @@
 import { Department } from "./Department"
 import { Group, Role } from "./Group"
 import { Organization } from "./Organization"
-
+import { Permission } from "./Permission"
 export interface Token {
     token?: string
     session?: string
@@ -29,7 +29,7 @@ export interface Users extends Token {
     root?: string
     image?: IImage
     mail?: string
-    permission?: any[]
+    permission?: Permission[]
     organization?: Organization
     authenProvider?: any
     phone?: string

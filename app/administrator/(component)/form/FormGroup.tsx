@@ -6,7 +6,7 @@ import { Button, Form, Input, Checkbox } from "antd"
 import { PlusOutlined } from "@ant-design/icons"
 import { useEnvContext } from "next-runtime-env"
 import BtnModel, { typeForm } from "@/app/administrator/(component)/BtnModal"
-import SelectForm from "@/app/administrator/(component)/SelectForm"
+import SelectForm from "@/components/SelectForm"
 import { RevalidateListGroup } from "@/app/(actions)/action"
 import {
     useContextAdmin,
@@ -187,7 +187,7 @@ const FormGroup: React.FC<Props> = ({
 
                 <Form.Item
                     style={{ marginBottom: "25px" }}
-                    label="thuộc nhóm"
+                    label="Thuộc nhóm"
                     name="groupParent"
                 >
                     <SelectForm
@@ -224,7 +224,7 @@ const FormGroup: React.FC<Props> = ({
                 </Form.Item>
                 <Form.Item
                     style={{ marginBottom: "25px" }}
-                    label="đơn vị"
+                    label="Đơn vị"
                     name="department"
                     rules={[
                         {
