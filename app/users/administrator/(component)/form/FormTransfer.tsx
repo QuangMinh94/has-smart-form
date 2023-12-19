@@ -1,25 +1,22 @@
-import { pathModel } from "@/app/administrator/(component)/BtnModal"
+import { pathModel } from "@/app/users/administrator/(component)/BtnModal"
 
-import React, { useEffect, useState, memo } from "react"
-import {
-    useContextTransferANTD,
-    useContextAdmin
-} from "@/components/cusTomHook/useContext"
-import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
-import { useEnvContext } from "next-runtime-env"
-import { Transfer, Button, Spin } from "antd"
-import type { TransferDirection } from "antd/es/transfer"
-import { RecordType } from "@/app/administrator/(component)/content/contentTransfer"
+import { RevalidateListDepartment } from "@/app/(actions)/action"
 import { SearchUser, getUserByDepartment } from "@/app/(service)/User"
 import { addUserToDepartment } from "@/app/(service)/department"
 import { addUserToGroup } from "@/app/(service)/group"
 import { Users } from "@/app/(types)/Users"
-import { ToFilterName } from "@/util/formatText"
-import { RevalidateListDepartment } from "@/app/(actions)/action"
+import { typeFormTransfer } from "@/app/users/administrator/(component)/BtnModal"
+import { RecordType } from "@/app/users/administrator/(component)/content/contentTransfer"
 import {
-    typeForm,
-    typeFormTransfer
-} from "@/app/administrator/(component)/BtnModal"
+    useContextAdmin,
+    useContextTransferANTD
+} from "@/components/cusTomHook/useContext"
+import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+import { ToFilterName } from "@/util/formatText"
+import { Button, Spin, Transfer } from "antd"
+import type { TransferDirection } from "antd/es/transfer"
+import { useEnvContext } from "next-runtime-env"
+import React, { memo, useEffect, useState } from "react"
 
 type Props = {
     pathModel: pathModel

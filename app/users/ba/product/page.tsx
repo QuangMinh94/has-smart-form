@@ -2,12 +2,12 @@ import { cookies } from "next/headers"
 
 import { eProduct } from "@/app/(types)/eProduct"
 
+import { requestBodyEproductTree } from "@/app/(types)/eProduct"
+import ButtonOpenModal from "@/app/users/ba/(component)/ButtonOpenModal"
+import axios from "axios"
+import ActiveTree from "../(component)/ActiveTree"
 import FillterProduct from "../(component)/fillter/FillterProduct"
 import LayoutTreeView from "../(component)/table/TreeViewProduct"
-import { requestBodyEproductTree } from "@/app/(types)/eProduct"
-import ButtonOpenModal from "@/app/ba/(component)/ButtonOpenModal"
-import ActiveTree from "../(component)/ActiveTree"
-import axios from "axios"
 
 const GetProductTree = async (pram: {
     bodyRequest: requestBodyEproductTree

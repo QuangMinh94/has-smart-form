@@ -1,16 +1,15 @@
-import React from "react"
-import LayoutAdmin from "@/app/administrator/(component)/LayoutAdmin"
+import LayoutAdmin from "@/app/users/administrator/(component)/LayoutAdmin"
 
-import Loading from "@/app/teller/mywork/loading"
-import BtnModal from "@/app/administrator/(component)/BtnModal"
-import ActionHeaderGroups from "@/app/administrator/(component)/ActionHeader/HeaderTree"
-import ProviderTree from "@/app/administrator/(component)/provider/ProviderTree"
+import ActionHeaderGroups from "@/app/users/administrator/(component)/ActionHeader/HeaderTree"
+import BtnModal from "@/app/users/administrator/(component)/BtnModal"
+import ProviderTranfer from "@/app/users/administrator/(component)/provider/ProviderTransfer"
+import ProviderTree from "@/app/users/administrator/(component)/provider/ProviderTree"
+import Loading from "@/app/users/teller/mywork/loading"
 import dynamic2 from "next/dynamic"
-import ProviderTranfer from "@/app/administrator/(component)/provider/ProviderTransfer"
 import { cookies } from "next/headers"
 
 const TreeGroups = dynamic2(
-    () => import("@/app/administrator/(component)/table/TreeGroups"),
+    () => import("@/app/users/administrator/(component)/table/TreeGroups"),
     {
         loading: () => <Loading />,
         ssr: false

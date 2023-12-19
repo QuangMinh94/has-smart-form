@@ -1,7 +1,7 @@
+import "@/app/users/administrator/(component)/CustomCss.css"
+import ProviderAdmin from "@/app/users/administrator/(component)/provider/ProviderAdmin"
 import SideMenu from "@/components/SideMenu"
 import React from "react"
-import "@/app/administrator/(component)/CustomCss.css"
-import ProviderAdmin from "@/app/administrator/(component)/provider/ProviderAdmin"
 type Props = {
     children: React.ReactNode
 }

@@ -1,9 +1,9 @@
-import React from "react"
-import { ClientCookiesProvider } from "../ClientCookiesProvider"
-import { cookies } from "next/headers"
+import { ClientCookiesProvider } from "@/app/ClientCookiesProvider"
+import ProviderBa from "@/app/users/ba/(component)/Provider"
 import SideMenu from "@/components/SideMenu"
 import ProviderTranfer from "@/components/provider/ProviderTranfer"
-import ProviderBa from "@/app/ba/(component)/Provider"
+import { cookies } from "next/headers"
+import React from "react"
 interface Props {
     children: React.ReactNode
 }

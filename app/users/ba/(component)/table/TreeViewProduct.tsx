@@ -1,13 +1,12 @@
 "use client"
-import { Tree, Flex, theme } from "antd"
-import type { DataNode } from "antd/es/tree"
-import React, { useMemo, useEffect } from "react"
 import { eProduct } from "@/app/(types)/eProduct"
-import ButtonOpenModal from "../ButtonOpenModal"
 import { useContextBa } from "@/components/cusTomHook/useContext"
-import "./TreeViewProduct.css"
-import ProviderBa from "@/app/ba/(component)/Provider"
 import { ToFilterName } from "@/util/formatText"
+import { Flex, Tree, theme } from "antd"
+import type { DataNode } from "antd/es/tree"
+import React, { useEffect } from "react"
+import ButtonOpenModal from "../ButtonOpenModal"
+import "./TreeViewProduct.css"
 type TypeProps = {
     TreeEProduct: eProduct[]
 }

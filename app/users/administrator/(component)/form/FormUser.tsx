@@ -1,31 +1,23 @@
 "use client"
-import React, { memo, useCallback, useState, useEffect } from "react"
+import { addUser, updateUser } from "@/app/(service)/User"
 import { BodyUserRequest, Users } from "@/app/(types)/Users"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
-import { addUser, updateUser } from "@/app/(service)/User"
+import React, { memo, useCallback, useState } from "react"
 
-import type { RangePickerProps } from "antd/es/date-picker"
-import {
-    Button,
-    Form,
-    Input,
-    InputNumber,
-    message,
-    DatePicker,
-    Checkbox
-} from "antd"
-import { PlusOutlined } from "@ant-design/icons"
-import { useEnvContext } from "next-runtime-env"
-import { typeForm } from "@/app/administrator/(component)/BtnModal"
-import dayjs from "dayjs"
+import { RevalidateListUser } from "@/app/(actions)/action"
+import { typeForm } from "@/app/users/administrator/(component)/BtnModal"
 import SelectForm, {
     typeSelect
-} from "@/app/administrator/(component)/SelectForm"
-import { RevalidateListUser } from "@/app/(actions)/action"
+} from "@/app/users/administrator/(component)/SelectForm"
 import {
     useContextAdmin,
     useContextAdminUser
 } from "@/components/cusTomHook/useContext"
+import { PlusOutlined } from "@ant-design/icons"
+import { Button, Checkbox, Form, Input, InputNumber } from "antd"
+import type { RangePickerProps } from "antd/es/date-picker"
+import dayjs from "dayjs"
+import { useEnvContext } from "next-runtime-env"
 
 const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo)

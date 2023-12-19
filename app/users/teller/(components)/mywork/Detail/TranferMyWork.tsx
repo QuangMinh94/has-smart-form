@@ -1,11 +1,11 @@
 "use client"
-import React, { useEffect, memo } from "react"
+import ButtonLeftandRight from "@/components/CustomTranfDrag/ButtonCusTom"
+import Container from "@/components/CustomTranfDrag/Container"
+import LayoutTranfer from "@/components/CustomTranfDrag/LayoutTranfer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import "@/public/css/myWork/detailMyWork.css"
-import Container from "../../../../../components/CustomTranfDrag/Container"
-import ButtonLeftandRight from "../../../../../components/CustomTranfDrag/ButtonCusTom"
-import LayoutTranfer from "../../../../../components/CustomTranfDrag/LayoutTranfer"
 import { usePathname } from "next/navigation"
+import { memo, useEffect } from "react"
 import HeaderUi from "../Detail/HeaderUiContent"
 
 const DetailFormUser = ({ Disabled }: { Disabled: boolean }) => {

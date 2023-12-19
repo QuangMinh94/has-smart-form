@@ -1,11 +1,11 @@
 "use client"
 
-import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
+import Filter from "@/app/users/teller/(components)/Filter/LayoutFilter"
 import ButtonLogOut from "@/components/HeaderAvatar"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
 
-import ProviderMyworkDetail from "@/app/teller/(components)/provider/ProviderMyworkDetail"
+import ProviderMyworkDetail from "@/app/users/teller/(components)/provider/ProviderMyworkDetail"
 import CustomSpin from "@/components/CustomSpin"
 import { faArchive } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"

@@ -1,10 +1,6 @@
-import {
-    RequestApoinMent,
-    RequestSeacrhApoinMent
-} from "@/app/(types)/Apointment"
 import { myWork } from "@/app/(types)/teller/mywork"
 import { authOptions } from "@/app/api/auth/authOptions"
-import TemlateWrapper from "@/app/teller/(components)/mywork/Detail/TeamplateWrapper"
+import TemlateWrapper from "@/app/users/teller/(components)/mywork/Detail/TeamplateWrapper"
 
 import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"

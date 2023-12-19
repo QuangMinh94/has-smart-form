@@ -1,3 +1,3 @@
-import DetailMyWork from "@/app/teller/mywork/detail/[id]/page"
+import DetailMyWork from "@/app/users/teller/mywork/detail/[id]/page"
 
 export default DetailMyWork

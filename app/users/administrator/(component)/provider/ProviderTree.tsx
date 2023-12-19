@@ -2,11 +2,11 @@
 import React, { useState } from "react"
 
 import {
-    typeContextTree,
     TreeFilter,
+    contextTreeView,
     dataGlobal,
-    contextTreeView
-} from "@/app/administrator/(component)/content/contentTreeView"
+    typeContextTree
+} from "@/app/users/administrator/(component)/content/contentTreeView"
 
 type typeProvider = {
     children: React.ReactNode

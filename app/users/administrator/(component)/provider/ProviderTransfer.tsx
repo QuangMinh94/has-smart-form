@@ -2,10 +2,10 @@
 import React, { useState } from "react"
 
 import {
-    typeContextTransfer,
     RecordType,
-    contextTransfer
-} from "@/app/administrator/(component)/content/contentTransfer"
+    contextTransfer,
+    typeContextTransfer
+} from "@/app/users/administrator/(component)/content/contentTransfer"
 
 type typeProvider = {
     children: React.ReactNode

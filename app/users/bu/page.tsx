@@ -1,6 +1,6 @@
+import { authOptions } from "@/app/api/auth/authOptions"
 import { getServerSession } from "next-auth"
 import { RedirectType, redirect } from "next/navigation"
-import { authOptions } from "../api/auth/authOptions"
 const BUPage = async () => {
     const session = await getServerSession(authOptions)
     if (!session) {

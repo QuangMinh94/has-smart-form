@@ -1,15 +1,14 @@
-import React from "react"
-import LayoutAdmin from "@/app/administrator/(component)/LayoutAdmin"
+import LayoutAdmin from "@/app/users/administrator/(component)/LayoutAdmin"
 
-import Loading from "@/app/teller/mywork/loading"
-import BtnModal from "@/app/administrator/(component)/BtnModal"
-import ActionHeaderRole from "@/app/administrator/(component)/ActionHeader/Role"
+import ActionHeaderRole from "@/app/users/administrator/(component)/ActionHeader/Role"
+import BtnModal from "@/app/users/administrator/(component)/BtnModal"
+import Loading from "@/app/users/teller/mywork/loading"
 import dynamic2 from "next/dynamic"
 
 import { cookies } from "next/headers"
 
 const TableUser = dynamic2(
-    () => import("@/app/administrator/(component)/table/tableUser"),
+    () => import("@/app/users/administrator/(component)/table/tableUser"),
     {
         loading: () => <Loading />,
         ssr: false

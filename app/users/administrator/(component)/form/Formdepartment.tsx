@@ -1,24 +1,25 @@
 "use client"
-import React, { memo, useCallback, useState, useMemo, useEffect } from "react"
-import { Department } from "@/app/(types)/Department"
-import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
-import { Button, Form, Input, Checkbox } from "antd"
-import { PlusOutlined } from "@ant-design/icons"
-import { useEnvContext } from "next-runtime-env"
-import BtnModel, { typeForm } from "@/app/administrator/(component)/BtnModal"
-import SelectForm from "@/app/administrator/(component)/SelectForm"
 import { RevalidateListDepartment } from "@/app/(actions)/action"
-import { ObjIdChidrenParentPlat } from "./ObjIdParentPlats"
+import {
+    addDepartment,
+    addUserToDepartment,
+    updateDepartment
+} from "@/app/(service)/department"
+import { Department, bodyDepartmentRequest } from "@/app/(types)/Department"
+import BtnModel, {
+    typeForm
+} from "@/app/users/administrator/(component)/BtnModal"
+import SelectForm from "@/app/users/administrator/(component)/SelectForm"
 import {
     useContextAdmin,
     useContextTransferANTD
 } from "@/components/cusTomHook/useContext"
-import {
-    addDepartment,
-    updateDepartment,
-    addUserToDepartment
-} from "@/app/(service)/department"
-import { bodyDepartmentRequest } from "@/app/(types)/Department"
+import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+import { PlusOutlined } from "@ant-design/icons"
+import { Button, Checkbox, Form, Input } from "antd"
+import { useEnvContext } from "next-runtime-env"
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
+import { ObjIdChidrenParentPlat } from "./ObjIdParentPlats"
 const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo)
 }
