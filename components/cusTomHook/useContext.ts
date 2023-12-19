@@ -3,24 +3,24 @@ import { useContext } from "react"
 import {
     contextMyworkDetail,
     typeContextMyworkDetail
-} from "../../app/teller/(components)/context"
+} from "@/app/users/teller/(components)/context"
 
 import { typeContextTranfer, contextTranfer } from "../context/context"
-import { typeContextBa, contextBa } from "@/app/ba/(component)/content"
+import { typeContextBa, contextBa } from "@/app/users/ba/(component)/content"
 import contentAdmin, {
     typeContextAdmin
-} from "@/app/administrator/(component)/content/contentAdmin"
+} from "@/app/users/administrator/(component)/content/contentAdmin"
 import contentUser, {
     typeContextUser
-} from "@/app/administrator/(component)/content/contentUser"
+} from "@/app/users/administrator/(component)/content/contentUser"
 import {
     typeContextTree,
     contextTreeView
-} from "@/app/administrator/(component)/content/contentTreeView"
+} from "@/app/users/administrator/(component)/content/contentTreeView"
 import {
     typeContextTransfer,
     contextTransfer
-} from "@/app/administrator/(component)/content/contentTransfer"
+} from "@/app/users/administrator/(component)/content/contentTransfer"
 import {
     typeContextCustomeTheme,
     contextCustomeTheme,

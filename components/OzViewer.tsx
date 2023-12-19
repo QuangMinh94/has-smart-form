@@ -48,7 +48,7 @@ const Viewer = ({ ozParams }: { ozParams?: string }) => {
                         DefaultParams(
                             NEXT_PUBLIC_EFORM_SERVER_APP!,
                             "/" + element.type + "/" + element.name,
-                            element.name!,
+                            element.name!.toString().replace(".ozr", ""),
                             OzDelimiter()
                         ) + ozParams,
                         OzDelimiter()

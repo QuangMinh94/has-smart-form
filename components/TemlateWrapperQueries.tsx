@@ -1,8 +1,8 @@
 "use client"
 import { block, formTemplate } from "@/app/(types)/eProduct"
 import { eFormTask, myWork } from "@/app/(types)/teller/mywork"
-import { choosenBlock } from "@/app/teller/(components)/context"
-import { DataTranfeCustom } from "@/app/teller/(components)/mywork/Detail/HeaderUiContent"
+import { choosenBlock } from "@/app/users/teller/(components)/context"
+import { DataTranfeCustom } from "@/app/users/teller/(components)/mywork/Detail/HeaderUiContent"
 import { DefaultParams, KSVParams, OzDelimiter } from "@/components/OzViewer"
 import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import { faLongArrowAltLeft } from "@fortawesome/free-solid-svg-icons"
@@ -108,7 +108,7 @@ const TemlateWrapperQueries: React.FC<Props> = ({ mywork, isKSV }) => {
                             DefaultParams(
                                 NEXT_PUBLIC_EFORM_SERVER_APP!,
                                 "/" + block.ozrRepository + "/" + block.name,
-                                block.name,
+                                block.name.replace(".ozr", ""),
                                 OzDelimiter(),
                                 JSON.stringify(dataInput)
                             ),

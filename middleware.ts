@@ -23,7 +23,10 @@ export default withAuth(function middleware(request: NextRequestWithAuth) {
         if (role) {
             if (lowerPath.indexOf(role.toString().toLowerCase()) < 0) {
                 return NextResponse.redirect(
-                    new URL(`/${(role as string).toLowerCase()}`, request.url)
+                    new URL(
+                        `/users/${(role as string).toLowerCase()}`,
+                        request.url
+                    )
                 )
             }
         } else {
@@ -37,11 +40,11 @@ export default withAuth(function middleware(request: NextRequestWithAuth) {
 
 export const config = {
     matcher: [
-        "/bu/:path*",
-        "/teller/:path*",
-        "/ksvteller/:path*",
-        "/ba/:path*",
-        "/administrator/:path*"
+        "/users/bu/:path*",
+        "/users/teller/:path*",
+        "/users/ksvteller/:path*",
+        "/users/ba/:path*",
+        "/users/administrator/:path*"
     ]
 }
 
