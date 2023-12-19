@@ -4,7 +4,7 @@ import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { Users } from "@/app/(types)/Users"
 import BtnModal from "../BtnModal"
-import { useRouter } from "next/navigation"
+
 import { useContextAdminUser } from "@/components/cusTomHook/useContext"
 const columns: ColumnsType<Users> = [
     {

@@ -29,12 +29,28 @@ const ActiveForm: React.FC<Props> = ({ data, CancelModal }) => {
                 CancelModal()
                 setDataGlobal((data) => {
                     const eProducts = [...data.eProducts]
+                    function updateProductChildDeactive(eProduct: eProduct[]) {
+                        eProduct.forEach((item, index) => {
+                            eProduct[index] = {
+                                ...item,
+                                active: false
+                            }
+                            if (item?.children && item.children.length > 0) {
+                                updateProductChildDeactive(item?.children ?? [])
+                            }
+                        })
+                    }
                     function updateEProduct(eProduct: eProduct[]) {
                         eProduct.forEach((item, index) => {
                             if (item._id === body.id) {
                                 eProduct[index] = {
                                     ...item,
-                                    ...resEproduct
+                                    active: resEproduct.active
+                                }
+                                if (!resEproduct.active) {
+                                    updateProductChildDeactive(
+                                        item?.children ?? []
+                                    )
                                 }
                                 return
                             }

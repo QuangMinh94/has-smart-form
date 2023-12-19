@@ -1,13 +1,13 @@
 import { cookies } from "next/headers"
 
 import { eProduct } from "@/app/(types)/eProduct"
-
-import { requestBodyEproductTree } from "@/app/(types)/eProduct"
-import ButtonOpenModal from "@/app/users/ba/(component)/ButtonOpenModal"
-import axios from "axios"
-import ActiveTree from "../(component)/ActiveTree"
+import { ViewPermissonEproduct } from "@/app/(service)/eProduct"
 import FillterProduct from "../(component)/fillter/FillterProduct"
 import LayoutTreeView from "../(component)/table/TreeViewProduct"
+import { requestBodyEproductTree } from "@/app/(types)/eProduct"
+import ButtonOpenModal from "@/app/users/ba/(component)/ButtonOpenModal"
+import ActiveTree from "../(component)/ActiveTree"
+import axios from "axios"
 
 const GetProductTree = async (pram: {
     bodyRequest: requestBodyEproductTree
@@ -24,22 +24,35 @@ const GetProductTree = async (pram: {
     return res
 }
 
-const fetchApi = async (): Promise<eProduct[]> => {
+const fetchApi = async (): Promise<{
+    eProduct: eProduct[]
+    permissonEproduct: any
+}> => {
     const cookie = cookies()
 
     try {
-        const res = await GetProductTree({
-            bodyRequest: {},
-            session: cookie.get("session")?.value ?? "",
-            token: cookie.get("token")?.value ?? ""
-        })
-        return res.data
+        const [resTree, resPermisson] = await Promise.all([
+            await GetProductTree({
+                bodyRequest: {},
+                session: cookie.get("session")?.value ?? "",
+                token: cookie.get("token")?.value ?? ""
+            }),
+            await ViewPermissonEproduct({
+                url: process.env.EPRODUCT_VIEW_PERMISSION!,
+                session: cookie.get("session")?.value ?? "",
+                token: cookie.get("token")?.value ?? ""
+            })
+        ])
+        return {
+            eProduct: resTree.data,
+            permissonEproduct: resPermisson.data
+        }
     } catch (e: any) {
         throw new Error("error fetching", e)
     }
 }
 const ProductPage = async () => {
-    const tree = await fetchApi()
+    const data = await fetchApi()
 
     return (
         <div>
@@ -61,7 +74,10 @@ const ProductPage = async () => {
                     />
                 </div>
             </div>
-            <LayoutTreeView TreeEProduct={tree} />
+            <LayoutTreeView
+                TreeEProduct={data?.eProduct ?? []}
+                ViewPermissonEproduct={data?.permissonEproduct ?? []}
+            />
         </div>
     )
 }

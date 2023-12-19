@@ -5,7 +5,7 @@ import { Group, bodyGroupRequest } from "@/app/(types)/Group"
 import BtnModel, {
     typeForm
 } from "@/app/users/administrator/(component)/BtnModal"
-import SelectForm from "@/app/users/administrator/(component)/SelectForm"
+import SelectForm from "@/components/SelectForm"
 import {
     useContextAdmin,
     useContextTransferANTD
@@ -188,7 +188,7 @@ const FormGroup: React.FC<Props> = ({
 
                 <Form.Item
                     style={{ marginBottom: "25px" }}
-                    label="thuộc nhóm"
+                    label="Thuộc nhóm"
                     name="groupParent"
                 >
                     <SelectForm
@@ -225,7 +225,7 @@ const FormGroup: React.FC<Props> = ({
                 </Form.Item>
                 <Form.Item
                     style={{ marginBottom: "25px" }}
-                    label="đơn vị"
+                    label="Đơn vị"
                     name="department"
                     rules={[
                         {

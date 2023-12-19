@@ -31,7 +31,7 @@ const CustomButtonGroup = ({
         }
         const VisibleTeller = InFoUser?.permission?.find(
             (p) =>
-                p.name.toLowerCase() === "VisibleTeller".toLowerCase() &&
+                p?.name?.toLowerCase() === "VisibleTeller".toLowerCase() &&
                 !!p.value
         )
         if (VisibleTeller) {

@@ -10,7 +10,6 @@ import Container from "@/components/CustomTranfDrag/Container"
 import ButtonLeftandRight from "@/components/CustomTranfDrag/ButtonCusTom"
 import LayoutTranfer from "@/components/CustomTranfDrag/LayoutTranfer"
 
-import CheckboxForm from "./CheckboxFormLeft"
 import TreeSelectEproduct from "./TreeSelectEproduct"
 const TranferNV = () => {
     const {
@@ -22,7 +21,6 @@ const TranferNV = () => {
         setChangeListFilter,
         loading
     } = useContextTranfer()
-    const { dataGlobal } = useContextBa()
     useEffect(() => {
         if (listRight.length > 0) {
             setListRight([])
@@ -38,14 +36,9 @@ const TranferNV = () => {
             ColLeft={
                 <Container
                     HidenUI={
-                        <>
-                            <CheckboxForm />
-                            {dataGlobal.checkedForm || (
-                                <div className="mt-[8px]">
-                                    <TreeSelectEproduct />
-                                </div>
-                            )}
-                        </>
+                        <div className="mt-[8px]">
+                            <TreeSelectEproduct />
+                        </div>
                     }
                     setChangeListFilter={setChangeListFilter}
                     ChangeListFilter={ChangeListFilter}

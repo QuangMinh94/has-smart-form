@@ -19,7 +19,7 @@ import {
 } from "@/app/(types)/eProduct"
 import { AddEproduct, UpdateEproduct } from "@/app/(service)/eProduct"
 import { useEnvContext } from "next-runtime-env"
-import { EformTemplate } from "@/app/(types)/EformTemplate"
+
 import {
     SeacrhEformTemplate,
     GethEformTemplate
@@ -100,7 +100,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
             token
         }
     )
-    console.log(FormNotUse)
+
     useEffect(() => {
         setLoading(isLoading || isRefetching)
         if (FormNotUse && FormAll) {
@@ -137,7 +137,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                 })
                 // }
             })
-            console.log("ao vay", dataListLeft)
+
             setListLeft(dataListLeft)
         }
         return () => {
@@ -157,8 +157,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                 return acc
             }, {})
 
-            const templates = dataGlobal.checkedForm ? FormNotUse : []
-            console.log(templates)
+            const templates = FormNotUse
             templates.forEach((tempalate: any) => {
                 if (!objIDTemplate[`${tempalate?._id}`]) {
                     dataListLeft.push({
@@ -168,7 +167,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                     })
                 }
             })
-            console.log("what", dataListLeft)
+
             setListLeft(dataListLeft)
         }
     }, [dataGlobal.checkedForm])

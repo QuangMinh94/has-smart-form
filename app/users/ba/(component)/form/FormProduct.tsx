@@ -7,7 +7,7 @@ import useGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
 import { Button, Form, Input } from "antd"
 import { useContextBa } from "@/components/cusTomHook/useContext"
 import Uploadfile from "../Uploadfile"
-
+import SelectDepatment from "@/components/SelectForm"
 import { setting } from "../ButtonOpenModal"
 import {
     eProduct,
@@ -180,6 +180,9 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
         }
         setLoadingBtn(false)
     }
+    const HanderOnchangeDepartment = useCallback((value: any) => {
+        form.setFieldsValue({ department: value })
+    }, [])
     return (
         <>
             <Form
@@ -228,6 +231,24 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                     ]}
                 >
                     <Input />
+                </Form.Item>
+                <Form.Item
+                    style={{ marginBottom: "25px" }}
+                    label="Đơn vị"
+                    name="department"
+                    rules={[
+                        {
+                            required: true,
+                            whitespace: true,
+                            message: "Vui lòng chọn đơn vị!"
+                        }
+                    ]}
+                >
+                    <SelectDepatment
+                        type="getDepartment"
+                        onChange={HanderOnchangeDepartment}
+                        enabledFecthData={type === "UPDATE_MODAL"}
+                    />
                 </Form.Item>
                 <Form.Item
                     style={{ marginBottom: "25px" }}

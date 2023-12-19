@@ -210,13 +210,13 @@ const SideMenu = ({ children }: Props) => {
         token: { colorBgContainer, colorPrimary }
     } = theme.useToken()
     const keyPath: KeyPath = {
-        BA_BLOCK: `/ba/${BLOCK}`,
-        BA_PRODUCT: `/ba/${PRODUCT}`,
-        KSV_MYWORK: `/ksvteller/${MYWORK}`,
-        TELLER_MYWORK: `/teller/${MYWORK}`,
-        ADMINISTRATOR: `/administrator`,
-        TELLER_QUERIES: `/teller/${QUERIES}`,
-        KSV_QUERIES: `/ksvteller/${QUERIES}`,
+        BA_BLOCK: `${routers("ba").block.path}`,
+        BA_PRODUCT: `${routers("ba").product.path}`,
+        KSV_MYWORK: `${routers("ksvteller").mywork.path}`,
+        TELLER_MYWORK: `${routers("teller").mywork.path}`,
+        ADMINISTRATOR: `${routers("administrator").admin.path}`,
+        TELLER_QUERIES: `${routers("teller").queries.path}`,
+        KSV_QUERIES: `${routers("ksvteller").queries.path}`,
         PROFILE: `${routers("profile").profile.path}`
     }
     const conditionPath: conditionPath = {

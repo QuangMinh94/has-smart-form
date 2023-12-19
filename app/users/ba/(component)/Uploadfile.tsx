@@ -1,8 +1,8 @@
-import React, { useState, memo, useEffect } from "react"
+import React, { useState, memo } from "react"
 
 import { Modal, Upload, Button } from "antd"
 import type { RcFile, UploadProps } from "antd/es/upload"
-import type { UploadFile, UploadChangeParam } from "antd/es/upload/interface"
+import type { UploadFile } from "antd/es/upload/interface"
 import { UploadOutlined } from "@ant-design/icons"
 
 const getBase64 = (file: RcFile): Promise<string> =>

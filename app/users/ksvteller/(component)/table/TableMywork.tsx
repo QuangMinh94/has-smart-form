@@ -62,7 +62,7 @@ const TableMyWork: React.FC<Props> = ({ data }) => {
         },
         {
             key: "name",
-            title: "Người làm đơn",
+            title: "Tên khách hàng",
             dataIndex: "name"
         },
         {

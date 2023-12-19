@@ -6,6 +6,7 @@ import SelectEproduct from "@/app/users/teller/(components)/customSelect/SelectE
 import { useContextTranfer } from "@/components/cusTomHook/useContext"
 import { Row } from "antd"
 import { memo } from "react"
+import { useContextBa } from "@/components/cusTomHook/useContext"
 import "./css/customcssSlectTree.css"
 
 export interface DataTranfeCustom extends DataTranfer {
@@ -13,12 +14,12 @@ export interface DataTranfeCustom extends DataTranfer {
 }
 const TreeSelectProduct = () => {
     const { setListLeft, listLeft, listRight } = useContextTranfer()
-
+    const { setDataGlobal } = useContextBa()
     const onSelect = (selectedKeys: string, info: OptionTree) => {
         if (listLeft.length > 0) {
             setListLeft([])
         }
-
+        console.log("selected", selectedKeys)
         const dataListLeft: DataTranfeCustom[] = []
         info.formTemplate.forEach((tempalate) => {
             dataListLeft.push({
@@ -31,11 +32,15 @@ const TreeSelectProduct = () => {
         const uniqueListLeft = uniqueValue(dataListLeft, listRight)
         setListLeft(uniqueListLeft)
     }
+    const onClear = () => {
+        setDataGlobal((data) => ({ ...data, checkedForm: !data.checkedForm }))
+    }
     return (
         <Row>
             <SelectEproduct
                 typeQuery="getProduct"
                 onSelect={onSelect}
+                onClear={onClear}
                 placeholder="vui lòng chọn sản phẩm "
             />
         </Row>

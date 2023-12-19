@@ -11,6 +11,7 @@ const ProviderBa: React.FC<typeProvider> = ({ children }) => {
         choosenBlock: [],
         eProducts: [],
         DataNode: [],
+
         checkedForm: true
     })
     const [treeFilter, setTreeFilter] = useState<TreeFilter>({

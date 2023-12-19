@@ -9,7 +9,7 @@ import { Department, bodyDepartmentRequest } from "@/app/(types)/Department"
 import BtnModel, {
     typeForm
 } from "@/app/users/administrator/(component)/BtnModal"
-import SelectForm from "@/app/users/administrator/(component)/SelectForm"
+import SelectForm from "@/components/SelectForm"
 import {
     useContextAdmin,
     useContextTransferANTD
