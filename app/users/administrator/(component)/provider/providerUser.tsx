@@ -1,9 +1,9 @@
 "use client"
-import React, { useState } from "react"
 import ContentAdmin, {
-    typeContextUser,
-    DataGlobal
-} from "@/app/administrator/(component)/content/contentUser"
+    DataGlobal,
+    typeContextUser
+} from "@/app/users/administrator/(component)/content/contentUser"
+import React, { useState } from "react"
 
 type typeProvider = {
     children: React.ReactNode

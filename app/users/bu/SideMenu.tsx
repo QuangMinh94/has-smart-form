@@ -2,7 +2,11 @@
 
 import CustomSpin from "@/components/CustomSpin"
 import NovuComponent from "@/components/NovuComponent"
-import { useContextThemeConfig } from "@/components/cusTomHook/useContext"
+import {
+    useContextProfile,
+    useContextThemeConfig
+} from "@/components/cusTomHook/useContext"
+import { CustomGetBase64 } from "@/util/customerBase64"
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
 import { faArchive, faFile, faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -21,9 +25,7 @@ import { signOut, useSession } from "next-auth/react"
 import { useEnvContext } from "next-runtime-env"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ReactNode, useEffect, useState, useMemo } from "react"
-import { useContextProfile } from "@/components/cusTomHook/useContext"
-import { CustomGetBase64 } from "@/util/customerBase64"
+import { ReactNode, useEffect, useMemo, useState } from "react"
 import { DocumentName } from "./_types/DocumentName"
 
 import { useRouter } from "next/navigation"
@@ -52,7 +54,7 @@ const CustomMenu = () => {
             }} */
             items={[
                 {
-                    key: "/bu/template",
+                    key: "users/bu/template",
                     icon: (
                         <Link href={"/bu/template"}>
                             <FontAwesomeIcon icon={faFile} />
@@ -70,9 +72,9 @@ const CustomMenu = () => {
                     label: "Tạo mới biểu mẫu"
                 }, */
                 {
-                    key: "/bu/mywork",
+                    key: "users/bu/mywork",
                     icon: (
-                        <Link href={"/bu/mywork"}>
+                        <Link href={"users/bu/mywork"}>
                             <FontAwesomeIcon icon={faArchive} />
                         </Link>
                     ),
