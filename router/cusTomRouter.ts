@@ -40,7 +40,6 @@ const routers = (root: rootPath) => {
         },
 
         // admninistrator
-
         user: { path: `/${RootUsers}/${root}/${USER}` },
         role: { path: `/${RootUsers}/${root}/${ROLE}` },
         department: { path: `/${RootUsers}/${root}/${DEPARTMENT}` },
@@ -49,7 +48,7 @@ const routers = (root: rootPath) => {
 
         // profile
         profile: { path: `/${RootUsers}/${root}` },
-        // profile
+        // admin
         admin: { path: `/${RootUsers}/${root}` }
     }
     return router

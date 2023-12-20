@@ -46,8 +46,10 @@ const fetchApi = async ({
         search === "CCCD" ? "citizenId" : "appointmentCode"
     const bodyRequest: any = {
         [KeySearch]: idSearch?.trim(),
-        userRole: idRole
+        userRole: idRole,
+        active: true
     }
+    console.log("body ksv", bodyRequest)
     if (!idSearch) {
         delete bodyRequest[KeySearch]
     }
