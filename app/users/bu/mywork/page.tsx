@@ -51,7 +51,7 @@ const MyWorkPage = async ({
     return (
         <SearchParamProvider>
             <PageHeader
-                path="/bu/mywork"
+                path="/users/bu/mywork"
                 addNewPermission={FindPermission(
                     permission,
                     "children",
