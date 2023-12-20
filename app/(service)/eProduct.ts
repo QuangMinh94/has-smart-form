@@ -71,3 +71,19 @@ export const UpdateEproduct = async (pram: {
     })
     return res
 }
+
+export const ViewPermissonEproduct = async (pram: {
+    url: string
+    token: string
+    session: string
+}) => {
+    // NEXT_PUBLIC_EPRODUCT_VIEW_PERMISSION
+    const { token, session, url } = pram
+    const res = await axios.get(url, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Session: session
+        }
+    })
+    return res
+}
