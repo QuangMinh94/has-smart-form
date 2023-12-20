@@ -12,14 +12,36 @@ import { useSearchParams } from "next/navigation"
 
 type TypeProps = {
     TreeEProduct: eProduct[]
-    ViewPermissonEproduct: PermissionViewEproduct[]
+    ViewPermissonEproduct: PermissionViewEproduct
 }
-function TreeCustom(
-    Tree: eProduct[],
-    searchValue: string,
-    colorSeacrh: string,
-    disabledActive?: boolean
-): DataNode[] {
+interface btnConditions {
+    add: {
+        title: string
+        disable: boolean
+        type: "P" | "B"
+    }
+    update: {
+        title: string
+        disable: boolean
+        type: "P" | "B"
+    }
+    active: {
+        title: string
+        disable: boolean
+        type: "ACTIVE"
+    }
+}
+function TreeCustom({
+    Tree,
+    searchValue,
+    colorSeacrh,
+    viewPermissonEproduct
+}: {
+    Tree: eProduct[]
+    searchValue: string
+    colorSeacrh: string
+    viewPermissonEproduct: PermissionViewEproduct
+}): DataNode[] {
     const TreeCustomer: DataNode[] = []
     Tree.forEach((item) => {
         const strTitle = item?.name ?? ""
@@ -30,6 +52,53 @@ function TreeCustom(
             ) : (
                 <span>{`${item?.name}`}</span>
             )
+
+        const permissions = viewPermissonEproduct?.ruleArray?.find(
+            (permisson) => permisson.productId === item._id
+        )
+
+        const conditionsBtn: btnConditions = {
+            add: {
+                title: permissions?.value?.visibleAddBusiness
+                    ? "Tạo nghiệp vụ"
+                    : "Tạo sản phẩm",
+                disable: !!(
+                    !permissions?.value?.visibleAddBusiness &&
+                    !permissions?.value?.visibleAddProduct
+                ),
+                type: permissions?.value?.visibleAddBusiness ? "B" : "P"
+            },
+            update: {
+                title: permissions?.value?.visibleEditBusiness
+                    ? "Cập nhật nghiệp vụ"
+                    : "Cập nhậ sản phẩm",
+                disable: !!(
+                    !permissions?.value?.visibleEditBusiness &&
+                    !permissions?.value?.visibleEditProduct
+                ),
+                type: permissions?.value?.visibleEditBusiness ? "B" : "P"
+            },
+            active: {
+                title: item.active
+                    ? `Vô hiệu hóa ${` ${
+                          permissions?.value?.visibleDeactiveProduct
+                              ? "sản phẩm"
+                              : "nghiệp vụ"
+                      } "${item.name}"`}`
+                    : `Khôi phục ${` ${
+                          permissions?.value?.visibleDeactiveProduct
+                              ? "sản phẩm"
+                              : "nghiệp vụ"
+                      } "${item.name}"`}`,
+                disable: !!(
+                    !permissions?.value?.visibleDeactiveProduct &&
+                    !permissions?.value?.visibleDeactiveBusiness
+                ),
+                type: permissions?.value?.visibleEditBusiness
+                    ? "ACTIVE"
+                    : "ACTIVE"
+            }
+        }
 
         TreeCustomer.push({
             title: (
@@ -48,41 +117,27 @@ function TreeCustom(
                             <ButtonOpenModal
                                 rowData={item}
                                 type="ADD_MODAL"
-                                titleModal="Tạo nghiệp vụ"
-                                typeRow="B"
+                                titleModal={conditionsBtn.add.title}
+                                typeRow={conditionsBtn.add.type}
+                                disabled={conditionsBtn.add.disable}
                             />
                         </div>
                         <div className="mr-[8px]">
                             <ButtonOpenModal
                                 rowData={item}
                                 type="UPDATE_MODAL"
-                                titleModal={
-                                    item?.type === "P"
-                                        ? "Cập nhật sản phẩm"
-                                        : "Cập nhật nghiệp vụ"
-                                }
-                                typeRow={item?.type === "P" ? "P" : "B"}
+                                titleModal={conditionsBtn.update.title}
+                                typeRow={conditionsBtn.update.type}
+                                disabled={conditionsBtn.update.disable}
                             />
                         </div>
                         <div>
                             <ButtonOpenModal
-                                disabledActive={disabledActive}
+                                disabled={conditionsBtn.active.disable}
                                 rowData={item}
                                 type="ACTIVE_MODAL"
-                                titleModal={
-                                    item.active
-                                        ? `Vô hiệu hóa ${` ${
-                                              item.type === "P"
-                                                  ? "sản phẩm"
-                                                  : "nghiệp vụ"
-                                          } "${item.name}"`}`
-                                        : `Khôi phục ${` ${
-                                              item.type === "P"
-                                                  ? "sản phẩm"
-                                                  : "nghiệp vụ"
-                                          } "${item.name}"`}`
-                                }
-                                typeRow="ACTIVE"
+                                titleModal={conditionsBtn.active.title}
+                                typeRow={conditionsBtn.active.type}
                             />
                         </div>
                     </div>
@@ -91,12 +146,12 @@ function TreeCustom(
             key: item?._id ?? "",
             children:
                 item?.children && item?.children?.length > 0
-                    ? TreeCustom(
-                          item?.children ?? [],
+                    ? TreeCustom({
+                          Tree: item?.children ?? [],
                           searchValue,
                           colorSeacrh,
-                          !item?.active || disabledActive
-                      )
+                          viewPermissonEproduct
+                      })
                     : [],
             icon: item?.name
         })
@@ -175,7 +230,6 @@ const LayoutTreeView: React.FC<TypeProps> = ({
     TreeEProduct,
     ViewPermissonEproduct
 }) => {
-    console.log("ViewPermissonEproduct", ViewPermissonEproduct)
     const { dataGlobal, setDataGlobal, treeFilter, setTreeFilter } =
         useContextBa()
     const searchParams = useSearchParams()
@@ -188,23 +242,28 @@ const LayoutTreeView: React.FC<TypeProps> = ({
 
     useEffect(() => {
         if (dataGlobal.eProducts.length > 0) {
-            const eproducts = eProductsFilter({
-                TreeEProducts: dataGlobal.eProducts,
-                active: checked
-            })
+            // const eproducts = eProductsFilter({
+            //     TreeEProducts: dataGlobal.eProducts,
+            //     active: checked
+            // })
 
-            const dataTree = TreeCustom(eproducts, searchValue, colorPrimary)
+            const dataTree = TreeCustom({
+                Tree: dataGlobal.eProducts,
+                searchValue,
+                colorSeacrh: colorPrimary,
+                viewPermissonEproduct: ViewPermissonEproduct
+            })
             setDataGlobal((data) => ({
                 ...data,
                 DataNode: dataTree
             }))
         }
-    }, [searchValue, checked, JSON.stringify(dataGlobal.eProducts)])
+    }, [searchValue, JSON.stringify(dataGlobal.eProducts)])
 
     useEffect(() => {
         setDataGlobal((data) => ({ ...data, eProducts: TreeEProduct }))
-    }, [])
-    console.log("data4", TreeEProduct)
+    }, [checked])
+    console.log("datatree", TreeEProduct)
     const onExpand = (newExpandedKeys: React.Key[]) => {
         setTreeFilter((data) => ({
             ...data,

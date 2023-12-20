@@ -1,6 +1,7 @@
 import { cookies } from "next/headers"
 
-import { eProduct } from "@/app/(types)/eProduct"
+import { eProduct, PermissionViewEproduct } from "@/app/(types)/eProduct"
+import NoPermssionPage from "@/components/noPermissionPage"
 import { ViewPermissonEproduct } from "@/app/(service)/eProduct"
 import FillterProduct from "../(component)/fillter/FillterProduct"
 import LayoutTreeView from "../(component)/table/TreeViewProduct"
@@ -24,16 +25,20 @@ const GetProductTree = async (pram: {
     return res
 }
 
-const fetchApi = async (): Promise<{
+const fetchApi = async ({
+    active
+}: {
+    active: boolean
+}): Promise<{
     eProduct: eProduct[]
-    permissonEproduct: any
+    permissonEproduct: PermissionViewEproduct
 }> => {
     const cookie = cookies()
 
     try {
         const [resTree, resPermisson] = await Promise.all([
             await GetProductTree({
-                bodyRequest: {},
+                bodyRequest: { active },
                 session: cookie.get("session")?.value ?? "",
                 token: cookie.get("token")?.value ?? ""
             }),
@@ -51,34 +56,50 @@ const fetchApi = async (): Promise<{
         throw new Error("error fetching", e)
     }
 }
-const ProductPage = async () => {
-    const data = await fetchApi()
+const ProductPage = async ({
+    searchParams
+}: {
+    searchParams: { active: string }
+}) => {
+    const data = await fetchApi({
+        active: searchParams?.active === "false" ? false : true
+    })
 
     return (
-        <div>
-            <div className="mb-[20px] flex items-center">
-                <div className="flex-1">
-                    <div className="w-[30%]">
-                        <FillterProduct />
-                    </div>
-                </div>
-                <div className="mr-[20px]">
-                    <ActiveTree />
-                </div>
+        <>
+            {data?.permissonEproduct?.generalRule?.visibleTreeview &&
+            data.permissonEproduct.generalRule.visibleView ? (
                 <div>
-                    <ButtonOpenModal
-                        type="ADD_MODAL"
-                        titleModal="Tạo sản phẩm"
-                        typeRow="P"
-                        clickBtn={true}
+                    <div className="mb-[20px] flex items-center">
+                        <div className="flex-1">
+                            <div className="w-[30%]">
+                                <FillterProduct />
+                            </div>
+                        </div>
+                        <div className="mr-[20px]">
+                            <ActiveTree />
+                        </div>
+                        {data?.permissonEproduct?.generalRule
+                            ?.visibleAddProduct && (
+                            <div>
+                                <ButtonOpenModal
+                                    type="ADD_MODAL"
+                                    titleModal="Tạo sản phẩm"
+                                    typeRow="P"
+                                    clickBtn={true}
+                                />
+                            </div>
+                        )}
+                    </div>
+                    <LayoutTreeView
+                        TreeEProduct={data?.eProduct ?? []}
+                        ViewPermissonEproduct={data?.permissonEproduct ?? {}}
                     />
                 </div>
-            </div>
-            <LayoutTreeView
-                TreeEProduct={data?.eProduct ?? []}
-                ViewPermissonEproduct={data?.permissonEproduct ?? []}
-            />
-        </div>
+            ) : (
+                <NoPermssionPage />
+            )}
+        </>
     )
 }
 

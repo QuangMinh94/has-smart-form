@@ -14,7 +14,7 @@ type Props = {
     rowData?: any
     typeRow: "P" | "B" | "ACTIVE"
     clickBtn?: boolean
-    disabledActive?: boolean
+    disabled?: boolean
 }
 const App: React.FC<Props> = ({
     type,
@@ -22,7 +22,7 @@ const App: React.FC<Props> = ({
     rowData,
     typeRow,
     clickBtn,
-    disabledActive
+    disabled
 }) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const showModal = () => {
@@ -60,13 +60,18 @@ const App: React.FC<Props> = ({
                 </Button>
             ) : type === "ACTIVE_MODAL" ? (
                 <Checkbox
-                    disabled={disabledActive}
+                    disabled={disabled}
                     onClick={showModal}
                     checked={rowData.active}
                 />
             ) : (
                 <FontAwesomeIcon
-                    onClick={showModal}
+                    style={
+                        disabled
+                            ? { cursor: "not-allowed", opacity: "0.5" }
+                            : undefined
+                    }
+                    onClick={disabled ? undefined : showModal}
                     icon={type === "ADD_MODAL" ? faPlus : faEdit}
                 />
             )}

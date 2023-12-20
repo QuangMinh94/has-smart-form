@@ -73,19 +73,30 @@ export interface requestBodyUpdateEproduct extends requestBodyAddEproduct {
     id: string
 }
 
-export interface PermissionViewEproduct {
-    value: {
-        productIDvsDepartmentIDCheck: boolean
-        isBA: boolean
-        isAdmin: boolean
-        visibleAddProduct: boolean
-        visibleEditProduct: boolean
-        visibleDeactiveProduct: boolean
-        visibleAddBusiness: boolean
-        visibleEditBusiness: boolean
-        visibleDeactiveBusiness: boolean
-        visibleView: boolean
-        visibleTreeview: boolean
+export interface ruleArray {
+    value?: {
+        productIDvsDepartmentIDCheck?: boolean
+        isBA?: boolean
+        isAdmin?: boolean
+        visibleAddProduct?: boolean
+        visibleEditProduct?: boolean
+        visibleDeactiveProduct?: boolean
+        visibleAddBusiness?: boolean
+        visibleEditBusiness?: boolean
+        visibleDeactiveBusiness?: boolean
+        visibleView?: boolean
+        visibleTreeview?: boolean
     }
-    productId: string
+    productId?: string
+}
+export interface generalRule {
+    isBA?: boolean
+    isAdmin?: boolean
+    visibleAddProduct?: boolean
+    visibleView?: boolean
+    visibleTreeview?: boolean
+}
+export interface PermissionViewEproduct {
+    generalRule?: generalRule
+    ruleArray?: ruleArray[]
 }
