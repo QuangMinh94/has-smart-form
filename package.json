@@ -1,6 +1,8 @@
 {
     "name": "has-smart-form",
+
     "version": "0.2.23",
+
     "private": true,
     "scripts": {
         "dev": "next dev --turbo",
