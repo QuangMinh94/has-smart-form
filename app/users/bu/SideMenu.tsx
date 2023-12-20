@@ -33,7 +33,7 @@ import { useRouter } from "next/navigation"
 const { Header, Sider, Content } = Layout
 
 const CustomMenu = () => {
-    const [selectedKey, setSelectedKey] = useState<string>("/bu/template")
+    const [selectedKey, setSelectedKey] = useState<string>("/users/bu/template")
     const pathName = usePathname()
     useEffect(() => {
         setSelectedKey(pathName)
@@ -54,9 +54,9 @@ const CustomMenu = () => {
             }} */
             items={[
                 {
-                    key: "users/bu/template",
+                    key: "/users/bu/template",
                     icon: (
-                        <Link href={"/bu/template"}>
+                        <Link href={"/users/bu/template"}>
                             <FontAwesomeIcon icon={faFile} />
                         </Link>
                     ),
@@ -72,9 +72,9 @@ const CustomMenu = () => {
                     label: "Tạo mới biểu mẫu"
                 }, */
                 {
-                    key: "users/bu/mywork",
+                    key: "/users/bu/mywork",
                     icon: (
-                        <Link href={"users/bu/mywork"}>
+                        <Link href={"/users/bu/mywork"}>
                             <FontAwesomeIcon icon={faArchive} />
                         </Link>
                     ),

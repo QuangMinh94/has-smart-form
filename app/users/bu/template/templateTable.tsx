@@ -73,7 +73,7 @@ const TemplateTable = ({
             }
         },
         {
-            ...(ksvPermission && !pathName.includes("/bu/template")
+            ...(ksvPermission && !pathName.includes("/users/bu/template")
                 ? {
                       title: "Hành động",
                       key: "Edit",
@@ -100,7 +100,7 @@ const TemplateTable = ({
             render(_value, record, _index) {
                 if (!readOnly) {
                     return (
-                        <CustomLink href={`/bu/template/${record.key}`}>
+                        <CustomLink href={`/users/bu/template/${record.key}`}>
                             <p className="truncate ...">
                                 <Tooltip title={record.formName!}>
                                     {record.formName!}
@@ -114,7 +114,7 @@ const TemplateTable = ({
                         className="text-blue-600 cursor-pointer truncate ..."
                         onClick={() => {
                             router.push(
-                                `/bu/template/details/${record.queryCode}`
+                                `/users/bu/template/details/${record.queryCode}`
                             )
                         }}
                     >
@@ -152,7 +152,7 @@ const TemplateTable = ({
             sorter: (a, b) => a.status!.localeCompare(b.status!)
         },
         {
-            ...(ksvPermission && !pathName.includes("/bu/template")
+            ...(ksvPermission && !pathName.includes("/users/bu/template")
                 ? {
                       title: "Hành động",
                       key: "Edit",
@@ -162,7 +162,9 @@ const TemplateTable = ({
                       fixed: "right",
                       render: (_value, record, _index) => {
                           return (
-                              <CustomLink href={`/bu/template/${record.key}`}>
+                              <CustomLink
+                                  href={`/users/bu/template/${record.key}`}
+                              >
                                   Phê duyệt
                               </CustomLink>
                           )

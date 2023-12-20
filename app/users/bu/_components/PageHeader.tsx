@@ -37,7 +37,7 @@ const PageHeader = ({
                 {addNewPermission && (
                     <Button
                         type="primary"
-                        onClick={() => router.push("/bu/template/new")}
+                        onClick={() => router.push("/users/bu/template/new")}
                     >
                         Tạo mới
                     </Button>
