@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
 import { RequestSeacrhEformTemplate } from "@/app/(types)/eFormTask"
 import { EformTemplate } from "@/app/(types)/EformTemplate"
+import FiliterOption from "@/components/filter/FilterBlock"
 import dynamic2 from "next/dynamic"
 import axios from "axios"
 import Loading from "../loading"
@@ -22,6 +23,7 @@ const BlockPage = async ({
         <>
             <div className="my-[20px] w-[30%]">
                 <FillterBlock />
+                {/* <FiliterOption /> */}
             </div>
             <TableBlock
                 data={data.map((item) => ({ ...item, key: item._id }))}

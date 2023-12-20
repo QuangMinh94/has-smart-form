@@ -157,7 +157,7 @@ const TemplateWrapper = ({
             messageApi.success("Thao tác thành công")
 
             setTimeout(() => {
-                router.push("/bu/mywork")
+                router.push("/users/bu/mywork")
                 router.refresh()
             }, 1000)
         } catch (error) {
@@ -219,7 +219,7 @@ const TemplateWrapper = ({
             setSubmitType("CANCEL")
             form.submit()
         } else {
-            router.push("/bu/mywork")
+            router.push("/users/bu/mywork")
             router.refresh()
         }
     }
@@ -229,7 +229,7 @@ const TemplateWrapper = ({
     }
 
     const onBack = () => {
-        router.push("/bu/mywork")
+        router.push("/users/bu/mywork")
         router.refresh()
     }
 
