@@ -13,18 +13,26 @@ function removeCharAt(str: string, index: number) {
     return result
 }
 const conditionParams = (
-    key: "creator" | "approved" | "status" | "major" | "timecreate" | "timeend",
+    key:
+        | "creator"
+        | "approved"
+        | "status"
+        | "major"
+        | "timecreate"
+        | "timeend"
+        | "name",
     value: string
 ): string => {
     return value ? `&${key}=${encodeURIComponent(value)}` : ""
 }
-const params = ({
+export const params = ({
     creator,
     approved,
     status,
     major,
     timecreate,
-    timeend
+    timeend,
+    name
 }: {
     creator: string
     approved: string
@@ -32,6 +40,7 @@ const params = ({
     major: string
     timecreate: string
     timeend: string
+    name: string
 }): string => {
     creator = conditionParams("creator", creator)
     approved = conditionParams("approved", approved)
@@ -39,8 +48,21 @@ const params = ({
     major = conditionParams("major", major)
     timecreate = conditionParams("timecreate", timecreate)
     timeend = conditionParams("timeend", timeend)
-    const query = `?${creator}${approved}${status}${major}${timecreate}${timeend}`
+    name = conditionParams("name", name)
+    const query = `?${creator}${approved}${status}${major}${timecreate}${timeend}${name}`
     return removeCharAt(query, 1)
+}
+export const useCustomeSearchParamsFilter = () => {
+    const searchParams = useSearchParams()
+    return {
+        creator: searchParams.get("creator") ?? "",
+        approved: searchParams.get("approved") ?? "",
+        status: searchParams.get("status") ?? "",
+        major: searchParams.get("major") ?? "",
+        timecreate: searchParams.get("timecreate") ?? "",
+        timeend: searchParams.get("timeend") ?? "",
+        name: searchParams.get("name") ?? ""
+    }
 }
 const RowContent: React.FC<{
     label: string
@@ -54,16 +76,17 @@ const RowContent: React.FC<{
     )
 }
 const ContenPopover: React.FC = () => {
-    const searchParams = useSearchParams()
+    const { creator, approved, status, major, timecreate, timeend, name } =
+        useCustomeSearchParamsFilter()
     const route = useRouter()
     const [loading, transition] = useTransition()
     const defaultValue = {
-        creator: searchParams.get("creator") ?? "",
-        approved: searchParams.get("approved") ?? "",
-        status: searchParams.get("status") ?? "",
-        major: searchParams.get("major") ?? "",
-        timecreate: searchParams.get("timecreate") ?? "",
-        timeend: searchParams.get("timeend") ?? ""
+        creator,
+        approved,
+        status,
+        major,
+        timecreate,
+        timeend
     }
     const [value, setValue] = useState<{
         creator: string
@@ -102,7 +125,8 @@ const ContenPopover: React.FC = () => {
                         status: value.status,
                         major: value.major,
                         timecreate: value.timecreate,
-                        timeend: value.timeend
+                        timeend: value.timeend,
+                        name: name
                     })
                 )
             } else {
