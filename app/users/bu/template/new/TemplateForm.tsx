@@ -102,7 +102,7 @@ const TemplateForm = ({
                 )
             }
 
-            router.push("/bu/mywork/")
+            router.push("/users/bu/mywork/")
             router.refresh()
         } catch (error) {
             console.log("Error", error)
