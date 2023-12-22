@@ -41,6 +41,7 @@ export interface requestBodyEproduct {
     type?: string
     _id?: string
     parent?: string
+    active: boolean
 }
 export interface requestBodyEproductTree {
     name?: string

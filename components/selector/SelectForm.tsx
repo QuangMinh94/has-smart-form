@@ -1,18 +1,18 @@
 "use client"
 
-import React, { useCallback, useState, memo, useMemo, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { Select, Empty, Spin } from "antd"
+import { Empty, Select, Spin } from "antd"
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
 
-import { getDepartment } from "@/app/(service)/department"
-import { getGroup } from "@/app/(service)/group"
 import { GetAuthen } from "@/app/(service)/authen"
 import { getCadasTrals } from "@/app/(service)/cadastrals"
 import { cateGoriFilter } from "@/app/(service)/category"
+import { getDepartment } from "@/app/(service)/department"
+import { getGroup } from "@/app/(service)/group"
+import { getRoles } from "@/app/(service)/role"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { ToFilterName } from "@/util/formatText"
 import { useEnvContext } from "next-runtime-env"
-import { getRoles } from "@/app/(service)/role"
 type Type =
     | "getAuth"
     | "getDepartment"
@@ -231,7 +231,9 @@ const CustomerSelect: React.FC<Props> = ({
         enabled: enabledFecth,
         idParent
     })
-
+    if (error) {
+        return <div style={{ color: "red" }}>có lỗi vui lòng thử lại !</div>
+    }
     const HandlerfilterOption = useCallback(
         (input: string, option: any) =>
             ToFilterName(option?.label ?? "").includes(ToFilterName(input)),

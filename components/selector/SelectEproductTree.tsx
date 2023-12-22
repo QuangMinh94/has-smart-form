@@ -6,11 +6,10 @@ import {
     requestBodyEproduct
 } from "@/app/(types)/eProduct"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
-import { ToFilterName } from "@/util/formatText"
 import { useQuery } from "@tanstack/react-query"
 import { Empty, Spin, TreeSelect } from "antd"
 import { useEnvContext } from "next-runtime-env"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useMemo, useState } from "react"
 type Props = {
     typeQuery: string
     placeholder: string
@@ -59,7 +58,7 @@ const CustomerSelect: React.FC<Props> = ({
     const { isLoading, error, data } = UseFecthApi(
         token,
         session,
-        {},
+        { active: true },
         typeQuery,
         enabledFecth
     )

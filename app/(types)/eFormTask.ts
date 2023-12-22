@@ -23,3 +23,16 @@ export interface RequestSeacrhEformTemplate {
     name?: string
     onlyApprove: boolean
 }
+export interface RequestSeacrhEformTemplate {
+    userRole: string
+    name?: string
+    onlyApprove: boolean
+}
+export interface RequestFilterTemplate {
+    name?: string
+    creator?: string
+    approver?: string
+    status?: string
+    createdDate?: { from?: string; to?: string }
+    eProduct?: string
+}
