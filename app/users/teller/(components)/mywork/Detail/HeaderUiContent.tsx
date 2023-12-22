@@ -1,12 +1,12 @@
 "use client"
-import SelectEproduct from "../../customSelect/SelectEproductTree"
+import SelectEproduct from "../../../../../../components/selector/SelectEproductTree"
 
 import { Row } from "antd"
 
-import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 import { OptionTree, block } from "@/app/(types)/eProduct"
 import { DataTranfer } from "@/app/(types)/typeDataTranfe"
 import { uniqueValue } from "@/app/(utilities)/ArrayUtilities"
+import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
 
 export interface DataTranfeCustom extends DataTranfer {
     block: block[]

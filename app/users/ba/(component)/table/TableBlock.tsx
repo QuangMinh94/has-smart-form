@@ -1,20 +1,20 @@
 "use client"
-import React, { useEffect } from "react"
+import { EformTemplate } from "@/app/(types)/EformTemplate"
+import { EncryptedString } from "@/app/(utilities)/Crypto"
+import Router from "@/router/cusTomRouter"
 import { Table, Tooltip } from "antd"
 import type { ColumnsType } from "antd/es/table"
-import { EformTemplate } from "@/app/(types)/EformTemplate"
 import dayjs from "dayjs"
-import { EncryptedString } from "@/app/(utilities)/Crypto"
 import { useCookies } from "next-client-cookies"
-import { useRouter, usePathname } from "next/navigation"
-import Router from "@/router/cusTomRouter"
+import { useRouter } from "next/navigation"
+import React from "react"
 type Props = {
     data: EformTemplate[]
 }
 const TableBlock: React.FC<Props> = ({ data }) => {
     const router = useRouter()
     const cookies = useCookies()
-    const pathName = usePathname()
+
     const columns: ColumnsType<EformTemplate> = [
         {
             key: "name",
@@ -25,13 +25,13 @@ const TableBlock: React.FC<Props> = ({ data }) => {
                     <p
                         className="text-blue-600 cursor-pointer truncate ..."
                         onClick={() => {
-                            const encryptedString = EncryptedString(row._id!)
+                            const encryptedString = EncryptedString(row?._id!)
                             cookies.set("encryptedId", encryptedString)
 
                             router.push(Router("ba").blockDetail())
                         }}
                     >
-                        <Tooltip title={row.name!}>{row.name!}</Tooltip>
+                        <Tooltip title={row?.name!}>{row?.name!}</Tooltip>
                     </p>
                 )
             }
@@ -40,7 +40,9 @@ const TableBlock: React.FC<Props> = ({ data }) => {
             key: "approver",
             title: "Người phê duyệt",
             render: (row: EformTemplate) => {
-                return `${row.approver.lastName} ${row.approver.firstName}`
+                return `${row?.approver?.lastName ?? ""} ${
+                    row?.approver?.firstName ?? ""
+                }`
             }
         },
 
@@ -52,7 +54,7 @@ const TableBlock: React.FC<Props> = ({ data }) => {
                 return dayjs(validFrom).format("DD/MM/YYYY HH:mm:ss")
             },
             sorter: (a: EformTemplate, b: EformTemplate) => {
-                if (dayjs(a.createdDate).isAfter(b.createdDate)) {
+                if (dayjs(a?.createdDate).isAfter(b?.createdDate)) {
                     return 1
                 }
                 return -1
@@ -70,10 +72,7 @@ const TableBlock: React.FC<Props> = ({ data }) => {
             }
         }
     ]
-    useEffect(() => {
-        if (pathName.startsWith(Router("ba").block.path))
-            router.push(Router("ba").block.path)
-    }, [])
+
     return (
         <Table
             scroll={{

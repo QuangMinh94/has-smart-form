@@ -1,8 +1,9 @@
 "use client"
-import { Input, theme } from "antd"
-import { useRouter } from "next/navigation"
-import { debounce } from "lodash"
+import FiliterOption from "@/app/users/(components)/filter/FilterTeamplate"
 import Routers from "@/router/cusTomRouter"
+import { Input, theme } from "antd"
+import { debounce } from "lodash"
+import { useRouter } from "next/navigation"
 import React, { useTransition } from "react"
 const FillterBlock: React.FC = () => {
     const [loading, Transition] = useTransition()
@@ -24,7 +25,12 @@ const FillterBlock: React.FC = () => {
             <div style={{ color: colorPrimary }} className="mb-[5px]">
                 Tìm Kiếm
             </div>
-            <Input.Search onChange={HandlerChange} loading={loading} />
+            <div className="flex items-center">
+                <Input.Search onChange={HandlerChange} loading={loading} />
+                <div className="ml-[6px]">
+                    <FiliterOption />
+                </div>
+            </div>
         </div>
     )
 }

@@ -1,4 +1,6 @@
+import { FilterEformTemplate } from "@/app/(service)/EformTemplate"
 import { EformTemplate } from "@/app/(types)/EformTemplate"
+import { RequestFilterTemplate } from "@/app/(types)/eFormTask"
 import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import { authOptions } from "@/app/api/auth/authOptions"
 import axios from "axios"
@@ -19,8 +21,18 @@ axios.interceptors.request.use((request) => {
 const TemplatePage = async ({
     searchParams
 }: {
-    searchParams: { name: string }
+    searchParams: {
+        name: string
+        creator?: string
+        approved?: string
+        status?: string
+        major?: string
+        timecreate?: string
+        timeend?: string
+    }
 }) => {
+    const { creator, approved, status, major, timecreate, timeend, name } =
+        searchParams
     await delay(2000)
     const session = await getServerSession(authOptions)
     if (!session) redirect("/auth/signin", RedirectType.replace)
@@ -32,26 +44,75 @@ const TemplatePage = async ({
     let data: EformTemplate[] = []
     let _data: DataTableType[] = []
 
-    data = await fetchTemplatePage(
-        process.env.EFORM_SEARCH_TEMPLATE!,
-        searchParams.name ? { name: searchParams.name } : {}
-    )
+    // if (timecreate || timeend || creator || approved || major || status) {
+    //tìm kiếm thep bộ lọc
+    const cookie = cookies()
+    const bodyRequestFilter: RequestFilterTemplate = {
+        name,
+        creator,
+        approver: approved,
+        status,
+        eProduct: major,
+        createdDate: { from: timecreate, to: timeend }
+    }
+    if (!creator) {
+        delete bodyRequestFilter.creator
+    }
+    if (!approved) {
+        delete bodyRequestFilter.approver
+    }
+    if (!major) {
+        delete bodyRequestFilter.eProduct
+    }
+    if (!status) {
+        delete bodyRequestFilter.status
+    }
+    if (!timecreate && !timeend) {
+        delete bodyRequestFilter.createdDate
+    } else {
+        if (!timecreate) {
+            delete bodyRequestFilter?.createdDate?.from
+        }
+        if (!timeend) {
+            delete bodyRequestFilter?.createdDate?.to
+        }
+    }
+    if (!name) {
+        delete bodyRequestFilter.name
+    }
+    console.log("bodyRquest", bodyRequestFilter)
+    const res = await FilterEformTemplate({
+        url: process.env.EFORM_FILTER_TEMPLATE!,
+        bodyRequest: bodyRequestFilter,
+        session: cookie.get("session")?.value ?? "",
+        token: cookie.get("token")?.value ?? ""
+    })
+    data = res.data
+    // } else {
+    //     data = await fetchTemplatePage(
+    //         process.env.EFORM_SEARCH_TEMPLATE!,
+    //         searchParams.name ? { name: searchParams.name } : {}
+    //     )
+    // }
+
     data.forEach((element) => {
         _data.push({
-            key: element._id,
-            formName: element.name,
-            approval: element.approver
-                ? element.approver.lastName + " " + element.approver!.firstName
+            key: element?._id,
+            formName: element?.name,
+            approval: element?.approver
+                ? element?.approver?.lastName +
+                  " " +
+                  element?.approver!.firstName
                 : "",
-            validFrom: element.validFrom,
-            status: element.status?.description,
-            queryCode: element.queryCode
+            validFrom: element?.validFrom,
+            status: element?.status?.description,
+            queryCode: element?.queryCode
         })
     })
 
     return (
         <SearchParamProvider>
-            <PageHeader path="/bu/template" addNewPermission={false}>
+            <PageHeader path="/users/bu/template" addNewPermission={false}>
                 <TemplateTable
                     readOnly={true}
                     data={_data}

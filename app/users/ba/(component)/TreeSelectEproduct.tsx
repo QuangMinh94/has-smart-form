@@ -2,11 +2,13 @@
 import { OptionTree, block } from "@/app/(types)/eProduct"
 import { DataTranfer } from "@/app/(types)/typeDataTranfe"
 import { uniqueValue } from "@/app/(utilities)/ArrayUtilities"
-import SelectEproduct from "@/app/users/teller/(components)/customSelect/SelectEproductTree"
-import { useContextTranfer } from "@/components/cusTomHook/useContext"
+import {
+    useContextBa,
+    useContextTranfer
+} from "@/components/cusTomHook/useContext"
+import SelectEproduct from "@/components/selector/SelectEproductTree"
 import { Row } from "antd"
 import { memo } from "react"
-import { useContextBa } from "@/components/cusTomHook/useContext"
 import "./css/customcssSlectTree.css"
 
 export interface DataTranfeCustom extends DataTranfer {

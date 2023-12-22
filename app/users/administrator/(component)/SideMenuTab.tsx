@@ -1,15 +1,13 @@
 "use client"
-
 import routers from "@/router/cusTomRouter"
-import { Layout, Menu, theme, Tooltip } from "antd"
+import { Menu, theme, Tooltip } from "antd"
 import React from "react"
 
 import {
-    faUsers,
     faBuilding,
+    faCogs,
     faUser,
-    faUserTag,
-    faCogs
+    faUsers
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 

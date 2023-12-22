@@ -6,11 +6,11 @@ import React, { memo, useCallback, useState } from "react"
 
 import { RevalidateListUser } from "@/app/(actions)/action"
 import { typeForm } from "@/app/users/administrator/(component)/BtnModal"
-import SelectForm, { typeSelect } from "@/components/SelectForm"
 import {
     useContextAdmin,
     useContextAdminUser
 } from "@/components/cusTomHook/useContext"
+import SelectForm, { typeSelect } from "@/components/selector/SelectForm"
 import { PlusOutlined } from "@ant-design/icons"
 import { Button, Checkbox, Form, Input, InputNumber } from "antd"
 import type { RangePickerProps } from "antd/es/date-picker"
