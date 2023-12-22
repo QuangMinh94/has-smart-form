@@ -1,9 +1,11 @@
 "use client"
 
+import { theme } from "antd"
 import delay from "delay"
 import { reverse } from "lodash"
 import { useEnvContext } from "next-runtime-env"
-import { useCallback, useContext, useEffect } from "react"
+import { useCallback, useContext, useEffect, useRef } from "react"
+import LoadingBar from "react-top-loading-bar"
 import { ContextTemplate } from "./context/context"
 
 const OzViewer = ({
@@ -17,15 +19,20 @@ const OzViewer = ({
 }
 
 const Viewer = ({ ozParams }: { ozParams?: string }) => {
+    const ref = useRef<any>(null)
     const { NEXT_PUBLIC_EFORM_SERVER, NEXT_PUBLIC_EFORM_SERVER_APP } =
         useEnvContext()
     const { listRight } = useContext(ContextTemplate)
     const reverseListRight: any[] = reverse(
         JSON.parse(JSON.stringify(listRight))
     )
+    const {
+        token: { colorPrimary }
+    } = theme.useToken()
 
     const cachedFn = useCallback(async () => {
         if (window.start_ozjs) {
+            ref.current.continuousStart()
             window.SetOZParamters_OZViewer = () => {
                 const oz = document.getElementById("OZViewer")
                 oz!.sendToActionScript("viewer.emptyframe", "true")
@@ -59,6 +66,9 @@ const Viewer = ({ ozParams }: { ozParams?: string }) => {
             } else {
                 console.log("Wut")
             }
+            if (ref && ref.current) {
+                ref.current.complete()
+            }
         }
     }, [])
 
@@ -70,6 +80,7 @@ const Viewer = ({ ozParams }: { ozParams?: string }) => {
 
     return (
         <div className="container mx-auto">
+            <LoadingBar color={colorPrimary} ref={ref} />
             <div
                 id="OZViewer"
                 style={{
@@ -108,9 +119,9 @@ viewer.createreport_doc_index=${index}${delimiter}
     eform.inputeventcommand=true${delimiter}
     viewer.reportchangecommand=true${delimiter}
     viewer.progresscommand=true${delimiter}
-    global.use_preview_progressbar=true${delimiter}
     viewer.errorcommand=true${delimiter}
-    viewer.progresscommand=true${delimiter}`
+    viewer.progresscommand=true${delimiter}
+    viewer.useprogressbar=false${delimiter}`
 }
 
 export const KSVParams = (isKSV: boolean, delimiter: string) => {
@@ -119,6 +130,8 @@ export const KSVParams = (isKSV: boolean, delimiter: string) => {
 }
 
 //eform.signpad_zoom=50${delimiter}
+//global.use_preview_progressbar=true${delimiter}
+//viewer.useprogressbar=false${delimiter}
 
 export const OzDelimiter = () => {
     return "==OZDelimiter=="
