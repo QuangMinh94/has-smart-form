@@ -5,12 +5,12 @@ import { Group, bodyGroupRequest } from "@/app/(types)/Group"
 import BtnModel, {
     typeForm
 } from "@/app/users/administrator/(component)/BtnModal"
-import SelectForm from "@/components/SelectForm"
 import {
     useContextAdmin,
     useContextTransferANTD
 } from "@/components/cusTomHook/useContext"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+import SelectForm from "@/components/selector/SelectForm"
 import { PlusOutlined } from "@ant-design/icons"
 import { Button, Checkbox, Form, Input } from "antd"
 import { useEnvContext } from "next-runtime-env"

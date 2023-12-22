@@ -3,19 +3,19 @@ import React, { memo, useCallback, useState } from "react"
 
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 
-import useGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
-import { Button, Form, Input } from "antd"
-import { useContextBa } from "@/components/cusTomHook/useContext"
-import Uploadfile from "../Uploadfile"
-import SelectDepatment from "@/components/SelectForm"
-import { setting } from "../ButtonOpenModal"
+import { AddEproduct, UpdateEproduct } from "@/app/(service)/eProduct"
 import {
     eProduct,
     requestBodyAddEproduct,
     requestBodyUpdateEproduct
 } from "@/app/(types)/eProduct"
-import { AddEproduct, UpdateEproduct } from "@/app/(service)/eProduct"
+import { useContextBa } from "@/components/cusTomHook/useContext"
+import useGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
+import SelectDepatment from "@/components/selector/SelectForm"
+import { Button, Form, Input } from "antd"
 import { useEnvContext } from "next-runtime-env"
+import { setting } from "../ButtonOpenModal"
+import Uploadfile from "../Uploadfile"
 const onFinishFailed = async (errorInfo: any) => {
     console.log("Failed:", await errorInfo)
 }

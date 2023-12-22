@@ -36,7 +36,7 @@ const UseFecthApi = ({
         getEProduct: async (): Promise<Option[]> => {
             const res = await GetProduct({
                 url: NEXT_PUBLIC_GET_EPRODUCT!,
-                bodyRequest: { type: "P" },
+                bodyRequest: { type: "P", active: true },
                 token,
                 session
             })

@@ -1,18 +1,18 @@
 "use client"
 
-import React, { useCallback, useState, memo, useMemo, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { Select, Empty, Spin } from "antd"
+import { Empty, Select, Spin } from "antd"
+import React, { memo, useEffect, useMemo, useState } from "react"
 
-import { getDepartment } from "@/app/(service)/department"
-import { getGroup } from "@/app/(service)/group"
 import { GetAuthen } from "@/app/(service)/authen"
 import { getCadasTrals } from "@/app/(service)/cadastrals"
 import { cateGoriFilter } from "@/app/(service)/category"
+import { getDepartment } from "@/app/(service)/department"
+import { getGroup } from "@/app/(service)/group"
+import { getRoles } from "@/app/(service)/role"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { ToFilterName } from "@/util/formatText"
 import { useEnvContext } from "next-runtime-env"
-import { getRoles } from "@/app/(service)/role"
 type Type =
     | "getAuth"
     | "getDepartment"
@@ -232,11 +232,8 @@ const CustomerSelect: React.FC<Props> = ({
         idParent
     })
 
-    const HandlerfilterOption = useCallback(
-        (input: string, option: any) =>
-            ToFilterName(option?.label ?? "").includes(ToFilterName(input)),
-        []
-    )
+    const HandlerfilterOption = (input: string, option: any) =>
+        ToFilterName(option?.label ?? "").includes(ToFilterName(input))
 
     const CustomData = useMemo(() => {
         let dataNew: Option[] = data ?? []
@@ -258,11 +255,16 @@ const CustomerSelect: React.FC<Props> = ({
             refetch()
         }
     }, [idParent])
-    const HanderenabledFecth = useCallback(() => {
+
+    const HanderenabledFecth = () => {
         if (!idParent) {
             setenabledFecth(true)
         }
-    }, [idParent])
+    }
+
+    if (error) {
+        return <div style={{ color: "red" }}>có lỗi vui lòng thử lại !</div>
+    }
     return (
         <Select
             loading={isRefetching}

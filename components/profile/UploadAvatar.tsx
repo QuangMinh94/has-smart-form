@@ -1,21 +1,21 @@
 "use client"
-import React, { useState, memo, useMemo, useCallback } from "react"
+import React, { memo, useCallback, useMemo, useState } from "react"
 
-import { UserOutlined, UploadOutlined } from "@ant-design/icons"
-import { message, Upload, Popover, Button, Avatar, theme, Image } from "antd"
+import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+import { UploadOutlined, UserOutlined } from "@ant-design/icons"
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Avatar, Button, Image, Popover, Upload, message, theme } from "antd"
 import type { UploadChangeParam } from "antd/es/upload"
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface"
-import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import { useEnvContext } from "next-runtime-env"
 
-import {
-    useContextProfile,
-    useContextAdmin
-} from "@/components/cusTomHook/useContext"
 import { updateUser } from "@/app/(service)/User"
-import { CustomeBase64, CustomGetBase64 } from "@/util/customerBase64"
+import {
+    useContextAdmin,
+    useContextProfile
+} from "@/components/cusTomHook/useContext"
+import { CustomGetBase64, CustomeBase64 } from "@/util/customerBase64"
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader()
     reader.addEventListener("load", () => callback(reader.result as string))
@@ -24,17 +24,17 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
 
 const beforeUpload = (file: RcFile) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png"
-    console.log("file size", file.size)
-    const isBigger70kb = file.size > 70000
+
+    // const isBigger70kb = file.size > 70000
     if (!isJpgOrPng) {
         message.error("vui lòng chọn định dạng JPG/PNG !")
         return false
     }
 
-    if (isBigger70kb) {
-        message.error("vui lòng chọn ảnh dưới 70KB")
-        return false
-    }
+    // if (isBigger70kb) {
+    //     message.error("vui lòng chọn ảnh dưới 70KB")
+    //     return false
+    // }
     return true
 }
 const AvtarCustome: React.FC<{ url: string; onClick?: () => void }> = memo(
@@ -127,8 +127,12 @@ const ContentUpload: React.FC<{ HidePopover: () => void }> = memo(
                 })
                 HidePopover()
                 messageApi("success", "lưu thành công")
-            } catch (err) {
-                messageApi("error", "có lỗi vui lòng thử lại sau")
+            } catch (err: any) {
+                if (err.response?.data?.type === "IMAGESIZE_ERRORS") {
+                    message.error("vui lòng chọn ảnh dưới 50KB")
+                } else {
+                    messageApi("error", "có lỗi vui lòng thử lại sau")
+                }
             }
             setLoadingBtn(false)
         }

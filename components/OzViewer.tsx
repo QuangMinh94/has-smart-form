@@ -106,21 +106,22 @@ export const DefaultParams = (
 ) => {
     return `connection.servlet=${url}${delimiter}
 connection.reportname=${reportName}${delimiter}
+connection.compressedForm=true${delimiter}
 global.concatthumbnail=true${delimiter}
 connection.refreshperiod=1${delimiter}
 viewer.createreport_doc_index=${index}${delimiter}
+viewer.thumbnailsection_makerule=byreport${delimiter}
+viewer.thumbnailsection_showclosebutton=true${delimiter}
     global.concatpreview=false${delimiter}
     viewer.showtab=true${delimiter}
     connection.displayname=${displayname}${delimiter}
     connection.inputjson=${inputJson}${delimiter}
-    viewer.thumbnailsection_showclosebutton=true${delimiter}
     information.debug=true${delimiter}
     eform.signpad_type=dialog${delimiter}
     eform.inputeventcommand=true${delimiter}
     viewer.reportchangecommand=true${delimiter}
     viewer.progresscommand=true${delimiter}
     viewer.errorcommand=true${delimiter}
-    viewer.progresscommand=true${delimiter}
     viewer.useprogressbar=false${delimiter}`
 }
 

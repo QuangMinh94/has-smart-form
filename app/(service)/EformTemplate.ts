@@ -1,9 +1,10 @@
-import axios from "axios"
 import {
     RequestEformTaks,
-    RequestVeRiFyEformTaks,
-    RequestSeacrhEformTemplate
+    RequestFilterTemplate,
+    RequestSeacrhEformTemplate,
+    RequestVeRiFyEformTaks
 } from "@/app/(types)/eFormTask"
+import axios from "axios"
 export const addEformTask = async (pram: {
     url: string
     bodyRequest: RequestEformTaks
@@ -60,6 +61,23 @@ export const GethEformTemplate = async (pram: {
     session: string
 }) => {
     //NEXT_PUBLIC_GET_EFORM_TEMPLATE
+
+    const { bodyRequest, token, session, url } = pram
+    const res = await axios.post(url, bodyRequest, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Session: session
+        }
+    })
+    return res
+}
+export const FilterEformTemplate = async (pram: {
+    url: string
+    bodyRequest: RequestFilterTemplate
+    token: string
+    session: string
+}) => {
+    // EFORM_FILTER_TEMPLATE
 
     const { bodyRequest, token, session, url } = pram
     const res = await axios.post(url, bodyRequest, {

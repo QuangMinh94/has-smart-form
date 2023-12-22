@@ -1,6 +1,6 @@
 "use client"
 import Avatar from "@/components/HeaderAvatar"
-import routers, { BLOCK, MYWORK, PRODUCT, QUERIES } from "@/router/cusTomRouter"
+import routers from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
 
@@ -174,8 +174,8 @@ const CustomMenu = ({
             }
         ]
     }
-    // profile
 
+    // profile
     if (conditionPath.isProfile) {
         items = [
             {
