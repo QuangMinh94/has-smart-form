@@ -59,5 +59,6 @@ const Group = async () => {
         </ProviderTree>
     )
 }
+
 export const dynamic = "force-dynamic"
 export default Group
