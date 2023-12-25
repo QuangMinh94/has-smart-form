@@ -14,7 +14,7 @@ import useGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
 import SelectDepatment from "@/components/selector/SelectForm"
 import { Button, Form, Input } from "antd"
 import { useEnvContext } from "next-runtime-env"
-import { setting } from "../ButtonOpenModal"
+import { setting } from "../../../(components)/button/ButtonOpenModalProduct"
 import Uploadfile from "../Uploadfile"
 const onFinishFailed = async (errorInfo: any) => {
     console.log("Failed:", await errorInfo)

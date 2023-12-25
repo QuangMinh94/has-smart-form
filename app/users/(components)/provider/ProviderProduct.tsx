@@ -1,7 +1,12 @@
 "use client"
-import React, { useState } from "react"
-import { contextBa, typeContextBa, dataGlobal, TreeFilter } from "./content"
 import { message } from "antd"
+import React, { useState } from "react"
+import {
+    TreeFilter,
+    contextBa,
+    dataGlobal,
+    typeContextBa
+} from "../../ba/(component)/content"
 type typeProvider = {
     children: React.ReactNode
 }
