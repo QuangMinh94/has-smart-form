@@ -14,6 +14,7 @@ export const CreationModal = ({
 }) => {
     return (
         <Modal
+            closable={false}
             title={title}
             open={open}
             maskClosable={false}
@@ -38,6 +39,7 @@ export const ReadOnlyModal = ({
 }) => {
     return (
         <Modal
+            closable={false}
             title={title}
             open={open}
             maskClosable={false}

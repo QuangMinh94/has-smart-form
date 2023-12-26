@@ -1,11 +1,13 @@
 import { TreeDataType } from "@/app/(types)/TreeDataType"
 import { CheckExtension } from "@/app/(utilities)/CheckFileExtension"
+import DateFormatter from "@/app/(utilities)/DateFormatter"
 import { InboxOutlined } from "@ant-design/icons"
 import {
     Button,
     Flex,
     Form,
     Input,
+    Spin,
     TreeSelect,
     Upload,
     UploadProps
@@ -15,7 +17,7 @@ import axios from "axios"
 import { useCookies } from "next-client-cookies"
 import { useEnvContext } from "next-runtime-env"
 import { useRouter } from "next/navigation"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { ContextFormManagement } from "./context"
 
 const { TextArea } = Input
@@ -130,17 +132,21 @@ export const UploadFileForm = ({
         description: string
         uploadedFile: any
     }
-    const { setOpen } = useContext(ContextFormManagement)
-    const { NEXT_PUBLIC_ADD_FILES } = useEnvContext()
     const cookie = useCookies()
     const [form] = Form.useForm()
+    const { setOpen } = useContext(ContextFormManagement)
+    const [draggerKey, setDraggerKey] = useState<number>(0)
+    const { NEXT_PUBLIC_ADD_FILES } = useEnvContext()
     const [messageApi, contextHolder] = useMessage()
+    const [loading, setLoading] = useState(false)
+
     const onFinish = async (e: any) => {
+        setLoading(true)
         console.log("EGREH", e)
         let bodyFormData = new FormData()
-        bodyFormData.append("fileName", e.uploadedFile.file.name)
+        bodyFormData.append("fileName", e.uploadedFile[0].name)
         bodyFormData.append("folderId", e.location)
-        bodyFormData.append("file", e.uploadedFile.file)
+        bodyFormData.append("file", e.uploadedFile[0].originFileObj)
 
         const config = {
             headers: {
@@ -152,8 +158,14 @@ export const UploadFileForm = ({
         //call axios to upload
         try {
             await axios.post(NEXT_PUBLIC_ADD_FILES!, bodyFormData, config)
+            messageApi.success("Tải tệp lên thành công")
+            setLoading(false)
+            clearData()
+            setOpen(false)
         } catch (error: any) {
             console.log("Error", error)
+            messageApi.error("Tải tệp lên thất bại")
+            setLoading(false)
         }
     }
 
@@ -162,8 +174,9 @@ export const UploadFileForm = ({
             location: "",
             name: "",
             description: "",
-            uploadedFile: {}
+            uploadedFile: undefined
         })
+        setDraggerKey(Math.random())
     }
 
     const normFile = (e: any) => {
@@ -171,6 +184,12 @@ export const UploadFileForm = ({
             return e
         }
         return e && e.fileList
+    }
+
+    const customRequest = (options: any) => {
+        setTimeout(() => {
+            options.onSuccess("ok")
+        }, 0)
     }
 
     const props: UploadProps = {
@@ -200,7 +219,7 @@ export const UploadFileForm = ({
             )
 
             if (!CheckExtension(fileType)) {
-                messageApi.error("File type not allowed")
+                messageApi.error("Chỉ được upload file ozr,ozd hoặc pdf")
                 return Upload.LIST_IGNORE
             }
 
@@ -208,7 +227,7 @@ export const UploadFileForm = ({
                 messageApi.error("File size cannot exceed 5MB")
                 return Upload.LIST_IGNORE
             }
-            return false
+            //return false
         }
     }
 
@@ -241,6 +260,7 @@ export const UploadFileForm = ({
                         treeDefaultExpandAll
                         treeData={treeSelectData}
                         onSelect={onSelect}
+                        disabled={loading}
                     />
                 </Form.Item>
 
@@ -263,6 +283,7 @@ export const UploadFileForm = ({
                 >
                     <TextArea
                         style={{ minWidth: "20vw", height: "10vw" }}
+                        disabled={loading}
                         //value={valueText}
                         //onChange={(e) => setValueText(e.target.value)}
                     />
@@ -278,7 +299,12 @@ export const UploadFileForm = ({
                         }
                     ]}
                 >
-                    <Dragger {...props}>
+                    <Dragger
+                        key={draggerKey}
+                        customRequest={customRequest}
+                        disabled={loading}
+                        {...props}
+                    >
                         <p className="ant-upload-drag-icon">
                             <InboxOutlined />
                         </p>
@@ -292,22 +318,65 @@ export const UploadFileForm = ({
                         </p>
                     </Dragger>
                 </Form.Item>
-                <Flex className="mt-4" justify="flex-end" gap={10}>
-                    <Button
-                        type="primary"
-                        danger
-                        onClick={() => {
-                            clearData()
-                            setOpen(false)
-                        }}
-                    >
-                        Hủy
-                    </Button>
-                    <Button type="primary" onClick={() => form.submit()}>
-                        Xác nhận
-                    </Button>
-                </Flex>
+                {!loading ? (
+                    <Flex className="mt-4" justify="flex-end" gap={10}>
+                        <Button
+                            type="primary"
+                            danger
+                            onClick={() => {
+                                clearData()
+                                setOpen(false)
+                            }}
+                        >
+                            Hủy
+                        </Button>
+                        <Button type="primary" onClick={() => form.submit()}>
+                            Xác nhận
+                        </Button>
+                    </Flex>
+                ) : (
+                    <Flex className="mt-4" justify="flex-end">
+                        <Spin />
+                    </Flex>
+                )}
             </Form>
         </>
+    )
+}
+
+export const DetailsForm = ({
+    location,
+    name,
+    creator,
+    createdDate,
+    ozrId
+}: {
+    location: string
+    name: string
+    creator: string
+    createdDate: Date | undefined
+    ozrId: string
+}) => {
+    return (
+        <Flex vertical gap={10}>
+            <b>Vị trí</b>
+            <Input disabled={true} defaultValue={location} />
+            <b>Tên</b>
+            <Input disabled={true} defaultValue={name} />
+            <Flex>
+                <b>Người tạo : </b>
+                <p>{creator}</p>
+            </Flex>
+            <Flex>
+                <b>Ngày tạo : </b>
+                <p>
+                    {createdDate ? DateFormatter(createdDate.toString()) : ""}
+                </p>
+            </Flex>
+            <Flex>
+                <b>OZR ID : </b>
+                <p>{ozrId}</p>
+            </Flex>
+        </Flex>
     )
 }

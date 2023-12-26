@@ -57,8 +57,13 @@ type FolderContent = {
 const FileManagementPage = async ({
     searchParams
 }: {
-    searchParams: { folderId: string }
+    searchParams: { folderId: string; name: string }
 }) => {
+    const { folderId, name } = searchParams
+    let request: { folderId: string | undefined; name: string | undefined } = {
+        folderId: "",
+        name: ""
+    }
     const session = await getServerSession()
     if (!session) {
         redirect("/auth/signin", RedirectType.replace)
@@ -69,7 +74,7 @@ const FileManagementPage = async ({
     const treeDataView: DataNode[] = MappingChildren(treeData)
 
     //fetch folder content
-    const tableData = await fetchFolderContent(searchParams.folderId)
+    const tableData = await fetchFolderContent(folderId)
     //map tableData
     const _tableData: FormTableType[] = []
     if (tableData) {

@@ -3,14 +3,16 @@ import { TreeDataType } from "@/app/(types)/TreeDataType"
 import PageHeader from "@/app/users/bu/_components/PageHeader"
 import { faFile, faFolder } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Col, Flex, Row, Table, Tree } from "antd"
+import { Button, Col, Flex, Row, Table } from "antd"
 import { ColumnsType } from "antd/es/table"
-import type { DataNode, TreeProps } from "antd/es/tree"
+import type { DataNode } from "antd/es/tree"
 import { useRouter } from "next/navigation"
-import { useContext, useState } from "react"
+import React, { useContext, useState } from "react"
 import { ContextFormManagement } from "./context"
-import { CreationForm, UploadFileForm } from "./form"
-import { CreationModal } from "./modal"
+import { CreationForm, DetailsForm, UploadFileForm } from "./form"
+import { CreationModal, ReadOnlyModal } from "./modal"
+
+import TreeComp from "./tree"
 
 export type FormTableType = {
     key?: string
@@ -61,14 +63,6 @@ const ManagementPage = ({
     treeSelectData: TreeDataType[]
     contentData: FormTableType[]
 }) => {
-    const router = useRouter()
-    const onSelect: TreeProps["onSelect"] = (selectedKeys, info) => {
-        console.log("selected", selectedKeys, info)
-        router.push(
-            "/users/administrator/formManagement?folderId=" + selectedKeys
-        )
-        router.refresh()
-    }
     return (
         <>
             <div className="pb-[5px] border-b-[2px] border-color:black text-black flex">
@@ -76,7 +70,7 @@ const ManagementPage = ({
             </div>
             <Row className="mt-4 border-b-2 border-black" gutter={10}>
                 <Col span={4} className="border-r-2 border-black">
-                    <Tree treeData={treeData} onSelect={onSelect} />
+                    <TreeComp treeSelectData={treeData} />
                 </Col>
                 <Col span={20}>
                     <TableLayout
@@ -96,14 +90,134 @@ const TableLayout = ({
     dataSource: FormTableType[]
     treeSelectData: TreeDataType[]
 }) => {
+    const router = useRouter()
+    const { setSelectedKey, openDetails, setOpenDetails } = useContext(
+        ContextFormManagement
+    )
+    const [popupState, setPopupState] = useState<{
+        record: any
+        visible: boolean
+        x: number
+        y: number
+    }>({
+        record: "",
+        visible: false,
+        x: 0,
+        y: 0
+    })
+
+    const [fileDetails, setFileDetails] = useState<{
+        location: string
+        name: string
+        creator: string
+        createdDate: Date | undefined
+        ozrId: string
+    }>({
+        location: "",
+        name: "",
+        creator: "",
+        createdDate: undefined,
+        ozrId: ""
+    })
+
+    const rowSelection = {
+        onChange: (
+            selectedRowKeys: React.Key[],
+            selectedRows: FormTableType[]
+        ) => {
+            console.log(
+                `selectedRowKeys: ${selectedRowKeys}`,
+                "selectedRows: ",
+                selectedRows
+            )
+        }
+    }
+
     return (
-        <PageHeader
-            path="/users/administrator/formManagement"
-            addNewPermission={false}
-            headerChild={<ButtonGroup treeSelectData={treeSelectData} />}
-        >
-            <Table dataSource={dataSource} columns={columns} />
-        </PageHeader>
+        <>
+            <PageHeader
+                path="/users/administrator/formManagement"
+                addNewPermission={false}
+                headerChild={<ButtonGroup treeSelectData={treeSelectData} />}
+            >
+                <Table
+                    rowSelection={{
+                        ...rowSelection
+                    }}
+                    rowClassName={(_record, index) =>
+                        index % 2 === 0 ? "table-row-light" : "table-row-dark"
+                    }
+                    onRow={(record, rowIndex) => {
+                        return {
+                            onContextMenu: (event) => {
+                                event.preventDefault()
+                                if (!popupState.visible) {
+                                    document.addEventListener(
+                                        `click`,
+                                        function onClickOutside() {
+                                            setPopupState({
+                                                ...popupState,
+                                                visible: false
+                                            })
+                                            document.removeEventListener(
+                                                `click`,
+                                                onClickOutside
+                                            )
+                                        }
+                                    )
+                                }
+                                setPopupState({
+                                    record: record,
+                                    visible: true,
+                                    x: event.clientX,
+                                    y: event.clientY
+                                })
+                            }, // right button click row
+
+                            onDoubleClick: () => {
+                                if (record.type === "FOLDER") {
+                                    setSelectedKey([record.key!])
+                                    router.push(
+                                        "/users/administrator/formManagement?folderId=" +
+                                            record.key
+                                    )
+                                    router.refresh()
+                                } else {
+                                    setFileDetails({
+                                        location: record.physicalFilePath!,
+                                        name: record.name,
+                                        creator: record.creator!,
+                                        createdDate: record.createdDate,
+                                        ozrId: record.physicalFileName!
+                                    })
+                                    setOpenDetails(true)
+                                }
+                            }
+                        }
+                    }}
+                    dataSource={dataSource}
+                    columns={columns}
+                />
+            </PageHeader>
+            <ReadOnlyModal
+                open={openDetails}
+                onCancel={() => setOpenDetails(false)}
+                title={<b>Chi tiết</b>}
+                children={
+                    <DetailsForm
+                        location={fileDetails.location}
+                        name={fileDetails.name}
+                        creator={fileDetails.creator}
+                        createdDate={
+                            fileDetails.createdDate
+                                ? fileDetails.createdDate
+                                : undefined
+                        }
+                        ozrId={fileDetails.ozrId}
+                    />
+                }
+            />
+        </>
     )
 }
 
