@@ -10,11 +10,13 @@ import { SearchParamContext } from "../_context/context"
 const PageHeader = ({
     path,
     children,
-    addNewPermission
+    addNewPermission,
+    headerChild
 }: {
     path: string
     children: ReactNode
     addNewPermission: boolean
+    headerChild?: ReactNode
 }) => {
     const router = useRouter()
     const { searchValue, setSearchValue } = useContext(SearchParamContext)
@@ -35,12 +37,13 @@ const PageHeader = ({
                             router.push(searchQuery)
                         }}
                     />
-                    {!addNewPermission && (
+                    {!headerChild && !addNewPermission && (
                         <div className="ml-[5px]">
                             <FilterOption />
                         </div>
                     )}
                 </div>
+                {headerChild}
                 {addNewPermission && (
                     <Button
                         type="primary"
