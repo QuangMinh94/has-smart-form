@@ -6,6 +6,14 @@
     background-color: #f1f0f0;
 }
 
+.table-row-light > td.ant-table-column-sort {
+    background-color: #ffffff !important;
+}
+
+.table-row-dark > td.ant-table-column-sort{
+    background-color: #f1f0f0 !important;
+}
+
 @keyframes fadeIn {
     0% {
         transform: translateY(-25%);

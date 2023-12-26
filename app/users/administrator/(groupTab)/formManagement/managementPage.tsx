@@ -29,6 +29,9 @@ const columns: ColumnsType<FormTableType> = [
     {
         title: "Tên",
         dataIndex: "name",
+        sorter: (a: FormTableType, b: FormTableType) => {
+            return a.name.localeCompare(b.name)
+        },
         render(_value, record, _index) {
             return (
                 <Flex align="center" gap={10}>
@@ -144,9 +147,9 @@ const TableLayout = ({
                     rowSelection={{
                         ...rowSelection
                     }}
-                    rowClassName={(_record, index) =>
+                    /*  rowClassName={(_record, index) =>
                         index % 2 === 0 ? "table-row-light" : "table-row-dark"
-                    }
+                    } */
                     onRow={(record, rowIndex) => {
                         return {
                             onContextMenu: (event) => {
@@ -197,26 +200,26 @@ const TableLayout = ({
                     }}
                     dataSource={dataSource}
                     columns={columns}
+                    scroll={{ y: 400 }}
                 />
             </PageHeader>
             <ReadOnlyModal
                 open={openDetails}
                 onCancel={() => setOpenDetails(false)}
                 title={<b>Chi tiết</b>}
-                children={
-                    <DetailsForm
-                        location={fileDetails.location}
-                        name={fileDetails.name}
-                        creator={fileDetails.creator}
-                        createdDate={
-                            fileDetails.createdDate
-                                ? fileDetails.createdDate
-                                : undefined
-                        }
-                        ozrId={fileDetails.ozrId}
-                    />
-                }
-            />
+            >
+                <DetailsForm
+                    location={fileDetails.location}
+                    name={fileDetails.name}
+                    creator={fileDetails.creator}
+                    createdDate={
+                        fileDetails.createdDate
+                            ? fileDetails.createdDate
+                            : undefined
+                    }
+                    ozrId={fileDetails.ozrId}
+                />
+            </ReadOnlyModal>
         </>
     )
 }
@@ -252,14 +255,13 @@ const ButtonGroup = ({
                 open={open}
                 onCancel={() => setOpen(false)}
                 title={<b>{title}</b>}
-                children={
-                    modalKey === "CREATE" ? (
-                        <CreationForm treeSelectData={treeSelectData} />
-                    ) : (
-                        <UploadFileForm treeSelectData={treeSelectData} />
-                    )
-                }
-            />
+            >
+                {modalKey === "CREATE" ? (
+                    <CreationForm treeSelectData={treeSelectData} />
+                ) : (
+                    <UploadFileForm treeSelectData={treeSelectData} />
+                )}
+            </CreationModal>
         </Flex>
     )
 }
