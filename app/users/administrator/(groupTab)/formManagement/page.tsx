@@ -1,4 +1,5 @@
 import { TreeDataType } from "@/app/(types)/TreeDataType"
+import DateFormatter from "@/app/(utilities)/DateFormatter"
 import { SearchParamProvider } from "@/app/users/bu/_context/provider"
 import type { DataNode } from "antd/es/tree"
 import axios from "axios"
@@ -38,6 +39,8 @@ type File = {
     physicalFilePath: string
     physicalFileName: string
     __v: number
+    creator: any
+    createdDate: Date
 }
 
 type Folder = {
@@ -47,6 +50,7 @@ type Folder = {
     createdDate: Date
     parent: string
     __v: number
+    creator: any
 }
 
 type FolderContent = {
@@ -60,10 +64,12 @@ const FileManagementPage = async ({
     searchParams: { folderId: string; name: string }
 }) => {
     const { folderId, name } = searchParams
-    let request: { folderId: string | undefined; name: string | undefined } = {
-        folderId: "",
-        name: ""
+    let request: { id: string | undefined; name: string | undefined } = {
+        id: undefined,
+        name: undefined
     }
+
+    console.log("SAJDASJKLJSDJADL", folderId, name)
     const session = await getServerSession()
     if (!session) {
         redirect("/auth/signin", RedirectType.replace)
@@ -72,6 +78,20 @@ const FileManagementPage = async ({
     const treeData = await fetchFolderTree()
     //map treeData to Antd Tree Items format
     const treeDataView: DataNode[] = MappingChildren(treeData)
+
+    /* if (folderId && name) {
+        request.id = folderId
+        request.name = name
+    } else {
+        if (!folderId && name) {
+            request.id = undefined
+            request.name = name
+        }
+        if (!name && folderId) {
+            request.id = folderId
+            request.name = undefined
+        }
+    } */
 
     //fetch folder content
     const tableData = await fetchFolderContent(folderId)
@@ -84,8 +104,12 @@ const FileManagementPage = async ({
                     key: childEle._id,
                     name: childEle.name,
                     size: "-",
-                    creator: childEle.parent,
-                    createdDate: childEle.createdDate,
+                    creator: childEle.creator
+                        ? childEle.creator.lastName +
+                          " " +
+                          childEle.creator.firstName
+                        : "",
+                    createdDate: DateFormatter(childEle.createdDate.toString()),
                     type: "FOLDER"
                 })
             })
@@ -96,9 +120,13 @@ const FileManagementPage = async ({
                     size: "-",
                     physicalFileName: childEle.physicalFileName,
                     physicalFilePath: childEle.physicalFilePath,
-                    type: "FILE"
-                    //creator: childEle.,
-                    //createdDate: childEle.createdDate
+                    type: "FILE",
+                    creator: childEle.creator
+                        ? childEle.creator.lastName +
+                          " " +
+                          childEle.creator.firstName
+                        : "",
+                    createdDate: DateFormatter(childEle.createdDate.toString())
                 })
             })
         }
@@ -150,7 +178,7 @@ const fetchFolderContent = async (
         }
         return undefined
     } catch (error) {
-        console.log("error", error)
+        //console.log("error", error)
         return undefined
     }
 }

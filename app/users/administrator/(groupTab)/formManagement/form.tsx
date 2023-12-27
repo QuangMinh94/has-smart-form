@@ -1,6 +1,5 @@
 import { TreeDataType } from "@/app/(types)/TreeDataType"
 import { CheckExtension } from "@/app/(utilities)/CheckFileExtension"
-import DateFormatter from "@/app/(utilities)/DateFormatter"
 import { InboxOutlined } from "@ant-design/icons"
 import {
     Button,
@@ -359,7 +358,7 @@ export const DetailsForm = ({
     location: string
     name: string
     creator: string
-    createdDate: Date | undefined
+    createdDate: string
     ozrId: string
 }) => {
     return (
@@ -374,9 +373,7 @@ export const DetailsForm = ({
             </Flex>
             <Flex>
                 <b>Ngày tạo : </b>
-                <p>
-                    {createdDate ? DateFormatter(createdDate.toString()) : ""}
-                </p>
+                <p>{createdDate ? createdDate : ""}</p>
             </Flex>
             <Flex>
                 <b>OZR ID : </b>
