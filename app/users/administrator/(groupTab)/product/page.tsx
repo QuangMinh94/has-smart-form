@@ -7,11 +7,12 @@ import {
     requestBodyEproductTree
 } from "@/app/(types)/eProduct"
 import ButtonOpenModal from "@/app/users/(components)/button/ButtonOpenModalProduct"
+import FillterProduct from "@/app/users/(components)/filter/FillterProduct"
+import ActiveTree from "@/app/users/(components)/form/ActiveTreeProduct"
+import ProviderProduct from "@/app/users/(components)/provider/ProviderProduct"
+import LayoutTreeView from "@/app/users/(components)/table/TreeViewProduct"
 import NoPermssionPage from "@/components/noPermissionPage"
 import axios from "axios"
-import FillterProduct from "../../(components)/filter/FillterProduct"
-import ActiveTree from "../../(components)/form/ActiveTreeProduct"
-import LayoutTreeView from "../../(components)/table/TreeViewProduct"
 
 const GetProductTree = async (pram: {
     bodyRequest: requestBodyEproductTree
@@ -69,7 +70,7 @@ const ProductPage = async ({
     })
 
     return (
-        <>
+        <ProviderProduct>
             {data?.permissonEproduct?.generalRule?.visibleTreeview &&
             data.permissonEproduct.generalRule.visibleView ? (
                 <div>
@@ -102,7 +103,7 @@ const ProductPage = async ({
             ) : (
                 <NoPermssionPage />
             )}
-        </>
+        </ProviderProduct>
     )
 }
 

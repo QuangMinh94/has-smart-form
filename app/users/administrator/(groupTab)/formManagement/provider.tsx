@@ -7,6 +7,7 @@ export const FormManagementProvider = ({ children }: PropsWithChildren) => {
     const [open, setOpen] = useState<boolean>(false)
     const [openDetails, setOpenDetails] = useState<boolean>(false)
     const [selectedKey, setSelectedKey] = useState<Key[]>([])
+    const [deletedItems, setDeletedItems] = useState<Key[]>([])
 
     const data: formManagementTypeContext = {
         setOpen,
@@ -14,7 +15,9 @@ export const FormManagementProvider = ({ children }: PropsWithChildren) => {
         setOpenDetails,
         openDetails,
         setSelectedKey,
-        selectedKey
+        selectedKey,
+        setDeletedItems,
+        deletedItems
     }
     return (
         <ContextFormManagement.Provider value={data}>
