@@ -15,6 +15,7 @@ export const DEPARTMENT = "department"
 export const GROUP = "group"
 export const QUERIES = "queries"
 export const SETTING = "setting"
+export const FORM_MANAGEMENT = "formManagement"
 const RootUsers = "users"
 const routers = (root: rootPath) => {
     const router = {
@@ -45,6 +46,7 @@ const routers = (root: rootPath) => {
         department: { path: `/${RootUsers}/${root}/${DEPARTMENT}` },
         group: { path: `/${RootUsers}/${root}/${GROUP}` },
         setting: { path: `/${RootUsers}/${root}/${SETTING}` },
+        formManagement: { path: `/${RootUsers}/${root}/${FORM_MANAGEMENT}` },
 
         // profile
         profile: { path: `/${RootUsers}/${root}` },

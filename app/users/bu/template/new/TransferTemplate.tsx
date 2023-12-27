@@ -1,4 +1,5 @@
 "use client"
+import { TreeDataType } from "@/app/(types)/TreeDataType"
 import { uniqueValue } from "@/app/(utilities)/ArrayUtilities"
 import ButtonLeftandRight from "@/components/CustomTranfDrag/ButtonCusTom"
 import Container from "@/components/CustomTranfDrag/Container"
@@ -10,7 +11,6 @@ import axios from "axios"
 import { useEnvContext } from "next-runtime-env"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
-import { TreeDataType } from "../../_types/TreeDataType"
 import { OptionProps } from "../[id]/page"
 
 const TreeSelectComp = ({ treeData }: { treeData: TreeDataType[] }) => {

@@ -1,5 +1,6 @@
 import { DefaultActiveRule } from "@/app/(types)/EformTemplate"
 import { Permission } from "@/app/(types)/Permission"
+import { TreeDataType } from "@/app/(types)/TreeDataType"
 import { TreeProduct } from "@/app/(types)/TreeProduct"
 import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import { authOptions } from "@/app/api/auth/authOptions"
@@ -9,7 +10,6 @@ import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import { cache } from "react"
-import { TreeDataType } from "../../_types/TreeDataType"
 import TemplateWrapper from "../_components/TemplateWrapper"
 
 const NewTemplate = async () => {

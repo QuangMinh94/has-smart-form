@@ -5,6 +5,7 @@ import React from "react"
 
 import {
     faArchive,
+    faBoxArchive,
     faBuilding,
     faCogs,
     faUser,
@@ -22,6 +23,7 @@ type KeyPath = {
     ADMIN_GROUP: string
     ADMIN_SETTING: string
     ADMIN_PRODUCT: string
+    ADMIN_FORM_MANAGEMENT: string
 }
 type conditionPath = {
     isAdminUser: boolean
@@ -41,6 +43,7 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
         ADMIN_GROUP: routers("administrator").group.path,
         ADMIN_SETTING: routers("administrator").setting.path,
         ADMIN_PRODUCT: routers("administrator").product.path
+        ADMIN_FORM_MANAGEMENT: routers("administrator").formManagement.path
     }
     const conditionPath: conditionPath = {
         isAdminUser: pathname.startsWith(keyPath.ADMIN_USER),
@@ -113,6 +116,19 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
                     <Link href={keyPath.ADMIN_SETTING}>
                         <FontAwesomeIcon
                             icon={faCogs}
+                            style={{ color: "black" }}
+                        />
+                    </Link>
+                </Tooltip>
+            )
+        },
+        {
+            key: keyPath.ADMIN_FORM_MANAGEMENT,
+            icon: (
+                <Tooltip placement="rightTop" title={"Quản lý form"}>
+                    <Link href={keyPath.ADMIN_FORM_MANAGEMENT}>
+                        <FontAwesomeIcon
+                            icon={faBoxArchive}
                             style={{ color: "black" }}
                         />
                     </Link>
