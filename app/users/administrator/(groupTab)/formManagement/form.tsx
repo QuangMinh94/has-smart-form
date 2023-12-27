@@ -51,6 +51,7 @@ export const CreationForm = ({
                 }
             )
             messageApi.success("Tạo thư mục thành công")
+            setOpen(false)
             router.refresh()
         } catch (error: any) {
             messageApi.error("Lỗi tạo thư mục.Xin thử lại sau")
@@ -85,6 +86,7 @@ export const CreationForm = ({
                 >
                     <TreeSelect
                         showSearch
+                        treeNodeFilterProp="title"
                         allowClear
                         treeDefaultExpandAll
                         treeData={treeSelectData}
@@ -133,6 +135,7 @@ export const UploadFileForm = ({
         uploadedFile: any
     }
     const cookie = useCookies()
+    const router = useRouter()
     const [form] = Form.useForm()
     const { setOpen } = useContext(ContextFormManagement)
     const [draggerKey, setDraggerKey] = useState<number>(0)
@@ -144,7 +147,7 @@ export const UploadFileForm = ({
         setLoading(true)
         console.log("EGREH", e)
         let bodyFormData = new FormData()
-        bodyFormData.append("fileName", e.uploadedFile[0].name)
+        bodyFormData.append("fileName", form.getFieldValue("name"))
         bodyFormData.append("folderId", e.location)
         bodyFormData.append("file", e.uploadedFile[0].originFileObj)
 
@@ -162,6 +165,7 @@ export const UploadFileForm = ({
             setLoading(false)
             clearData()
             setOpen(false)
+            router.refresh()
         } catch (error: any) {
             console.log("Error", error)
             messageApi.error("Tải tệp lên thất bại")
@@ -257,6 +261,7 @@ export const UploadFileForm = ({
                     <TreeSelect
                         showSearch
                         allowClear
+                        treeNodeFilterProp="title"
                         treeDefaultExpandAll
                         treeData={treeSelectData}
                         onSelect={onSelect}

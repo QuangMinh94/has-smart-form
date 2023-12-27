@@ -7,6 +7,8 @@ export interface formManagementTypeContext {
     openDetails: boolean
     setSelectedKey: Dispatch<SetStateAction<Key[]>>
     selectedKey: Key[]
+    setDeletedItems: Dispatch<SetStateAction<Key[]>>
+    deletedItems: Key[]
 }
 
 const ContextFormManagement = createContext<formManagementTypeContext>({
@@ -15,7 +17,9 @@ const ContextFormManagement = createContext<formManagementTypeContext>({
     setOpenDetails: () => {},
     openDetails: false,
     setSelectedKey: () => {},
-    selectedKey: []
+    selectedKey: [],
+    setDeletedItems: () => {},
+    deletedItems: []
 })
 
 export { ContextFormManagement }
