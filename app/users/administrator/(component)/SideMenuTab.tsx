@@ -42,7 +42,7 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
         ADMIN_DEPARTMENT: routers("administrator").department.path,
         ADMIN_GROUP: routers("administrator").group.path,
         ADMIN_SETTING: routers("administrator").setting.path,
-        ADMIN_PRODUCT: routers("administrator").product.path
+        ADMIN_PRODUCT: routers("administrator").product.path,
         ADMIN_FORM_MANAGEMENT: routers("administrator").formManagement.path
     }
     const conditionPath: conditionPath = {
