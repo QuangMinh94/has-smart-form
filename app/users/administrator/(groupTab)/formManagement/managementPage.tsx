@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Col, Flex, Popconfirm, Row, Table } from "antd"
 import { ColumnsType } from "antd/es/table"
 import type { DataNode } from "antd/es/tree"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useContext, useEffect, useState } from "react"
 import { ContextFormManagement } from "./context"
 import { CreationForm, DetailsForm, UploadFileForm } from "./form"
@@ -23,7 +23,7 @@ export type FormTableType = {
     name: string
     size?: string
     creator?: string
-    createdDate?: Date
+    createdDate?: string
     physicalFilePath?: string
     physicalFileName?: string
     type: string
@@ -71,6 +71,7 @@ const TableLayout = ({
     dataSource: FormTableType[]
     treeSelectData: TreeDataType[]
 }) => {
+    const pathName = usePathname()
     const [messageApi, contextHolder] = useMessage()
     const { NEXT_PUBLIC_DELETE_FOLDER, NEXT_PUBLIC_DELETE_FILE } =
         useEnvContext()
@@ -95,13 +96,13 @@ const TableLayout = ({
         location: string
         name: string
         creator: string
-        createdDate: Date | undefined
+        createdDate: string
         ozrId: string
     }>({
         location: "",
         name: "",
         creator: "",
-        createdDate: undefined,
+        createdDate: "",
         ozrId: ""
     })
 
@@ -173,7 +174,7 @@ const TableLayout = ({
         <>
             {contextHolder}
             <PageHeader
-                path="/users/administrator/formManagement"
+                path={pathName}
                 addNewPermission={false}
                 headerChild={<ButtonGroup treeSelectData={treeSelectData} />}
             >
@@ -221,7 +222,7 @@ const TableLayout = ({
                                         location: record.physicalFilePath!,
                                         name: record.name,
                                         creator: record.creator!,
-                                        createdDate: record.createdDate,
+                                        createdDate: record.createdDate!,
                                         ozrId: record.physicalFileName!
                                     })
                                     setOpenDetails(true)
@@ -243,11 +244,7 @@ const TableLayout = ({
                     location={fileDetails.location}
                     name={fileDetails.name}
                     creator={fileDetails.creator}
-                    createdDate={
-                        fileDetails.createdDate
-                            ? fileDetails.createdDate
-                            : undefined
-                    }
+                    createdDate={fileDetails.createdDate}
                     ozrId={fileDetails.ozrId}
                 />
             </ReadOnlyModal>
