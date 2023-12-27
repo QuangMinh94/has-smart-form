@@ -4,6 +4,7 @@ import { Menu, theme, Tooltip } from "antd"
 import React from "react"
 
 import {
+    faArchive,
     faBoxArchive,
     faBuilding,
     faCogs,
@@ -21,6 +22,7 @@ type KeyPath = {
     ADMIN_DEPARTMENT: string
     ADMIN_GROUP: string
     ADMIN_SETTING: string
+    ADMIN_PRODUCT: string
     ADMIN_FORM_MANAGEMENT: string
 }
 type conditionPath = {
@@ -29,6 +31,7 @@ type conditionPath = {
     isDepartment: boolean
     isGroup: boolean
     isSetting: boolean
+    isProduct: boolean
 }
 
 const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
@@ -39,6 +42,7 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
         ADMIN_DEPARTMENT: routers("administrator").department.path,
         ADMIN_GROUP: routers("administrator").group.path,
         ADMIN_SETTING: routers("administrator").setting.path,
+        ADMIN_PRODUCT: routers("administrator").product.path
         ADMIN_FORM_MANAGEMENT: routers("administrator").formManagement.path
     }
     const conditionPath: conditionPath = {
@@ -46,7 +50,8 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
         isAdminRole: pathname.startsWith(keyPath.ADMIN_ROLE),
         isDepartment: pathname.startsWith(keyPath.ADMIN_DEPARTMENT),
         isGroup: pathname.startsWith(keyPath.ADMIN_GROUP),
-        isSetting: pathname.startsWith(keyPath.ADMIN_SETTING)
+        isSetting: pathname.startsWith(keyPath.ADMIN_SETTING),
+        isProduct: pathname.startsWith(keyPath.ADMIN_PRODUCT)
     }
 
     const selectedKeys: string[] = []
@@ -91,19 +96,19 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
                 </Tooltip>
             )
         },
-        // {
-        //     key: keyPath.ADMIN_ROLE,
-        //     icon: (
-        //         <Tooltip placement="rightTop" title={"Quản trị nhóm quyền"}>
-        //             <Link href={keyPath.ADMIN_ROLE}>
-        //                 <FontAwesomeIcon
-        //                     icon={faUserTag}
-        //                     style={{ color: "black" }}
-        //                 />
-        //             </Link>
-        //         </Tooltip>
-        //     )
-        // },
+        {
+            key: keyPath.ADMIN_PRODUCT,
+            icon: (
+                <Tooltip placement="rightTop" title={"Quản trị sản phẩm"}>
+                    <Link href={keyPath.ADMIN_PRODUCT}>
+                        <FontAwesomeIcon
+                            icon={faArchive}
+                            style={{ color: "black" }}
+                        />
+                    </Link>
+                </Tooltip>
+            )
+        },
         {
             key: keyPath.ADMIN_SETTING,
             icon: (
@@ -147,6 +152,9 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
     }
     if (conditionPath.isSetting) {
         selectedKeys.push(keyPath.ADMIN_SETTING)
+    }
+    if (conditionPath.isProduct) {
+        selectedKeys.push(keyPath.ADMIN_PRODUCT)
     }
     return (
         <Menu

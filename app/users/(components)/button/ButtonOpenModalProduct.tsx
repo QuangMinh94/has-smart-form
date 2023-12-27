@@ -1,12 +1,12 @@
 "use client"
-import React, { useState, memo, useCallback } from "react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import React, { memo, useCallback, useState } from "react"
 
-import { Modal, Button, Checkbox } from "antd"
-import FormProduct from "./form/FormProduct"
-import FormNV from "./form/FormNV"
-import FormActive from "./form/Active"
+import { Button, Checkbox, Modal } from "antd"
+import FormActive from "../../ba/(component)/form/Active"
+import FormNV from "../../ba/(component)/form/FormNV"
+import FormProduct from "../../ba/(component)/form/FormProduct"
 export type setting = "ADD_MODAL" | "UPDATE_MODAL" | "ACTIVE_MODAL"
 type Props = {
     type: setting

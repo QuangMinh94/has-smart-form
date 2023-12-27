@@ -1,5 +1,5 @@
 import { ClientCookiesProvider } from "@/app/ClientCookiesProvider"
-import ProviderBa from "@/app/users/ba/(component)/Provider"
+import ProviderBa from "@/app/users/(components)/provider/ProviderProduct"
 import SideMenu from "@/components/SideMenu"
 import ProviderTranfer from "@/components/provider/ProviderTranfer"
 import { cookies } from "next/headers"

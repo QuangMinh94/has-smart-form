@@ -1,10 +1,10 @@
 "use client"
-import { Tree, Flex, theme } from "antd"
+import { PermissionViewEproduct, eProduct } from "@/app/(types)/eProduct"
+import { useContextBa } from "@/components/cusTomHook/useContext"
+import { Flex, Tree, theme } from "antd"
 import type { DataNode } from "antd/es/tree"
 import React, { useEffect } from "react"
-import { eProduct, PermissionViewEproduct } from "@/app/(types)/eProduct"
-import ButtonOpenModal from "../ButtonOpenModal"
-import { useContextBa } from "@/components/cusTomHook/useContext"
+import ButtonOpenModal from "../button/ButtonOpenModalProduct"
 import "./TreeViewProduct.css"
 
 import { ToFilterName } from "@/util/formatText"
@@ -59,44 +59,34 @@ function TreeCustom({
 
         const conditionsBtn: btnConditions = {
             add: {
-                title: permissions?.value?.visibleAddBusiness
-                    ? "Tạo nghiệp vụ"
-                    : "Tạo sản phẩm",
-                disable: !!(
-                    !permissions?.value?.visibleAddBusiness &&
-                    !permissions?.value?.visibleAddProduct
-                ),
-                type: permissions?.value?.visibleAddBusiness ? "B" : "P"
+                title: "Tạo nghiệp vụ",
+                disable: !permissions?.value?.visibleAddBusiness,
+                type: "B"
             },
             update: {
-                title: permissions?.value?.visibleEditBusiness
-                    ? "Cập nhật nghiệp vụ"
-                    : "Cập nhậ sản phẩm",
+                title:
+                    item.type === "B"
+                        ? "Cập nhật nghiệp vụ"
+                        : "Cập nhậ sản phẩm",
                 disable: !!(
                     !permissions?.value?.visibleEditBusiness &&
                     !permissions?.value?.visibleEditProduct
                 ),
-                type: permissions?.value?.visibleEditBusiness ? "B" : "P"
+                type: item.type === "B" ? "B" : "P"
             },
             active: {
                 title: item.active
                     ? `Vô hiệu hóa ${` ${
-                          permissions?.value?.visibleDeactiveProduct
-                              ? "sản phẩm"
-                              : "nghiệp vụ"
+                          item.type === "P" ? "sản phẩm" : "nghiệp vụ"
                       } "${item.name}"`}`
                     : `Khôi phục ${` ${
-                          permissions?.value?.visibleDeactiveProduct
-                              ? "sản phẩm"
-                              : "nghiệp vụ"
+                          item.type === "P" ? "sản phẩm" : "nghiệp vụ"
                       } "${item.name}"`}`,
                 disable: !!(
                     !permissions?.value?.visibleDeactiveProduct &&
                     !permissions?.value?.visibleDeactiveBusiness
                 ),
-                type: permissions?.value?.visibleEditBusiness
-                    ? "ACTIVE"
-                    : "ACTIVE"
+                type: "ACTIVE"
             }
         }
 
