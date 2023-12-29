@@ -51,7 +51,7 @@ const FileManagementPage = async ({
     const _tableData: FormTableType[] = []
     if (tableData) {
         if (Object.keys(tableData).length !== 0) {
-            tableData.folder.forEach((childEle) => {
+            tableData.folder!.forEach((childEle) => {
                 _tableData.push({
                     key: childEle._id,
                     name: childEle.name,
