@@ -46,13 +46,13 @@ const fecth = async ({
     }
 }
 
-const PageAttachBu = async (searchParams: { active: string; name: string }) => {
-    const body = {
-        active: searchParams?.active === "false" ? false : true,
-        name: searchParams?.name ?? ""
-    }
+const PageAttachBu = async () => {
+    // const body = {
+    //     active: searchParams?.active === "false" ? false : true,
+    //     name: searchParams?.name ?? ""
+    // }
 
-    const { eProduct, connnector } = await fecth(body)
+    const { eProduct, connnector } = await fecth({ active: true, name: "" })
 
     return (
         <ProviderAttachBu

@@ -34,14 +34,13 @@ const fectheConnecterManager = async ({
         throw new Error("error", error)
     }
 }
-const PageManager = async (searchParams: { active: string; name: string }) => {
-    const body = {
-        active: searchParams?.active === "false" ? false : true,
-        name: searchParams?.name ?? ""
-    }
+const PageManager = async () => {
+    // const body = {
+    //     active: searchParams?.active === "false" ? false : true,
+    //     name: searchParams?.name ?? ""
+    // }
 
-    const data = await fectheConnecterManager(body)
-    console.log("data", data)
+    const data = await fectheConnecterManager({ active: true, name: "" })
 
     return (
         <ProviderManager>
