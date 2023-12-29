@@ -1,3 +1,4 @@
+import { FolderContent, FolderTree } from "@/app/(types)/Folder"
 import { TreeDataType } from "@/app/(types)/TreeDataType"
 import DateFormatter from "@/app/(utilities)/DateFormatter"
 import { SearchParamProvider } from "@/app/users/bu/_context/provider"
@@ -8,55 +9,6 @@ import { cookies } from "next/headers"
 import { RedirectType, redirect } from "next/navigation"
 import ManagementPage, { FormTableType } from "./managementPage"
 import { FormManagementProvider } from "./provider"
-
-type Parent = {
-    _id: string
-    name: string
-}
-
-type Child = {
-    _id: string
-    name: string
-    active: boolean
-    createdDate: string
-    parent: Parent
-    __v: number
-    children: Child[]
-}
-
-type FolderTree = {
-    createdDate: string
-    _id: string
-    name: string
-    active: boolean
-    children: Child[]
-}
-
-type File = {
-    _id: string
-    name: string
-    folder: string
-    physicalFilePath: string
-    physicalFileName: string
-    __v: number
-    creator: any
-    createdDate: Date
-}
-
-type Folder = {
-    _id: string
-    name: string
-    active: boolean
-    createdDate: Date
-    parent: string
-    __v: number
-    creator: any
-}
-
-type FolderContent = {
-    file: File[]
-    folder: Folder[]
-}
 
 const FileManagementPage = async ({
     searchParams
