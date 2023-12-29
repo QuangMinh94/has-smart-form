@@ -1,6 +1,7 @@
 import { DefaultActiveRule } from "@/app/(types)/EformTemplate"
+import { FolderTree } from "@/app/(types)/Folder"
 import { Permission } from "@/app/(types)/Permission"
-import { TreeProduct } from "@/app/(types)/TreeProduct"
+import { TreeDataType } from "@/app/(types)/TreeDataType"
 import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import { authOptions } from "@/app/api/auth/authOptions"
 import ProviderTemplate from "@/components/context/providerTemplate"
@@ -9,7 +10,6 @@ import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import { cache } from "react"
-import { TreeDataType } from "../../_types/TreeDataType"
 import TemplateWrapper from "../_components/TemplateWrapper"
 
 const NewTemplate = async () => {
@@ -21,8 +21,8 @@ const NewTemplate = async () => {
     if (!FindPermission(permission, "children", "VisibleBU")) notFound()
 
     //get tree data
-    const treeData: TreeProduct[] = await fetchTemplate(
-        process.env.EPRODUCT_TREEDATA!,
+    const treeData: FolderTree[] = await fetchTemplate(
+        process.env.FOLDER_TREE_VIEW!,
         {}
     )
 
@@ -40,15 +40,13 @@ const NewTemplate = async () => {
     )
 }
 
-const MappingChildren = (product: TreeProduct[]) => {
+const MappingChildren = (product: FolderTree[]) => {
     if (product.length === 0) return []
 
     const childrenView: TreeDataType[] = []
     product.forEach((element) => {
         childrenView.push({
-            value: element.parent
-                ? "/" + element.parent.name + "/" + element.name
-                : "/" + element.name,
+            value: element._id,
             title: element.name,
             children:
                 element.children.length !== 0

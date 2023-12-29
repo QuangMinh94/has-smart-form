@@ -19,6 +19,7 @@ const CONNECTER = "connecter"
 export const MANAGER = "manager"
 export const CORRECTION = "correction"
 export const ATTACH_BUSINESS = "attachbusiness"
+export const FORM_MANAGEMENT = "formManagement"
 const RootUsers = "users"
 const routers = (root: rootPath) => {
     const router = {
@@ -49,6 +50,7 @@ const routers = (root: rootPath) => {
         department: { path: `/${RootUsers}/${root}/${DEPARTMENT}` },
         group: { path: `/${RootUsers}/${root}/${GROUP}` },
         setting: { path: `/${RootUsers}/${root}/${SETTING}` },
+        formManagement: { path: `/${RootUsers}/${root}/${FORM_MANAGEMENT}` },
 
         connecterManager: {
             path: `/${RootUsers}/${root}/${CONNECTER}/${MANAGER}`
