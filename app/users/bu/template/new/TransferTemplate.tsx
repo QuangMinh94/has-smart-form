@@ -1,10 +1,12 @@
 "use client"
+import { FolderContent } from "@/app/(types)/Folder"
 import { TreeDataType } from "@/app/(types)/TreeDataType"
 import { uniqueValue } from "@/app/(utilities)/ArrayUtilities"
 import ButtonLeftandRight from "@/components/CustomTranfDrag/ButtonCusTom"
 import Container from "@/components/CustomTranfDrag/Container"
 import LayoutTranfer from "@/components/CustomTranfDrag/LayoutTranfer"
 import { useContextTemplate } from "@/components/cusTomHook/useContextTemplate"
+import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import "@/public/css/myWork/detailMyWork.css"
 import { TreeSelect } from "antd"
 import axios from "axios"
@@ -15,31 +17,50 @@ import { OptionProps } from "../[id]/page"
 
 const TreeSelectComp = ({ treeData }: { treeData: TreeDataType[] }) => {
     const { listRight, setSelectedTree, setListLeft } = useContextTemplate()
-    const { NEXT_PUBLIC_EFORM_LIST } = useEnvContext()
+    const { NEXT_PUBLIC_FOLDER_CONTENT_FILE } = useEnvContext()
+    const { token, session } = useCustomCookies()
 
     const updateListLeft = async (selectedKeys: any) => {
         console.log("ListRIght", listRight)
-        const response = await axios.post(NEXT_PUBLIC_EFORM_LIST!, {
-            repository: selectedKeys
-        })
-        const res_1 = response.data as {
+        try {
+            const response = await axios.post(
+                NEXT_PUBLIC_FOLDER_CONTENT_FILE!,
+                {
+                    id: selectedKeys
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Session: session
+                    }
+                }
+            )
+            const res_1 = response.data as FolderContent
+            /* const res_1 = response.data as {
             name: string
             repository: string
             serverPath: string
-        }[]
-        const _option: OptionProps[] = []
-        res_1.forEach((resChild) => {
-            _option.push({
-                id: resChild.repository + "/" + resChild.name,
-                name: resChild.name,
-                checkBox: false,
-                type: resChild.repository
+        }[] */
+            const _option: OptionProps[] = []
+            res_1.file.forEach((resChild) => {
+                _option.push({
+                    id:
+                        resChild.physicalFilePath +
+                        "/" +
+                        resChild.physicalFileName,
+                    name: resChild.name,
+                    checkBox: false,
+                    type: resChild.physicalFilePath
+                })
             })
-        })
-        console.log("Option", _option)
-        console.log("Right", listRight)
-        //setListLeft(_option)
-        setListLeft(uniqueValue(_option, listRight))
+            console.log("Option", _option)
+            console.log("Right", listRight)
+            //setListLeft(_option)
+            setListLeft(uniqueValue(_option, listRight))
+        } catch (err) {
+            console.log(err)
+            setListLeft([])
+        }
     }
 
     const onSelect = (selectedKeys: any, info: any) => {
@@ -53,7 +74,7 @@ const TreeSelectComp = ({ treeData }: { treeData: TreeDataType[] }) => {
             showSearch
             style={{ width: "100%" }}
             dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
-            placeholder="Please select"
+            placeholder="Chọn nghiệp vụ"
             allowClear
             treeDefaultExpandAll
             //onChange={onChange}
