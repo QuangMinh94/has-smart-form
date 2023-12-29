@@ -1,19 +1,19 @@
-import type { DataNode } from "antd/es/tree"
 import { ToFilterName } from "@/util/formatText"
 import { Flex } from "antd"
+import type { DataNode } from "antd/es/tree"
 
 import "./TreeViewProduct.css"
 type Cusomter = {
     Tree: any[]
     searchValue: string
     colorSeacrh: string
-    AddModel?: React.FC<{
+    AddModel: React.FC<{
         datarow: any
     }>
-    UpdateModel?: React.FC<{
+    UpdateModel: React.FC<{
         datarow: any
     }>
-    ActiveModal?: React.FC<{
+    ActiveModal: React.FC<{
         datarow: any
     }>
 }

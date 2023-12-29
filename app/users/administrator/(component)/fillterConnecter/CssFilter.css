@@ -1,0 +1,4 @@
+.css-dev-only-do-not-override-oj317f.ant-dropdown .ant-dropdown-menu {
+    max-height: 50vh;
+    overflow: auto;
+}

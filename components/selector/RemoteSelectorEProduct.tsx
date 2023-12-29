@@ -74,16 +74,16 @@ async function fetchProduct(
     searchString: string,
     url: string,
     header: any
-): Promise<UserValue[]> {
+): Promise<any[]> {
     return axios
         .post(url, {}, { headers: header })
         .then((response) => response.data as eProduct[])
         .then((body) =>
             body
                 .filter((element) =>
-                    ToLowerCaseNonAccentVietnamese(element.name).includes(
-                        ToLowerCaseNonAccentVietnamese(searchString)
-                    )
+                    ToLowerCaseNonAccentVietnamese(
+                        element?.name ?? ""
+                    ).includes(ToLowerCaseNonAccentVietnamese(searchString))
                 )
                 .map((element) => ({
                     label: element.name,

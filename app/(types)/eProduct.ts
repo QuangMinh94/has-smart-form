@@ -30,12 +30,13 @@ export interface eProduct {
     _id?: string
     active?: boolean
     code?: string
-    name: string
+    name?: string
     creator?: string
     description?: string
     type?: string
     children?: eProduct[]
     parent?: { _id: string; name: string }
+    integration?: string[]
 }
 export interface requestBodyEproduct {
     type?: string
