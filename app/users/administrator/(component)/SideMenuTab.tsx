@@ -7,6 +7,8 @@ import {
     faArchive,
     faBuilding,
     faCogs,
+    faLink,
+    faNetworkWired,
     faUser,
     faUsers
 } from "@fortawesome/free-solid-svg-icons"
@@ -22,6 +24,8 @@ type KeyPath = {
     ADMIN_GROUP: string
     ADMIN_SETTING: string
     ADMIN_PRODUCT: string
+    ADMIN_CONNECTOR_MANAGER: string
+    ADMIN_CONNECTOR_ATTACH_BUSINESS: string
 }
 type conditionPath = {
     isAdminUser: boolean
@@ -30,6 +34,8 @@ type conditionPath = {
     isGroup: boolean
     isSetting: boolean
     isProduct: boolean
+    isConnectorManager: boolean
+    isConnectorAttachBusiness: boolean
 }
 
 const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
@@ -40,7 +46,10 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
         ADMIN_DEPARTMENT: routers("administrator").department.path,
         ADMIN_GROUP: routers("administrator").group.path,
         ADMIN_SETTING: routers("administrator").setting.path,
-        ADMIN_PRODUCT: routers("administrator").product.path
+        ADMIN_PRODUCT: routers("administrator").product.path,
+        ADMIN_CONNECTOR_MANAGER: routers("administrator").connecterManager.path,
+        ADMIN_CONNECTOR_ATTACH_BUSINESS:
+            routers("administrator").connecterAttachBusiness.path
     }
     const conditionPath: conditionPath = {
         isAdminUser: pathname.startsWith(keyPath.ADMIN_USER),
@@ -48,7 +57,15 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
         isDepartment: pathname.startsWith(keyPath.ADMIN_DEPARTMENT),
         isGroup: pathname.startsWith(keyPath.ADMIN_GROUP),
         isSetting: pathname.startsWith(keyPath.ADMIN_SETTING),
-        isProduct: pathname.startsWith(keyPath.ADMIN_PRODUCT)
+        isProduct: pathname.startsWith(keyPath.ADMIN_PRODUCT),
+        isConnectorManager: pathname.startsWith(
+            keyPath.ADMIN_CONNECTOR_MANAGER
+        ),
+        isConnectorAttachBusiness:
+            pathname.startsWith(keyPath.ADMIN_CONNECTOR_ATTACH_BUSINESS) ||
+            pathname.startsWith(
+                routers("administrator").connecterCorrection.path
+            )
     }
 
     const selectedKeys: string[] = []
@@ -118,6 +135,32 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
                     </Link>
                 </Tooltip>
             )
+        },
+        {
+            key: keyPath.ADMIN_CONNECTOR_MANAGER,
+            icon: (
+                <Tooltip placement="rightTop" title={"Kết nối"}>
+                    <Link href={keyPath.ADMIN_CONNECTOR_MANAGER}>
+                        <FontAwesomeIcon
+                            icon={faNetworkWired}
+                            style={{ color: "black" }}
+                        />
+                    </Link>
+                </Tooltip>
+            )
+        },
+        {
+            key: keyPath.ADMIN_CONNECTOR_ATTACH_BUSINESS,
+            icon: (
+                <Tooltip placement="rightTop" title={"Gán nghiệp vụ"}>
+                    <Link href={keyPath.ADMIN_CONNECTOR_ATTACH_BUSINESS}>
+                        <FontAwesomeIcon
+                            icon={faLink}
+                            style={{ color: "black" }}
+                        />
+                    </Link>
+                </Tooltip>
+            )
         }
     ]
 
@@ -139,6 +182,12 @@ const CustomMenu = ({ backgroundColor }: { backgroundColor: string }) => {
     }
     if (conditionPath.isProduct) {
         selectedKeys.push(keyPath.ADMIN_PRODUCT)
+    }
+    if (conditionPath.isConnectorManager) {
+        selectedKeys.push(keyPath.ADMIN_CONNECTOR_MANAGER)
+    }
+    if (conditionPath.isConnectorAttachBusiness) {
+        selectedKeys.push(keyPath.ADMIN_CONNECTOR_ATTACH_BUSINESS)
     }
     return (
         <Menu

@@ -22,6 +22,9 @@ type Type =
     | "getWards"
     | "cateGoriFilter"
     | "getRoles"
+    | "getcategoriesMethods"
+    | "getcategoriesApi"
+    | "getcategoriesConnecter"
 export type typeSelect = "authen" | "department" | "defaultGroup" // DANG DUNG O FORM USER
 type Option = { label: string; value: string; dataRow: any }
 type Props = {
@@ -171,6 +174,55 @@ const UseFecthApi = ({
             }))
             return option
         },
+
+        getcategoriesMethods: async (): Promise<Option[]> => {
+            const res = await cateGoriFilter({
+                url: NEXT_PUBLIC_CATEGORY!,
+                bodyRequest: { type: "ConnectorMethod" },
+                token,
+                session
+            })
+            const group: any[] = res.data
+
+            const option: Option[] = group.map((item) => ({
+                value: item?._id ?? "",
+                label: item?.name ?? "",
+                dataRow: item
+            }))
+            return option
+        },
+        getcategoriesApi: async (): Promise<Option[]> => {
+            const res = await cateGoriFilter({
+                url: NEXT_PUBLIC_CATEGORY!,
+                bodyRequest: { type: "ConnectorType" },
+                token,
+                session
+            })
+            const group: any[] = res.data
+
+            const option: Option[] = group.map((item) => ({
+                value: item?._id ?? "",
+                label: item?.name ?? "",
+                dataRow: item
+            }))
+            return option
+        },
+        getcategoriesConnecter: async (): Promise<Option[]> => {
+            const res = await cateGoriFilter({
+                url: NEXT_PUBLIC_CATEGORY!,
+                bodyRequest: { type: "ConnectorGroup" },
+                token,
+                session
+            })
+            const group: any[] = res.data
+
+            const option: Option[] = group.map((item) => ({
+                value: item?._id ?? "",
+                label: item?.name ?? "",
+                dataRow: item
+            }))
+            return option
+        },
         getRoles: async (): Promise<Option[]> => {
             const res = await getRoles({
                 url: NEXT_PUBLIC_GET_ROLE!,
@@ -224,7 +276,7 @@ const CustomerSelect: React.FC<Props> = ({
     )
 
     const { token, session } = useCustomCookies()
-    const { isRefetching, error, data, refetch, isLoading } = UseFecthApi({
+    const { error, data, refetch, isLoading } = UseFecthApi({
         token,
         session,
         type: type,
@@ -267,7 +319,7 @@ const CustomerSelect: React.FC<Props> = ({
     }
     return (
         <Select
-            loading={isRefetching}
+            loading={isLoading && enabledFecth}
             mode={mode}
             defaultValue={defalutValue ?? undefined}
             style={{ width: "100%" }}
@@ -277,12 +329,15 @@ const CustomerSelect: React.FC<Props> = ({
             filterOption={HandlerfilterOption}
             allowClear
             showSearch
+            placeholder={
+                isLoading && enabledFecth ? "vui lòng đợi..." : undefined
+            }
             onChange={onChange}
             onSelect={onSelect}
             options={CustomData}
-            value={value}
+            value={isLoading && enabledFecth ? undefined : value}
             notFoundContent={
-                isRefetching || isLoading ? (
+                isLoading && enabledFecth ? (
                     <Spin size="small" />
                 ) : (
                     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />

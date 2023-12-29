@@ -5,6 +5,12 @@ import {
     typeContextMyworkDetail
 } from "../../app/users/teller/(components)/context"
 
+import contentAttachBu, {
+    typeContextAttachBu
+} from "@/app/users/administrator/(component)/content/connecter/connecterAttachBu"
+import contextConnecterManager, {
+    typeContextManager
+} from "@/app/users/administrator/(component)/content/connecter/connecterManager"
 import contentAdmin, {
     typeContextAdmin
 } from "@/app/users/administrator/(component)/content/contentAdmin"
@@ -80,6 +86,25 @@ function useContextAdminUser(): typeContextUser {
         dataGlobal: provider.dataGlobal
     }
 }
+function useContextAdminAttachBu(): typeContextAttachBu {
+    const provider = useContext(contentAttachBu)
+    return {
+        setDataGlobal: provider.setDataGlobal,
+        dataGlobal: provider.dataGlobal,
+        tab: provider.tab,
+        setTab: provider.setTab,
+        EproductActive: provider.EproductActive,
+        setIdEproductActive: provider.setIdEproductActive
+    }
+}
+
+function useContextAdminconnectManager(): typeContextManager {
+    const provider = useContext(contextConnecterManager)
+    return {
+        setDataForm: provider.setDataForm,
+        DataForm: provider.DataForm
+    }
+}
 function useContextTree(): typeContextTree {
     const provider = useContext(contextTreeView)
     return {
@@ -116,7 +141,9 @@ function useContextProfile(): typeContextProfile {
 }
 export {
     useContextAdmin,
+    useContextAdminAttachBu,
     useContextAdminUser,
+    useContextAdminconnectManager,
     useContextBa,
     useContextMyWorkDetail,
     useContextProfile,
