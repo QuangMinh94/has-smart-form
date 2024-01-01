@@ -1,6 +1,6 @@
 "use client"
 import ButtonModal from "@/app/users/administrator/(component)/BtnModal"
-import { Input } from "antd"
+import { Checkbox, Input } from "antd"
 import { debounce } from "lodash"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useTransition } from "react"
@@ -49,11 +49,11 @@ const ActionHeaderManager = () => {
                     loading={loading}
                 />
             </div>
-            {/* <Checkbox
+            <Checkbox
                 style={{ marginRight: "10px" }}
                 onChange={HanderChecked}
                 checked={checked === "false" ? false : true}
-            /> */}
+            />
             <ButtonModal
                 type="CATEGORY_CONNECTION"
                 pathModel="ADMIN_CONNECTER_MANAGER"

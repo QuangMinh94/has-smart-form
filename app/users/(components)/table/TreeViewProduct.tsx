@@ -149,73 +149,6 @@ function TreeCustom({
     return TreeCustomer
 }
 
-function eProductsFilter({
-    TreeEProducts,
-    active
-}: {
-    TreeEProducts: eProduct[]
-    active: boolean
-}): eProduct[] {
-    function eProductActive({
-        eProduct
-    }: {
-        eProduct: eProduct[]
-    }): eProduct[] {
-        const eProducts: eProduct[] = []
-        eProduct?.forEach((item) => {
-            if (item.active) {
-                eProducts.push({
-                    ...item,
-                    children:
-                        item?.children && item?.children?.length > 0
-                            ? eProductActive({ eProduct: item?.children })
-                            : []
-                })
-            }
-        })
-        return eProducts
-    }
-
-    function eProductDeactive({
-        eProduct
-    }: {
-        eProduct: eProduct[]
-    }): eProduct[] {
-        // const newEproducts: eProduct[] = []
-        const eProducts: eProduct[] = []
-        eProduct?.forEach((item) => {
-            if (!item.active || checkDeActive(item?.children ?? [])) {
-                eProducts.push({
-                    ...item,
-                    children:
-                        item?.children && item?.children?.length > 0
-                            ? eProductDeactive({ eProduct: item?.children })
-                            : []
-                })
-            }
-        })
-        return eProducts
-    }
-
-    function checkDeActive(eProduct: eProduct[]): boolean {
-        if (eProduct.length <= 0) {
-            return false
-        }
-        return eProduct.some((item) => {
-            if (!item.active) {
-                return true
-            }
-            return checkDeActive(item?.children ?? [])
-        })
-    }
-
-    if (active) {
-        return eProductActive({ eProduct: TreeEProducts })
-    }
-    return eProductDeactive({
-        eProduct: TreeEProducts
-    })
-}
 const LayoutTreeView: React.FC<TypeProps> = ({
     TreeEProduct,
     ViewPermissonEproduct
@@ -232,11 +165,6 @@ const LayoutTreeView: React.FC<TypeProps> = ({
 
     useEffect(() => {
         if (dataGlobal.eProducts.length > 0) {
-            // const eproducts = eProductsFilter({
-            //     TreeEProducts: dataGlobal.eProducts,
-            //     active: checked
-            // })
-
             const dataTree = TreeCustom({
                 Tree: dataGlobal.eProducts,
                 searchValue,
@@ -252,8 +180,8 @@ const LayoutTreeView: React.FC<TypeProps> = ({
 
     useEffect(() => {
         setDataGlobal((data) => ({ ...data, eProducts: TreeEProduct }))
-    }, [checked])
-    console.log("datatree", TreeEProduct)
+    }, [checked, JSON.stringify(TreeEProduct)])
+
     const onExpand = (newExpandedKeys: React.Key[]) => {
         setTreeFilter((data) => ({
             ...data,
@@ -263,6 +191,7 @@ const LayoutTreeView: React.FC<TypeProps> = ({
     }
     return (
         <Tree
+            style={{ height: "70vh", overflow: "auto" }}
             expandedKeys={expandedKeys}
             treeData={dataGlobal.DataNode}
             onExpand={onExpand}

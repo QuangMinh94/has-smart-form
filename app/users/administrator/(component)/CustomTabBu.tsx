@@ -40,7 +40,9 @@ const items: TabsProps["items"] = [
         children: (
             <ProviderTree>
                 <ActionHeaderBu />
-                <TreeAttachBu />
+                <div className="mt-[10px]">
+                    <TreeAttachBu />
+                </div>
                 <div className="flex justify-end">
                     <BtnAttachBu />
                 </div>

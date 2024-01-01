@@ -35,19 +35,18 @@ const getEproductChecked = (
     Eproduct: CustomEproduct[]
 ): Partial<CustomEproduct> | undefined => {
     let result: Partial<CustomEproduct> | undefined = undefined
-    Eproduct.forEach((item) => {
+    for (let i = 0; i < Eproduct.length; i++) {
+        const item = Eproduct[i]
         if (item.checked === true) {
-            result = item
-            return
+            return item
         }
-
-        if (item?.children && item.children.length > 0 && !result) {
+        if (item?.children && item.children.length > 0) {
             result = getEproductChecked(item.children)
-            console.log("keep result", result)
-            return
+            if (result) {
+                return result
+            }
         }
-    })
-
+    }
     return result
 }
 
@@ -73,8 +72,8 @@ const FilterConnecter: React.FC = () => {
     } = theme.useToken()
 
     useEffect(() => {
-        console.log("cay", EproductActive)
-        console.log("cayw", Connecter)
+        console.log("data", EproductActive)
+        console.log("Connecter", Connecter)
         const connect = Connecter.map((item) => ({
             key: item._id ?? "",
             label: (
@@ -99,15 +98,13 @@ const FilterConnecter: React.FC = () => {
 
     useEffect(() => {
         const activeProduct = getEproductChecked(Eproduct)
-            ? getEproductChecked(Eproduct)
-            : undefined
         setIdEproductActive(activeProduct ?? {})
-        if (activeProduct && tab === "ADMIN_ATTACH_BUSINESS") {
+        if (activeProduct) {
             setOpen(true)
         } else {
             setOpen(false)
         }
-    }, [JSON.stringify(Eproduct), tab])
+    }, [JSON.stringify(Eproduct)])
 
     const onChange = debounce((e: any) => {
         const value = e.target.value
@@ -139,18 +136,25 @@ const FilterConnecter: React.FC = () => {
         })
     }
     return (
-        <Dropdown menu={{ items }} open={open} placement="bottom">
-            <div className="w-[100%]">
-                <div style={{ color: colorPrimary }} className="mb-[5px]">
-                    Tìm Kiếm Connecter
-                </div>
-                <Input
-                    placeholder="Tìm kiếm Connecter"
-                    onChange={onChange}
-                    style={{ height: "33px", width: "100%" }}
-                />
-            </div>
-        </Dropdown>
+        <>
+            {tab === "ADMIN_ATTACH_BUSINESS" && (
+                <Dropdown menu={{ items }} open={open} placement="bottom">
+                    <div className="w-[100%]">
+                        <div
+                            style={{ color: colorPrimary }}
+                            className="mb-[5px]"
+                        >
+                            Tìm Kiếm Connecter
+                        </div>
+                        <Input
+                            placeholder="Tìm kiếm Connecter"
+                            onChange={onChange}
+                            style={{ height: "33px", width: "100%" }}
+                        />
+                    </div>
+                </Dropdown>
+            )}
+        </>
     )
 }
 export default memo(FilterConnecter)

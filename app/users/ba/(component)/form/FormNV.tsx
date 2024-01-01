@@ -20,6 +20,7 @@ import {
 import { useEnvContext } from "next-runtime-env"
 import { setting } from "../../../(components)/button/ButtonOpenModalProduct"
 
+import { RevalidateTreeEProductViewPermssion } from "@/app/(actions)/action"
 import {
     GethEformTemplate,
     SeacrhEformTemplate
@@ -191,6 +192,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                 name: name,
                 description: description,
                 active: true,
+                department: rowData?.department ?? "",
                 code: idNV,
                 parent: `${rowData?._id}`,
                 type: "B",
@@ -207,6 +209,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
             const body: requestBodyUpdateEproduct = {
                 id: rowData?._id ?? "",
                 name: name,
+
                 description: description,
                 active: true,
                 code: idNV,
@@ -229,6 +232,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
             })
             if (res.status === 200) {
                 const resEproduct: any = res.data
+                await RevalidateTreeEProductViewPermssion()
                 messageApi("success", "Thêm nghiệp vụ thành công")
                 cancelModel()
                 setDataGlobal((data) => {
@@ -242,7 +246,8 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                             },
                             children: []
                         }
-                        eProduct.forEach((item) => {
+                        for (let i = 0; i < eProduct.length; i++) {
+                            const item = eProduct[i]
                             if (item._id === body.parent) {
                                 item.children?.unshift(dataAdd)
                                 return
@@ -250,7 +255,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                             if (item?.children && item?.children?.length > 0) {
                                 addEProduct(item?.children ?? [])
                             }
-                        })
+                        }
                     }
 
                     addEProduct(eProducts)
@@ -277,14 +282,16 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
             if (res.status === 200) {
                 const resEproduct: any = res.data
                 delete resEproduct?.parent
+                // await RevalidateTreeEProduct()
                 messageApi("success", "Cập nhật nghiệp vụ thành công")
                 cancelModel()
                 setDataGlobal((data) => {
                     const eProducts = [...data.eProducts]
                     function updateEProduct(eProduct: eProduct[]) {
-                        eProduct.forEach((item, index) => {
+                        for (let i = 0; i < eProduct.length; i++) {
+                            const item = eProduct[i]
                             if (item._id === body.id) {
-                                eProduct[index] = {
+                                eProduct[i] = {
                                     ...item,
                                     ...resEproduct
                                 }
@@ -293,7 +300,7 @@ const FormNV: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                             if (item?.children && item?.children?.length > 0) {
                                 updateEProduct(item?.children ?? [])
                             }
-                        })
+                        }
                     }
                     updateEProduct(eProducts)
                     return {
