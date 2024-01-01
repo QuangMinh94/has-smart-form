@@ -72,8 +72,6 @@ const FilterConnecter: React.FC = () => {
     } = theme.useToken()
 
     useEffect(() => {
-        console.log("data", EproductActive)
-        console.log("Connecter", Connecter)
         const connect = Connecter.map((item) => ({
             key: item._id ?? "",
             label: (
@@ -144,10 +142,10 @@ const FilterConnecter: React.FC = () => {
                             style={{ color: colorPrimary }}
                             className="mb-[5px]"
                         >
-                            Tìm Kiếm Connecter
+                            Tìm Kiếm Connector
                         </div>
                         <Input
-                            placeholder="Tìm kiếm Connecter"
+                            placeholder="Tìm kiếm Connector"
                             onChange={onChange}
                             style={{ height: "33px", width: "100%" }}
                         />
