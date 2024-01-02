@@ -55,7 +55,7 @@ function TreeCustom({
             ) : (
                 <span>{`${item?.name}`}</span>
             )
-
+        const integration = item?.integration
         TreeCustomer.push({
             title: (
                 <div className="flex items-center">
@@ -67,16 +67,17 @@ function TreeCustom({
                             }}
                             className="flex items-center"
                         >
-                            {item?.integration &&
-                                item?.integration?.length > 0 && (
+                            {integration && integration?.length > 0 && (
+                                <div className="mr-[16px]">
                                     <Badge
                                         size="small"
-                                        count={item?.integration?.length}
+                                        count={integration?.length}
                                     >
                                         <FontAwesomeIcon icon={faPaperclip} />
                                     </Badge>
-                                )}
-                            <div className="ml-[10px]">
+                                </div>
+                            )}
+                            <div>
                                 <Checkbox
                                     id={item._id ?? ""}
                                     checked={!!item?.checked}

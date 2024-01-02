@@ -5,7 +5,7 @@ import ContentAttachBu, {
     DataGlobal,
     typeContextAttachBu
 } from "@/app/users/administrator/(component)/content/connecter/connecterAttachBu"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 
 type typeProvider = {
     children: React.ReactNode
@@ -27,9 +27,9 @@ const ProviderAttachBu: React.FC<typeProvider> = ({
     })
     const [tab, setTab] = useState<string>("ADMIN_ATTACH_BUSINESS")
     const [EproductActive, setIdEproductActive] = useState<CustomEproduct>({})
-    useEffect(() => {
-        setDataGlobal({ ...dataGlobal, Eproduct })
-    }, [JSON.stringify(Eproduct)])
+    // useEffect(() => {
+    //     setDataGlobal({ ...dataGlobal, Eproduct })
+    // }, [JSON.stringify(Eproduct)])
     const data: typeContextAttachBu = {
         setDataGlobal,
         dataGlobal,

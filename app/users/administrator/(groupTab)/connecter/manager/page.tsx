@@ -10,12 +10,13 @@ const fectheConnecterManager = async ({
     name
 }: {
     active: boolean
-    name: string
+    name?: string
 }): Promise<connnector[]> => {
     try {
-        const body = { active: true }
-        console.log("body", body)
-
+        const body = { name, active }
+        if (!name) {
+            delete body.name
+        }
         const cookie = cookies()
         const res = await fetch(process.env.GET_CONNECTION!, {
             next: { tags: ["ListConnecterManager"] },
@@ -34,13 +35,17 @@ const fectheConnecterManager = async ({
         throw new Error("error", error)
     }
 }
-const PageManager = async () => {
-    // const body = {
-    //     active: searchParams?.active === "false" ? false : true,
-    //     name: searchParams?.name ?? ""
-    // }
+const PageManager = async ({
+    searchParams
+}: {
+    searchParams: { active: string; name: string }
+}) => {
+    const body = {
+        active: searchParams?.active === "false" ? false : true,
+        name: searchParams?.name ?? ""
+    }
 
-    const data = await fectheConnecterManager({ active: true, name: "" })
+    const data = await fectheConnecterManager(body)
 
     return (
         <ProviderManager>

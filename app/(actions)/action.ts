@@ -20,3 +20,6 @@ export const RevalidateListConnecterManager = async () => {
 export const RevalidateTreeEProduct = async () => {
     revalidateTag("TreeEProduct")
 }
+export const RevalidateTreeEProductViewPermssion = async () => {
+    revalidateTag("TreeEProductViewPermssion")
+}

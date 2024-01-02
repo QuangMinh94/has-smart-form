@@ -22,7 +22,7 @@ const BtnAttachBu = () => {
                 type="primary"
                 onClick={() => {
                     if (!idCorrection) {
-                        messageApi("error", "Vui lòng chon connection muốn gán")
+                        messageApi("error", "Vui lòng chon connector muốn gán")
                         return
                     }
                     setTab("ADMIN_CORRECTION")
@@ -40,7 +40,9 @@ const items: TabsProps["items"] = [
         children: (
             <ProviderTree>
                 <ActionHeaderBu />
-                <TreeAttachBu />
+                <div className="mt-[10px]">
+                    <TreeAttachBu />
+                </div>
                 <div className="flex justify-end">
                     <BtnAttachBu />
                 </div>
@@ -49,7 +51,7 @@ const items: TabsProps["items"] = [
     },
     {
         key: "ADMIN_CORRECTION",
-        label: "Hiệu chỉnh connecter",
+        label: "Hiệu chỉnh Connector",
         children: <TableCorrection />
     }
 ]

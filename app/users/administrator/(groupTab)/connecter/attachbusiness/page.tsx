@@ -11,8 +11,7 @@ const fecth = async ({
     name: string
 }): Promise<{ connnector: connnector[]; eProduct: CustomEproduct[] }> => {
     try {
-        const body = { active: true }
-        console.log("body", body)
+        const body = { active }
 
         const cookie = cookies()
         const [resConnecter, resEproduct] = await Promise.all([
@@ -29,7 +28,7 @@ const fecth = async ({
             fetch(process.env.EPRODUCT_TREEDATA!, {
                 next: { tags: ["TreeEProduct"] },
                 method: "POST",
-                body: JSON.stringify({ active: true }),
+                body: JSON.stringify(body),
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: "Bearer " + cookie.get("token")?.value ?? "",

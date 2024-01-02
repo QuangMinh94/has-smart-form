@@ -35,6 +35,7 @@ export interface eProduct {
     description?: string
     type?: string
     children?: eProduct[]
+    department?: string
     parent?: { _id: string; name: string }
     integration?: string[]
 }
@@ -63,6 +64,7 @@ export interface requestBodyAddEproduct {
     description?: string
     active: boolean
     code?: string
+    department?: string
     type?: "P" | "B"
     parent?: string
     formTemplate?: string[]

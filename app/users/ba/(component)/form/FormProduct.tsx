@@ -3,6 +3,7 @@ import React, { memo, useCallback, useState } from "react"
 
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 
+import { RevalidateTreeEProductViewPermssion } from "@/app/(actions)/action"
 import { AddEproduct, UpdateEproduct } from "@/app/(service)/eProduct"
 import {
     eProduct,
@@ -30,11 +31,13 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
     const [loadingBtn, setLoadingBtn] = useState<boolean>(false)
 
     const onFinish = ({
+        department,
         idProduct,
         name,
         description,
         imageProduct
     }: {
+        department: string
         idProduct: string
         imageProduct: {
             thumbUrl: string
@@ -48,6 +51,7 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                 name: name,
                 description: description,
                 active: true,
+                department,
                 code: idProduct,
                 parent: `${rowData?._id}`,
                 type: "P",
@@ -70,6 +74,7 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                 id: rowData?._id ?? "",
                 name: name,
                 description: description,
+                department,
                 active: true,
                 code: idProduct,
                 type: "P",
@@ -96,6 +101,7 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
             })
             if (res.status === 200) {
                 const resEproduct: eProduct = res.data
+                await RevalidateTreeEProductViewPermssion()
                 messageApi("success", "Thêm sản phẩm thành công")
                 cancelModel()
                 setDataGlobal((data) => {
@@ -113,8 +119,8 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                             eProduct.push(dataAdd)
                             return
                         }
-
-                        eProduct.forEach((item) => {
+                        for (let i = 0; i < eProduct.length; i++) {
+                            const item = eProduct[i]
                             if (item._id === body.parent) {
                                 item.children?.unshift(dataAdd)
                                 return
@@ -123,7 +129,7 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                             if (item?.children && item?.children?.length > 0) {
                                 addEProduct(item?.children ?? [])
                             }
-                        })
+                        }
                     }
 
                     addEProduct(eProducts)
@@ -150,14 +156,16 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
             })
             if (res.status === 200) {
                 const resEproduct: eProduct = res.data
+                // await RevalidateTreeEProduct()
                 messageApi("success", "Cập nhật sản  phẩm thành công")
                 cancelModel()
                 setDataGlobal((data) => {
                     const eProducts = [...data.eProducts]
                     function updateEProduct(eProduct: eProduct[]) {
-                        eProduct.forEach((item, index) => {
+                        for (let i = 0; i < eProduct.length; i++) {
+                            const item = eProduct[i]
                             if (item._id === body.id) {
-                                eProduct[index] = {
+                                eProduct[i] = {
                                     ...item,
                                     ...resEproduct
                                 }
@@ -166,7 +174,7 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                             if (item?.children && item?.children?.length > 0) {
                                 updateEProduct(item?.children ?? [])
                             }
-                        })
+                        }
                     }
                     updateEProduct(eProducts)
                     return {
@@ -196,7 +204,8 @@ const FormProduct: React.FC<Props> = ({ rowData, type, cancelModel }) => {
                         : {
                               idProduct: rowData?.code ?? "",
                               name: rowData?.name ?? "",
-                              description: rowData?.description ?? ""
+                              description: rowData?.description ?? "",
+                              department: rowData?.department ?? ""
                           }
                 }
                 onFinish={onFinish}

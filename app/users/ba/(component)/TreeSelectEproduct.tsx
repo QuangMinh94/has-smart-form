@@ -21,7 +21,7 @@ const TreeSelectProduct = () => {
         if (listLeft.length > 0) {
             setListLeft([])
         }
-        console.log("selected", selectedKeys)
+
         const dataListLeft: DataTranfeCustom[] = []
         info.formTemplate.forEach((tempalate) => {
             dataListLeft.push({
@@ -31,7 +31,9 @@ const TreeSelectProduct = () => {
                 block: tempalate.block ?? []
             })
         })
+
         const uniqueListLeft = uniqueValue(dataListLeft, listRight)
+
         setListLeft(uniqueListLeft)
     }
     const onClear = () => {
