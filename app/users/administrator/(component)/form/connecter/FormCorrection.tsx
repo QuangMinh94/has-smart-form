@@ -91,7 +91,7 @@ const FormFieldParametter: React.FC<Props> = ({
                             <Input placeholder="Trường kết nối đích" />
                         </Form.Item>
                     </Col>
-                    <Col span={7}>
+                    <Col span={8}>
                         <Form.Item<FieldType>
                             // style={{ marginBottom: "25px" }}
                             // label="field"
@@ -107,8 +107,8 @@ const FormFieldParametter: React.FC<Props> = ({
                             <Input.TextArea placeholder="Mô tả" />
                         </Form.Item>
                     </Col>
-                    <Col span={3}>
-                        <div className=" ">
+                    <Col span={2}>
+                        <div className="flex justify-center">
                             <Button
                                 onClick={CancelModal}
                                 style={{ marginRight: "8px" }}

@@ -51,7 +51,7 @@ const TreeGroup: React.FC = () => {
             autoExpandParent: false
         }))
     }
-    console.log("group", providerAttachBu.dataGlobal.Eproduct)
+
     return (
         <Tree
             style={{ maxHeight: "60vh", width: "45%", overflowY: "auto" }}

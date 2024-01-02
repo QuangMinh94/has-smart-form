@@ -1,5 +1,4 @@
 "use client"
-import { RevalidateTreeEProduct } from "@/app/(actions)/action"
 import { addIntergration } from "@/app/(service)/connection"
 import { RequestAddIntergration, corrections } from "@/app/(types)/Connecter"
 import {
@@ -7,10 +6,13 @@ import {
     useContextAdminAttachBu
 } from "@/components/cusTomHook/useContext"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { useEnvContext } from "next-runtime-env"
 import React, { useMemo, useState } from "react"
+import { CustomEproduct } from "../../TreeCustome/CustomTreeAttachBusiness"
 import FormCorrection from "../../form/connecter/FormCorrection"
 const columns: ColumnsType<corrections> = [
     {
@@ -101,7 +103,9 @@ const BtnCRUD = () => {
                     CancelModal={hide}
                 />
             ) : (
-                <Button onClick={show}>thêm</Button>
+                <Button onClick={show}>
+                    <FontAwesomeIcon icon={faPlus} />
+                </Button>
             )}
         </>
     )
@@ -109,10 +113,12 @@ const BtnCRUD = () => {
 const Btnsave = () => {
     const { NEXT_PUBLIC_ADD_INTEGRATION } = useEnvContext()
     const { token, session } = useCustomCookies()
+    const [loading, setLoading] = useState<boolean>(false)
     const { messageApi } = useContextAdmin()
     const {
+        setDataGlobal,
         EproductActive,
-        dataGlobal: { Connecter, Eproduct, Correction }
+        dataGlobal: { Connecter, Correction }
     } = useContextAdminAttachBu()
     const idCorrection = Connecter.filter((item) => item.checked)[0]?._id ?? ""
     const targetParams = Correction.map((item) => item.parametterConntion ?? "")
@@ -125,8 +131,32 @@ const Btnsave = () => {
             sourceParams
         }
     }
-    console.log("body11111111111123", body)
+    const updateEproduct = ({
+        eProduct,
+        idUpdate,
+        idIntegrations
+    }: {
+        eProduct: CustomEproduct[]
+        idUpdate: string
+        idIntegrations: string
+    }) => {
+        for (let i = 0; i < eProduct.length; i++) {
+            const item = eProduct[i]
+            const children = item?.children
+            if (item._id === idUpdate) {
+                eProduct[i] = {
+                    ...item,
+                    integration: [...(item.integration ?? []), idIntegrations]
+                }
+                return
+            }
+            if (children && children?.length > 0) {
+                updateEproduct({ eProduct: children, idUpdate, idIntegrations })
+            }
+        }
+    }
     const handerSave = async () => {
+        setLoading(true)
         try {
             const res = await addIntergration({
                 url: NEXT_PUBLIC_ADD_INTEGRATION!,
@@ -134,16 +164,31 @@ const Btnsave = () => {
                 token,
                 bodyRequest: body
             })
+            const idIntegrations = res?.data?._id
+            setDataGlobal((data) => {
+                const eProduct = data.Eproduct
+                updateEproduct({
+                    eProduct,
+                    idUpdate: body?.eProduct,
+                    idIntegrations
+                })
+                return { ...data, Eproduct: eProduct }
+            })
+            // await RevalidateTreeEProduct()
             messageApi("success", "Gán nghiệp vụ thành công")
-            await RevalidateTreeEProduct()
         } catch (err) {
             messageApi("error", "có lỗi")
         }
+        setLoading(false)
     }
     return (
-        <Button onClick={handerSave} type="primary">
-            Xác nhận gán
-        </Button>
+        <>
+            {EproductActive?._id && idCorrection && (
+                <Button loading={loading} onClick={handerSave} type="primary">
+                    Xác nhận gán
+                </Button>
+            )}
+        </>
     )
 }
 const App: React.FC = () => {

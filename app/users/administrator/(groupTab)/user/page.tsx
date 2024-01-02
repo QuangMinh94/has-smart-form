@@ -51,7 +51,7 @@ const User = async ({
     searchParams
 }: {
     params: {}
-    searchParams: { active: boolean; searchname: "" }
+    searchParams: { active: boolean; searchname: string }
 }) => {
     console.log("params", searchParams)
     const Users = await fectheUser({

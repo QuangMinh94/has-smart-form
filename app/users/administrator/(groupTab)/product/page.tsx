@@ -1,6 +1,5 @@
 import { cookies } from "next/headers"
 
-import { ViewPermissonEproduct } from "@/app/(service)/eProduct"
 import {
     eProduct,
     PermissionViewEproduct,
@@ -12,6 +11,7 @@ import ActiveTree from "@/app/users/(components)/form/ActiveTreeProduct"
 import ProviderProduct from "@/app/users/(components)/provider/ProviderProduct"
 import LayoutTreeView from "@/app/users/(components)/table/TreeViewProduct"
 import NoPermssionPage from "@/components/noPermissionPage"
+import ProviderTranfer from "@/components/provider/ProviderTranfer"
 import axios from "axios"
 
 const GetProductTree = async (pram: {
@@ -41,20 +41,35 @@ const fetchApi = async ({
 
     try {
         const [resTree, resPermisson] = await Promise.all([
-            await GetProductTree({
-                bodyRequest: { active },
-                session: cookie.get("session")?.value ?? "",
-                token: cookie.get("token")?.value ?? ""
+            fetch(process.env.EPRODUCT_TREEDATA!, {
+                next: { tags: ["TreeEProduct"] },
+                method: "POST",
+                body: JSON.stringify({ active }),
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + cookie.get("token")?.value ?? "",
+                    Session: cookie.get("session")?.value ?? ""
+                }
             }),
-            await ViewPermissonEproduct({
-                url: process.env.EPRODUCT_VIEW_PERMISSION!,
-                session: cookie.get("session")?.value ?? "",
-                token: cookie.get("token")?.value ?? ""
+            fetch(process.env.EPRODUCT_VIEW_PERMISSION!, {
+                next: { tags: ["TreeEProductViewPermssion"] },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + cookie.get("token")?.value ?? "",
+                    Session: cookie.get("session")?.value ?? ""
+                }
             })
+            // ViewPermissonEproduct({
+            //     url: process.env.EPRODUCT_VIEW_PERMISSION!,
+            //     session: cookie.get("session")?.value ?? "",
+            //     token: cookie.get("token")?.value ?? ""
+            // })
         ])
+        const tree = await resTree.json()
+        const permisson = await resPermisson.json()
         return {
-            eProduct: resTree.data,
-            permissonEproduct: resPermisson.data
+            eProduct: tree,
+            permissonEproduct: permisson
         }
     } catch (e: any) {
         throw new Error("error fetching", e)
@@ -71,38 +86,42 @@ const ProductPage = async ({
 
     return (
         <ProviderProduct>
-            {data?.permissonEproduct?.generalRule?.visibleTreeview &&
-            data.permissonEproduct.generalRule.visibleView ? (
-                <div>
-                    <div className="mb-[20px] flex items-center">
-                        <div className="flex-1">
-                            <div className="w-[30%]">
-                                <FillterProduct />
+            <ProviderTranfer>
+                {data?.permissonEproduct?.generalRule?.visibleTreeview &&
+                data.permissonEproduct.generalRule.visibleView ? (
+                    <div>
+                        <div className="mb-[20px] flex items-center">
+                            <div className="flex-1">
+                                <div className="w-[30%]">
+                                    <FillterProduct />
+                                </div>
                             </div>
-                        </div>
-                        <div className="mr-[20px]">
-                            <ActiveTree />
-                        </div>
-                        {data?.permissonEproduct?.generalRule
-                            ?.visibleAddProduct && (
-                            <div>
-                                <ButtonOpenModal
-                                    type="ADD_MODAL"
-                                    titleModal="Tạo sản phẩm"
-                                    typeRow="P"
-                                    clickBtn={true}
-                                />
+                            <div className="mr-[20px]">
+                                <ActiveTree />
                             </div>
-                        )}
+                            {data?.permissonEproduct?.generalRule
+                                ?.visibleAddProduct && (
+                                <div>
+                                    <ButtonOpenModal
+                                        type="ADD_MODAL"
+                                        titleModal="Tạo sản phẩm"
+                                        typeRow="P"
+                                        clickBtn={true}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                        <LayoutTreeView
+                            TreeEProduct={data?.eProduct ?? []}
+                            ViewPermissonEproduct={
+                                data?.permissonEproduct ?? {}
+                            }
+                        />
                     </div>
-                    <LayoutTreeView
-                        TreeEProduct={data?.eProduct ?? []}
-                        ViewPermissonEproduct={data?.permissonEproduct ?? {}}
-                    />
-                </div>
-            ) : (
-                <NoPermssionPage />
-            )}
+                ) : (
+                    <NoPermssionPage />
+                )}
+            </ProviderTranfer>
         </ProviderProduct>
     )
 }
