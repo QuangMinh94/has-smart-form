@@ -5,7 +5,7 @@ import { useContextTree } from "@/components/cusTomHook/useContext"
 import { Tree, theme } from "antd"
 import React, { useEffect } from "react"
 
-import TreeCustom from "../TreeCustome/CustomTree"
+import TreeCustom from "../TreeCustome/CustomTreeCRUD"
 type TypeProps = {
     Department: Department[]
 }

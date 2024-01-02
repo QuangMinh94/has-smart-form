@@ -1,8 +1,10 @@
 import {
+    RevalidateListConnecterManager,
     RevalidateListDepartment,
     RevalidateListUser
 } from "@/app/(actions)/action"
 import { updateUser } from "@/app/(service)/User"
+import { addOrUpdateConnection } from "@/app/(service)/connection"
 import { updateDepartment } from "@/app/(service)/department"
 import { addAndUpdateGroup } from "@/app/(service)/group"
 import { pathModel } from "@/app/users/administrator/(component)/BtnModal"
@@ -20,7 +22,8 @@ const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
     const {
         NEXT_PUBLIC_UPDATE_USER,
         NEXT_PUBLIC_UPDATE_DEPARTMENT,
-        NEXT_PUBLIC_UPDATE_GROUP
+        NEXT_PUBLIC_UPDATE_GROUP,
+        NEXT_PUBLIC_UPDATE_CONNECTION
     } = useEnvContext()
     const [loading, setLoading] = useState<boolean>(false)
     const { messageApi } = useContextAdmin()
@@ -78,7 +81,7 @@ const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
                 }
             } catch (e: any) {
                 const err: any = e.response.data
-                console.log("sao vy", err)
+
                 if (err?.code === 500) {
                     messageApi("error", `${err.message}`)
                 } else {
@@ -119,7 +122,40 @@ const ActiveForm: React.FC<Props> = ({ pathModel, data, CancelModal }) => {
                 }
             }
         },
-        ADMIN_ROLE: () => {}
+        ADMIN_ROLE: () => {},
+        ADMIN_CONNECTER_MANAGER: async () => {
+            try {
+                const res = await addOrUpdateConnection({
+                    url: NEXT_PUBLIC_UPDATE_CONNECTION!,
+                    bodyRequest: {
+                        id: data.idUpdate ?? "",
+                        active: !data.active
+                    },
+                    token,
+                    session
+                })
+                if (res.status === 200) {
+                    await RevalidateListConnecterManager()
+                    messageApi(
+                        "success",
+                        ` ${
+                            data.active
+                                ? "vô hiệu thành công"
+                                : "kích hoạt thành công"
+                        }`
+                    )
+                    CancelModal()
+                }
+            } catch (e: any) {
+                const err: any = e.response.data
+
+                if (err?.code === 500) {
+                    messageApi("error", `${err.message}`)
+                } else {
+                    messageApi("error", "xảy ra lỗi vui lòng thử lại sau")
+                }
+            }
+        }
     }
     return (
         <div className="flex py-[10px] justify-end ">

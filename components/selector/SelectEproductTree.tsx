@@ -72,7 +72,7 @@ const CustomerSelect: React.FC<Props> = ({
         const childrenView: OptionTree[] = []
         product.forEach((element, index) => {
             childrenView.push({
-                value: element?.name + element._id ?? "",
+                value: element?.name ?? "" + element._id ?? "",
                 title: element?.name,
                 children:
                     element?.children && element?.children.length > 0

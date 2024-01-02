@@ -40,7 +40,8 @@ const nextConfig = {
                 source: "/users/administrator",
                 destination: "/users/administrator/user",
                 permanent: true
-            }
+            },
+
         ]
     }
 }
