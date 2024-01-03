@@ -9,6 +9,7 @@ export const cateGoriFilter = async (pram: {
             | "ConnectorMethod"
             | "Connector"
             | "ConnectorGroup"
+            | "DataType"
     }
     token: string
     session: string

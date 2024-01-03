@@ -25,6 +25,7 @@ type Type =
     | "getcategoriesMethods"
     | "getcategoriesApi"
     | "getcategoriesConnecter"
+    | "cateGoriFilterDataType"
 export type typeSelect = "authen" | "department" | "defaultGroup" // DANG DUNG O FORM USER
 type Option = { label: string; value: string; dataRow: any }
 type Props = {
@@ -218,6 +219,22 @@ const UseFecthApi = ({
 
             const option: Option[] = group.map((item) => ({
                 value: item?._id ?? "",
+                label: item?.name ?? "",
+                dataRow: item
+            }))
+            return option
+        },
+        cateGoriFilterDataType: async (): Promise<Option[]> => {
+            const res = await cateGoriFilter({
+                url: NEXT_PUBLIC_CATEGORY!,
+                bodyRequest: { type: "DataType" },
+                token,
+                session
+            })
+            const group: any[] = res.data
+
+            const option: Option[] = group.map((item) => ({
+                value: item?.code ?? "",
                 label: item?.name ?? "",
                 dataRow: item
             }))
