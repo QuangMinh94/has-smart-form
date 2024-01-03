@@ -66,4 +66,6 @@ const PageAttachBu = async () => {
         </ProviderAttachBu>
     )
 }
+
+export const dynamic = "force-dynamic"
 export default PageAttachBu
