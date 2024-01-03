@@ -20,6 +20,7 @@ export interface connnector {
 }
 export interface Requestauthen {
     body?: authenInfo[]
+    headers?: authenInfo[]
     type?: string
     method?: string
     urlToken?: string

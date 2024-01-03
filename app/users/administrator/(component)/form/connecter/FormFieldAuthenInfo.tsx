@@ -2,9 +2,14 @@
 import { authenInfo } from "@/app/(types)/formFiled/FormConnectManager/authenInfo"
 import { typeForm } from "@/app/users/administrator/(component)/BtnModal"
 import { typeAuthen } from "@/app/users/administrator/(component)/ModalFiledForm/connecterManager/AuthenInfo"
-import { useContextAdminconnectManager } from "@/components/cusTomHook/useContext"
-import { Button, Form, Input } from "antd"
-import React, { memo } from "react"
+import {
+    useContextAdmin,
+    useContextAdminconnectManager
+} from "@/components/cusTomHook/useContext"
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Button, Col, Input, Row } from "antd"
+import React, { memo, useState } from "react"
 const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo)
 }
@@ -21,19 +26,20 @@ const FormFieldAuthenInfo: React.FC<Props> = ({
     typeAcTionForm,
     datarow
 }) => {
-    const [form] = Form.useForm()
     const { setDataForm } = useContextAdminconnectManager()
+    const { messageApi } = useContextAdmin()
+    const [value, setValue] = useState<FieldType>({})
     const HandelerCRUD = (dataHandeler: any, dataUpdate: FieldType) => {
         if (typeAcTionForm === "ADD_MODAL") {
             dataHandeler.unshift(dataUpdate)
         }
-        if (typeAcTionForm === "UPDATE_MODAL") {
-            const index = dataHandeler.findIndex(
-                (item: any, index: number) => index === Number(datarow.key) - 1
-            )
+        // if (typeAcTionForm === "UPDATE_MODAL") {
+        //     const index = dataHandeler.findIndex(
+        //         (item: any, index: number) => index === Number(datarow.key) - 1
+        //     )
 
-            dataHandeler.splice(index, 1, dataUpdate)
-        }
+        //     dataHandeler.splice(index, 1, dataUpdate)
+        // }
         if (typeAcTionForm === "REMOVE_MODAL") {
             const index = dataHandeler.findIndex(
                 (item: any, index: number) => index === Number(datarow.key) - 1
@@ -41,19 +47,36 @@ const FormFieldAuthenInfo: React.FC<Props> = ({
             dataHandeler.splice(index, 1)
         }
     }
-    const onFinish = (data: FieldType) => {
+    const save = () => {
+        if (typeAcTionForm === "ADD_MODAL") {
+            if (!value.name?.trim()) {
+                messageApi(
+                    "error",
+                    `vui lòng nhập ${
+                        typeForm === "fieldHeader"
+                            ? "thông tin"
+                            : "trường hệ thống"
+                    }`
+                )
+                return
+            }
+            if (!value.value?.trim() && typeForm !== "fieldHeader") {
+                messageApi("error", "vui lòng nhập giá trị")
+                return
+            }
+        }
         setDataForm((dataForm) => {
             const authenHeader = dataForm.authenInfo.header
             const authenBody = dataForm.authenInfo.body
             const authenFieldHeader = dataForm.authenInfo.fieldsHeader
             if (typeForm === "header") {
-                HandelerCRUD(authenHeader, data)
+                HandelerCRUD(authenHeader, value)
             }
             if (typeForm === "body") {
-                HandelerCRUD(authenBody, data)
+                HandelerCRUD(authenBody, value)
             }
             if (typeForm === "fieldHeader") {
-                HandelerCRUD(authenFieldHeader, data)
+                HandelerCRUD(authenFieldHeader, value)
             }
             return {
                 ...dataForm,
@@ -67,93 +90,66 @@ const FormFieldAuthenInfo: React.FC<Props> = ({
         })
         CancelModal()
     }
-
+    const HandelerChange = (e: any) => {
+        const { name, value } = e.target
+        setValue((data) => ({ ...data, [name]: value }))
+    }
     return (
         <>
-            <Form
-                name={typeForm}
-                form={form}
-                labelCol={{ span: 7 }}
-                style={{ width: 600 }}
-                initialValues={{
-                    name: datarow?.name,
-                    value: datarow?.value,
-                    description: datarow?.description
-                }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
-                layout="vertical"
-            >
+            <Row align={"middle"} gutter={10}>
                 {typeAcTionForm === "REMOVE_MODAL" || (
                     <>
-                        <Form.Item<FieldType>
-                            style={{ marginBottom: "25px", width: "100%" }}
-                            label={
-                                typeForm === "fieldHeader"
-                                    ? "Nhập thông tin"
-                                    : "Tên trường hệ thống"
-                            }
-                            name="name"
-                            rules={[
-                                {
-                                    required: true,
-                                    whitespace: true,
-                                    message: `Vui lòng nhập  ${
-                                        typeForm === "fieldHeader"
-                                            ? "thông tin"
-                                            : "tên trường hệ thống"
-                                    }`
-                                }
-                            ]}
-                        >
-                            <Input />
-                        </Form.Item>
+                        <Col span={8}>
+                            <Input
+                                onChange={HandelerChange}
+                                name="name"
+                                size="small"
+                                placeholder={`${
+                                    typeForm === "fieldHeader"
+                                        ? "Nhập thông tin"
+                                        : "Tên trường hệ thống"
+                                }`}
+                            />
+                        </Col>
                         {typeForm === "fieldHeader" || (
                             <>
-                                <Form.Item<FieldType>
-                                    style={{ marginBottom: "25px" }}
-                                    label="Giá trị"
-                                    name="value"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            whitespace: true,
-                                            message: "Vui lòng chọn giá trị"
-                                        }
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item<FieldType>
-                                    style={{ marginBottom: "25px" }}
-                                    label="Mô tả"
-                                    name="description"
-                                >
-                                    <Input.TextArea />
-                                </Form.Item>
+                                <Col span={8}>
+                                    <Input
+                                        onChange={HandelerChange}
+                                        size="small"
+                                        name="value"
+                                        placeholder="Giá trị"
+                                    />
+                                </Col>
+                                <Col span={8}>
+                                    <Input.TextArea
+                                        onChange={HandelerChange}
+                                        name="description"
+                                        size="small"
+                                        placeholder="Mô tả"
+                                    />
+                                </Col>
                             </>
                         )}
                     </>
                 )}
-                <div className="my-[25px] flex justify-end ">
-                    <Button
-                        type="primary"
-                        style={{ minWidth: "100px" }}
-                        onClick={CancelModal}
-                        danger
-                    >
-                        Hủy
+                <div className=" flex justify-end ">
+                    <Button onClick={CancelModal} danger>
+                        <FontAwesomeIcon
+                            icon={faTimes}
+                            style={{ color: "red" }}
+                        />
                     </Button>
                     <div className="ml-[10px]">
-                        <Button type="primary" htmlType="submit">
-                            {typeAcTionForm === "REMOVE_MODAL"
-                                ? "Xác nhận"
-                                : "Lưu"}
+                        <Button onClick={save}>
+                            <FontAwesomeIcon
+                                icon={faCheck}
+                                style={{ color: "green" }}
+                            />
                         </Button>
                     </div>
                 </div>
-            </Form>
+            </Row>
         </>
     )
 }

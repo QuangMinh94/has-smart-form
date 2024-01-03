@@ -1,9 +1,14 @@
 "use client"
 import { parametter } from "@/app/(types)/formFiled/FormConnectManager/parametter"
 import { typeForm } from "@/app/users/administrator/(component)/BtnModal"
-import { useContextAdminconnectManager } from "@/components/cusTomHook/useContext"
-import { Button, Form, Input } from "antd"
-import React, { memo } from "react"
+import {
+    useContextAdmin,
+    useContextAdminconnectManager
+} from "@/components/cusTomHook/useContext"
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Button, Input } from "antd"
+import React, { memo, useState } from "react"
 const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo)
 }
@@ -18,20 +23,19 @@ const FormFieldParametter: React.FC<Props> = ({
     typeForm,
     dataRow
 }) => {
-    const [form] = Form.useForm()
+    const [field, setField] = useState<string>("")
     const { setDataForm } = useContextAdminconnectManager()
-    const onFinish = (data: FieldType) => {
+    const { messageApi } = useContextAdmin()
+    const onAdd = () => {
+        if (!field.trim() && typeForm === "ADD_MODAL") {
+            messageApi("error", "vui lòng nhập field")
+            return
+        }
         setDataForm((dataForm) => {
             const parametters = dataForm.parametter
+            console.log("alo")
             if (typeForm === "ADD_MODAL") {
-                parametters.unshift(data)
-            }
-            if (typeForm === "UPDATE_MODAL") {
-                const index = parametters.findIndex(
-                    (item, index) => index === Number(dataRow.key) - 1
-                )
-
-                parametters.splice(index, 1, data)
+                parametters.unshift({ field })
             }
             if (typeForm === "REMOVE_MODAL") {
                 const index = parametters.findIndex(
@@ -46,45 +50,37 @@ const FormFieldParametter: React.FC<Props> = ({
     }
 
     return (
-        <>
-            <Form
-                form={form}
-                labelCol={{ span: 7 }}
-                initialValues={{ field: dataRow.field }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
-                layout="vertical"
-            >
-                {typeForm === "REMOVE_MODAL" || (
-                    <Form.Item<FieldType>
-                        style={{ marginBottom: "25px" }}
-                        label="field"
-                        name="field"
-                        rules={[
-                            {
-                                required: true,
-                                whitespace: true,
-                                message: "Vui lòng nhập field"
-                            }
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-                )}
+        <div className="flex items-center  h-[30px]">
+            {typeForm === "REMOVE_MODAL" || (
+                <Input
+                    onChange={(e) => {
+                        setField(e?.target?.value)
+                    }}
+                    value={field}
+                    style={{ width: "20vw", height: "25px" }}
+                    size="small"
+                    placeholder="field"
+                />
+            )}
 
-                <div className="my-[25px] flex justify-end ">
-                    <Button type="primary" onClick={CancelModal} danger>
-                        Hủy
+            <div
+                className={` w-[100%] my-[25px] ml-[5px] flex   ${
+                    typeForm === "REMOVE_MODAL" ? "justify-end" : ""
+                } `}
+            >
+                <Button onClick={CancelModal}>
+                    <FontAwesomeIcon icon={faTimes} style={{ color: "red" }} />
+                </Button>
+                <div className="ml-[10px]">
+                    <Button onClick={onAdd}>
+                        <FontAwesomeIcon
+                            icon={faCheck}
+                            style={{ color: "green" }}
+                        />
                     </Button>
-                    <div className="ml-[10px]">
-                        <Button type="primary" htmlType="submit">
-                            {typeForm === "REMOVE_MODAL" ? "Xóa" : "Lưu"}
-                        </Button>
-                    </div>
                 </div>
-            </Form>
-        </>
+            </div>
+        </div>
     )
 }
 

@@ -56,7 +56,9 @@ function TreeCustom({
         const permissions = viewPermissonEproduct?.ruleArray?.find(
             (permisson) => permisson.productId === item._id
         )
-
+        console.log("name", item.name)
+        console.log("type", item.type)
+        console.log("obj", { name: item.name, permissions })
         const conditionsBtn: btnConditions = {
             add: {
                 title: "Tạo nghiệp vụ",
@@ -67,11 +69,10 @@ function TreeCustom({
                 title:
                     item.type === "B"
                         ? "Cập nhật nghiệp vụ"
-                        : "Cập nhậ sản phẩm",
-                disable: !!(
-                    !permissions?.value?.visibleEditBusiness &&
-                    !permissions?.value?.visibleEditProduct
-                ),
+                        : "Cập nhật sản phẩm",
+                disable: !!(item.type === "B"
+                    ? !permissions?.value?.visibleEditBusiness
+                    : !permissions?.value?.visibleEditProduct),
                 type: item.type === "B" ? "B" : "P"
             },
             active: {
@@ -82,10 +83,9 @@ function TreeCustom({
                     : `Khôi phục ${` ${
                           item.type === "P" ? "sản phẩm" : "nghiệp vụ"
                       } "${item.name}"`}`,
-                disable: !!(
-                    !permissions?.value?.visibleDeactiveProduct &&
-                    !permissions?.value?.visibleDeactiveBusiness
-                ),
+                disable: !!(item.type === "B"
+                    ? !permissions?.value?.visibleDeactiveBusiness
+                    : !permissions?.value?.visibleDeactiveProduct),
                 type: "ACTIVE"
             }
         }
