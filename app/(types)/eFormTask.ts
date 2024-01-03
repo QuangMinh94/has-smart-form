@@ -5,6 +5,7 @@ export interface taskEform {
 }
 export interface RequestEformTaks {
     data: { Input: any }
+    eProduct: string
     formTemplate: string[]
     appointmentId: string
     documentId: string

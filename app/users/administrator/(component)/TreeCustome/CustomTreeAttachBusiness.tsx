@@ -11,7 +11,7 @@ export interface CustomEproduct extends eProduct {
 type Cusomter = {
     Tree: CustomEproduct[]
     searchValue: string
-    colorSeacrh: string
+
     Checkbox: React.FC<{
         id: string
         checked: boolean
@@ -38,12 +38,7 @@ export function updateCheckbox({
         }
     })
 }
-function TreeCustom({
-    Tree,
-    searchValue,
-    colorSeacrh,
-    Checkbox
-}: Cusomter): DataNode[] {
+function TreeCustom({ Tree, searchValue, Checkbox }: Cusomter): DataNode[] {
     const TreeCustomer: DataNode[] = []
 
     Tree?.forEach((item) => {
@@ -51,7 +46,7 @@ function TreeCustom({
         const index = ToFilterName(strTitle).indexOf(ToFilterName(searchValue))
         const name =
             index > -1 && searchValue.length > 0 ? (
-                <span style={{ color: colorSeacrh }}>{strTitle}</span>
+                <span style={{ color: "orange" }}>{strTitle}</span>
             ) : (
                 <span>{`${item?.name}`}</span>
             )
@@ -93,7 +88,7 @@ function TreeCustom({
                     ? TreeCustom({
                           Tree: item?.children ?? [],
                           searchValue,
-                          colorSeacrh,
+
                           Checkbox
                       })
                     : [],

@@ -1,6 +1,7 @@
 import {
     RequestAddIntergration,
     RequestAddOrUpdateConnection,
+    RequestSearchIntergration,
     RequestTestConnection
 } from "@/app/(types)/Connecter"
 import axios from "axios"
@@ -44,6 +45,23 @@ export const addIntergration = async (pram: {
     session: string
 }) => {
     //NEXT_PUBLIC_ADD_INTEGRATION
+
+    const { bodyRequest, token, session, url } = pram
+    const res = await axios.post(url, bodyRequest, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Session: session
+        }
+    })
+    return res
+}
+export const searchIntergration = async (pram: {
+    url: string
+    bodyRequest: RequestSearchIntergration
+    token: string
+    session: string
+}) => {
+    //NEXT_PUBLIC_SEARCH_INTEGRATION
 
     const { bodyRequest, token, session, url } = pram
     const res = await axios.post(url, bodyRequest, {
