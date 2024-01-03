@@ -12,10 +12,11 @@ export interface DataTranfeCustom extends DataTranfer {
     block: block[]
 }
 const HeaderUi = () => {
-    const { setListLeft, listLeft, dataGlobal, listRight } =
+    const { setListLeft, listLeft, dataGlobal, listRight, setSelectedProduct } =
         useContextMyWorkDetail()
 
     const onSelect = (selectedKeys: string, info: OptionTree) => {
+        setSelectedProduct(selectedKeys)
         if (listLeft.length > 0) {
             setListLeft([])
         }

@@ -47,7 +47,9 @@ function useContextMyWorkDetail(): typeContextMyworkDetail {
         setChoosenBlock: provider.setChoosenBlock,
         choosenBlock: provider.choosenBlock,
         setLoading: provider.setLoading,
-        loading: provider.loading
+        loading: provider.loading,
+        setSelectedProduct: provider.setSelectedProduct,
+        selectedProduct: provider.selectedProduct
     }
 }
 function useContextTranfer(): typeContextTranfer {
