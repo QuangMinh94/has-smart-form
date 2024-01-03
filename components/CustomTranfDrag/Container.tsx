@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Checkbox, Empty, Input, Spin, theme } from "antd"
 import update from "immutability-helper"
-import { useCallback, useEffect, useState, useMemo } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDrop } from "react-dnd"
 
 export type typeKey = "left" | "right"
@@ -187,7 +187,7 @@ const MyDropTarget: React.FC<typeProps> = ({
                 </div>
             </header>
 
-            <div style={{ width: "95%", margin: "10px auto " }}>
+            <div style={{ width: "95%", margin: "10px auto" }}>
                 {HidenUI && <div className="my-5"> {HidenUI} </div>}
                 <Input
                     value={valueSearch}

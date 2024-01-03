@@ -90,12 +90,8 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             myworkDetail: DataMywork,
             idEProduct: DataMywork?.eProduct + "" ?? ""
         }))
-        // setDataGlobal((data) => ({
-        //     ...data,
-        //     idEProduct: DataMywork?.eProduct?._id ?? "",
-        //     nameEproduct: DataMywork?.eProduct?.name ?? ""
-        // }))
-        // router.refresh()
+
+        router.refresh()
     }, [])
 
     useEffect(() => {

@@ -364,9 +364,9 @@ export const DetailsForm = ({
     return (
         <Flex vertical gap={10}>
             <b>Vị trí</b>
-            <Input disabled={true} defaultValue={location} />
+            <Input disabled={true} value={location} />
             <b>Tên</b>
-            <Input disabled={true} defaultValue={name} />
+            <Input disabled={true} value={name} />
             <Flex>
                 <b>Người tạo : </b>
                 <p>{creator}</p>
