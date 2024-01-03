@@ -1,12 +1,15 @@
 "use client"
 import React, { useState } from "react"
-import { contextMyworkDetail, typeContextMyworkDetail } from "../context"
+import {
+    changeBlock,
+    contextMyworkDetail,
+    dataGlobal,
+    typeContextMyworkDetail
+} from "../context"
 
 type typeProvider = {
     children: React.ReactNode
 }
-import { changeBlock } from "../context"
-import { dataGlobal } from "../context"
 const ProviderMyWorkDetail: React.FC<typeProvider> = ({ children }) => {
     const [listLeft, setListLeft] = useState<any[]>([])
     const [listRight, setListRight] = useState<any[]>([])
@@ -31,6 +34,7 @@ const ProviderMyWorkDetail: React.FC<typeProvider> = ({ children }) => {
             emailAddress: ""
         }
     })
+    const [selectedProduct, setSelectedProduct] = useState<string>("")
     const data: typeContextMyworkDetail = {
         setListLeft,
         setListRight,
@@ -43,7 +47,9 @@ const ProviderMyWorkDetail: React.FC<typeProvider> = ({ children }) => {
         listRight,
         ChangeListFilter,
         choosenBlock,
-        loading
+        loading,
+        setSelectedProduct,
+        selectedProduct
     }
     return (
         <contextMyworkDetail.Provider value={data}>

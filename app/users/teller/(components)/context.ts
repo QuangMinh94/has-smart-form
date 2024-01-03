@@ -1,7 +1,7 @@
 "use client"
-import React, { createContext } from "react"
-import { myWork } from "@/app/(types)/teller/mywork"
 import { User } from "@/app/(types)/infoUser"
+import { myWork } from "@/app/(types)/teller/mywork"
+import React, { createContext } from "react"
 export type choosenBlock = {
     name: string
     location: string
@@ -32,6 +32,8 @@ export interface typeContextMyworkDetail {
     setDataGlobal: React.Dispatch<React.SetStateAction<dataGlobal>>
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
     loading: boolean
+    setSelectedProduct: React.Dispatch<React.SetStateAction<string>>
+    selectedProduct: string
 }
 const contextMyworkDetail = createContext<typeContextMyworkDetail>({
     setListLeft: () => {},
@@ -59,7 +61,9 @@ const contextMyworkDetail = createContext<typeContextMyworkDetail>({
     },
     setDataGlobal: () => {},
     setLoading: () => {},
-    loading: false
+    loading: false,
+    setSelectedProduct: () => {},
+    selectedProduct: ""
 })
 
 export { contextMyworkDetail }

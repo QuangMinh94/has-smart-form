@@ -49,8 +49,13 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const [messageApi, contextHolder] = message.useMessage()
     const [viewerKey, setViewerKey] = useState<number>(0)
     const [idFormTempLate, setIdFormTempLate] = useState<string[]>([])
-    const { listRight, setChoosenBlock, setListRight, setDataGlobal } =
-        useContextMyWorkDetail()
+    const {
+        listRight,
+        setChoosenBlock,
+        setListRight,
+        setDataGlobal,
+        selectedProduct
+    } = useContextMyWorkDetail()
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
@@ -248,12 +253,19 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                     oz?.GetInformation("INPUT_JSON_ALL") || "{}"
                 )
 
-                const body: RequestEformTaks = {
+                let body: RequestEformTaks = {
                     data: { Input: inputdata },
                     formTemplate: idFormTempLate,
                     appointmentId: `${params?.id}`,
                     documentId: "test",
                     button: type
+                }
+
+                if (selectedProduct !== "") {
+                    body = {
+                        ...body,
+                        eProduct: selectedProduct
+                    }
                 }
 
                 console.log("requestbody", body)

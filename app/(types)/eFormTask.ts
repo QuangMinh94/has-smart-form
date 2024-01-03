@@ -9,6 +9,7 @@ export interface RequestEformTaks {
     appointmentId: string
     documentId: string
     button: "SAVE" | "SUBMIT" | "CANCEL"
+    eProduct?: string
 }
 
 export interface RequestVeRiFyEformTaks {
