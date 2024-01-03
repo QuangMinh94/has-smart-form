@@ -1,8 +1,8 @@
 import { DefaultDeactiveRule, EformTemplate } from "@/app/(types)/EformTemplate"
+import { FolderTree } from "@/app/(types)/Folder"
 import { Role } from "@/app/(types)/Group"
 import { Permission } from "@/app/(types)/Permission"
 import { TreeDataType } from "@/app/(types)/TreeDataType"
-import { TreeProduct } from "@/app/(types)/TreeProduct"
 import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import { authOptions } from "@/app/api/auth/authOptions"
 import NotAuthenPage from "@/app/notAuthorized/page"
@@ -42,10 +42,15 @@ const TemplateDetailPage = async ({ params }: { params: { id: string } }) => {
     )
 
     //get tree data
-    const treeData: TreeProduct[] = await fetchTemplate(
-        process.env.EPRODUCT_TREEDATA_PUBLIC!,
+    const treeData: FolderTree[] = await fetchTemplate(
+        process.env.FOLDER_TREE_VIEW!,
         {}
     )
+    //get tree data
+    /* const treeData: TreeProduct[] = await fetchTemplate(
+        process.env.EPRODUCT_TREEDATA_PUBLIC!,
+        {}
+    ) */
     const treeDataView: TreeDataType[] = MappingChildren(treeData)
 
     return (
@@ -92,15 +97,13 @@ const fetchTemplate = cache(async (url: string, searchInput: any) => {
     }
 })
 
-const MappingChildren = (product: TreeProduct[]) => {
+const MappingChildren = (product: FolderTree[]) => {
     if (product.length === 0) return []
 
     const childrenView: TreeDataType[] = []
     product.forEach((element) => {
         childrenView.push({
-            value: element.parent
-                ? "/" + element.parent.name + "/" + element.name
-                : "/" + element.name,
+            value: element._id,
             title: element.name,
             children:
                 element.children.length !== 0
