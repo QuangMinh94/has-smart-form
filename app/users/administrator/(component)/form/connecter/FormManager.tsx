@@ -162,6 +162,7 @@ const FormGroup: React.FC<Props> = ({
         }
         if (typeForm === "UPDATE_MODAL") {
             bodyRequest.id = rowData._id
+            delete bodyRequest.connectorType
             HanderUpdateConnecter(bodyRequest)
             // update(bodyRequest)
         }
@@ -475,6 +476,7 @@ const FormGroup: React.FC<Props> = ({
                     ]}
                 >
                     <SelectForm
+                        disabled={typeForm === "UPDATE_MODAL"}
                         enabledFecthData={typeForm === "UPDATE_MODAL"}
                         type="getcategoriesApi"
                         onChange={HandlerOnchangeCategoryApi}

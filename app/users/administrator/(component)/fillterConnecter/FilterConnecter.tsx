@@ -141,12 +141,15 @@ const FilterConnecter: React.FC = () => {
     }, 300)
     const onCheck = ({ checked, id }: { checked: boolean; id: string }) => {
         setDataGlobal((data) => {
-            const connecter = data.Connecter
-            const index = connecter.findIndex((item) => item._id === id)
-            connecter.splice(index, 1, {
-                ...connecter[index],
-                checked: !checked
-            })
+            const connecter = data.Connecter.map((item) => ({
+                ...item,
+                checked: item._id === id ? !checked : false
+            }))
+            // const index = connecter.findIndex((item) => item._id === id)
+            // connecter.splice(index, 1, {
+            //     ...connecter[index],
+            //     checked: !checked
+            // })
             return { ...data, Connecter: connecter }
         })
     }

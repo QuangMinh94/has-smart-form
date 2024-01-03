@@ -51,14 +51,21 @@ export interface corrections {
     key?: number
     parametterConntion?: string
     attachBusiness?: string
+    type?: { id: string; name: string }
     description?: string
 }
 interface mappingTable {
     sourceParams: string[]
     targetParams: string[]
+    dataType: string[]
 }
 export interface RequestAddIntergration {
     connection: string
     eProduct: string
     mappingTable: mappingTable
+}
+
+export interface RequestSearchIntergration {
+    connection?: string
+    eProduct?: string
 }

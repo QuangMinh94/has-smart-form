@@ -38,7 +38,6 @@ const TreeGroup: React.FC = () => {
         const dataTree = TreeCustomer({
             Tree: providerAttachBu.dataGlobal.Eproduct,
             searchValue,
-            colorSeacrh: colorPrimary,
             Checkbox: ChecBoxComponent
         })
         setDataGlobal((data) => ({ ...data, DataNode: dataTree }))

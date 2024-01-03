@@ -141,7 +141,7 @@ const BtnModal: React.FC<Props> = ({
                         footer={null}
                         width={
                             pathModel === "ADMIN_CONNECTER_MANAGER"
-                                ? 800
+                                ? 1200
                                 : undefined
                         }
                     >
@@ -167,7 +167,7 @@ const BtnModal: React.FC<Props> = ({
                         footer={null}
                         width={
                             pathModel === "ADMIN_CONNECTER_MANAGER"
-                                ? 800
+                                ? 1200
                                 : undefined
                         }
                     >

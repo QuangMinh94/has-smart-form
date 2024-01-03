@@ -6,87 +6,25 @@ import {
     useContextAdminAttachBu
 } from "@/components/cusTomHook/useContext"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import SelectForm from "@/components/selector/SelectForm"
+import { faEdit, faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Table } from "antd"
-import type { ColumnsType } from "antd/es/table"
+import { Button, Form, Input, Popconfirm, Table, Typography } from "antd"
 import { useEnvContext } from "next-runtime-env"
-import React, { useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { CustomEproduct } from "../../TreeCustome/CustomTreeAttachBusiness"
 import FormCorrection from "../../form/connecter/FormCorrection"
-const columns: ColumnsType<corrections> = [
-    {
-        title: "STT",
-        dataIndex: "key",
-        width: "5vw",
-        align: "center",
-        key: "stt"
-    },
-    {
-        title: "Trường trên hệ thống",
-        key: "attachBusiness",
-        dataIndex: "attachBusiness"
-    },
-    {
-        title: "Trường kết nối đích",
-        key: "parametterConntion",
-        dataIndex: "parametterConntion"
-    },
-    {
-        title: "Mô tả",
-        key: "parametterConntion",
-        dataIndex: "parametterConntion"
-    }
-    // {
-    //     title: "Loại kết nối",
-    //     key: "type",
-    //     render: (record: connnector) => {
-    //         return `${record?.authenInfo?.type ?? ""}`
-    //     }
-    // },
+const BtnCRUD = ({
+    type,
+    disable,
+    record
+}: {
+    type: "ADD" | "REMOVE"
+    disable: boolean
+    record: any
+}) => {
+    const { setDataGlobal } = useContextAdminAttachBu()
 
-    // {
-    //     title: "Thay đổi lần cuối",
-    //     key: "updateDate",
-    //     render: (record: connnector) => {
-    //         return dayjs(record?.updatedDate).format("DD/MM/YYYY HH:mm:ss")
-    //     }
-    // },
-    // {
-    //     title: "Chỉnh sửa",
-    //     width: "8vw",
-    //     align: "center",
-    //     key: "edit",
-    //     render: (record: connnector) => (
-    //         <BtnModal
-    //             titleModel="Sửa Connector"
-    //             type="UPDATE_MODAL"
-    //             pathModel="ADMIN_CONNECTER_MANAGER"
-    //             rowData={record}
-    //         />
-    //     )
-    // },
-    // {
-    //     title: "Kích hoạt",
-    //     width: "8vw",
-    //     align: "center",
-    //     key: "active",
-    //     render: (record: connnector) => (
-    //         <BtnModal
-    //             titleModel={`${
-    //                 record.active
-    //                     ? `hủy kết nối "${record.name}"`
-    //                     : `kích hoạt kết nối "${record.name}"`
-    //             }`}
-    //             type="ACTIVE_MODAL"
-    //             pathModel="ADMIN_CONNECTER_MANAGER"
-    //             rowData={record}
-    //             activeChecked={record.active}
-    //         />
-    //     )
-    // }
-]
-const BtnCRUD = () => {
     const [active, setActive] = useState<boolean>(false)
     const show = () => {
         setActive(true)
@@ -94,18 +32,54 @@ const BtnCRUD = () => {
     const hide = () => {
         setActive(false)
     }
+
+    const confirm = (key: number) => {
+        setDataGlobal((data) => {
+            const Correction = data.Correction
+            const index = Correction.findIndex(
+                (item, index) => key - 1 === index
+            )
+            Correction.splice(index, 1)
+            return { ...data, Correction }
+        })
+        hide()
+    }
+    const handleOpenChange = (newOpen: boolean) => {
+        setActive(newOpen)
+    }
     return (
         <>
-            {active ? (
-                <FormCorrection
-                    typeForm="ADD_MODAL"
-                    dataRow={{}}
-                    CancelModal={hide}
-                />
+            {type === "ADD" ? (
+                <>
+                    {" "}
+                    {active ? (
+                        <FormCorrection
+                            typeForm="ADD_MODAL"
+                            dataRow={{}}
+                            CancelModal={hide}
+                        />
+                    ) : (
+                        <Button disabled={disable} onClick={show}>
+                            <FontAwesomeIcon icon={faPlus} />
+                        </Button>
+                    )}{" "}
+                </>
             ) : (
-                <Button onClick={show}>
-                    <FontAwesomeIcon icon={faPlus} />
-                </Button>
+                <Popconfirm
+                    title="Delete the task"
+                    description="Are you sure to delete this task?"
+                    open={active}
+                    onOpenChange={handleOpenChange}
+                    onConfirm={() => confirm(Number(record.key))}
+                    onCancel={hide}
+                    okText="Đồng ý"
+                    cancelText="Hủy"
+                >
+                    <FontAwesomeIcon
+                        className="cursor-pointer hover:opacity-50"
+                        icon={faTrashAlt}
+                    />
+                </Popconfirm>
             )}
         </>
     )
@@ -123,12 +97,14 @@ const Btnsave = () => {
     const idCorrection = Connecter.filter((item) => item.checked)[0]?._id ?? ""
     const targetParams = Correction.map((item) => item.parametterConntion ?? "")
     const sourceParams = Correction.map((item) => item.attachBusiness ?? "")
+    const dataType = Correction.map((item) => item?.type?.id ?? "")
     const body: RequestAddIntergration = {
         eProduct: EproductActive?._id ?? "",
         connection: idCorrection,
         mappingTable: {
             targetParams,
-            sourceParams
+            sourceParams,
+            dataType
         }
     }
     const updateEproduct = ({
@@ -191,28 +167,249 @@ const Btnsave = () => {
         </>
     )
 }
+
+interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+    editing: boolean
+    dataIndex: string
+    inputType: "select" | "text"
+    record: corrections
+    children: React.ReactNode
+    onChangeSelection: (value: string, option: any) => void
+}
+
+const EditableCell: React.FC<EditableCellProps> = ({
+    editing,
+    dataIndex,
+    inputType,
+    record,
+    children,
+    onChangeSelection,
+    ...restProps
+}) => {
+    const inputNode =
+        inputType === "select" ? (
+            <SelectForm
+                enabledFecthData={true}
+                onChange={onChangeSelection}
+                type="cateGoriFilterDataType"
+                placeholder="Loại"
+            />
+        ) : (
+            <Input />
+        )
+    const title =
+        dataIndex === "attachBusiness"
+            ? "Trường hệ thống"
+            : dataIndex === "parametterConntion"
+            ? "Trường kết nối địch"
+            : "Kiểu dữ liệu"
+    return (
+        <td {...restProps}>
+            {editing ? (
+                <Form.Item
+                    name={dataIndex}
+                    style={{ margin: 0 }}
+                    rules={[
+                        {
+                            required: dataIndex !== "description",
+                            message: `Vui lòng không để trống ${title}!`
+                        }
+                    ]}
+                >
+                    {inputNode}
+                </Form.Item>
+            ) : (
+                children
+            )}
+        </td>
+    )
+}
 const App: React.FC = () => {
     const {
+        setDataGlobal,
         dataGlobal: { Correction }
     } = useContextAdminAttachBu()
+    const [form] = Form.useForm()
+    const [editingKey, setEditingKey] = useState<number | null>(null)
+
+    const isEditing = (record: corrections) => record.key === editingKey
+    const [label, setLabel] = useState<string>("")
+
+    const onChangeSelection = useCallback((value: string, option: any) => {
+        setLabel(option?.label)
+        form.setFieldsValue({ type: value })
+    }, [])
+
+    const edit = (record: corrections) => {
+        form.setFieldsValue({
+            parametterConntion: "",
+            attachBusiness: "",
+            description: "",
+            ...record,
+            type: record.type?.id ?? ""
+        })
+        setEditingKey(Number(record?.key))
+    }
+    const save = async (key: number) => {
+        try {
+            const row = (await form.validateFields()) as corrections
+            setDataGlobal((data) => {
+                const Correction = data.Correction
+                const index = Correction.findIndex(
+                    (item, index) => key - 1 === index
+                )
+                const id: any = row?.type ?? ""
+
+                Correction.splice(index, 1, {
+                    ...row,
+                    type: { id, name: label }
+                })
+                return { ...data, Correction }
+            })
+            setEditingKey(null)
+        } catch (errInfo) {
+            console.log("Validate Failed:", errInfo)
+        }
+    }
+
+    const columns = [
+        {
+            title: "STT",
+            dataIndex: "key",
+            width: "5vw",
+            align: "center",
+            key: "stt"
+        },
+        {
+            title: "Trường trên hệ thống",
+            key: "attachBusiness",
+            dataIndex: "attachBusiness",
+            editable: true
+        },
+        {
+            title: "Trường kết nối đích",
+            key: "parametterConntion",
+            dataIndex: "parametterConntion",
+            editable: true
+        },
+        {
+            title: "Kiểu dữ liệu",
+            key: "type",
+            dataIndex: "type",
+            editable: true,
+            render: (type: any) => {
+                return type?.name
+            }
+        },
+        {
+            title: "Mô tả",
+            key: "description",
+            dataIndex: "description",
+            editable: true
+        },
+        {
+            title: "action",
+            key: "action",
+            align: "center",
+            width: 150,
+            render: (record: corrections) => {
+                const editable = isEditing(record)
+                return (
+                    <div className="flex items-center justify-center">
+                        {editable ? (
+                            <>
+                                <Typography.Link
+                                    onClick={() => save(Number(record.key))}
+                                    style={{ marginRight: 8 }}
+                                >
+                                    Save
+                                </Typography.Link>
+                                <Typography.Link
+                                    onClick={() => {
+                                        setEditingKey(null)
+                                    }}
+                                    style={{ marginLeft: "5px" }}
+                                >
+                                    Cancel
+                                </Typography.Link>
+                            </>
+                        ) : (
+                            <>
+                                <div className="mr-[10px]">
+                                    <FontAwesomeIcon
+                                        onClick={() => {
+                                            !editingKey && edit(record)
+                                        }}
+                                        icon={faEdit}
+                                        className={`${
+                                            !editingKey
+                                                ? "cursor-pointer hover:opacity-50"
+                                                : "cursor-not-allowed opacity-50"
+                                        }`}
+                                    />
+                                </div>
+                                {!editingKey ? (
+                                    <BtnCRUD
+                                        record={record}
+                                        type="REMOVE"
+                                        disable={!!editingKey}
+                                    />
+                                ) : (
+                                    <FontAwesomeIcon
+                                        icon={faTrashAlt}
+                                        className="cursor-not-allowed opacity-50"
+                                    />
+                                )}
+                            </>
+                        )}
+                    </div>
+                )
+            }
+        }
+    ]
     const data = useMemo(() => {
         return Correction.map((item, index) => ({ ...item, key: index + 1 }))
     }, [JSON.stringify(Correction)])
+
+    const mergedColumns: any = columns.map((col) => {
+        if (!col.editable) {
+            return col
+        }
+
+        return {
+            ...col,
+            onCell: (record: corrections) => ({
+                record,
+                inputType: col.dataIndex === "type" ? "select" : "text",
+                dataIndex: col.dataIndex,
+                title: col.title,
+                editing: isEditing(record),
+                onChangeSelection
+            })
+        }
+    })
     return (
         <>
-            <Table
-                scroll={{
-                    y: "54vh",
-                    scrollToFirstRowOnChange: true
-                }}
-                columns={columns}
-                dataSource={data}
-            />
+            <Form form={form} component={false}>
+                <Table
+                    components={{
+                        body: {
+                            cell: EditableCell
+                        }
+                    }}
+                    scroll={{
+                        y: "54vh",
+                        scrollToFirstRowOnChange: true
+                    }}
+                    columns={mergedColumns}
+                    dataSource={data}
+                />
+            </Form>
             <div className="mt-[15px]">
-                <BtnCRUD />
-                <div className="mt-[20px]">
-                    <Btnsave />
-                </div>
+                <BtnCRUD record={{}} type="ADD" disable={!!editingKey} />
+            </div>
+            <div className="mt-[20px]">
+                <Btnsave />
             </div>
         </>
     )

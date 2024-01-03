@@ -12,16 +12,20 @@ export interface DataTranfeCustom extends DataTranfer {
     block: block[]
 }
 const HeaderUi = () => {
-    const { setListLeft, listLeft, dataGlobal, listRight, setSelectedProduct } =
-        useContextMyWorkDetail()
+    const {
+        setListRight,
+        setListLeft,
+        listLeft,
+        dataGlobal,
+        listRight,
+        setDataGlobal
+    } = useContextMyWorkDetail()
 
     const onSelect = (selectedKeys: string, info: OptionTree) => {
-        setSelectedProduct(selectedKeys)
         if (listLeft.length > 0) {
             setListLeft([])
         }
-
-        console.log("info", info)
+        setDataGlobal((data) => ({ ...data, idEProduct: selectedKeys }))
         const dataListLeft: DataTranfeCustom[] = []
         info.formTemplate.forEach((tempalate) => {
             dataListLeft.push({
@@ -33,6 +37,7 @@ const HeaderUi = () => {
         })
         const uniqueListLeft = uniqueValue(dataListLeft, listRight)
         setListLeft(uniqueListLeft)
+        setListRight([])
     }
     return (
         <Row>

@@ -1,13 +1,13 @@
 "use client"
 
-import React, { useEffect } from "react"
+import { myWork } from "@/app/(types)/teller/mywork"
+import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+import routers from "@/router/cusTomRouter"
 import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
-import routers from "@/router/cusTomRouter"
-import { myWork } from "@/app/(types)/teller/mywork"
 import dayjs from "dayjs"
 import { useRouter } from "next/navigation"
-import { useContextMyWorkDetail } from "@/components/cusTomHook/useContext"
+import React, { useEffect } from "react"
 
 type Props = {
     data: myWork[]
@@ -25,6 +25,7 @@ const App: React.FC<Props> = ({ data }) => {
         router.refresh()
     }, [JSON.stringify(data)])
     const CustomClickPath = async (row: myWork) => {
+        console.log("row", row)
         try {
             setDataGlobal((data) => ({
                 ...data,

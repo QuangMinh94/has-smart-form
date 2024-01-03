@@ -43,23 +43,23 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
     const { token, session } = useCustomCookies()
     const params = useParams()
     const router = useRouter()
-    console.log("dataMywork: ", DataMywork)
     const searchParams = useSearchParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [messageApi, contextHolder] = message.useMessage()
     const [viewerKey, setViewerKey] = useState<number>(0)
     const [idFormTempLate, setIdFormTempLate] = useState<string[]>([])
+    const [FormTempLateUpdate, setFormTempLateUpdate] = useState<any[]>([])
     const {
         listRight,
         setChoosenBlock,
         setListRight,
         setDataGlobal,
-        selectedProduct
+        dataGlobal: { idEProduct }
     } = useContextMyWorkDetail()
     const resetEForm = () => {
         setViewerKey(Math.random())
     }
-
+    console.log("resetEForm", DataMywork)
     const Blocks = (listRightBlock: any[]): choosenBlock[] => {
         const choosenBlock: choosenBlock[] = []
         const checkDuplicateBlock = new Set()
@@ -84,8 +84,14 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
 
     useEffect(() => {
         //console.log("Here")
-        setDataGlobal((data) => ({ ...data, myworkDetail: DataMywork }))
-        // router.refresh()
+        console.log("database", DataMywork)
+        setDataGlobal((data) => ({
+            ...data,
+            myworkDetail: DataMywork,
+            idEProduct: DataMywork?.eProduct + "" ?? ""
+        }))
+
+        router.refresh()
     }, [])
 
     useEffect(() => {
@@ -143,6 +149,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                     }
                 }
                 setIdFormTempLate(listRight.map((item) => item?.id))
+                setFormTempLateUpdate(listRight)
                 setChoosenBlock({
                     choosenBlock: choosenBlock,
                     changeBlock: 0
@@ -208,6 +215,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                     )
                 }
                 setIdFormTempLate(listRight.map((item) => item?.id))
+                setFormTempLateUpdate(listRight)
                 setChoosenBlock({
                     choosenBlock: choosenBlock,
                     changeBlock: 0
@@ -253,19 +261,13 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                     oz?.GetInformation("INPUT_JSON_ALL") || "{}"
                 )
 
-                let body: RequestEformTaks = {
+                const body: RequestEformTaks = {
+                    eProduct: idEProduct,
                     data: { Input: inputdata },
                     formTemplate: idFormTempLate,
                     appointmentId: `${params?.id}`,
                     documentId: "test",
                     button: type
-                }
-
-                if (selectedProduct !== "") {
-                    body = {
-                        ...body,
-                        eProduct: selectedProduct
-                    }
                 }
 
                 console.log("requestbody", body)
@@ -278,14 +280,16 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 })
                 if (res.status === 200) {
                     messageApi.success("success")
-                    DataMywork?.eformTask?.[0]?.data?.Input
+
                     setMyWork((data) => {
                         const eformTask: any = data?.eformTask?.[0]
+
                         return {
                             ...data,
                             eformTask: [
                                 {
                                     ...eformTask,
+                                    formTemplate: FormTempLateUpdate,
                                     data: { Input: inputdata }
                                 }
                             ]
