@@ -1,8 +1,5 @@
 "use client"
-import {
-    useContextAdmin,
-    useContextAdminconnectManager
-} from "@/components/cusTomHook/useContext"
+import { useContextAdminconnectManager } from "@/components/cusTomHook/useContext"
 import { Input, Select } from "antd"
 import React, { memo } from "react"
 const optionstype = [
@@ -38,21 +35,8 @@ const FormFieldAuthenText: React.FC = () => {
         setDataForm,
         DataForm: { authenInfo }
     } = useContextAdminconnectManager()
-    const { messageApi } = useContextAdmin()
-    const { textInfo } = authenInfo
 
-    const HandelerSave = () => {
-        // setDataForm((dataForm) => {
-        //     return {
-        //         ...dataForm,
-        //         authenInfo: {
-        //             ...dataForm.authenInfo,
-        //             textInfo: value
-        //         }
-        //     }
-        // })
-        messageApi("success", "Lưu thành công")
-    }
+    const { textInfo } = authenInfo
 
     const onChange = (
         value: string,

@@ -13,6 +13,7 @@ import FillterProduct from "../../(components)/filter/FillterProduct"
 import ActiveTree from "../../(components)/form/ActiveTreeProduct"
 import LayoutTreeView from "../../(components)/table/TreeViewProduct"
 
+export const dynamic = "force-dynamic"
 const GetProductTree = async (pram: {
     bodyRequest: requestBodyEproductTree
     token: string
@@ -106,5 +107,4 @@ const ProductPage = async ({
     )
 }
 
-export const dynamic = "force-dynamic"
 export default ProductPage
