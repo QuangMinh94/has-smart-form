@@ -91,12 +91,14 @@ const FormGroup: React.FC<Props> = ({
                 rowData?.authenInfo?.fieldsHeader?.map((field) => ({
                     name: field
                 })) ?? []
+
             setDataForm({
                 parametter: parametter,
                 authenInfo: {
-                    header: [],
+                    header: authen.headers ?? [],
                     body: authen?.body ?? [],
                     fieldsHeader: fieldsHeader ?? [],
+
                     textInfo: {
                         type: authen?.type,
                         method: authen?.method,
@@ -124,16 +126,24 @@ const FormGroup: React.FC<Props> = ({
         const fieldsHeader = authenInfo.fieldsHeader.map(
             (field) => field?.name ?? ""
         )
+        const headers = authenInfo.header.map((item) => ({
+            name: item?.name,
+            value: item?.value,
+            description: item?.description
+        }))
         const params = parametter.map((item) => item?.field ?? "")
         const authen: Requestauthen = {
             body,
+            headers,
             type: textInfoAuthen?.type,
             method: textInfoAuthen?.method,
             urlToken: textInfoAuthen?.urlToken,
             fieldToken: textInfoAuthen?.fieldToken,
             fieldsHeader
         }
-
+        if (headers?.length <= 0) {
+            delete authen.headers
+        }
         const bodyRequest: RequestAddOrUpdateConnection = {
             dataTest: data?.datatest ? JSON.parse(data?.datatest) : {},
             authenInfo: authen,
@@ -406,13 +416,13 @@ const FormGroup: React.FC<Props> = ({
 
                 <Form.Item
                     style={{ marginBottom: "25px" }}
-                    label="Loại kết nối"
+                    label="Nhóm kết nối"
                     name="categoryConnecter"
                     rules={[
                         {
                             required: true,
                             whitespace: true,
-                            message: "Vui lòng chọn loại kết nối"
+                            message: "Vui lòng chọn nhóm kết nối"
                         }
                     ]}
                 >
@@ -454,13 +464,13 @@ const FormGroup: React.FC<Props> = ({
                 </Form.Item>
                 <Form.Item
                     style={{ marginBottom: "25px" }}
-                    label="Loại api"
+                    label="Loại kết nối"
                     name="categoryapi"
                     rules={[
                         {
                             required: true,
                             whitespace: true,
-                            message: "Vui lòng chọn loại api"
+                            message: "Vui lòng chọn loại kết nối"
                         }
                     ]}
                 >
@@ -489,8 +499,8 @@ const FormGroup: React.FC<Props> = ({
                     label="Data test"
                     name="datatest"
                 >
-                    <Input.TextArea
-                        style={{ minWidth: "140px" }}
+                    <TextArea
+                        style={{ minHeight: "200px" }}
                         placeholder={'{"key": "value" }'}
                     />
                 </Form.Item>

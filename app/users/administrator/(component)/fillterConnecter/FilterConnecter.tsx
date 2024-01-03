@@ -67,35 +67,48 @@ const FilterConnecter: React.FC = () => {
     const [open, setOpen] = useState<boolean>(false)
     const [items, setitems] = useState<TypeItem[]>([])
     const [value, setvalue] = useState<string>("")
+    const [ItemMain, setItemsMain] = useState<TypeItem[]>([])
     const {
         token: { colorPrimary }
     } = theme.useToken()
 
     useEffect(() => {
-        const connect = Connecter.map((item) => ({
-            key: item._id ?? "",
-            label: (
-                <div
-                    className="flex"
-                    onClick={() =>
-                        onCheck({
-                            check: !!item?.checked,
-                            id: item?._id ?? ""
-                        })
-                    }
-                >
-                    <div className="flex-1">{item?.name}</div>
-                    <Checkbox checked={!!item?.checked} />
-                </div>
-            ),
-            checked: !!item.checked,
-            name: item?.name ?? ""
-        }))
+        const connect = Connecter.map((item) => {
+            const checked: boolean = !!item?.checked
+            return {
+                key: item._id ?? "",
+                label: (
+                    <div
+                        className="flex"
+                        onClick={() =>
+                            onCheck({
+                                checked,
+                                id: item?._id ?? ""
+                            })
+                        }
+                    >
+                        <div className="flex-1">{item?.name}</div>
+                        <Checkbox checked={checked} />
+                    </div>
+                ),
+                checked,
+                name: item?.name ?? ""
+            }
+        })
+        connect.sort((a: any, b: any) => {
+            if (a.checked && !b.checked) {
+                return -1
+            }
+
+            return 1
+        })
+        setItemsMain(connect)
         setitems(connect)
     }, [JSON.stringify(Connecter), EproductActive?._id])
 
     useEffect(() => {
         const activeProduct = getEproductChecked(Eproduct)
+        console.log("active", activeProduct)
         setIdEproductActive(activeProduct ?? {})
         if (activeProduct) {
             setOpen(true)
@@ -106,7 +119,7 @@ const FilterConnecter: React.FC = () => {
 
     const onChange = debounce((e: any) => {
         const value = e.target.value
-        const itemFilter = items.filter((item) => {
+        const itemFilter = ItemMain.filter((item) => {
             return (
                 item.checked ||
                 (value
@@ -121,15 +134,19 @@ const FilterConnecter: React.FC = () => {
 
             return 1
         })
+
         setvalue(value)
         setitems(itemFilter)
         // setOpen(itemFilter.length > 0)
     }, 300)
-    const onCheck = ({ check, id }: { check: boolean; id: string }) => {
+    const onCheck = ({ checked, id }: { checked: boolean; id: string }) => {
         setDataGlobal((data) => {
             const connecter = data.Connecter
             const index = connecter.findIndex((item) => item._id === id)
-            connecter.splice(index, 1, { ...connecter[index], checked: !check })
+            connecter.splice(index, 1, {
+                ...connecter[index],
+                checked: !checked
+            })
             return { ...data, Connecter: connecter }
         })
     }

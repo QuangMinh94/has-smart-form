@@ -17,4 +17,5 @@ export interface AuthenInfo {
     urlToken?: string
     fieldToken?: string
     fieldsHeader?: string[]
+    headers?: authenInfo[]
 }
