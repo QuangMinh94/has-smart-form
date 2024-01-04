@@ -22,7 +22,7 @@ import {
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import SelectForm from "@/components/selector/SelectForm"
 import { PlusOutlined } from "@ant-design/icons"
-import { Button, Form, Input, Select } from "antd"
+import { Button, Col, Form, Input, Row, Select } from "antd"
 import { useEnvContext } from "next-runtime-env"
 import React, { memo, useCallback, useEffect, useState } from "react"
 const { TextArea } = Input
@@ -279,8 +279,9 @@ const FormGroup: React.FC<Props> = ({
         } catch (e: any) {
             setLoadingtestConnection(false)
             console.log("e", e.response.data)
-            const { type, data, code } = e?.response?.data
+            const { type, data, code, name } = e?.response?.data
             const err = data?.[0]
+
             if (type === "VALIDATION_ERROR") {
                 if (err?.type === "required") {
                     if (err?.field === "method") {
@@ -288,7 +289,7 @@ const FormGroup: React.FC<Props> = ({
                     } else if (err?.field === "url") {
                         messageApi("error", "Vui lòng nhập đường dẫn")
                     } else if (err?.field === "connectorType") {
-                        messageApi("error", "Vui lòng chọn loại Api")
+                        messageApi("error", "Vui lòng chọn loại kết nối")
                     } else if (err?.field === "dataTest") {
                         messageApi("error", "Vui lòng nhập dataTest")
                     } else if (err?.field === "type") {
@@ -335,7 +336,7 @@ const FormGroup: React.FC<Props> = ({
                     } else if (err?.field === "body") {
                         messageApi(
                             "error",
-                            "Vui lòng chọn định  kiểu object cho body"
+                            "Vui lòng chọn định dạng  kiểu object cho body"
                         )
                     } else {
                         messageApi("error", "có lỗi")
@@ -354,8 +355,11 @@ const FormGroup: React.FC<Props> = ({
                     return
                 }
                 messageApi("error", "có lỗi")
-            } else if (code === "ECONNREFUSED") {
-                messageApi("error", "kết nối thất bại ")
+            } else if (
+                (code === 404 && type === "ERR_BAD_REQUEST") ||
+                (code === 500 && name === "TypeError")
+            ) {
+                messageApi("error", "vui lòng chọn đường dẫn  khác")
             } else {
                 messageApi("error", "có lỗi")
             }
@@ -400,133 +404,141 @@ const FormGroup: React.FC<Props> = ({
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
-                <Form.Item
-                    style={{ marginBottom: "25px" }}
-                    label="Tên connecter"
-                    name="nameConnecter"
-                    rules={[
-                        {
-                            required: true,
-                            whitespace: true,
-                            message: "Vui lòng nhập Tên connecter"
-                        }
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item
-                    style={{ marginBottom: "25px" }}
-                    label="Nhóm kết nối"
-                    name="categoryConnecter"
-                    rules={[
-                        {
-                            required: true,
-                            whitespace: true,
-                            message: "Vui lòng chọn nhóm kết nối"
-                        }
-                    ]}
-                >
-                    {typeForm === "UPDATE_MODAL" ? (
-                        <SelectForm
-                            enabledFecthData={typeForm === "UPDATE_MODAL"}
-                            type="getcategoriesConnecter"
-                            onChange={HandlerOnchangeCategoryConnecter}
-                        />
-                    ) : (
-                        <Select
-                            options={[
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <Form.Item
+                            style={{ marginBottom: "25px" }}
+                            label="Tên connecter"
+                            name="nameConnecter"
+                            rules={[
                                 {
-                                    label: rowData?.nameconnectorGroup,
-                                    value: rowData?.connectorGroup
+                                    required: true,
+                                    whitespace: true,
+                                    message: "Vui lòng nhập Tên connecter"
                                 }
                             ]}
-                            disabled={true}
-                        />
-                    )}
-                </Form.Item>
-                <Form.Item
-                    style={{ marginBottom: "25px" }}
-                    label="Phương thức"
-                    name="categoryMethod"
-                    rules={[
-                        {
-                            required: true,
-                            whitespace: true,
-                            message: "Vui lòng chọn phương thức"
-                        }
-                    ]}
-                >
-                    <SelectForm
-                        enabledFecthData={typeForm === "UPDATE_MODAL"}
-                        type="getcategoriesMethods"
-                        onChange={HandlerOnchangeCategoryMethod}
-                    />
-                </Form.Item>
-                <Form.Item
-                    style={{ marginBottom: "25px" }}
-                    label="Loại kết nối"
-                    name="categoryapi"
-                    rules={[
-                        {
-                            required: true,
-                            whitespace: true,
-                            message: "Vui lòng chọn loại kết nối"
-                        }
-                    ]}
-                >
-                    <SelectForm
-                        disabled={typeForm === "UPDATE_MODAL"}
-                        enabledFecthData={typeForm === "UPDATE_MODAL"}
-                        type="getcategoriesApi"
-                        onChange={HandlerOnchangeCategoryApi}
-                    />
-                </Form.Item>
-                <Form.Item
-                    style={{ marginBottom: "25px" }}
-                    label="Đường dẫn"
-                    name="url"
-                    rules={[
-                        {
-                            required: true,
-                            whitespace: true,
-                            message: "Vui lòng chọn đường dẫn"
-                        }
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    style={{ marginBottom: "25px" }}
-                    label="Data test"
-                    name="datatest"
-                >
-                    <TextArea
-                        style={{ minHeight: "200px" }}
-                        placeholder={'{"key": "value" }'}
-                    />
-                </Form.Item>
-                <Form.Item
-                    style={{ marginBottom: "25px" }}
-                    label="Mô tả"
-                    name="description"
-                    rules={[
-                        {
-                            required: true,
-                            whitespace: true,
-                            message: "Vui lòng nhập mô tả"
-                        }
-                    ]}
-                >
-                    <TextArea />
-                </Form.Item>
-                <div className="mb-[25px] ">
-                    <FiledParametter />
-                </div>
-                <div className="mb-[25px] ">
-                    <FiledAuthenInfo />
-                </div>
+                        >
+                            <Input />
+                        </Form.Item>
 
+                        <Form.Item
+                            style={{ marginBottom: "25px" }}
+                            label="Nhóm kết nối"
+                            name="categoryConnecter"
+                            rules={[
+                                {
+                                    required: true,
+                                    whitespace: true,
+                                    message: "Vui lòng chọn nhóm kết nối"
+                                }
+                            ]}
+                        >
+                            {typeForm === "UPDATE_MODAL" ? (
+                                <SelectForm
+                                    enabledFecthData={
+                                        typeForm === "UPDATE_MODAL"
+                                    }
+                                    type="getcategoriesConnecter"
+                                    onChange={HandlerOnchangeCategoryConnecter}
+                                />
+                            ) : (
+                                <Select
+                                    options={[
+                                        {
+                                            label: rowData?.nameconnectorGroup,
+                                            value: rowData?.connectorGroup
+                                        }
+                                    ]}
+                                    disabled={true}
+                                />
+                            )}
+                        </Form.Item>
+                        <Form.Item
+                            style={{ marginBottom: "25px" }}
+                            label="Phương thức"
+                            name="categoryMethod"
+                            rules={[
+                                {
+                                    required: true,
+                                    whitespace: true,
+                                    message: "Vui lòng chọn phương thức"
+                                }
+                            ]}
+                        >
+                            <SelectForm
+                                enabledFecthData={typeForm === "UPDATE_MODAL"}
+                                type="getcategoriesMethods"
+                                onChange={HandlerOnchangeCategoryMethod}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            style={{ marginBottom: "25px" }}
+                            label="Loại kết nối"
+                            name="categoryapi"
+                            rules={[
+                                {
+                                    required: true,
+                                    whitespace: true,
+                                    message: "Vui lòng chọn loại kết nối"
+                                }
+                            ]}
+                        >
+                            <SelectForm
+                                disabled={typeForm === "UPDATE_MODAL"}
+                                enabledFecthData={typeForm === "UPDATE_MODAL"}
+                                type="getcategoriesApi"
+                                onChange={HandlerOnchangeCategoryApi}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            style={{ marginBottom: "25px" }}
+                            label="Đường dẫn"
+                            name="url"
+                            rules={[
+                                {
+                                    required: true,
+                                    whitespace: true,
+                                    message: "Vui lòng chọn đường dẫn"
+                                }
+                            ]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item
+                            style={{ marginBottom: "25px" }}
+                            label="Data test"
+                            name="datatest"
+                        >
+                            <TextArea
+                                style={{ minHeight: "200px" }}
+                                placeholder={'{"key": "value" }'}
+                            />
+                        </Form.Item>
+                    </Col>
+
+                    <Col span={12}>
+                        <Form.Item
+                            style={{ marginBottom: "25px" }}
+                            label="Mô tả"
+                            name="description"
+                            rules={[
+                                {
+                                    required: true,
+                                    whitespace: true,
+                                    message: "Vui lòng nhập mô tả"
+                                }
+                            ]}
+                        >
+                            <TextArea />
+                        </Form.Item>
+                        <div className="mb-[25px] ">
+                            <FiledParametter />
+                        </div>
+                        <div className="mb-[25px] ">
+                            <FiledAuthenInfo />
+                        </div>
+                    </Col>
+                </Row>
                 <div className="my-[25px] flex ">
                     <div className="flex-1">
                         <Button

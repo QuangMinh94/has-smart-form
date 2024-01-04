@@ -25,7 +25,7 @@ const fecth = async ({
                     Session: cookie.get("session")?.value ?? ""
                 }
             }),
-            fetch(process.env.EPRODUCT_TREEDATA!, {
+            fetch(process.env.EPRODUCT_TREEDATA_CONNECTION!, {
                 next: { tags: ["TreeEProduct"] },
                 method: "POST",
                 body: JSON.stringify(body),

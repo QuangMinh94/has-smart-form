@@ -38,6 +38,7 @@ export interface eProduct {
     department?: string
     parent?: { _id: string; name: string }
     integration?: string[]
+    connectionCount?: number
 }
 export interface requestBodyEproduct {
     type?: string
