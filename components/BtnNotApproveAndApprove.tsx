@@ -29,7 +29,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
     const [valueText, setValueText] = useState<string>("")
     const [messageApi, contextHolder] = message.useMessage()
     const { dataGlobal, choosenBlock } = useContextMyWorkDetail()
-    console.log("idEProduct", dataGlobal.idEProduct)
+
     const {
         NEXT_PUBLIC_EXPORT_FOLDER,
         NEXT_PUBLIC_EXPORT_SERVICE,
@@ -134,32 +134,40 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
         }
         setLoadingConfirm(false)
     }
+
     const HandlerSubmit = async () => {
         try {
-            const data = dataGlobal.myworkDetail.eformTask?.[0].data
-            const res = await veriFyEformTask({
-                url: NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE_APPOINT_MENTS!,
-                bodyRequest: {
-                    id: `${params?.id}`,
-                    rejectReason: valueText,
-                    button: type === "approve" ? "SUBMIT" : "REJECT",
-                    citizenId: searchParams.get("CCCD") ?? "",
-                    data
-                },
-                token: token,
-                session: session
-            })
+            const oz = document.getElementById("OZViewer")
 
-            if (res.status === 200) {
-                messageApi.success(
-                    type === "approve"
-                        ? "Phê duyệt thành công "
-                        : "Từ chối thành công"
-                )
-                Router.replace(routers("ksvteller").mywork.path, {
-                    scroll: true
+            if (oz) {
+                const inputdatas = JSON.parse(
+                    oz.GetInformation("INPUT_JSON_ALL_GROUP_BY_REPORT")
+                )[0]
+                console.log("oz", inputdatas)
+                const res = await veriFyEformTask({
+                    url: NEXT_PUBLIC_EFORM_VERIFY_TEMPLATE_APPOINT_MENTS!,
+                    bodyRequest: {
+                        id: `${params?.id}`,
+                        rejectReason: valueText,
+                        button: type === "approve" ? "SUBMIT" : "REJECT",
+                        citizenId: searchParams.get("CCCD") ?? "",
+                        data: { ...inputdatas }
+                    },
+                    token: token,
+                    session: session
                 })
-                Router.refresh()
+
+                if (res.status === 200) {
+                    messageApi.success(
+                        type === "approve"
+                            ? "Phê duyệt thành công "
+                            : "Từ chối thành công"
+                    )
+                    Router.replace(routers("ksvteller").mywork.path, {
+                        scroll: true
+                    })
+                    Router.refresh()
+                }
             }
         } catch (e: any) {
             messageApi.error("có lỗi vui lòng thử lại sau ")

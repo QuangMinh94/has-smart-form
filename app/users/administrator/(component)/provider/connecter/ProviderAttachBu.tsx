@@ -23,10 +23,13 @@ const ProviderAttachBu: React.FC<typeProvider> = ({
     const [dataGlobal, setDataGlobal] = useState<DataGlobal>({
         Eproduct: Eproduct,
         Connecter: Connecter,
-        Correction: Correction
+        Correction: Correction,
+        CorrectionFill: []
     })
     const [tab, setTab] = useState<string>("ADMIN_ATTACH_BUSINESS")
     const [EproductActive, setIdEproductActive] = useState<CustomEproduct>({})
+
+    const [FillterCorrection, setFillterCorrection] = useState<string>("")
     // useEffect(() => {
     //     setDataGlobal({ ...dataGlobal, Eproduct })
     // }, [JSON.stringify(Eproduct)])
@@ -36,7 +39,9 @@ const ProviderAttachBu: React.FC<typeProvider> = ({
         tab,
         setTab,
         EproductActive,
-        setIdEproductActive
+        setIdEproductActive,
+        setFillterCorrection,
+        FillterCorrection
     }
     return (
         <ContentAttachBu.Provider value={data}>

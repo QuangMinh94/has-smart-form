@@ -84,14 +84,14 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
 
     useEffect(() => {
         //console.log("Here")
-        console.log("database", DataMywork)
+
         setDataGlobal((data) => ({
             ...data,
             myworkDetail: DataMywork,
             idEProduct: DataMywork?.eProduct + "" ?? ""
         }))
 
-        router.refresh()
+        // router.refresh()
     }, [])
 
     useEffect(() => {
@@ -119,6 +119,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
             const formTemplate = cusTomerFormtemplate(
                 DataMywork?.eformTask ?? []
             )
+
             const listRight = CustomerListRight(formTemplate)
 
             if (listRight.length > 0) {
@@ -129,7 +130,6 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                 console.log("choosenBlock", choosenBlock)
 
                 const dataInput = DataMywork?.eformTask?.[0]?.data?.Input
-
                 console.log("dataInput", dataInput)
                 const oz = document.getElementById("OZViewer")
                 if (oz) {
@@ -148,8 +148,11 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                         )
                     }
                 }
+
                 setIdFormTempLate(listRight.map((item) => item?.id))
-                setFormTempLateUpdate(listRight)
+                setFormTempLateUpdate(
+                    listRight.map((item) => ({ ...item, _id: item.id }))
+                )
                 setChoosenBlock({
                     choosenBlock: choosenBlock,
                     changeBlock: 0
@@ -190,7 +193,7 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                         mobilePhoneNumber: User?.phoneNumber
                     }
                 }
-                console.log("foIn", info)
+
                 resetEForm()
                 await delay(3000)
                 const choosenBlock = Blocks(listRight)
@@ -215,7 +218,10 @@ const TemlateWrapper: React.FC<Props> = ({ mywork }) => {
                     )
                 }
                 setIdFormTempLate(listRight.map((item) => item?.id))
-                setFormTempLateUpdate(listRight)
+
+                setFormTempLateUpdate(
+                    listRight.map((item) => ({ ...item, _id: item.id }))
+                )
                 setChoosenBlock({
                     choosenBlock: choosenBlock,
                     changeBlock: 0

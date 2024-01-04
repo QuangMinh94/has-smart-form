@@ -21,6 +21,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
     children: React.ReactNode
     setValue: React.Dispatch<React.SetStateAction<authenInfo>>
     typeInput: string
+    inputPassword: boolean
 }
 const EditableCell: React.FC<EditableCellProps> = ({
     editing,
@@ -28,6 +29,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
     setValue,
     typeInput,
     children,
+    inputPassword,
     ...restProps
 }) => {
     const onChange = (e: any) => {
@@ -42,19 +44,18 @@ const EditableCell: React.FC<EditableCellProps> = ({
             : typeInput === "value"
             ? value?.value
             : value?.description
-    return (
-        <td {...restProps}>
-            {editing ? (
-                <Input
-                    name={typeInput}
-                    onChange={onChange}
-                    value={valueCustome}
-                />
-            ) : (
-                children
-            )}
-        </td>
+    const propsInput = {
+        name: typeInput,
+        onChange,
+        value: valueCustome
+    }
+    const InputCustom = inputPassword ? (
+        <Input.Password {...propsInput} />
+    ) : (
+        <Input {...propsInput} />
     )
+
+    return <td {...restProps}>{editing ? InputCustom : children}</td>
 }
 const BtnCustomer: React.FC<{
     type: typeAuthen
@@ -284,11 +285,16 @@ const TableauthenInfo: React.FC<PropsTable> = memo(({ type }) => {
         },
         {
             title: "Giá trị",
-            dataIndex: "value",
+
             align: "center",
             key: "value",
             editable: true,
-            width: 100
+            width: 100,
+            render: (record: authenInfo) => {
+                return record?.name?.toLowerCase() === "password".toLowerCase()
+                    ? "********"
+                    : record.value
+            }
         },
         {
             title: "Mô tả",
@@ -356,7 +362,10 @@ const TableauthenInfo: React.FC<PropsTable> = memo(({ type }) => {
                 value,
                 editing: isEditing(record),
                 setValue,
-                typeInput: col.key
+                typeInput: col.key,
+                inputPassword:
+                    record?.name?.toLowerCase() === "password".toLowerCase() &&
+                    col.key === "value"
             })
         }
     })
