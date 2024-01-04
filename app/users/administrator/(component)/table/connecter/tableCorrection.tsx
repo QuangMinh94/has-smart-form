@@ -1,6 +1,7 @@
 "use client"
 import { addIntergration } from "@/app/(service)/connection"
 import { RequestAddIntergration, corrections } from "@/app/(types)/Connecter"
+import { FecthIntergration } from "@/app/users/administrator/(component)/PopoverFindIntergaration"
 import {
     useContextAdmin,
     useContextAdminAttachBu
@@ -9,9 +10,20 @@ import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import SelectForm from "@/components/selector/SelectForm"
 import { faEdit, faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Form, Input, Popconfirm, Table, Typography } from "antd"
+import {
+    Button,
+    Col,
+    Form,
+    Input,
+    Popconfirm,
+    Row,
+    Spin,
+    Table,
+    Typography
+} from "antd"
 import { useEnvContext } from "next-runtime-env"
-import React, { useCallback, useMemo, useState } from "react"
+import { usePathname, useSearchParams } from "next/navigation"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { CustomEproduct } from "../../TreeCustome/CustomTreeAttachBusiness"
 import FormCorrection from "../../form/connecter/FormCorrection"
 const BtnCRUD = ({
@@ -122,7 +134,7 @@ const Btnsave = () => {
             if (item._id === idUpdate) {
                 eProduct[i] = {
                     ...item,
-                    integration: [...(item.integration ?? []), idIntegrations]
+                    connectionCount: Number(item.connectionCount) + 1
                 }
                 return
             }
@@ -225,16 +237,60 @@ const EditableCell: React.FC<EditableCellProps> = ({
     )
 }
 const App: React.FC = () => {
+    const praram = useSearchParams()
+    const pathname = usePathname()
+    const idEproduct = praram.get("eproduct")
     const {
+        tab,
         setDataGlobal,
         dataGlobal: { Correction }
     } = useContextAdminAttachBu()
+    const { data, refetch, isRefetching, isLoading, error } = FecthIntergration(
+        {
+            request: { eProduct: idEproduct ?? "" },
+            key: idEproduct ?? "",
+            enabled: false
+        }
+    )
     const [form] = Form.useForm()
     const [editingKey, setEditingKey] = useState<number | null>(null)
 
     const isEditing = (record: corrections) => record.key === editingKey
     const [label, setLabel] = useState<string>("")
 
+    useEffect(() => {
+        if (idEproduct) {
+            refetch()
+        }
+    }, [idEproduct])
+    useEffect(() => {
+        if (data) {
+            const TableMapping = data?.[0]?.mappingTable
+
+            if (TableMapping) {
+                const { sourceParams, targetParams, dataType } = TableMapping
+
+                setDataGlobal((data) => {
+                    const corrections: corrections[] = []
+                    sourceParams?.forEach((item, index) => {
+                        const target = targetParams?.[index]
+                        const type = dataType?.[index]
+                        corrections.push({
+                            parametterConntion: item,
+                            attachBusiness: target,
+                            type: { id: type ?? "", name: type ?? "" }
+                        })
+                    })
+
+                    return { ...data, Correction: corrections }
+                })
+            } else {
+                setDataGlobal((data) => {
+                    return { ...data, Correction: [] }
+                })
+            }
+        }
+    }, [isRefetching, isLoading])
     const onChangeSelection = useCallback((value: string, option: any) => {
         setLabel(option?.label)
         form.setFieldsValue({ type: value })
@@ -248,11 +304,13 @@ const App: React.FC = () => {
             ...record,
             type: record.type?.id ?? ""
         })
+        setLabel(record?.type?.name ?? "")
         setEditingKey(Number(record?.key))
     }
     const save = async (key: number) => {
         try {
             const row = (await form.validateFields()) as corrections
+            console.log(row)
             setDataGlobal((data) => {
                 const Correction = data.Correction
                 const index = Correction.findIndex(
@@ -367,7 +425,7 @@ const App: React.FC = () => {
             }
         }
     ]
-    const data = useMemo(() => {
+    const dataCustom = useMemo(() => {
         return Correction.map((item, index) => ({ ...item, key: index + 1 }))
     }, [JSON.stringify(Correction)])
 
@@ -388,8 +446,24 @@ const App: React.FC = () => {
             })
         }
     })
+    if (isLoading && idEproduct) {
+        return <Spin />
+    }
+    if (error) {
+        return <div style={{ color: "red" }}>có lỗi, vui lòng thử lại sau</div>
+    }
     return (
         <>
+            <Row align={"middle"} style={{ marginBottom: "15px" }}>
+                <Col span={22}>
+                    <BtnCRUD record={{}} type="ADD" disable={!!editingKey} />
+                </Col>
+                <Col span={2}>
+                    <div className="flex justify-end">
+                        <Btnsave />
+                    </div>
+                </Col>
+            </Row>
             <Form form={form} component={false}>
                 <Table
                     components={{
@@ -402,15 +476,9 @@ const App: React.FC = () => {
                         scrollToFirstRowOnChange: true
                     }}
                     columns={mergedColumns}
-                    dataSource={data}
+                    dataSource={dataCustom}
                 />
             </Form>
-            <div className="mt-[15px]">
-                <BtnCRUD record={{}} type="ADD" disable={!!editingKey} />
-            </div>
-            <div className="mt-[20px]">
-                <Btnsave />
-            </div>
         </>
     )
 }
