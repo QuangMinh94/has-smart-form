@@ -1,6 +1,7 @@
 "use client"
 import { addIntergration } from "@/app/(service)/connection"
 import { RequestAddIntergration, corrections } from "@/app/(types)/Connecter"
+import Fillter from "@/app/users/administrator/(component)/ActionHeader/connecter/corection"
 import { FecthIntergration } from "@/app/users/administrator/(component)/PopoverFindIntergaration"
 import {
     useContextAdmin,
@@ -8,6 +9,7 @@ import {
 } from "@/components/cusTomHook/useContext"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import SelectForm from "@/components/selector/SelectForm"
+import { ToFilterName } from "@/util/formatText"
 import { faEdit, faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -22,7 +24,7 @@ import {
     Typography
 } from "antd"
 import { useEnvContext } from "next-runtime-env"
-import { usePathname, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { CustomEproduct } from "../../TreeCustome/CustomTreeAttachBusiness"
 import FormCorrection from "../../form/connecter/FormCorrection"
@@ -238,11 +240,12 @@ const EditableCell: React.FC<EditableCellProps> = ({
 }
 const App: React.FC = () => {
     const praram = useSearchParams()
-    const pathname = usePathname()
+
     const idEproduct = praram.get("eproduct")
     const {
         tab,
         setDataGlobal,
+        FillterCorrection,
         dataGlobal: { Correction }
     } = useContextAdminAttachBu()
     const { data, refetch, isRefetching, isLoading, error } = FecthIntergration(
@@ -261,6 +264,10 @@ const App: React.FC = () => {
     useEffect(() => {
         if (idEproduct) {
             refetch()
+        } else {
+            setDataGlobal((data) => {
+                return { ...data, Correction: [] }
+            })
         }
     }, [idEproduct])
     useEffect(() => {
@@ -426,8 +433,17 @@ const App: React.FC = () => {
         }
     ]
     const dataCustom = useMemo(() => {
-        return Correction.map((item, index) => ({ ...item, key: index + 1 }))
-    }, [JSON.stringify(Correction)])
+        return Correction.map((item, index) => ({
+            ...item,
+            key: index + 1
+        })).filter((item) => {
+            return FillterCorrection
+                ? ToFilterName(
+                      `${item.attachBusiness}${item.parametterConntion}${item?.type?.name}`
+                  ).includes(ToFilterName(FillterCorrection))
+                : true
+        })
+    }, [JSON.stringify(Correction), FillterCorrection])
 
     const mergedColumns: any = columns.map((col) => {
         if (!col.editable) {
@@ -453,7 +469,7 @@ const App: React.FC = () => {
         return <div style={{ color: "red" }}>có lỗi, vui lòng thử lại sau</div>
     }
     return (
-        <>
+        <div style={{ overflow: "auto", height: "100vh" }}>
             <Row align={"middle"} style={{ marginBottom: "15px" }}>
                 <Col span={22}>
                     <BtnCRUD record={{}} type="ADD" disable={!!editingKey} />
@@ -464,6 +480,9 @@ const App: React.FC = () => {
                     </div>
                 </Col>
             </Row>
+            <div className="my-[5px]">
+                <Fillter />
+            </div>
             <Form form={form} component={false}>
                 <Table
                     components={{
@@ -479,7 +498,7 @@ const App: React.FC = () => {
                     dataSource={dataCustom}
                 />
             </Form>
-        </>
+        </div>
     )
 }
 

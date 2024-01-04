@@ -96,7 +96,9 @@ function useContextAdminAttachBu(): typeContextAttachBu {
         tab: provider.tab,
         setTab: provider.setTab,
         EproductActive: provider.EproductActive,
-        setIdEproductActive: provider.setIdEproductActive
+        setIdEproductActive: provider.setIdEproductActive,
+        FillterCorrection: provider.FillterCorrection,
+        setFillterCorrection: provider.setFillterCorrection
     }
 }
 
