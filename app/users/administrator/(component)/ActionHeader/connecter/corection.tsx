@@ -10,7 +10,7 @@ const ActionHeaderManager = () => {
     const HanderSearch = (e: any) => {
         const value = e.target.value
         Transition(() => {
-            setFillterCorrection(e.target.value)
+            setFillterCorrection(value)
         })
     }
 
