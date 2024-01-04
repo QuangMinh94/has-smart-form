@@ -2,9 +2,9 @@ import { eProduct } from "@/app/(types)/eProduct"
 import { ToFilterName } from "@/util/formatText"
 import { faPaperclip } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-
 import { Badge } from "antd"
 import type { DataNode } from "antd/es/tree"
+import PopoverFindIntergaration from "../PopoverFindIntergaration"
 export interface CustomEproduct extends eProduct {
     checked?: boolean
 }
@@ -50,7 +50,7 @@ function TreeCustom({ Tree, searchValue, Checkbox }: Cusomter): DataNode[] {
             ) : (
                 <span>{`${item?.name}`}</span>
             )
-        const integration = item?.integration
+        const connectionCount = Number(item?.connectionCount)
         TreeCustomer.push({
             title: (
                 <div className="flex items-center">
@@ -62,15 +62,22 @@ function TreeCustom({ Tree, searchValue, Checkbox }: Cusomter): DataNode[] {
                             }}
                             className="flex items-center"
                         >
-                            {integration && integration?.length > 0 && (
-                                <div className="mr-[16px]">
-                                    <Badge
-                                        size="small"
-                                        count={integration?.length}
-                                    >
-                                        <FontAwesomeIcon icon={faPaperclip} />
-                                    </Badge>
-                                </div>
+                            {connectionCount > 0 && (
+                                <PopoverFindIntergaration
+                                    connectionCount={connectionCount}
+                                    idEproduct={item?._id ?? ""}
+                                >
+                                    <div className="mr-[16px]">
+                                        <Badge
+                                            size="small"
+                                            count={connectionCount}
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={faPaperclip}
+                                            />
+                                        </Badge>
+                                    </div>
+                                </PopoverFindIntergaration>
                             )}
                             <div>
                                 <Checkbox

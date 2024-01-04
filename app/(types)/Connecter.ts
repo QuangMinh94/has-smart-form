@@ -18,6 +18,14 @@ export interface connnector {
     method?: string
     checked?: boolean
 }
+export interface integration {
+    mappingTable: Partial<mappingTable>
+    _id?: string
+    connection: connnector
+    updatedDate: string
+    createdDate: string
+    string: string
+}
 export interface Requestauthen {
     body?: authenInfo[]
     headers?: authenInfo[]

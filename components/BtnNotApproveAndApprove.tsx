@@ -29,6 +29,7 @@ const BtnNotApproveAndApprove: React.FC<Props> = ({ type }) => {
     const [valueText, setValueText] = useState<string>("")
     const [messageApi, contextHolder] = message.useMessage()
     const { dataGlobal, choosenBlock } = useContextMyWorkDetail()
+    console.log("idEProduct", dataGlobal.idEProduct)
     const {
         NEXT_PUBLIC_EXPORT_FOLDER,
         NEXT_PUBLIC_EXPORT_SERVICE,
