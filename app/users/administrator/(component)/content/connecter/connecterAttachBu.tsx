@@ -6,10 +6,13 @@ export type DataGlobal = {
     Eproduct: CustomEproduct[]
     Connecter: connnector[]
     Correction: corrections[]
+    CorrectionFill: corrections[]
 }
 export interface typeContextAttachBu {
     setDataGlobal: React.Dispatch<React.SetStateAction<DataGlobal>>
     dataGlobal: DataGlobal
+    setFillterCorrection: React.Dispatch<React.SetStateAction<string>>
+    FillterCorrection: string
     tab: string
     setTab: React.Dispatch<React.SetStateAction<string>>
     EproductActive: CustomEproduct
@@ -17,11 +20,14 @@ export interface typeContextAttachBu {
 }
 const contextAdmin = createContext<typeContextAttachBu>({
     setDataGlobal: () => {},
+    setFillterCorrection: () => {},
     dataGlobal: {
         Eproduct: [],
         Connecter: [],
-        Correction: []
+        Correction: [],
+        CorrectionFill: []
     },
+    FillterCorrection: "",
     tab: "ADMIN_ATTACH_BUSINESS",
     setTab: () => {},
     EproductActive: {},

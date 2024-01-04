@@ -144,6 +144,9 @@ const FormGroup: React.FC<Props> = ({
         if (headers?.length <= 0) {
             delete authen.headers
         }
+        if (fieldsHeader?.length <= 0) {
+            delete authen.fieldsHeader
+        }
         const bodyRequest: RequestAddOrUpdateConnection = {
             dataTest: data?.datatest ? JSON.parse(data?.datatest) : {},
             authenInfo: authen,

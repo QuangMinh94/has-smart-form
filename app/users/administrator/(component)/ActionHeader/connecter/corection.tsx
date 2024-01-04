@@ -1,44 +1,22 @@
 "use client"
+import { useContextAdminAttachBu } from "@/components/cusTomHook/useContext"
 import { Input } from "antd"
-import { debounce } from "lodash"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useTransition } from "react"
+import { memo, useTransition } from "react"
 const ActionHeaderManager = () => {
-    const SearchParams = useSearchParams()
-    const Router = useRouter()
-    const checked = SearchParams.get("active")
-    const searchname = SearchParams.get("name")
     const [loading, Transition] = useTransition()
+    const { setFillterCorrection, FillterCorrection } =
+        useContextAdminAttachBu()
 
-    const HanderChecked = (e: any) => {
-        const query = new URLSearchParams()
-        query.set("active", e?.target?.checked)
-        if (searchname) {
-            query.set("name", searchname)
-        } else {
-            query.delete("name")
-        }
-
-        Router.push(`?${query}`)
-    }
-
-    const HanderSearch = debounce((e: any) => {
+    const HanderSearch = (e: any) => {
         const value = e.target.value
         Transition(() => {
-            const query = new URLSearchParams()
-            query.set("active", checked === null ? "true" : `${checked}`)
-            if (value) {
-                query.set("name", encodeURIComponent(e.target.value))
-                Router.push(`?${query}`)
-            } else {
-                query.delete("name")
-                Router.push(`?${query}`)
-            }
+            setFillterCorrection(value)
         })
-    }, 400)
+    }
 
     return (
         <Input.Search
+            value={FillterCorrection}
             className="InputCss"
             placeholder="Tìm kiếm"
             style={{ width: "30%" }}
@@ -47,4 +25,4 @@ const ActionHeaderManager = () => {
         />
     )
 }
-export default ActionHeaderManager
+export default memo(ActionHeaderManager)
