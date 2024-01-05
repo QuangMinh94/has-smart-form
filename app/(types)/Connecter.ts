@@ -62,7 +62,7 @@ export interface corrections {
     type?: { id: string; name: string }
     description?: string
 }
-interface mappingTable {
+export interface mappingTable {
     sourceParams: string[]
     targetParams: string[]
     dataType: string[]

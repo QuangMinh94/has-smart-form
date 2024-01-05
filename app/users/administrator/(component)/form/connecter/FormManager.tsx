@@ -438,6 +438,7 @@ const FormGroup: React.FC<Props> = ({
                         >
                             {typeForm === "UPDATE_MODAL" ? (
                                 <SelectForm
+                                    disabled={true}
                                     enabledFecthData={
                                         typeForm === "UPDATE_MODAL"
                                     }
@@ -487,7 +488,6 @@ const FormGroup: React.FC<Props> = ({
                             ]}
                         >
                             <SelectForm
-                                disabled={typeForm === "UPDATE_MODAL"}
                                 enabledFecthData={typeForm === "UPDATE_MODAL"}
                                 type="getcategoriesApi"
                                 onChange={HandlerOnchangeCategoryApi}

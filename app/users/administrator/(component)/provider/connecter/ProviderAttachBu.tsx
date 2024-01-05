@@ -24,12 +24,12 @@ const ProviderAttachBu: React.FC<typeProvider> = ({
         Eproduct: Eproduct,
         Connecter: Connecter,
         Correction: Correction,
-        CorrectionFill: []
+        MappingTable: { sourceParams: [], targetParams: [], dataType: [] }
     })
     const [tab, setTab] = useState<string>("ADMIN_ATTACH_BUSINESS")
     const [EproductActive, setIdEproductActive] = useState<CustomEproduct>({})
-
     const [FillterCorrection, setFillterCorrection] = useState<string>("")
+
     // useEffect(() => {
     //     setDataGlobal({ ...dataGlobal, Eproduct })
     // }, [JSON.stringify(Eproduct)])
