@@ -2,7 +2,6 @@
 import { addIntergration } from "@/app/(service)/connection"
 import { RequestAddIntergration, corrections } from "@/app/(types)/Connecter"
 import Fillter from "@/app/users/administrator/(component)/ActionHeader/connecter/corection"
-import { FecthIntergration } from "@/app/users/administrator/(component)/PopoverFindIntergaration"
 import {
     useContextAdmin,
     useContextAdminAttachBu
@@ -19,12 +18,10 @@ import {
     Input,
     Popconfirm,
     Row,
-    Spin,
     Table,
     Typography
 } from "antd"
 import { useEnvContext } from "next-runtime-env"
-import { useSearchParams } from "next/navigation"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { CustomEproduct } from "../../TreeCustome/CustomTreeAttachBusiness"
 import FormCorrection from "../../form/connecter/FormCorrection"
@@ -239,65 +236,34 @@ const EditableCell: React.FC<EditableCellProps> = ({
     )
 }
 const App: React.FC = () => {
-    const praram = useSearchParams()
-
-    const idEproduct = praram.get("eproduct")
     const {
-        tab,
         setDataGlobal,
         FillterCorrection,
-        dataGlobal: { Correction }
+        dataGlobal: { Correction, MappingTable }
     } = useContextAdminAttachBu()
-    const { data, refetch, isRefetching, isLoading, error } = FecthIntergration(
-        {
-            request: { eProduct: idEproduct ?? "" },
-            key: idEproduct ?? "",
-            enabled: false
-        }
-    )
+
     const [form] = Form.useForm()
     const [editingKey, setEditingKey] = useState<number | null>(null)
-
     const isEditing = (record: corrections) => record.key === editingKey
     const [label, setLabel] = useState<string>("")
-
     useEffect(() => {
-        if (idEproduct) {
-            refetch()
-        } else {
-            setDataGlobal((data) => {
-                return { ...data, Correction: [] }
+        const { sourceParams, targetParams, dataType } = MappingTable
+        setDataGlobal((data) => {
+            const corrections: corrections[] = []
+            sourceParams?.forEach((item, index) => {
+                const target = targetParams?.[index]
+                const type = dataType?.[index]
+                corrections.push({
+                    parametterConntion: item,
+                    attachBusiness: target,
+                    type: { id: type ?? "", name: type ?? "" }
+                })
             })
-        }
-    }, [idEproduct])
-    useEffect(() => {
-        if (data) {
-            const TableMapping = data?.[0]?.mappingTable
 
-            if (TableMapping) {
-                const { sourceParams, targetParams, dataType } = TableMapping
+            return { ...data, Correction: corrections }
+        })
+    }, [JSON.stringify(MappingTable)])
 
-                setDataGlobal((data) => {
-                    const corrections: corrections[] = []
-                    sourceParams?.forEach((item, index) => {
-                        const target = targetParams?.[index]
-                        const type = dataType?.[index]
-                        corrections.push({
-                            parametterConntion: item,
-                            attachBusiness: target,
-                            type: { id: type ?? "", name: type ?? "" }
-                        })
-                    })
-
-                    return { ...data, Correction: corrections }
-                })
-            } else {
-                setDataGlobal((data) => {
-                    return { ...data, Correction: [] }
-                })
-            }
-        }
-    }, [isRefetching, isLoading])
     const onChangeSelection = useCallback((value: string, option: any) => {
         setLabel(option?.label)
         form.setFieldsValue({ type: value })
@@ -462,14 +428,12 @@ const App: React.FC = () => {
             })
         }
     })
-    if (isLoading && idEproduct) {
-        return <Spin />
-    }
-    if (error) {
-        return <div style={{ color: "red" }}>có lỗi, vui lòng thử lại sau</div>
-    }
+
     return (
         <div style={{ overflow: "auto", height: "100vh" }}>
+            <div className="my-[5px]">
+                <Fillter />
+            </div>
             <Row align={"middle"} style={{ marginBottom: "15px" }}>
                 <Col span={22}>
                     <BtnCRUD record={{}} type="ADD" disable={!!editingKey} />
@@ -480,9 +444,7 @@ const App: React.FC = () => {
                     </div>
                 </Col>
             </Row>
-            <div className="my-[5px]">
-                <Fillter />
-            </div>
+
             <Form form={form} component={false}>
                 <Table
                     components={{

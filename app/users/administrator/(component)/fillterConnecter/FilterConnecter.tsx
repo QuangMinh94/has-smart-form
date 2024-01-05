@@ -1,5 +1,5 @@
 "use client"
-import { integration } from "@/app/(types)/Connecter"
+import { integration, mappingTable } from "@/app/(types)/Connecter"
 import { FecthIntergration } from "@/app/users/administrator/(component)/PopoverFindIntergaration"
 import { useContextAdminAttachBu } from "@/components/cusTomHook/useContext"
 import { ToFilterName } from "@/util/formatText"
@@ -7,7 +7,6 @@ import { faPaperclip } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Checkbox, Dropdown, Input, Spin, theme } from "antd"
 import { debounce } from "lodash"
-import { useRouter } from "next/navigation"
 import React, { memo, useEffect, useState } from "react"
 import { CustomEproduct } from "../TreeCustome/CustomTreeAttachBusiness"
 import "./CssFilter.css"
@@ -76,10 +75,8 @@ const FilterConnecter: React.FC = () => {
         setDataGlobal,
         dataGlobal: { Connecter, Eproduct }
     } = useContextAdminAttachBu()
-    const router = useRouter()
     const [open, setOpen] = useState<boolean>(false)
     const [items, setitems] = useState<TypeItem[]>([])
-    const [value, setvalue] = useState<string>("")
     const [ItemMain, setItemsMain] = useState<TypeItem[]>([])
     const {
         token: { colorPrimary }
@@ -91,11 +88,25 @@ const FilterConnecter: React.FC = () => {
             enabled: false
         }
     )
+
+    const reSetDataMapping = () => {
+        setDataGlobal((DataGlobal) => {
+            return {
+                ...DataGlobal,
+                MappingTable: {
+                    sourceParams: [],
+                    targetParams: [],
+                    dataType: []
+                }
+            }
+        })
+    }
+
     useEffect(() => {
         if (data) {
             const duplicateConnector = CustomdataDulicateConnnector(data)
             const connect = Connecter.map((item) => {
-                const paperclip: boolean = duplicateConnector[item._id]
+                const paperclip: boolean = !!duplicateConnector[item._id]
                 const checked: boolean = paperclip || !!item?.checked
                 return {
                     key: item._id ?? "",
@@ -136,19 +147,28 @@ const FilterConnecter: React.FC = () => {
         }
     }, [JSON.stringify(Connecter), isRefetching, isLoading])
     useEffect(() => {
-        const query = new URLSearchParams()
+        if (data?.[0]?.mappingTable) {
+            setDataGlobal((DataGlobal) => {
+                const MappingTable: mappingTable = data?.[0]
+                    ?.mappingTable as mappingTable
+                return { ...DataGlobal, MappingTable }
+            })
+        } else {
+            reSetDataMapping()
+        }
+    }, [isRefetching, isLoading])
+
+    useEffect(() => {
         if (EproductActive?._id) {
             refetch()
-            query.set("eproduct", EproductActive?._id)
         } else {
-            query.delete("eproduct")
+            reSetDataMapping()
         }
-        router.push(`?${query}`)
     }, [EproductActive?._id])
 
     useEffect(() => {
         const activeProduct = getEproductChecked(Eproduct)
-        console.log("active", activeProduct)
+
         setIdEproductActive(activeProduct ?? {})
         if (activeProduct) {
             setOpen(true)
@@ -175,7 +195,6 @@ const FilterConnecter: React.FC = () => {
             return 1
         })
 
-        setvalue(value)
         setitems(itemFilter)
         // setOpen(itemFilter.length > 0)
     }, 300)

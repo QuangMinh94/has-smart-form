@@ -37,7 +37,7 @@ const HeaderUi = () => {
         })
         const uniqueListLeft = uniqueValue(dataListLeft, listRight)
         setListLeft(uniqueListLeft)
-        setListRight([])
+        // setListRight([])
     }
     return (
         <Row>
