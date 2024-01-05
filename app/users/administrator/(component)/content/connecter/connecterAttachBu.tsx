@@ -1,13 +1,14 @@
 "use client"
-import { connnector, corrections } from "@/app/(types)/Connecter"
+import { connnector, corrections, mappingTable } from "@/app/(types)/Connecter"
 import { CustomEproduct } from "@/app/users/administrator/(component)/TreeCustome/CustomTreeAttachBusiness"
 import React, { createContext } from "react"
 export type DataGlobal = {
     Eproduct: CustomEproduct[]
     Connecter: connnector[]
     Correction: corrections[]
-    CorrectionFill: corrections[]
+    MappingTable: mappingTable
 }
+
 export interface typeContextAttachBu {
     setDataGlobal: React.Dispatch<React.SetStateAction<DataGlobal>>
     dataGlobal: DataGlobal
@@ -25,7 +26,7 @@ const contextAdmin = createContext<typeContextAttachBu>({
         Eproduct: [],
         Connecter: [],
         Correction: [],
-        CorrectionFill: []
+        MappingTable: { sourceParams: [], targetParams: [], dataType: [] }
     },
     FillterCorrection: "",
     tab: "ADMIN_ATTACH_BUSINESS",
