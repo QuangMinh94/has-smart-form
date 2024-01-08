@@ -5,6 +5,7 @@ export interface taskEform {
 }
 export interface RequestEformTaks {
     data: { Input: any }
+    eProduct: string
     formTemplate: string[]
     appointmentId: string
     documentId: string
@@ -22,4 +23,17 @@ export interface RequestSeacrhEformTemplate {
     userRole: string
     name?: string
     onlyApprove: boolean
+}
+export interface RequestSeacrhEformTemplate {
+    userRole: string
+    name?: string
+    onlyApprove: boolean
+}
+export interface RequestFilterTemplate {
+    name?: string
+    creator?: string
+    approver?: string
+    status?: string
+    createdDate?: { from?: string; to?: string }
+    eProduct?: string
 }

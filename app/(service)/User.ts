@@ -2,7 +2,8 @@ import axios from "axios"
 import {
     bodyRequestSeacrhUser,
     BodyUserRequest,
-    BodyUserRequestFileExcel
+    BodyUserRequestFileExcel,
+    BodyRequestChangePass
 } from "../(types)/Users"
 export const SearchUser = async (pram: {
     url: string
@@ -75,6 +76,23 @@ export const getUserByDepartment = async (pram: {
     session: string
 }) => {
     //NEXT_PUBLIC_GET_BY_DEPARTMENT
+    const { bodyRequest, token, session, url } = pram
+    const res = await axios.post(url, bodyRequest, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Session: session
+        }
+    })
+    return res
+}
+
+export const changePassWordUser = async (pram: {
+    url: string
+    bodyRequest: BodyRequestChangePass
+    token: string
+    session: string
+}) => {
+    //NEXT_PUBLIC_CHANGE_PASSWORD_USER
     const { bodyRequest, token, session, url } = pram
     const res = await axios.post(url, bodyRequest, {
         headers: {

@@ -6,18 +6,18 @@ const nextConfig = {
         return [
             {
                 source: "/",
-                destination: "/bu",
+                destination: "/users/bu",
                 permanent: true
             },
             {
-                source: "/bu",
-                destination: "/bu/mywork",
+                source: "/users/bu",
+                destination: "/users/bu/mywork",
                 permanent: true
             },
 
             {
-                source: "/teller",
-                destination: "/teller/mywork",
+                source: "/users/teller",
+                destination: "/users/teller/mywork",
                 permanent: true
             },
             /*  {
@@ -27,20 +27,21 @@ const nextConfig = {
       }, */
 
             {
-                source: "/ksvteller",
-                destination: "/ksvteller/mywork",
+                source: "/users/ksvteller",
+                destination: "/users/ksvteller/mywork",
                 permanent: true
             },
             {
-                source: "/ba",
-                destination: "/ba/block",
+                source: "/users/ba",
+                destination: "/users/ba/block",
                 permanent: true
             },
             {
-                source: "/administrator",
-                destination: "/administrator/user",
+                source: "/users/administrator",
+                destination: "/users/administrator/user",
                 permanent: true
-            }
+            },
+
         ]
     }
 }

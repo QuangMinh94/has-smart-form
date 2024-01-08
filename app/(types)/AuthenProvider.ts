@@ -1,3 +1,4 @@
+import { authenInfo } from "./formFiled/FormConnectManager/authenInfo"
 export interface AuthenProvider {
     _id?: string
     name?: string
@@ -7,4 +8,14 @@ export interface AuthenProvider {
     organization?: string
     createdDate?: Date
     creator?: string
+}
+
+export interface AuthenInfo {
+    body?: authenInfo[]
+    type?: string
+    method?: string
+    urlToken?: string
+    fieldToken?: string
+    fieldsHeader?: string[]
+    headers?: authenInfo[]
 }

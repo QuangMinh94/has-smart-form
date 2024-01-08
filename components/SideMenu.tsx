@@ -1,15 +1,16 @@
 "use client"
-import ButtonLogOut from "@/app/teller/(components)/customButton/ButtonLogout"
-import routers, { BLOCK, MYWORK, PRODUCT, QUERIES } from "@/router/cusTomRouter"
+import Avatar from "@/components/HeaderAvatar"
+import routers from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
 import React, { useState } from "react"
 
-import Filter from "@/app/teller/(components)/Filter/LayoutFilter"
+import Filter from "@/app/users/teller/(components)/Filter/LayoutFilter"
 import { useContextThemeConfig } from "@/components/cusTomHook/useContext"
 import {
     faArchive,
     faCog,
     faFile,
+    faIdCard,
     faSearch
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -27,6 +28,7 @@ type KeyPath = {
     TELLER_MYWORK: string
     ADMINISTRATOR: string
     TELLER_QUERIES: string
+    PROFILE: string
 }
 type conditionPath = {
     isBaBlock: boolean
@@ -36,6 +38,7 @@ type conditionPath = {
     isAdminTrator: boolean
     isKsvQuery: boolean
     isTellerQuery: boolean
+    isProfile: boolean
 }
 const { Header, Sider, Content } = Layout
 
@@ -116,7 +119,6 @@ const CustomMenu = ({
                 key: keyPath.KSV_MYWORK,
                 icon: (
                     <Link href={`${routers("ksvteller").mywork.path}`}>
-                        ,
                         <FontAwesomeIcon icon={faArchive} />
                     </Link>
                 ),
@@ -173,6 +175,21 @@ const CustomMenu = ({
         ]
     }
 
+    // profile
+    if (conditionPath.isProfile) {
+        items = [
+            {
+                key: keyPath.PROFILE,
+                icon: (
+                    <Link href={`${routers("profile").profile.path}`}>
+                        <FontAwesomeIcon icon={faIdCard} />
+                    </Link>
+                ),
+                label: "Thông tin cá nhân"
+            }
+        ]
+    }
+
     return (
         <Menu
             style={{ backgroundColor }}
@@ -193,13 +210,14 @@ const SideMenu = ({ children }: Props) => {
         token: { colorBgContainer, colorPrimary }
     } = theme.useToken()
     const keyPath: KeyPath = {
-        BA_BLOCK: `/ba/${BLOCK}`,
-        BA_PRODUCT: `/ba/${PRODUCT}`,
-        KSV_MYWORK: `/ksvteller/${MYWORK}`,
-        TELLER_MYWORK: `/teller/${MYWORK}`,
-        ADMINISTRATOR: `/administrator`,
-        TELLER_QUERIES: `/teller/${QUERIES}`,
-        KSV_QUERIES: `/ksvteller/${QUERIES}`
+        BA_BLOCK: `${routers("ba").block.path}`,
+        BA_PRODUCT: `${routers("ba").product.path}`,
+        KSV_MYWORK: `${routers("ksvteller").mywork.path}`,
+        TELLER_MYWORK: `${routers("teller").mywork.path}`,
+        ADMINISTRATOR: `${routers("administrator").admin.path}`,
+        TELLER_QUERIES: `${routers("teller").queries.path}`,
+        KSV_QUERIES: `${routers("ksvteller").queries.path}`,
+        PROFILE: `${routers("profile").profile.path}`
     }
     const conditionPath: conditionPath = {
         isBaBlock: pathname.startsWith(keyPath.BA_BLOCK),
@@ -208,7 +226,8 @@ const SideMenu = ({ children }: Props) => {
         isTellerMywork: pathname.startsWith(keyPath.TELLER_MYWORK),
         isAdminTrator: pathname.startsWith(keyPath.ADMINISTRATOR),
         isKsvQuery: pathname.startsWith(keyPath.KSV_QUERIES),
-        isTellerQuery: pathname.startsWith(keyPath.TELLER_QUERIES)
+        isTellerQuery: pathname.startsWith(keyPath.TELLER_QUERIES),
+        isProfile: pathname.startsWith(keyPath.PROFILE)
     }
 
     const { status, data: session } = useSession()
@@ -291,6 +310,7 @@ const SideMenu = ({ children }: Props) => {
                             conditionPath.isKsvQuery) &&
                             "Truy vấn giao dịch"}
                         {conditionPath.isAdminTrator && "Quản trị"}
+                        {conditionPath.isProfile && "Hồ sơ của tôi"}
                     </h1>
                     {status === "authenticated" && (
                         <div className="mr-[1vw]">
@@ -315,7 +335,7 @@ const SideMenu = ({ children }: Props) => {
                             />
                         </div>
                     )}
-                    <ButtonLogOut />
+                    <Avatar />
                 </Header>
                 {conditionPath.isAdminTrator ? (
                     <div>{children}</div>
@@ -330,14 +350,16 @@ const SideMenu = ({ children }: Props) => {
                             overflowY: "scroll"
                         }}
                     >
-                        <div className="my-6">
-                            {conditionPath.isTellerMywork && (
-                                <Filter rootPath="teller" />
-                            )}
-                            {conditionPath.isKsvMywork && (
-                                <Filter rootPath="ksvteller" />
-                            )}
-                        </div>
+                        {conditionPath.isProfile || (
+                            <div className="my-6">
+                                {conditionPath.isTellerMywork && (
+                                    <Filter rootPath="teller" />
+                                )}
+                                {conditionPath.isKsvMywork && (
+                                    <Filter rootPath="ksvteller" />
+                                )}
+                            </div>
+                        )}
                         <div>{children}</div>
                     </Content>
                 )}

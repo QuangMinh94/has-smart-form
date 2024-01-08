@@ -30,17 +30,21 @@ export interface eProduct {
     _id?: string
     active?: boolean
     code?: string
-    name: string
+    name?: string
     creator?: string
     description?: string
     type?: string
     children?: eProduct[]
+    department?: string
     parent?: { _id: string; name: string }
+    integration?: string[]
+    connectionCount?: number
 }
 export interface requestBodyEproduct {
     type?: string
     _id?: string
     parent?: string
+    active: boolean
 }
 export interface requestBodyEproductTree {
     name?: string
@@ -61,6 +65,7 @@ export interface requestBodyAddEproduct {
     description?: string
     active: boolean
     code?: string
+    department?: string
     type?: "P" | "B"
     parent?: string
     formTemplate?: string[]
@@ -71,4 +76,32 @@ export interface requestBodyAddEproduct {
 }
 export interface requestBodyUpdateEproduct extends requestBodyAddEproduct {
     id: string
+}
+
+export interface ruleArray {
+    value?: {
+        productIDvsDepartmentIDCheck?: boolean
+        isBA?: boolean
+        isAdmin?: boolean
+        visibleAddProduct?: boolean
+        visibleEditProduct?: boolean
+        visibleDeactiveProduct?: boolean
+        visibleAddBusiness?: boolean
+        visibleEditBusiness?: boolean
+        visibleDeactiveBusiness?: boolean
+        visibleView?: boolean
+        visibleTreeview?: boolean
+    }
+    productId?: string
+}
+export interface generalRule {
+    isBA?: boolean
+    isAdmin?: boolean
+    visibleAddProduct?: boolean
+    visibleView?: boolean
+    visibleTreeview?: boolean
+}
+export interface PermissionViewEproduct {
+    generalRule?: generalRule
+    ruleArray?: ruleArray[]
 }

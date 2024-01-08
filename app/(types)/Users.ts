@@ -1,7 +1,7 @@
 import { Department } from "./Department"
 import { Group, Role } from "./Group"
 import { Organization } from "./Organization"
-
+import { Permission } from "./Permission"
 export interface Token {
     token?: string
     session?: string
@@ -17,7 +17,7 @@ export interface Users extends Token {
     role?: Role
     department?: Department
     color?: string
-    defaultGroup: Group
+    defaultGroup?: Group
     firstName?: string
     lastName?: string
     group?: Group[]
@@ -29,7 +29,7 @@ export interface Users extends Token {
     root?: string
     image?: IImage
     mail?: string
-    permission?: any[]
+    permission?: Permission[]
     organization?: Organization
     authenProvider?: any
     phone?: string
@@ -61,8 +61,8 @@ export interface BodyUserRequest {
 }
 
 export interface IImage {
-    Data?: string
-    ContentType?: string
+    data?: string
+    contentType?: string
 }
 export interface UsersUploadFile {
     FirstName: string
@@ -131,4 +131,8 @@ export interface InforUser {
     mobilePhoneNumber: string
     emailAddress: string
     __v?: number
+}
+export interface BodyRequestChangePass {
+    oldPassword: string
+    newPassword: string
 }

@@ -3,28 +3,36 @@ import { useContext } from "react"
 import {
     contextMyworkDetail,
     typeContextMyworkDetail
-} from "../../app/teller/(components)/context"
+} from "../../app/users/teller/(components)/context"
 
-import { typeContextTranfer, contextTranfer } from "../context/context"
-import { typeContextBa, contextBa } from "@/app/ba/(component)/content"
+import contentAttachBu, {
+    typeContextAttachBu
+} from "@/app/users/administrator/(component)/content/connecter/connecterAttachBu"
+import contextConnecterManager, {
+    typeContextManager
+} from "@/app/users/administrator/(component)/content/connecter/connecterManager"
 import contentAdmin, {
     typeContextAdmin
-} from "@/app/administrator/(component)/content/contentAdmin"
+} from "@/app/users/administrator/(component)/content/contentAdmin"
+import {
+    contextTransfer,
+    typeContextTransfer
+} from "@/app/users/administrator/(component)/content/contentTransfer"
+import {
+    contextTreeView,
+    typeContextTree
+} from "@/app/users/administrator/(component)/content/contentTreeView"
 import contentUser, {
     typeContextUser
-} from "@/app/administrator/(component)/content/contentUser"
+} from "@/app/users/administrator/(component)/content/contentUser"
+import { contextBa, typeContextBa } from "@/app/users/ba/(component)/content"
 import {
-    typeContextTree,
-    contextTreeView
-} from "@/app/administrator/(component)/content/contentTreeView"
-import {
-    typeContextTransfer,
-    contextTransfer
-} from "@/app/administrator/(component)/content/contentTransfer"
-import {
+    contextCustomeTheme,
+    contextProfile,
     typeContextCustomeTheme,
-    contextCustomeTheme
+    typeContextProfile
 } from "@/components/context/context"
+import { contextTranfer, typeContextTranfer } from "../context/context"
 function useContextMyWorkDetail(): typeContextMyworkDetail {
     const provider = useContext(contextMyworkDetail)
     return {
@@ -39,7 +47,9 @@ function useContextMyWorkDetail(): typeContextMyworkDetail {
         setChoosenBlock: provider.setChoosenBlock,
         choosenBlock: provider.choosenBlock,
         setLoading: provider.setLoading,
-        loading: provider.loading
+        loading: provider.loading,
+        setSelectedProduct: provider.setSelectedProduct,
+        selectedProduct: provider.selectedProduct
     }
 }
 function useContextTranfer(): typeContextTranfer {
@@ -78,6 +88,27 @@ function useContextAdminUser(): typeContextUser {
         dataGlobal: provider.dataGlobal
     }
 }
+function useContextAdminAttachBu(): typeContextAttachBu {
+    const provider = useContext(contentAttachBu)
+    return {
+        setDataGlobal: provider.setDataGlobal,
+        dataGlobal: provider.dataGlobal,
+        tab: provider.tab,
+        setTab: provider.setTab,
+        EproductActive: provider.EproductActive,
+        setIdEproductActive: provider.setIdEproductActive,
+        FillterCorrection: provider.FillterCorrection,
+        setFillterCorrection: provider.setFillterCorrection
+    }
+}
+
+function useContextAdminconnectManager(): typeContextManager {
+    const provider = useContext(contextConnecterManager)
+    return {
+        setDataForm: provider.setDataForm,
+        DataForm: provider.DataForm
+    }
+}
 function useContextTree(): typeContextTree {
     const provider = useContext(contextTreeView)
     return {
@@ -105,14 +136,23 @@ function useContextThemeConfig(): typeContextCustomeTheme {
         logo: provider.logo
     }
 }
-
+function useContextProfile(): typeContextProfile {
+    const provider = useContext(contextProfile)
+    return {
+        User: provider.User,
+        setUser: provider.setUser
+    }
+}
 export {
-    useContextMyWorkDetail,
-    useContextTranfer,
-    useContextBa,
     useContextAdmin,
+    useContextAdminAttachBu,
     useContextAdminUser,
-    useContextTree,
+    useContextAdminconnectManager,
+    useContextBa,
+    useContextMyWorkDetail,
+    useContextProfile,
+    useContextThemeConfig,
+    useContextTranfer,
     useContextTransferANTD,
-    useContextThemeConfig
+    useContextTree
 }

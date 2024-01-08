@@ -1,14 +1,11 @@
 "use client"
-
 import { ConfigProvider } from "antd"
-import useGetInfoUser from "@/components/cusTomHook/useGetInfoUser"
 import useCustomCookies from "@/components/cusTomHook/useCustomCookies"
 import React, { useState, useEffect } from "react"
 import {
     contextCustomeTheme,
     typeContextCustomeTheme
 } from "@/components/context/context"
-
 import { getOrganization } from "@/app/(service)/organizations"
 import { useEnvContext } from "next-runtime-env"
 import { useQuery } from "@tanstack/react-query"
@@ -17,44 +14,44 @@ import Loading from "@/components/LoadingPage"
 import { usePathname } from "next/navigation"
 type Props = { children: React.ReactNode }
 
-const UseFecthApi = ({ idOrginazation }: { idOrginazation: string }) => {
-    const { token, session } = useCustomCookies()
+const UseFecthApi = ({
+    token,
+    session
+}: {
+    token: string
+    session: string
+}) => {
     const { NEXT_PUBLIC_GET_ORGANIZATIONS } = useEnvContext()
-    const { isLoading, error, data, refetch, isRefetching } =
-        useQuery<Organization>({
-            queryKey: ["getOrganization"],
-            queryFn: async () => {
-                const res = await getOrganization({
-                    url: NEXT_PUBLIC_GET_ORGANIZATIONS!,
-                    bodyRequest: { _id: idOrginazation },
-                    token,
-                    session
-                })
-                return res.data[0]
-            },
-            retry: 3,
-            refetchOnWindowFocus: false,
-            refetchOnReconnect: false,
-            enabled: false
-        })
+    const { isLoading, error, data, refetch } = useQuery<Organization>({
+        queryKey: ["getOrganization"],
+        queryFn: async () => {
+            const res = await getOrganization({
+                url: NEXT_PUBLIC_GET_ORGANIZATIONS!,
+                bodyRequest: {},
+                token,
+                session
+            })
+            return res.data[0]
+        },
+        retry: 3,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        enabled: false
+    })
 
-    return { isRefetching, error, data, refetch, isLoading }
+    return { error, data, refetch, isLoading }
 }
 const CusomerConfigProvider: React.FC<Props> = ({ children }) => {
-    const { InFoUser } = useGetInfoUser()
-    const { data, refetch, isLoading } = UseFecthApi({
-        idOrginazation: InFoUser?.organization?._id ?? ""
-    })
+    const { token, session } = useCustomCookies()
+    const { data, isLoading, refetch } = UseFecthApi({ token, session })
+    const pathname = usePathname()
     const Origanization = data
     const primaryInfo = Origanization?.themeGlobal?.theme?.token?.colorPrimary
     const IconInfo = Origanization?.themeGlobal?.logo
     const [primaryColor, setPrimaryColor] = useState<string>(
         primaryInfo ?? "#0E7490"
     )
-    const [logo, setLogo] = useState<string>(
-        IconInfo ?? "/img/hptIconKnowingIT.png"
-    )
-    const pathname = usePathname()
+    const [logo, setLogo] = useState<string>(IconInfo ?? "")
 
     useEffect(() => {
         if (primaryInfo && IconInfo) {
@@ -62,12 +59,12 @@ const CusomerConfigProvider: React.FC<Props> = ({ children }) => {
             setLogo(IconInfo)
         }
     }, [primaryInfo, IconInfo])
+
     useEffect(() => {
-        if (InFoUser?.organization?._id) {
+        if (token) {
             refetch()
         }
-    }, [InFoUser?.organization?._id])
-
+    }, [token])
     const value: typeContextCustomeTheme = {
         setPrimaryColor,
         primaryColor,
@@ -109,11 +106,12 @@ const CusomerConfigProvider: React.FC<Props> = ({ children }) => {
                         }
                     },
                     token: {
-                        colorPrimary: primaryColor
+                        colorPrimary: primaryColor,
+                        colorBgContainer: "#fff"
                     }
                 }}
             >
-                {isLoading && !pathname.startsWith("/auth") ? (
+                {isLoading && token && !pathname.startsWith("/auth") ? (
                     <Loading />
                 ) : (
                     children
