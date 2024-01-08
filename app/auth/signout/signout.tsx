@@ -10,6 +10,7 @@ const SignOut = () => {
         async function out() {
             await signOut({ redirect: false })
             router.push("/")
+            router.refresh()
         }
         out()
     }, [])
