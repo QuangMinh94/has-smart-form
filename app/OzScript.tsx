@@ -7,6 +7,11 @@ const OzScript = () => {
     return (
         <>
             <Script
+                type="text/javascript"
+                src={url + "/html5viewer/OZJSViewer.js"}
+                //strategy="beforeInteractive"
+            />
+            <Script
                 src="https://code.jquery.com/jquery-2.0.3.min.js"
                 //strategy="beforeInteractive"
             />
@@ -18,22 +23,17 @@ const OzScript = () => {
             <Script
                 type="text/javascript"
                 src={url + "/html5viewer/jquery.dynatree.js"}
-                // strategy="beforeInteractive"
-            />
-            <Script
-                type="text/javascript"
-                src={url + "/html5viewer/OZJSViewer.js"}
                 //strategy="beforeInteractive"
             />
             <Script
                 type="text/javascript"
                 src={url + "/html5viewer/pdf_js/web/compatibility.js"}
-                // strategy="beforeInteractive"
+                //strategy="beforeInteractive"
             />
             <Script
                 type="text/javascript"
                 src={url + "/html5viewer/pdf_js/build/pdf.js"}
-                // strategy="beforeInteractive"
+                //strategy="beforeInteractive"
             />
             <Script id={"ozScript"}>
                 {`function OZReportChangeCommand_OZViewer(docindex) {
