@@ -4,7 +4,6 @@ import DateFormatter from "@/app/(utilities)/DateFormatter"
 import CustomLink from "@/components/CustomLink"
 import { Skeleton, Table, Tooltip } from "antd"
 import { ColumnsType } from "antd/es/table"
-import { useCookies } from "next-client-cookies"
 import { usePathname, useRouter } from "next/navigation"
 
 export type DataTableType = {
@@ -29,7 +28,6 @@ const TemplateTable = ({
 }) => {
     const pathName = usePathname()
     const router = useRouter()
-    const cookies = useCookies()
     const skeletonColumns: ColumnsType<DataTableType> = [
         {
             title: "Tên biểu mẫu",
@@ -71,23 +69,6 @@ const TemplateTable = ({
             render() {
                 return <Skeleton.Input active />
             }
-        },
-        {
-            ...(ksvPermission && !pathName.includes("/users/bu/template")
-                ? {
-                      title: "Hành động",
-                      key: "Edit",
-                      //dataIndex: 'action',
-                      align: "center",
-                      width: "5vw",
-                      fixed: "right",
-                      render() {
-                          return <Skeleton.Input active />
-                      }
-                  }
-                : {
-                      width: "0vw"
-                  })
         }
     ]
 
@@ -100,7 +81,7 @@ const TemplateTable = ({
             render(_value, record, _index) {
                 if (!readOnly) {
                     return (
-                        <CustomLink href={`/users/bu/template/${record.key}`}>
+                        <CustomLink href={`/users/template/${record.key}`}>
                             <p className="truncate ...">
                                 <Tooltip title={record.formName!}>
                                     {record.formName!}
@@ -114,7 +95,7 @@ const TemplateTable = ({
                         className="text-blue-600 cursor-pointer truncate ..."
                         onClick={() => {
                             router.push(
-                                `/users/bu/template/details/${record.queryCode}`
+                                `/users/template/details/${record.queryCode}`
                             )
                         }}
                     >
@@ -152,7 +133,7 @@ const TemplateTable = ({
             sorter: (a, b) => a.status!.localeCompare(b.status!)
         },
         {
-            ...(ksvPermission && !pathName.includes("/users/bu/template")
+            ...(ksvPermission && !pathName.includes("/users/template")
                 ? {
                       title: "Hành động",
                       key: "Edit",
@@ -163,7 +144,7 @@ const TemplateTable = ({
                       render: (_value, record, _index) => {
                           return (
                               <CustomLink
-                                  href={`/users/bu/template/${record.key}`}
+                                  href={`/users/template/${record.key}`}
                               >
                                   Phê duyệt
                               </CustomLink>

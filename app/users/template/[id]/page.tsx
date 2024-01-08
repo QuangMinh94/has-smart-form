@@ -14,10 +14,10 @@ import { RedirectType, redirect } from "next/navigation"
 import { cache } from "react"
 import TemplateWrapper from "../_components/TemplateWrapper"
 
-axios.interceptors.request.use((request) => {
+/* axios.interceptors.request.use((request) => {
     console.log("Starting Request", JSON.stringify(request, null, 2))
     return request
-})
+}) */
 
 export interface OptionProps {
     id: string

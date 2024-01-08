@@ -1,4 +1,4 @@
-import { TemplateLoading } from "../_components/TemplateLoading"
+import { TemplateLoading } from "./_components/TemplateLoading"
 
 const MyworkLoadingPage = () => {
     return <TemplateLoading />

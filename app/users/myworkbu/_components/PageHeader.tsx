@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Flex, Input } from "antd"
 import { useRouter } from "next/navigation"
 import { ReactNode, useContext } from "react"
-import { SearchParamContext } from "../_context/context"
+import { SearchParamContext } from "../../(context)/context"
 const PageHeader = ({
     path,
     children,
@@ -47,7 +47,7 @@ const PageHeader = ({
                 {addNewPermission && (
                     <Button
                         type="primary"
-                        onClick={() => router.push("/users/bu/template/new")}
+                        onClick={() => router.push("/users/template/new")}
                     >
                         Tạo mới
                     </Button>

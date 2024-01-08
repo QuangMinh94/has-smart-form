@@ -9,9 +9,9 @@ import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
 import { RedirectType, notFound, redirect } from "next/navigation"
 import { cache } from "react"
-import PageHeader from "../_components/PageHeader"
-import { SearchParamProvider } from "../_context/provider"
-import TemplateTable, { DataTableType } from "./templateTable"
+import TemplateTable, { DataTableType } from "../(components)/templateTable"
+import { SearchParamProvider } from "../(context)/provider"
+import PageHeader from "../myworkbu/_components/PageHeader"
 /* 
 axios.interceptors.request.use((request) => {
     console.log("Starting Request", JSON.stringify(request, null, 2))

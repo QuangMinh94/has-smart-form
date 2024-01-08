@@ -1,14 +1,14 @@
-//export { default } from "next-auth/middleware"
+export { default } from "next-auth/middleware"
 
-import withAuth, { NextRequestWithAuth } from "next-auth/middleware"
-import { NextResponse } from "next/server"
+/* import withAuth, { NextRequestWithAuth } from "next-auth/middleware"
+import { NextResponse } from "next/server" */
 
 /* export function middleware(request: NextRequestWithAuth) {
     console.log("Request", request)
     //return NextResponse.redirect(new URL('/bu/mywork', request.url))
 } */
 
-export default withAuth(function middleware(request: NextRequestWithAuth) {
+/* export default withAuth(function middleware(request: NextRequestWithAuth) {
     const token = request.nextauth.token
     const pathName = request?.nextUrl?.pathname
 
@@ -36,7 +36,7 @@ export default withAuth(function middleware(request: NextRequestWithAuth) {
         return NextResponse.redirect(new URL("/auth/signin", request.url))
     }
     //}
-})
+}) */
 
 export const config = {
     matcher: [
@@ -44,7 +44,9 @@ export const config = {
         "/users/teller/:path*",
         "/users/ksvteller/:path*",
         "/users/ba/:path*",
-        "/users/administrator/:path*"
+        "/users/administrator/:path*",
+        "/users/myworkbu/:path*",
+        "/users/template/:path*"
     ]
 }
 

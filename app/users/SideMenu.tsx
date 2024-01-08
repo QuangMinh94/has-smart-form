@@ -26,9 +26,9 @@ import { useEnvContext } from "next-runtime-env"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ReactNode, useEffect, useMemo, useState } from "react"
-import { DocumentName } from "./_types/DocumentName"
 
 import { useRouter } from "next/navigation"
+import { DocumentName } from "./template/_types/DocumentName"
 
 const { Header, Sider, Content } = Layout
 

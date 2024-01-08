@@ -2,8 +2,10 @@
 import Avatar from "@/components/HeaderAvatar"
 import routers from "@/router/cusTomRouter"
 import { Image, Layout, Menu, theme } from "antd"
-import React, { useState } from "react"
+import React, { ReactNode, useState } from "react"
 
+import { Permission } from "@/app/(types)/Permission"
+import { FindPermission } from "@/app/(utilities)/ArrayUtilities"
 import Filter from "@/app/users/teller/(components)/Filter/LayoutFilter"
 import { useContextThemeConfig } from "@/components/cusTomHook/useContext"
 import {
@@ -45,14 +47,16 @@ const { Header, Sider, Content } = Layout
 const CustomMenu = ({
     backgroundColor,
     keyPath,
-    conditionPath
+    conditionPath,
+    permission
 }: {
     backgroundColor: string
     keyPath: KeyPath
     conditionPath: conditionPath
+    permission: Permission[]
 }) => {
     const selectedKeys: string[] = []
-    let items: any = []
+    let items: any[] = []
 
     // set slectkey
 
@@ -89,106 +93,122 @@ const CustomMenu = ({
     //set item
 
     //ba
-    if (conditionPath.isBaBlock || conditionPath.isBaProduct) {
-        items = [
-            {
-                key: keyPath.BA_BLOCK,
-                icon: (
-                    <Link href={`${routers("ba").block.path}`}>
-                        <FontAwesomeIcon icon={faFile} />
-                    </Link>
-                ),
-                label: "Biểu mẫu"
-            },
-            {
-                key: keyPath.BA_PRODUCT,
-                icon: (
-                    <Link href={`${routers("ba").product.path}`}>
-                        <FontAwesomeIcon icon={faArchive} />
-                    </Link>
-                ),
-                label: "Sản phẩm"
-            }
-        ]
+    if (FindPermission(permission, "children", "VisibleListFormBA")) {
+        items.push({
+            key: keyPath.BA_BLOCK,
+            icon: (
+                <Link href={`${routers("ba").block.path}`}>
+                    <FontAwesomeIcon icon={faFile} />
+                </Link>
+            ),
+            label: "Biểu mẫu"
+        })
     }
 
-    // ksv
-    if (conditionPath.isKsvMywork || conditionPath.isKsvQuery) {
-        items = [
-            {
+    if (FindPermission(permission, "children", "VisibleProductBussinessBA")) {
+        items.push({
+            key: keyPath.BA_PRODUCT,
+            icon: (
+                <Link href={`${routers("ba").product.path}`}>
+                    <FontAwesomeIcon icon={faArchive} />
+                </Link>
+            ),
+            label: "Sản phẩm"
+        })
+    }
+
+    // teller
+    if (FindPermission(permission, "children", "VisibleTeller")) {
+        //cv
+        if (FindPermission(permission, "children", "VisibleCVCTTeller")) {
+            items.push({
                 key: keyPath.KSV_MYWORK,
                 icon: (
                     <Link href={`${routers("ksvteller").mywork.path}`}>
                         <FontAwesomeIcon icon={faArchive} />
                     </Link>
                 ),
-                label: "Công việc của tôi"
-            },
-            {
-                key: keyPath.KSV_QUERIES,
-                icon: (
-                    <Link href={`${routers("ksvteller").queries.path}`}>
-                        <FontAwesomeIcon icon={faSearch} />
-                    </Link>
-                ),
-                label: "Truy vấn giao dịch"
-            }
-        ]
-    }
-
-    // teller
-    if (conditionPath.isTellerMywork || conditionPath.isTellerQuery) {
-        items = [
-            {
+                label: "Khởi tạo giao dịch"
+            })
+        }
+        //ksv
+        if (FindPermission(permission, "children", "VisibleCVCTReviewer")) {
+            items.push({
                 key: keyPath.TELLER_MYWORK,
                 icon: (
                     <Link href={`${routers("teller").mywork.path}`}>
                         <FontAwesomeIcon icon={faArchive} />
                     </Link>
                 ),
-                label: "Công việc của tôi"
-            },
-            {
-                key: keyPath.TELLER_QUERIES,
+                label: "Phê duyệt giao dịch"
+            })
+        }
+        items.push({
+            key: keyPath.KSV_QUERIES,
+            icon: (
+                <Link href={`${routers("ksvteller").queries.path}`}>
+                    <FontAwesomeIcon icon={faSearch} />
+                </Link>
+            ),
+            label: "Truy vấn giao dịch"
+        })
+    }
+
+    // bu
+    if (FindPermission(permission, "children", "VisibleBU")) {
+        if (
+            FindPermission(permission, "children", "VisibleTemplateBU") ||
+            FindPermission(permission, "children", "VisibleTemplateApprover")
+        ) {
+            items.push({
+                key: "/users/template",
                 icon: (
-                    <Link href={`${routers("teller").queries.path}`}>
-                        <FontAwesomeIcon icon={faSearch} />
+                    <Link href={"/users/template"}>
+                        <FontAwesomeIcon icon={faFile} />
                     </Link>
                 ),
-                label: "Truy vấn giao dịch"
-            }
-        ]
+                label: "Quản trị biểu mẫu"
+            })
+        }
+        if (
+            FindPermission(permission, "children", "VisibleCVCTBU") ||
+            FindPermission(permission, "children", "VisibleCVCTApprover")
+        ) {
+            items.push({
+                key: "/users/myworkbu",
+                icon: (
+                    <Link href={"/users/myworkbu"}>
+                        <FontAwesomeIcon icon={faArchive} />
+                    </Link>
+                ),
+                label: "Công việc của tôi"
+            })
+        }
     }
 
     // admin
-    if (conditionPath.isAdminTrator) {
-        items = [
-            {
-                key: keyPath.ADMINISTRATOR,
-                icon: (
-                    <Link href={`${routers("administrator").user.path}`}>
-                        <FontAwesomeIcon icon={faCog} />
-                    </Link>
-                ),
-                label: "Quản trị"
-            }
-        ]
+    if (FindPermission(permission, "children", "VisibleAdmin")) {
+        items.push({
+            key: keyPath.ADMINISTRATOR,
+            icon: (
+                <Link href={`${routers("administrator").user.path}`}>
+                    <FontAwesomeIcon icon={faCog} />
+                </Link>
+            ),
+            label: "Quản trị"
+        })
     }
 
     // profile
-    if (conditionPath.isProfile) {
-        items = [
-            {
-                key: keyPath.PROFILE,
-                icon: (
-                    <Link href={`${routers("profile").profile.path}`}>
-                        <FontAwesomeIcon icon={faIdCard} />
-                    </Link>
-                ),
-                label: "Thông tin cá nhân"
-            }
-        ]
-    }
+    items.push({
+        key: keyPath.PROFILE,
+        icon: (
+            <Link href={`${routers("profile").profile.path}`}>
+                <FontAwesomeIcon icon={faIdCard} />
+            </Link>
+        ),
+        label: "Thông tin cá nhân"
+    })
 
     return (
         <Menu
@@ -201,7 +221,13 @@ const CustomMenu = ({
 type Props = {
     children: React.ReactNode
 }
-const SideMenu = ({ children }: Props) => {
+const SideMenu = ({
+    children,
+    permission
+}: {
+    children: ReactNode
+    permission?: Permission[]
+}) => {
     const pathname = usePathname()
     const [collapsed, setCollapsed] = useState(false)
     const { logo } = useContextThemeConfig()
@@ -282,6 +308,7 @@ const SideMenu = ({ children }: Props) => {
                     />
                 </center>
                 <CustomMenu
+                    permission={permission ? permission : []}
                     keyPath={keyPath}
                     conditionPath={conditionPath}
                     backgroundColor={colorPrimary}

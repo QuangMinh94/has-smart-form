@@ -1,4 +1,4 @@
-import TemplateTable from "../template/templateTable"
+import TemplateTable from "../../(components)/templateTable"
 import PageHeader from "./PageHeader"
 
 export const TemplateLoading = () => {

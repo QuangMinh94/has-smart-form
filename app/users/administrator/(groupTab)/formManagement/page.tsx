@@ -1,7 +1,7 @@
 import { FolderContent, FolderTree } from "@/app/(types)/Folder"
 import { TreeDataType } from "@/app/(types)/TreeDataType"
 import DateFormatter from "@/app/(utilities)/DateFormatter"
-import { SearchParamProvider } from "@/app/users/bu/_context/provider"
+import { SearchParamProvider } from "@/app/users/(context)/provider"
 import type { DataNode } from "antd/es/tree"
 import axios from "axios"
 import { getServerSession } from "next-auth"

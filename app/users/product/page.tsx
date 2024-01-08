@@ -9,9 +9,9 @@ import {
 import ButtonOpenModal from "@/app/users/(components)/button/ButtonOpenModalProduct"
 import NoPermssionPage from "@/components/noPermissionPage"
 import axios from "axios"
-import FillterProduct from "../../(components)/filter/FillterProduct"
-import ActiveTree from "../../(components)/form/ActiveTreeProduct"
-import LayoutTreeView from "../../(components)/table/TreeViewProduct"
+import FillterProduct from "../(components)/filter/FillterProduct"
+import ActiveTree from "../(components)/form/ActiveTreeProduct"
+import LayoutTreeView from "../(components)/table/TreeViewProduct"
 
 export const dynamic = "force-dynamic"
 const GetProductTree = async (pram: {
